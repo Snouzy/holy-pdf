@@ -677,3 +677,7 @@ Deux annulations sont vérifiées entre le deuxième et le troisième geste.
 3. Dans Lire le texte, lire un scan en japonais avec le réglage de départ : le texte trouvé est illisible. Choisir « japonais » dans « Langue du texte » (la première lecture reste à l'écran), relire, enregistrer : un mot japonais se trouve dans la copie.
 4. Dans Ajouter un filigrane, « Certaines pages » : taper 12 dans « De la page », Entrée ; le filigrane quitte les pages d'avant. Taper un nombre plus grand que le nombre de pages : le réglage s'arrête à la dernière page, et l'appli ne plante pas sur un nombre négatif énorme.
 5. (3 octobre) Dans Ajouter un filigrane, « En poser un autre » : un second filigrane apparaît au centre, sélectionné ; le glisser dans un coin, changer son texte : le premier garde le sien. Cliquer le premier : le panneau montre ses réglages. « Retirer de la page » sur l'un ; ⌘Z le ramène. Enregistrer : la copie porte les deux.
+
+## Bureau
+
+`pnpm desktop:smoke` (ou `pnpm --filter @holy-pdf/desktop smoke`) construit la page de test du moteur et la lance dans la coque Tauri ; le processus sort avec 0 si PDFium, qpdf et les workers tournent dans la webview (voir la [spec](../specs/2026-10-05-desktop-tauri-design.md)). Rust via rustup est nécessaire ; rien ne tourne en CI.

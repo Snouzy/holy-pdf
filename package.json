@@ -13,6 +13,7 @@
     "check": "pnpm --filter @holy-pdf/web check",
     "test": "pnpm --filter @holy-pdf/web test",
     "verify": "pnpm --filter @holy-pdf/web verify",
-    "verify:full": "pnpm --filter @holy-pdf/web verify:full"
+    "verify:full": "pnpm --filter @holy-pdf/web verify:full",
+    "desktop:smoke": "pnpm --filter @holy-pdf/desktop smoke"
   }
 }

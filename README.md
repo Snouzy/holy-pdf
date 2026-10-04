@@ -43,7 +43,7 @@ Node 22.12 or later (CI uses 24) and pnpm. Details in [CONTRIBUTING.md](CONTRIBU
 ## Repository
 
 - `apps/web/`: the site (Astro, Preact) and its engine. Development happens here.
-- `apps/desktop/`: the desktop app (Tauri) for Mac, Windows and Linux, built on the site's code. Coming next.
+- `apps/desktop/`: the desktop shell (Tauri 2) for Mac and Windows, then Linux, built on the site's code. Today an engine smoke test (`pnpm --filter @holy-pdf/desktop smoke`, needs Rust); the app comes next.
 - `Packages/Core`, `apps/mac`: the Swift engine and native Mac app. Frozen since 4 October 2026; the desktop app replaces them.
 - `wiki/`: product, specs and technical guide, in French. Opens as an Obsidian vault.
 - `tools/`: research prototypes.

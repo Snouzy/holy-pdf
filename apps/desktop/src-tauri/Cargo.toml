@@ -1,0 +1,22 @@
+[package]
+name = "holy-pdf"
+version = "0.1.0"
+description = "Holy PDF desktop shell: the site's PDF tools in a Tauri window"
+authors = ["Snouzylabs S.R.L."]
+license-file = "../../../LICENSING.md"
+publish = false
+repository = "https://github.com/Snouzy/holy-pdf"
+edition = "2024"
+rust-version = "1.90"
+
+[lib]
+name = "app_lib"
+crate-type = ["rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.7.1", features = [] }
+
+[dependencies]
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+tauri = { version = "2.12.1", features = [] }

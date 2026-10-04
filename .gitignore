@@ -21,3 +21,4 @@ tasks/
 .claude/settings.local.json
 .superpowers/
 node_modules/
+apps/desktop/dist-smoke/
