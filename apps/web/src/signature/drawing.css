@@ -1,0 +1,12 @@
+.signature-enlarge { width: 100%; margin-top: 0.5rem; }
+.signature-drawing .signature-buttons .signature-add { flex-basis: 100%; }
+.signature-drawing-dialog { box-sizing: border-box; width: min(64rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: clamp(1rem, 3vw, 2rem); border: 1px solid var(--line); border-radius: var(--radius-control); color: var(--ink); background: var(--surface); }
+.signature-drawing-dialog::backdrop { background: rgb(20 26 46 / 55%); }
+.signature-drawing-heading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+.signature-drawing-heading h2 { margin: 0; font-size: clamp(1.25rem, 3vw, 1.75rem); }
+.signature-drawing-dialog > .signature-hint { margin-bottom: 1rem; }
+.signature-drawing .signature-drawing-dialog canvas { max-height: calc(100dvh - 17rem); width: auto; max-width: 100%; margin-inline: auto; }
+.signature-drawing-dialog .signature-buttons button { flex: 1 1 10rem; }
+@media (max-width: 600px) {
+  .signature-drawing-dialog { width: calc(100vw - 1rem); padding: 0.75rem; }
+}

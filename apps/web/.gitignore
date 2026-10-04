@@ -1,0 +1,9 @@
+node_modules/
+public/ocr/
+public/scan/
+dist/
+.astro/
+.wrangler/
+.lighthouseci/
+test-results/
+playwright-report/

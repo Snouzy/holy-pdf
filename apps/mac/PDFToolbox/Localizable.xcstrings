@@ -1,0 +1,7045 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ · page %lld / %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · page %lld / %lld"
+          }
+        }
+      }
+    },
+    "%@, coming soon" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, bientôt"
+          }
+        }
+      }
+    },
+    "%lld PDF already exist in this folder" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld PDF already exists in this folder"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld PDF already exist in this folder"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld PDF existe déjà dans ce dossier"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld PDF existent déjà dans ce dossier"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld PDFs saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld PDF enregistrés"
+          }
+        }
+      }
+    },
+    "%lld documents" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld document"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld documents"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld document"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld documents"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld p." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld p."
+          }
+        }
+      }
+    },
+    "%lld pages" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld page"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld pages"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld page"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld pages"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld pages still need checking." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld page still needs checking."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld pages still need checking."
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld page est encore à vérifier."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld pages sont encore à vérifier."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld°" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld°"
+          }
+        }
+      }
+    },
+    "1 page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 page"
+          }
+        }
+      }
+    },
+    "200 dpi, real page format (A4, A5). The GPS position of the photos is never copied into the PDFs." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "200 dpi, format réel (A4, A5). La position GPS des photos n'est jamais copiée dans les PDF."
+          }
+        }
+      }
+    },
+    "A PDF takes up to 200 images." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un PDF prend jusqu'à 200 images."
+          }
+        }
+      }
+    },
+    "A PDF without its password" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un PDF sans son mot de passe"
+          }
+        }
+      }
+    },
+    "A balance between size and image quality." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un équilibre entre taille et qualité d'image."
+          }
+        }
+      }
+    },
+    "A hidden corner was rebuilt: check it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un coin caché a été reconstruit : vérifiez-le."
+          }
+        }
+      }
+    },
+    "A page could not be rendered again: the PDF keeps its last good render." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une page n'a pas pu être recalculée : le PDF garde son dernier rendu réussi."
+          }
+        }
+      }
+    },
+    "A page could not be turned into an image. Your original PDF has not changed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une page n'a pas pu être changée en image. Votre PDF original n'a pas changé."
+          }
+        }
+      }
+    },
+    "A page that carries a black area becomes an image: what the area covers is no longer in the file. On that page, the text can no longer be selected, and the links, notes and form fields are removed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une page qui porte une zone noire devient une image : ce que la zone couvre n'est plus dans le fichier. Sur cette page, le texte ne peut plus être sélectionné, et les liens, les notes et les champs de formulaire sont retirés."
+          }
+        }
+      }
+    },
+    "A password on your PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un mot de passe sur votre PDF"
+          }
+        }
+      }
+    },
+    "A ribbon on every chapter" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un signet à chaque chapitre"
+          }
+        }
+      }
+    },
+    "A strong compression. The images lose detail." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compression forte. Les images perdent du détail."
+          }
+        }
+      }
+    },
+    "A4 sheet, landscape." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feuille A4 à l'italienne."
+          }
+        }
+      }
+    },
+    "A4 sheet, portrait." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feuille A4 à la française."
+          }
+        }
+      }
+    },
+    "Accessibility tags from the original PDF will not be kept in the saved copy." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les balises d’accessibilité du PDF original ne seront pas conservées dans la copie enregistrée."
+          }
+        }
+      }
+    },
+    "Accessibility tags from the source PDFs will not be kept in the merged copy." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le PDF fusionné ne conservera pas la structure d’accessibilité des originaux."
+          }
+        }
+      }
+    },
+    "Add PDFs…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des PDF…"
+          }
+        }
+      }
+    },
+    "Add Photos…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des photos…"
+          }
+        }
+      }
+    },
+    "Add a Suffix (-2)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un suffixe (-2)"
+          }
+        }
+      }
+    },
+    "Add a bookmark to page %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un signet à la page %lld"
+          }
+        }
+      }
+    },
+    "Add a number to every page, where you want it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez un numéro sur chaque page, là où vous voulez."
+          }
+        }
+      }
+    },
+    "Add a watermark" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un filigrane"
+          }
+        }
+      }
+    },
+    "Add a watermark, on your Mac" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez un filigrane, sur votre Mac"
+          }
+        }
+      }
+    },
+    "Add at least two PDFs, then unlock or remove any files that are not ready." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez au moins deux PDF, puis déverrouillez ou retirez les fichiers qui ne sont pas prêts."
+          }
+        }
+      }
+    },
+    "Add at least two readable PDFs before merging." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez au moins deux PDF lisibles avant de fusionner."
+          }
+        }
+      }
+    },
+    "Add bookmarks" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des signets"
+          }
+        }
+      }
+    },
+    "Add images…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des images…"
+          }
+        }
+      }
+    },
+    "Add text, images, shapes and highlighter to your pages." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez du texte, des images, des formes et du surligneur sur vos pages."
+          }
+        }
+      }
+    },
+    "Add this text" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter ce texte"
+          }
+        }
+      }
+    },
+    "All pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les pages"
+          }
+        }
+      }
+    },
+    "An addition could not be written. Check it, then save again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un ajout n'a pas pu être écrit. Vérifiez-le, puis enregistrez de nouveau."
+          }
+        }
+      }
+    },
+    "An edge of the page is hard to see." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un bord de la page se voit mal."
+          }
+        }
+      }
+    },
+    "An image could not be read. Remove it and try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une image n'a pas pu être lue. Retirez-la et recommencez."
+          }
+        }
+      }
+    },
+    "Angle" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angle"
+          }
+        }
+      }
+    },
+    "Apply" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appliquer"
+          }
+        }
+      }
+    },
+    "Archival and print profiles will not be kept. The merged copy is not guaranteed to comply with PDF/A or retain the same print colors." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les profils d’archivage et d’impression ne seront pas conservés. La conformité PDF/A et les mêmes couleurs à l’impression ne sont pas garanties."
+          }
+        }
+      }
+    },
+    "Archival and print profiles will not be kept. The saved copy is not guaranteed to comply with PDF/A or retain the same print colors." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les profils d’archivage et d’impression ne seront pas conservés. La copie enregistrée ne garantit ni la conformité PDF/A ni les mêmes couleurs à l’impression."
+          }
+        }
+      }
+    },
+    "Arrow" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flèche"
+          }
+        }
+      }
+    },
+    "Auto" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto"
+          }
+        }
+      }
+    },
+    "Bind your photos into one PDF, in the order you choose." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reliez vos photos en un seul PDF, dans l'ordre de votre choix."
+          }
+        }
+      }
+    },
+    "Black" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noir"
+          }
+        }
+      }
+    },
+    "Black areas: %lld (pages: %lld)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zones noires : %lld (pages : %lld)"
+          }
+        }
+      }
+    },
+    "Blue" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bleu"
+          }
+        }
+      }
+    },
+    "Bold" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gras"
+          }
+        }
+      }
+    },
+    "Bookmarks and document properties (title, author) stay in the copy." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les signets et les propriétés du document (titre, auteur) restent dans la copie."
+          }
+        }
+      }
+    },
+    "Bookmarks that lead to no page of this PDF: %lld. The copy does not keep them." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signets qui ne mènent à aucune page de ce PDF : %lld. La copie ne les garde pas."
+          }
+        }
+      }
+    },
+    "Bookmarks: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signets : %lld"
+          }
+        }
+      }
+    },
+    "Bottom center" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En bas au centre"
+          }
+        }
+      }
+    },
+    "Bottom left" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En bas à gauche"
+          }
+        }
+      }
+    },
+    "Bottom right" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En bas à droite"
+          }
+        }
+      }
+    },
+    "Bring several PDFs together in the order you choose." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réunissez plusieurs PDF dans l’ordre de votre choix."
+          }
+        }
+      }
+    },
+    "Bring to front" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre devant"
+          }
+        }
+      }
+    },
+    "Bring your PDFs together" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réunissez vos PDF"
+          }
+        }
+      }
+    },
+    "Brother Binder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brother Binder"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Classeur"
+          }
+        }
+      }
+    },
+    "Brother Copyist" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Copiste"
+          }
+        }
+      }
+    },
+    "Brother Folio" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Folio"
+          }
+        }
+      }
+    },
+    "Brother Frame" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Cadre"
+          }
+        }
+      }
+    },
+    "Brother Glass" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Vitrail"
+          }
+        }
+      }
+    },
+    "Brother Illuminator" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Enlumineur"
+          }
+        }
+      }
+    },
+    "Brother Inkpot" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Encrier"
+          }
+        }
+      }
+    },
+    "Brother Layer" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Calque"
+          }
+        }
+      }
+    },
+    "Brother Lens" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Loupe"
+          }
+        }
+      }
+    },
+    "Brother Mosaic" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Mosaïque"
+          }
+        }
+      }
+    },
+    "Brother Padlock" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Cadenas"
+          }
+        }
+      }
+    },
+    "Brother Passkey" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Passe-partout"
+          }
+        }
+      }
+    },
+    "Brother Press" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Pressoir"
+          }
+        }
+      }
+    },
+    "Brother Quill" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Plume"
+          }
+        }
+      }
+    },
+    "Brother Reader" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Lecteur"
+          }
+        }
+      }
+    },
+    "Brother Ribbon" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Signet"
+          }
+        }
+      }
+    },
+    "Brother Roller" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Rouleau"
+          }
+        }
+      }
+    },
+    "Brother Scissors" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Ciseaux"
+          }
+        }
+      }
+    },
+    "Brother Scribe" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Scribe"
+          }
+        }
+      }
+    },
+    "Brother Snap" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Déclic"
+          }
+        }
+      }
+    },
+    "Brother Stamp" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Tampon"
+          }
+        }
+      }
+    },
+    "Brother Staple" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Agrafe"
+          }
+        }
+      }
+    },
+    "Brother Trimmer" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frère Massicot"
+          }
+        }
+      }
+    },
+    "CONFIDENTIAL" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CONFIDENTIEL"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        }
+      }
+    },
+    "Change Rendering" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changer le rendu"
+          }
+        }
+      }
+    },
+    "Check the page number settings before saving." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez les réglages des numéros avant d’enregistrer."
+          }
+        }
+      }
+    },
+    "Check the watermark settings before saving." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez les réglages du filigrane avant d'enregistrer."
+          }
+        }
+      }
+    },
+    "Choose PDFs…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir des PDF…"
+          }
+        }
+      }
+    },
+    "Choose Photos…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir des photos…"
+          }
+        }
+      }
+    },
+    "Choose a PDF under 256 MB." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez un PDF de moins de 256 Mo."
+          }
+        }
+      }
+    },
+    "Choose a PDF…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a PDF…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir un PDF…"
+          }
+        }
+      }
+    },
+    "Choose a different name or folder to keep your original PDF." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez un autre nom ou dossier pour conserver votre PDF original."
+          }
+        }
+      }
+    },
+    "Choose a different name or folder to keep your original PDFs." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez un autre nom ou dossier pour conserver vos PDF originaux."
+          }
+        }
+      }
+    },
+    "Choose a readable PNG or JPEG image." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez une image PNG ou JPEG lisible."
+          }
+        }
+      }
+    },
+    "Choose a readable PNG or JPEG signature." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez une signature au format PNG ou JPEG lisible."
+          }
+        }
+      }
+    },
+    "Choose a readable image: JPEG, PNG, HEIC, WebP, TIFF or GIF." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez une image lisible : JPEG, PNG, HEIC, WebP, TIFF ou GIF."
+          }
+        }
+      }
+    },
+    "Choose an image under 10 MB and 16 million pixels." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez une image de moins de 10 Mo et 16 millions de pixels."
+          }
+        }
+      }
+    },
+    "Choose an image under 50 MB and 50 million pixels." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez une image de moins de 50 Mo et 50 millions de pixels."
+          }
+        }
+      }
+    },
+    "Choose an image…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir une image…"
+          }
+        }
+      }
+    },
+    "Choose another PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir un autre PDF…"
+          }
+        }
+      }
+    },
+    "Choose images…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir des images…"
+          }
+        }
+      }
+    },
+    "Choose the PDF to lay on it…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir le PDF à poser dessus…"
+          }
+        }
+      }
+    },
+    "Choose the document order" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez l’ordre des documents"
+          }
+        }
+      }
+    },
+    "Choose…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir…"
+          }
+        }
+      }
+    },
+    "Clean" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nettoyage"
+          }
+        }
+      }
+    },
+    "Clear all %lld PDFs?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer les %lld PDF de la liste ?"
+          }
+        }
+      }
+    },
+    "Clear drawing" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Effacer le dessin"
+          }
+        }
+      }
+    },
+    "Clear the list" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vider la liste"
+          }
+        }
+      }
+    },
+    "Click a page to correct it. Drag a page to move it to another document." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez sur une page pour la corriger. Glissez une page pour la déplacer vers un autre document."
+          }
+        }
+      }
+    },
+    "Click a page to correct it. Drag it to move it to another document. ⚠︎ marks a page to check. Use ⋯ to download or delete a document." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez sur une page pour la corriger. Glissez-la pour la déplacer vers un autre document. ⚠︎ marque une page à vérifier. ⋯ permet de télécharger ou de supprimer un document."
+          }
+        }
+      }
+    },
+    "Click an addition to move it, resize it or change its style." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez sur un ajout pour le déplacer, changer sa taille ou son style."
+          }
+        }
+      }
+    },
+    "Click on the page to place the mark there. Drag it to move it, drag its corner to resize it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez sur la page pour y poser la marque. Glissez-la pour la déplacer, tirez son coin pour changer sa taille."
+          }
+        }
+      }
+    },
+    "Click the pages to keep. The eye previews a page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez sur les pages à garder. L’œil agrandit une page."
+          }
+        }
+      }
+    },
+    "Click the scissors between two pages to cut there. Click a page to preview it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez sur les ciseaux entre deux pages pour couper à cet endroit. Cliquez sur une page pour l’agrandir."
+          }
+        }
+      }
+    },
+    "Close" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer"
+          }
+        }
+      }
+    },
+    "Close PDF" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close PDF"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fermer le PDF"
+          }
+        }
+      }
+    },
+    "Color" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couleur"
+          }
+        }
+      }
+    },
+    "Compress a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compresser un PDF"
+          }
+        }
+      }
+    },
+    "Compress the PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compresser le PDF"
+          }
+        }
+      }
+    },
+    "Compressed copy" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie compressée"
+          }
+        }
+      }
+    },
+    "Compressed copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie compressée enregistrée"
+          }
+        }
+      }
+    },
+    "Compressing…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je presse…"
+          }
+        }
+      }
+    },
+    "Compression level" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niveau de compression"
+          }
+        }
+      }
+    },
+    "Confirm the password" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirmez le mot de passe"
+          }
+        }
+      }
+    },
+    "Convert" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convertir"
+          }
+        }
+      }
+    },
+    "Convert to JPG…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convertir en JPG…"
+          }
+        }
+      }
+    },
+    "Convert to Word…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convertir en Word…"
+          }
+        }
+      }
+    },
+    "Copy the text and the pictures of a PDF into a Word document you can edit." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recopiez le texte et les images d'un PDF dans un document Word modifiable."
+          }
+        }
+      }
+    },
+    "Copy with bookmarks saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie avec signets enregistrée"
+          }
+        }
+      }
+    },
+    "Copy with its text saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie avec son texte enregistrée"
+          }
+        }
+      }
+    },
+    "Copying the pages…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je recopie les pages…"
+          }
+        }
+      }
+    },
+    "Corner" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coin"
+          }
+        }
+      }
+    },
+    "Corners" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coins"
+          }
+        }
+      }
+    },
+    "Corners set by hand." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coins posés à la main."
+          }
+        }
+      }
+    },
+    "Correct" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corriger"
+          }
+        }
+      }
+    },
+    "Correct…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corriger…"
+          }
+        }
+      }
+    },
+    "Could not be read as an image: %@." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Illisible comme image : %@."
+          }
+        }
+      }
+    },
+    "Counting the photos…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comptage des photos…"
+          }
+        }
+      }
+    },
+    "Cover what must stay private: the copy no longer holds it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couvrez ce qui doit rester privé : la copie ne le contient plus."
+          }
+        }
+      }
+    },
+    "Create the PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer le PDF…"
+          }
+        }
+      }
+    },
+    "Create your signature" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créez votre signature"
+          }
+        }
+      }
+    },
+    "Crop" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recadrer"
+          }
+        }
+      }
+    },
+    "Cut a PDF into several files, wherever you want." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coupez un PDF en plusieurs fichiers, là où vous voulez."
+          }
+        }
+      }
+    },
+    "Cut after this page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couper après cette page"
+          }
+        }
+      }
+    },
+    "Cut copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie coupée enregistrée"
+          }
+        }
+      }
+    },
+    "Cut each page in two: just right for a book scanned flat." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coupez chaque page en deux : idéal pour un livre scanné à plat."
+          }
+        }
+      }
+    },
+    "Cutting…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je coupe…"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
+          }
+        }
+      }
+    },
+    "Delete Document" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le document"
+          }
+        }
+      }
+    },
+    "Delete Document…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le document…"
+          }
+        }
+      }
+    },
+    "Delete Page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer la page"
+          }
+        }
+      }
+    },
+    "Delete page" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete page"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer la page"
+          }
+        }
+      }
+    },
+    "Delete “%@” and its %lld pages?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete “%1$@” and its %#@pages@?"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "page"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "%arg pages"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer « %1$@ » et %#@pages@ ?"
+          },
+          "substitutions" : {
+            "pages" : {
+              "argNum" : 2,
+              "formatSpecifier" : "lld",
+              "variations" : {
+                "plural" : {
+                  "one" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "sa page"
+                    }
+                  },
+                  "other" : {
+                    "stringUnit" : {
+                      "state" : "translated",
+                      "value" : "ses %arg pages"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Direction of the cut" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sens de la coupe"
+          }
+        }
+      }
+    },
+    "Discard changes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard changes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner les modifications"
+          }
+        }
+      }
+    },
+    "Discard changes to %@?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner les modifications de %@ ?"
+          }
+        }
+      }
+    },
+    "Discard unsaved page changes?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard unsaved page changes?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abandonner les modifications non enregistrées ?"
+          }
+        }
+      }
+    },
+    "Document" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Document"
+          }
+        }
+      }
+    },
+    "Document actions" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions du document"
+          }
+        }
+      }
+    },
+    "Document name" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du document"
+          }
+        }
+      }
+    },
+    "Documents" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Documents"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer"
+          }
+        }
+      }
+    },
+    "Done cropping" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terminer le recadrage"
+          }
+        }
+      }
+    },
+    "Download PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger le PDF…"
+          }
+        }
+      }
+    },
+    "Download this document as a PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger ce document en PDF…"
+          }
+        }
+      }
+    },
+    "Download…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger…"
+          }
+        }
+      }
+    },
+    "Drag a file above another, or use the arrows." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glissez un fichier au-dessus d’un autre, ou utilisez les flèches."
+          }
+        }
+      }
+    },
+    "Drag files into the order you want, or use the arrows." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glissez les fichiers dans l’ordre souhaité, ou utilisez les flèches."
+          }
+        }
+      }
+    },
+    "Drag on the page to cover what must disappear." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites glisser sur la page pour couvrir ce qui doit disparaître."
+          }
+        }
+      }
+    },
+    "Drag pages into order, or use the arrows. Click a page to preview it." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag pages into order, or use the arrows. Click a page to preview it."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glissez les pages dans l’ordre souhaité, ou utilisez les flèches. Cliquez sur une page pour l’agrandir."
+          }
+        }
+      }
+    },
+    "Drag the corners to keep only part of the image." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tirez les coins pour ne garder qu'une partie de l'image."
+          }
+        }
+      }
+    },
+    "Drag the watermark to move it. Drag its corner to resize it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glissez le filigrane pour le déplacer. Tirez son coin pour changer sa taille."
+          }
+        }
+      }
+    },
+    "Draw a signature, import an image or type a line, then place it on the pages as often as you like." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dessinez une signature, importez une image ou tapez une ligne, puis posez-la sur les pages autant de fois que vous voulez."
+          }
+        }
+      }
+    },
+    "Draw or import a signature…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dessiner ou importer une signature…"
+          }
+        }
+      }
+    },
+    "Draw with your mouse or trackpad, or import a PNG or JPEG." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dessinez avec votre souris ou votre trackpad, ou importez un PNG ou JPEG."
+          }
+        }
+      }
+    },
+    "Draw your signature and save a signed copy." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dessinez votre signature et enregistrez une copie signée."
+          }
+        }
+      }
+    },
+    "Drop a PDF here to cut it into several files." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici pour le couper en plusieurs fichiers."
+          }
+        }
+      }
+    },
+    "Drop a PDF here to pull out the pages you choose." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici pour en extraire les pages choisies."
+          }
+        }
+      }
+    },
+    "Drop a PDF here to reorder, rotate or remove its pages." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drop a PDF here to reorder, rotate or remove its pages."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici pour réorganiser, pivoter ou supprimer ses pages."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then add text, images, shapes or highlighter." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis ajoutez du texte, des images, des formes ou du surligneur."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then choose a text or an image." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis choisissez un texte ou une image."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then choose how hard to press." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis choisissez la pression."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then choose how many pages go on each sheet." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis choisissez combien de pages par feuille."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then choose its password." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis choisissez son mot de passe."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then choose the direction of the cut." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis choisissez le sens de la coupe."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then choose where the numbers go." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis choisissez où placer les numéros."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then drag over what must disappear." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis faites glisser sur ce qui doit disparaître."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then draw or import your signature." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis dessinez ou importez votre signature."
+          }
+        }
+      }
+    },
+    "Drop a PDF here, then mark the pages you want to find again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici, puis marquez les pages à retrouver."
+          }
+        }
+      }
+    },
+    "Drop a PDF here: each page becomes a JPG image." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici : chaque page devient une image JPG."
+          }
+        }
+      }
+    },
+    "Drop a PDF here: each page becomes a picture." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici : chaque page devient une image."
+          }
+        }
+      }
+    },
+    "Drop a PDF here: its filled fields and its annotations become part of the page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici : ses champs remplis et ses annotations deviennent partie de la page."
+          }
+        }
+      }
+    },
+    "Drop a PDF here: its text and its pictures go into a Word document." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF ici : son texte et ses images passent dans un document Word."
+          }
+        }
+      }
+    },
+    "Drop a page here for a new document" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glissez une page ici pour un nouveau document"
+          }
+        }
+      }
+    },
+    "Drop a protected PDF here. You need its password to open it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF protégé ici. Il faut son mot de passe pour l'ouvrir."
+          }
+        }
+      }
+    },
+    "Drop a scanned PDF here, then let the monk read it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez un PDF scanné ici, puis laissez le moine le lire."
+          }
+        }
+      }
+    },
+    "Drop here to move to the end" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drop here to move to the end"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez ici pour déplacer à la fin"
+          }
+        }
+      }
+    },
+    "Drop images here, then drag them into the order you want." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez des images ici, puis glissez-les dans l'ordre voulu."
+          }
+        }
+      }
+    },
+    "Drop the PDF that receives the other one: a letter for your letterhead, for instance." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez le PDF qui reçoit l'autre : une lettre pour votre papier à en-tête, par exemple."
+          }
+        }
+      }
+    },
+    "Drop your PDFs here, arrange them, then save one document." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez vos PDF ici, choisissez leur ordre, puis enregistrez un seul document."
+          }
+        }
+      }
+    },
+    "Drop your document photos 📸" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez vos photos de documents 📸"
+          }
+        }
+      }
+    },
+    "Each image takes one A4 page, turned to its shape. Drag the rows, or use their arrows, to set the order of the pages." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque image prend une page A4, tournée selon sa forme. Glissez les lignes, ou servez-vous de leurs flèches, pour régler l'ordre des pages."
+          }
+        }
+      }
+    },
+    "Each page becomes a picture: the text can no longer be selected or copied." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque page devient une image : le texte ne se sélectionne plus et ne se copie plus."
+          }
+        }
+      }
+    },
+    "Edit" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier"
+          }
+        }
+      }
+    },
+    "Edit a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier un PDF"
+          }
+        }
+      }
+    },
+    "Edit your PDF, on your Mac" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifiez votre PDF, sur votre Mac"
+          }
+        }
+      }
+    },
+    "Edited copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie modifiée enregistrée"
+          }
+        }
+      }
+    },
+    "Ellipse" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ellipse"
+          }
+        }
+      }
+    },
+    "Enter a text or choose an image to save a copy." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez un texte ou choisissez une image pour enregistrer une copie."
+          }
+        }
+      }
+    },
+    "Enter the PDF password to open it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez le mot de passe du PDF pour l’ouvrir."
+          }
+        }
+      }
+    },
+    "Erase" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gomme"
+          }
+        }
+      }
+    },
+    "Eraser" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gomme"
+          }
+        }
+      }
+    },
+    "Eraser size" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille de la gomme"
+          }
+        }
+      }
+    },
+    "Every page gets its number" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À chaque page son numéro"
+          }
+        }
+      }
+    },
+    "Every page in its place" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every page in its place"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque page à sa place"
+          }
+        }
+      }
+    },
+    "Every page, illuminated as an image" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque page, enluminée en image"
+          }
+        }
+      }
+    },
+    "Everything runs here: nothing is sent." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout est traité ici : rien n'est envoyé."
+          }
+        }
+      }
+    },
+    "Export" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter"
+          }
+        }
+      }
+    },
+    "Export %lld PDF" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Export %lld PDF"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Export %lld PDFs"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Exporter %lld PDF"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Exporter %lld PDF"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Export %lld documents" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Export %lld document"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Export %lld documents"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Exporter %lld document"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Exporter %lld documents"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Export…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter…"
+          }
+        }
+      }
+    },
+    "Extract images" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extraire les images"
+          }
+        }
+      }
+    },
+    "Extract pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extraire des pages"
+          }
+        }
+      }
+    },
+    "Extreme" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extrême"
+          }
+        }
+      }
+    },
+    "Fields and annotations to flatten: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Champs et annotations à aplatir : %lld"
+          }
+        }
+      }
+    },
+    "File %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fichier %lld"
+          }
+        }
+      }
+    },
+    "Filled" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plein"
+          }
+        }
+      }
+    },
+    "First number" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premier numéro"
+          }
+        }
+      }
+    },
+    "Flatten a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aplatir un PDF"
+          }
+        }
+      }
+    },
+    "Flattened copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie aplatie enregistrée"
+          }
+        }
+      }
+    },
+    "Flip horizontally" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retourner horizontalement"
+          }
+        }
+      }
+    },
+    "Flip vertically" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retourner verticalement"
+          }
+        }
+      }
+    },
+    "Folder" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dossier"
+          }
+        }
+      }
+    },
+    "Font" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Police"
+          }
+        }
+      }
+    },
+    "For a scanned open book: each page on its own." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour un livre scanné ouvert : chaque page à part."
+          }
+        }
+      }
+    },
+    "For a sheet folded in two across its height." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour une feuille pliée en deux dans la hauteur."
+          }
+        }
+      }
+    },
+    "Format" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format"
+          }
+        }
+      }
+    },
+    "Four pages, one sheet" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quatre pages, une seule feuille"
+          }
+        }
+      }
+    },
+    "Freeze the filled fields and the annotations into the page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Figez les champs remplis et les annotations dans la page."
+          }
+        }
+      }
+    },
+    "From page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De la page"
+          }
+        }
+      }
+    },
+    "Green" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vert"
+          }
+        }
+      }
+    },
+    "HEIC, JPEG or PNG. Everything runs on this Mac: nothing is sent." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HEIC, JPEG ou PNG. Tout est traité sur ce Mac : rien n'est envoyé."
+          }
+        }
+      }
+    },
+    "Handwritten" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manuscrit"
+          }
+        }
+      }
+    },
+    "Hide the tips" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masquer les conseils"
+          }
+        }
+      }
+    },
+    "High (sharper)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Élevée (plus nette)"
+          }
+        }
+      }
+    },
+    "High, 300 ppi" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Élevée, 300 ppp"
+          }
+        }
+      }
+    },
+    "High: sharper images, but heavier." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Élevée : images plus nettes, mais plus lourdes."
+          }
+        }
+      }
+    },
+    "Highlighter" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Surligneur"
+          }
+        }
+      }
+    },
+    "Holy PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holy PDF"
+          }
+        }
+      }
+    },
+    "I copy, you correct" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je recopie, vous corrigez"
+          }
+        }
+      }
+    },
+    "Illuminating…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J'enlumine…"
+          }
+        }
+      }
+    },
+    "Image" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Image"
+          }
+        }
+      }
+    },
+    "Image quality" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualité de l'image"
+          }
+        }
+      }
+    },
+    "Images ready: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Images prêtes : %lld"
+          }
+        }
+      }
+    },
+    "Images to PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Images en PDF"
+          }
+        }
+      }
+    },
+    "Images: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Images : %lld"
+          }
+        }
+      }
+    },
+    "Import image…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer une image…"
+          }
+        }
+      }
+    },
+    "It covers the page wherever it is not transparent." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il couvre la page partout où il n'est pas transparent."
+          }
+        }
+      }
+    },
+    "It shows wherever the page left the paper bare." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il se voit partout où la page a laissé le papier nu."
+          }
+        }
+      }
+    },
+    "Its page 1 goes on page 1, its page 2 on page 2, and so on. Its last page goes on all the pages that remain." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sa page 1 va sur la page 1, sa page 2 sur la page 2, et ainsi de suite. Sa dernière page va sur toutes les pages qui restent."
+          }
+        }
+      }
+    },
+    "Keep at least one page before saving the PDF." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep at least one page before saving the PDF."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conservez au moins une page avant d’enregistrer le PDF."
+          }
+        }
+      }
+    },
+    "Keep only the best" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne gardez que le meilleur"
+          }
+        }
+      }
+    },
+    "Keep only the pages you choose, in a new PDF." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardez seulement les pages choisies, dans un nouveau PDF."
+          }
+        }
+      }
+    },
+    "Keep this password: without it, nobody can open the copy, not even you." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardez ce mot de passe : sans lui, personne n'ouvrira la copie, pas même vous."
+          }
+        }
+      }
+    },
+    "Keep watermark" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garder le filigrane"
+          }
+        }
+      }
+    },
+    "Language of the text" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Langue du texte"
+          }
+        }
+      }
+    },
+    "Lay the pages of a PDF on those of another: a letterhead under a letter." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posez les pages d'un PDF sur celles d'un autre : un papier à en-tête sous une lettre."
+          }
+        }
+      }
+    },
+    "Laying out the sheets…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je compose les feuilles…"
+          }
+        }
+      }
+    },
+    "Laying the pages…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pose les pages…"
+          }
+        }
+      }
+    },
+    "Left | right" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gauche | droite"
+          }
+        }
+      }
+    },
+    "Letter" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lettre"
+          }
+        }
+      }
+    },
+    "Line" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ligne"
+          }
+        }
+      }
+    },
+    "Loading preview…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chargement de l’aperçu…"
+          }
+        }
+      }
+    },
+    "Look at the saved copy before you share it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regardez la copie enregistrée avant de la partager."
+          }
+        }
+      }
+    },
+    "Low" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basse"
+          }
+        }
+      }
+    },
+    "Make a PDF lighter: the photos slim down, the words stay." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allégez un PDF : les photos maigrissent, les mots restent."
+          }
+        }
+      }
+    },
+    "Make larger" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agrandir"
+          }
+        }
+      }
+    },
+    "Make smaller" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réduire"
+          }
+        }
+      }
+    },
+    "Making the PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je fais le PDF…"
+          }
+        }
+      }
+    },
+    "Mark at least one page or one cut before saving." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquez au moins une page ou une coupe avant d’enregistrer."
+          }
+        }
+      }
+    },
+    "Mark the chapters of a PDF, to find them in one click." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquez les chapitres d'un PDF, pour les retrouver en un clic."
+          }
+        }
+      }
+    },
+    "Mark your pages with a text or a logo." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marquez vos pages d'un texte ou d'un logo."
+          }
+        }
+      }
+    },
+    "Medium" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moyenne"
+          }
+        }
+      }
+    },
+    "Merge" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fusionner"
+          }
+        }
+      }
+    },
+    "Merge PDFs" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fusionner des PDF"
+          }
+        }
+      }
+    },
+    "Merged PDF saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF fusionné enregistré"
+          }
+        }
+      }
+    },
+    "Merged documents" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Documents fusionnés"
+          }
+        }
+      }
+    },
+    "Merging PDFs…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fusion des PDF…"
+          }
+        }
+      }
+    },
+    "Monks found: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moines trouvés : %lld"
+          }
+        }
+      }
+    },
+    "Move Corners" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer les coins"
+          }
+        }
+      }
+    },
+    "Move Page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer la page"
+          }
+        }
+      }
+    },
+    "Move down" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer vers le bas"
+          }
+        }
+      }
+    },
+    "Move earlier" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move earlier"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer avant"
+          }
+        }
+      }
+    },
+    "Move later" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move later"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer après"
+          }
+        }
+      }
+    },
+    "Move left" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer à gauche"
+          }
+        }
+      }
+    },
+    "Move right" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer à droite"
+          }
+        }
+      }
+    },
+    "Move up" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer vers le haut"
+          }
+        }
+      }
+    },
+    "Move up one level" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remonter d'un niveau"
+          }
+        }
+      }
+    },
+    "Name, initials or date" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom, initiales ou date"
+          }
+        }
+      }
+    },
+    "New Document" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau document"
+          }
+        }
+      }
+    },
+    "Next Page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page suivante"
+          }
+        }
+      }
+    },
+    "Next page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page suivante"
+          }
+        }
+      }
+    },
+    "No folder chosen" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun dossier choisi"
+          }
+        }
+      }
+    },
+    "No monk does that… yet" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun moine ne fait ça… pour l'instant"
+          }
+        }
+      }
+    },
+    "No page found: the corners are at the edges of the photo." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune page trouvée : les coins sont aux bords de la photo."
+          }
+        }
+      }
+    },
+    "No photo could be taken out of this PDF: convert its pages instead." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune photo n’a pu être extraite de ce PDF : convertissez plutôt ses pages."
+          }
+        }
+      }
+    },
+    "No text to add: these pages already have their text, or show none." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun texte à ajouter : ces pages ont déjà leur texte, ou n'en montrent pas."
+          }
+        }
+      }
+    },
+    "Normal (recommended)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normale (conseillée)"
+          }
+        }
+      }
+    },
+    "Normal, 150 ppi" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normale, 150 ppp"
+          }
+        }
+      }
+    },
+    "Number the pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Numéroter les pages"
+          }
+        }
+      }
+    },
+    "Numbered copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie numérotée enregistrée"
+          }
+        }
+      }
+    },
+    "One cut, two pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un coup de massicot, deux pages"
+          }
+        }
+      }
+    },
+    "One page, one stained glass: look, don't copy" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une page, un vitrail : on regarde, on ne copie pas"
+          }
+        }
+      }
+    },
+    "One roll, and nothing moves anymore" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un coup de rouleau, et plus rien ne bouge"
+          }
+        }
+      }
+    },
+    "One snip, clean and neat" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un coup de ciseaux, net et sans bavure"
+          }
+        }
+      }
+    },
+    "Opacity" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opacité"
+          }
+        }
+      }
+    },
+    "Open PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir un PDF…"
+          }
+        }
+      }
+    },
+    "Open the folder after the export" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir le dossier après l'export"
+          }
+        }
+      }
+    },
+    "Opening PDF %lld of %lld…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouverture du PDF %lld sur %lld…"
+          }
+        }
+      }
+    },
+    "Opening PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouverture du PDF…"
+          }
+        }
+      }
+    },
+    "Opening the image…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouverture de l'image…"
+          }
+        }
+      }
+    },
+    "Optimize" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optimiser"
+          }
+        }
+      }
+    },
+    "Organize" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organiser"
+          }
+        }
+      }
+    },
+    "Organize pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Organiser les pages"
+          }
+        }
+      }
+    },
+    "Original" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Original"
+          }
+        }
+      }
+    },
+    "Outline" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contour"
+          }
+        }
+      }
+    },
+    "Over the pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par-dessus les pages"
+          }
+        }
+      }
+    },
+    "Overlaid copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie superposée enregistrée"
+          }
+        }
+      }
+    },
+    "Overlay two PDFs" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Superposer deux PDF"
+          }
+        }
+      }
+    },
+    "PDF files: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fichiers PDF : %lld"
+          }
+        }
+      }
+    },
+    "PDF password" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe du PDF"
+          }
+        }
+      }
+    },
+    "PDF saved" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF saved"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF enregistré"
+          }
+        }
+      }
+    },
+    "PDF to Word" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF en Word"
+          }
+        }
+      }
+    },
+    "PDF to images" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PDF en images"
+          }
+        }
+      }
+    },
+    "Page %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page %lld"
+          }
+        }
+      }
+    },
+    "Page %lld of %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page %lld sur %lld"
+          }
+        }
+      }
+    },
+    "Page %lld of %lld…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page %lld sur %lld…"
+          }
+        }
+      }
+    },
+    "Page Format" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format de page"
+          }
+        }
+      }
+    },
+    "Page shown" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page affichée"
+          }
+        }
+      }
+    },
+    "Pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages"
+          }
+        }
+      }
+    },
+    "Pages per file: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages par fichier : %lld"
+          }
+        }
+      }
+    },
+    "Pages per sheet" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages par feuille"
+          }
+        }
+      }
+    },
+    "Pages to JPG" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages en JPG"
+          }
+        }
+      }
+    },
+    "Pages whose corners or text should be checked. Open them to correct or confirm." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages dont les coins ou le texte sont à vérifier. Ouvrez-les pour corriger ou confirmer."
+          }
+        }
+      }
+    },
+    "Pages: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages : %lld"
+          }
+        }
+      }
+    },
+    "Pages: %lld, so as many JPG images." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages : %lld, donc autant d'images JPG."
+          }
+        }
+      }
+    },
+    "Pages: %lld. After the cut: %lld." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages : %lld. Après la coupe : %lld."
+          }
+        }
+      }
+    },
+    "Pages: %lld. Sheets: %lld." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pages : %lld. Feuilles : %lld."
+          }
+        }
+      }
+    },
+    "Password" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe"
+          }
+        }
+      }
+    },
+    "Password required" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe requis"
+          }
+        }
+      }
+    },
+    "Pen" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Crayon"
+          }
+        }
+      }
+    },
+    "Photo · drag the corners" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photo · glissez les coins"
+          }
+        }
+      }
+    },
+    "Photos in this PDF: %lld." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photos dans ce PDF : %lld."
+          }
+        }
+      }
+    },
+    "Pick a tool, then click or drag on the page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez un outil, puis cliquez ou tirez sur la page."
+          }
+        }
+      }
+    },
+    "Pixelize a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pixelliser un PDF"
+          }
+        }
+      }
+    },
+    "Pixelized copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie pixellisée enregistrée"
+          }
+        }
+      }
+    },
+    "Place a mark to save a signed copy." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posez une marque pour enregistrer une copie signée."
+          }
+        }
+      }
+    },
+    "Place another one" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En poser un autre"
+          }
+        }
+      }
+    },
+    "Place at least one cut to split the PDF." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posez au moins une coupe pour diviser le PDF."
+          }
+        }
+      }
+    },
+    "Place on this page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placer sur cette page"
+          }
+        }
+      }
+    },
+    "Place the signature inside a page before saving." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placez la signature à l’intérieur d’une page avant d’enregistrer."
+          }
+        }
+      }
+    },
+    "Placed signature" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signature placée"
+          }
+        }
+      }
+    },
+    "Placed watermark" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filigrane placé"
+          }
+        }
+      }
+    },
+    "Plain" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simple"
+          }
+        }
+      }
+    },
+    "Position" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position"
+          }
+        }
+      }
+    },
+    "Position %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Position %lld"
+          }
+        }
+      }
+    },
+    "Preview" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu"
+          }
+        }
+      }
+    },
+    "Preview %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu de %@"
+          }
+        }
+      }
+    },
+    "Preview PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher l’aperçu du PDF"
+          }
+        }
+      }
+    },
+    "Preview of the merged PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu du PDF fusionné"
+          }
+        }
+      }
+    },
+    "Preview page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agrandir la page"
+          }
+        }
+      }
+    },
+    "Preview source page %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview source page %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu de la page source %lld"
+          }
+        }
+      }
+    },
+    "Preview unavailable" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu indisponible"
+          }
+        }
+      }
+    },
+    "Previous page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page précédente"
+          }
+        }
+      }
+    },
+    "Protect a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protéger un PDF"
+          }
+        }
+      }
+    },
+    "Protected copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie protégée enregistrée"
+          }
+        }
+      }
+    },
+    "Put a password on a PDF: only those who know it open it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettez un mot de passe sur un PDF : seuls ceux qui le connaissent l'ouvrent."
+          }
+        }
+      }
+    },
+    "Put several pages on each sheet, to print less." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rangez plusieurs pages sur chaque feuille, pour imprimer moins."
+          }
+        }
+      }
+    },
+    "Put under the bookmark above" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ranger sous le signet du dessus"
+          }
+        }
+      }
+    },
+    "Quality better preserved. A gentler compression." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qualité mieux préservée. Compression plus douce."
+          }
+        }
+      }
+    },
+    "Quit" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitter"
+          }
+        }
+      }
+    },
+    "Quit without exporting?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitter sans exporter ?"
+          }
+        }
+      }
+    },
+    "Read the text" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lire le texte"
+          }
+        }
+      }
+    },
+    "Read the text (OCR)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lire le texte (OCR)"
+          }
+        }
+      }
+    },
+    "Readable on screen and on paper, light file." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lisible à l'écran et à l'impression, fichier léger."
+          }
+        }
+      }
+    },
+    "Reading PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture du PDF…"
+          }
+        }
+      }
+    },
+    "Reading page %lld of %lld…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture de la page %lld sur %lld…"
+          }
+        }
+      }
+    },
+    "Reading photos: %lld of %lld…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture des photos : %lld sur %lld…"
+          }
+        }
+      }
+    },
+    "Reading the text…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture du texte…"
+          }
+        }
+      }
+    },
+    "Recommended" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recommandée"
+          }
+        }
+      }
+    },
+    "Rectangle" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rectangle"
+          }
+        }
+      }
+    },
+    "Red" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rouge"
+          }
+        }
+      }
+    },
+    "Redact a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noircir un PDF"
+          }
+        }
+      }
+    },
+    "Redacted copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie noircie enregistrée"
+          }
+        }
+      }
+    },
+    "Redo" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rétablir"
+          }
+        }
+      }
+    },
+    "Remove" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer"
+          }
+        }
+      }
+    },
+    "Remove %@" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer %@"
+          }
+        }
+      }
+    },
+    "Remove all the images" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer toutes les images"
+          }
+        }
+      }
+    },
+    "Remove all the images?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer toutes les images ?"
+          }
+        }
+      }
+    },
+    "Remove from the list" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer de la liste"
+          }
+        }
+      }
+    },
+    "Remove from the page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer de la page"
+          }
+        }
+      }
+    },
+    "Remove the areas of this page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer les zones de cette page"
+          }
+        }
+      }
+    },
+    "Remove the cuts" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer les coupes"
+          }
+        }
+      }
+    },
+    "Remove the password of a PDF, if you know it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirez le mot de passe d'un PDF, si vous le connaissez."
+          }
+        }
+      }
+    },
+    "Remove this area" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer cette zone"
+          }
+        }
+      }
+    },
+    "Remove this bookmark" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer ce signet"
+          }
+        }
+      }
+    },
+    "Remove this cut" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer cette coupe"
+          }
+        }
+      }
+    },
+    "Remove this image" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer cette image"
+          }
+        }
+      }
+    },
+    "Remove this mark" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer cette marque"
+          }
+        }
+      }
+    },
+    "Rename" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Renommer"
+          }
+        }
+      }
+    },
+    "Render failed" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rendu en échec"
+          }
+        }
+      }
+    },
+    "Rendering" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rendu"
+          }
+        }
+      }
+    },
+    "Reorder, rotate or remove pages, then save a copy." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reorder, rotate or remove pages, then save a copy."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réorganisez, pivotez ou supprimez des pages, puis enregistrez une copie."
+          }
+        }
+      }
+    },
+    "Replace" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remplacer"
+          }
+        }
+      }
+    },
+    "Resolution" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résolution"
+          }
+        }
+      }
+    },
+    "Restore Automatic Detection" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rétablir la détection auto"
+          }
+        }
+      }
+    },
+    "Result · choose Eraser to erase around the page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résultat · choisissez la gomme pour effacer autour"
+          }
+        }
+      }
+    },
+    "Result · erase what is left around the page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résultat · gommez ce qui reste autour de la page"
+          }
+        }
+      }
+    },
+    "Return starts a new line. Double-click a text to change it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entrée commence une nouvelle ligne. Double-cliquez sur un texte pour le changer."
+          }
+        }
+      }
+    },
+    "Review" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier"
+          }
+        }
+      }
+    },
+    "Rotate" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pivoter"
+          }
+        }
+      }
+    },
+    "Rotate a quarter turn" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pivoter d'un quart de tour"
+          }
+        }
+      }
+    },
+    "Rotate clockwise" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rotate clockwise"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pivoter vers la droite"
+          }
+        }
+      }
+    },
+    "Same name as another document" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Même nom qu'un autre document"
+          }
+        }
+      }
+    },
+    "Save a copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer une copie…"
+          }
+        }
+      }
+    },
+    "Save a numbered copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer une copie numérotée…"
+          }
+        }
+      }
+    },
+    "Save a protected copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer une copie protégée…"
+          }
+        }
+      }
+    },
+    "Save a signed copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer une copie signée…"
+          }
+        }
+      }
+    },
+    "Save a watermarked copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer une copie avec filigrane…"
+          }
+        }
+      }
+    },
+    "Save an unlocked copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer une copie déverrouillée…"
+          }
+        }
+      }
+    },
+    "Save merged PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer le PDF fusionné…"
+          }
+        }
+      }
+    },
+    "Save organized PDF…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save organized PDF…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer le PDF réorganisé…"
+          }
+        }
+      }
+    },
+    "Save the compressed copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la copie compressée…"
+          }
+        }
+      }
+    },
+    "Save the copy with bookmarks…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la copie avec signets…"
+          }
+        }
+      }
+    },
+    "Save the copy with its text…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la copie avec son texte…"
+          }
+        }
+      }
+    },
+    "Save the cut copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la copie coupée…"
+          }
+        }
+      }
+    },
+    "Save the flattened copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la copie aplatie…"
+          }
+        }
+      }
+    },
+    "Save the images here" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer les images ici"
+          }
+        }
+      }
+    },
+    "Save the overlaid copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la copie superposée…"
+          }
+        }
+      }
+    },
+    "Save the pixelized copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la copie pixellisée…"
+          }
+        }
+      }
+    },
+    "Save the redacted copy…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la copie noircie…"
+          }
+        }
+      }
+    },
+    "Save the selection…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer la sélection…"
+          }
+        }
+      }
+    },
+    "Save the sheets…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer les feuilles…"
+          }
+        }
+      }
+    },
+    "Saved “%@”" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "« %@ » enregistré"
+          }
+        }
+      }
+    },
+    "Saving file %lld of %lld…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement du fichier %lld sur %lld…"
+          }
+        }
+      }
+    },
+    "Saving signed PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement du PDF signé…"
+          }
+        }
+      }
+    },
+    "Saving the PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement du PDF…"
+          }
+        }
+      }
+    },
+    "Saving watermarked PDF…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement du PDF avec filigrane…"
+          }
+        }
+      }
+    },
+    "Saving “%@”…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrement de « %@ »…"
+          }
+        }
+      }
+    },
+    "Scanned pages get their text back: search it, copy it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos pages scannées retrouvent leur texte : cherchez-le, copiez-le."
+          }
+        }
+      }
+    },
+    "Scanner" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scanner"
+          }
+        }
+      }
+    },
+    "Search a tool" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chercher un outil"
+          }
+        }
+      }
+    },
+    "Search and copy the text in Preview, Mail and Spotlight." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recherche et copie du texte dans Aperçu, Mail et Spotlight."
+          }
+        }
+      }
+    },
+    "Searchable text (OCR)" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texte cherchable (OCR)"
+          }
+        }
+      }
+    },
+    "Security" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sécurité"
+          }
+        }
+      }
+    },
+    "See all the monks" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voir tous les moines"
+          }
+        }
+      }
+    },
+    "Select" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélection"
+          }
+        }
+      }
+    },
+    "Select all" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout sélectionner"
+          }
+        }
+      }
+    },
+    "Select at least one page to save a PDF." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionnez au moins une page pour enregistrer un PDF."
+          }
+        }
+      }
+    },
+    "Select none" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout désélectionner"
+          }
+        }
+      }
+    },
+    "Selected: %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélection : %lld"
+          }
+        }
+      }
+    },
+    "Send to back" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre derrière"
+          }
+        }
+      }
+    },
+    "Setting the glass…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je pose les vitraux…"
+          }
+        }
+      }
+    },
+    "Shadows removed, white paper, black text. Stamps and signatures keep their color." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ombres retirées, papier blanc, texte noir. Tampons et signatures gardent leur couleur."
+          }
+        }
+      }
+    },
+    "Shape" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forme"
+          }
+        }
+      }
+    },
+    "Sharper for printing, heavier file." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus net pour imprimer, fichier plus lourd."
+          }
+        }
+      }
+    },
+    "Sheets saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feuilles enregistrées"
+          }
+        }
+      }
+    },
+    "Show Tips" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les conseils"
+          }
+        }
+      }
+    },
+    "Show a page with the arrows under the preview, then add its bookmark." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affichez une page avec les flèches sous l'aperçu, puis ajoutez son signet."
+          }
+        }
+      }
+    },
+    "Show in Finder" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher dans le Finder"
+          }
+        }
+      }
+    },
+    "Show this page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher cette page"
+          }
+        }
+      }
+    },
+    "Sign" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signer"
+          }
+        }
+      }
+    },
+    "Sign a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signer un PDF"
+          }
+        }
+      }
+    },
+    "Sign your PDF, on your Mac" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signez votre PDF, sur votre Mac"
+          }
+        }
+      }
+    },
+    "Signature" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signature"
+          }
+        }
+      }
+    },
+    "Signature drawing area" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zone de dessin de la signature"
+          }
+        }
+      }
+    },
+    "Signed copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie signée enregistrée"
+          }
+        }
+      }
+    },
+    "Size: %lld pt" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille : %lld pt"
+          }
+        }
+      }
+    },
+    "Some pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Certaines pages"
+          }
+        }
+      }
+    },
+    "Soon" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bientôt"
+          }
+        }
+      }
+    },
+    "Source: %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source: %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source : %lld"
+          }
+        }
+      }
+    },
+    "Split a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diviser un PDF"
+          }
+        }
+      }
+    },
+    "Split here" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diviser ici"
+          }
+        }
+      }
+    },
+    "Split into %lld PDFs…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diviser en %lld PDF…"
+          }
+        }
+      }
+    },
+    "Split pages in half" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couper les pages en deux"
+          }
+        }
+      }
+    },
+    "Split…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diviser…"
+          }
+        }
+      }
+    },
+    "Straighten" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redressement"
+          }
+        }
+      }
+    },
+    "Style" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style"
+          }
+        }
+      }
+    },
+    "Tables become lines of text, and columns follow one another. A scan that was not read gives only its picture." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les tableaux deviennent des lignes de texte, et les colonnes se suivent. Un scan qui n'a pas été lu ne donne que son image."
+          }
+        }
+      }
+    },
+    "Text" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texte"
+          }
+        }
+      }
+    },
+    "Text added to %lld pages" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Text added to %lld page"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Text added to %lld pages"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Texte ajouté sur %lld page"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Texte ajouté sur %lld pages"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Text recognition is not available." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La lecture du texte n'est pas disponible."
+          }
+        }
+      }
+    },
+    "Text recognition suggests how to group and name the pages. You confirm, one PDF per document." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La lecture du texte propose les regroupements et les noms. Vous validez : un PDF par document."
+          }
+        }
+      }
+    },
+    "The PDF could not be opened. Choose a readable file under 256 MB." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’ouvrir ce PDF. Choisissez un fichier lisible de moins de 256 Mo."
+          }
+        }
+      }
+    },
+    "The PDF could not be saved. Check the folder access and the free space. Your images have not changed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le PDF n'a pas pu être enregistré. Vérifiez l'accès au dossier et l'espace libre. Vos images n'ont pas changé."
+          }
+        }
+      }
+    },
+    "The PDF could not be saved. Choose another location." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’enregistrer le PDF. Choisissez un autre emplacement."
+          }
+        }
+      }
+    },
+    "The PDF of this list has not been saved." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le PDF de cette liste n'a pas été enregistré."
+          }
+        }
+      }
+    },
+    "The Word document could not be written. Check the folder access and the free space." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le document Word n'a pas pu être écrit. Vérifiez l'accès au dossier et l'espace libre."
+          }
+        }
+      }
+    },
+    "The copy could not be written. Your original PDF has not changed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La copie n'a pas pu être écrite. Votre PDF original n'a pas changé."
+          }
+        }
+      }
+    },
+    "The copy is encrypted in AES-128. A long password protects it better." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La copie est chiffrée en AES-128. Un mot de passe long la protège mieux."
+          }
+        }
+      }
+    },
+    "The copy will open without a password, with no limit on printing or copying." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La copie s'ouvrira sans mot de passe, sans limite d'impression ni de copie."
+          }
+        }
+      }
+    },
+    "The current list has not been saved as a merged PDF. Your original files will stay unchanged." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette liste n’a pas été enregistrée en un PDF fusionné. Vos fichiers originaux resteront intacts."
+          }
+        }
+      }
+    },
+    "The documents you have not exported will be lost." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les documents que vous n'avez pas exportés seront perdus."
+          }
+        }
+      }
+    },
+    "The filled fields and the annotations become part of the page: they look the same and can no longer be changed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les champs remplis et les annotations deviennent partie de la page : ils gardent leur aspect et ne se modifient plus."
+          }
+        }
+      }
+    },
+    "The images could not be written. Check the folder access and the free space." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les images n'ont pas pu être écrites. Vérifiez l'accès au dossier et l'espace libre."
+          }
+        }
+      }
+    },
+    "The lines read are highlighted on the page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les lignes lues sont surlignées sur la page."
+          }
+        }
+      }
+    },
+    "The merge was cancelled. Your original PDFs have not changed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fusion a été annulée. Vos PDF originaux restent intacts."
+          }
+        }
+      }
+    },
+    "The merged copy will not require a password." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le PDF fusionné s’ouvrira sans mot de passe."
+          }
+        }
+      }
+    },
+    "The monk copies the text, its size and its style, paragraph by paragraph, and the pictures where they stand." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le moine recopie le texte, sa taille et son style, paragraphe par paragraphe, et les images à leur place."
+          }
+        }
+      }
+    },
+    "The monk reads the pages that have no text and lays what he reads over them, invisible. You can then search the PDF and copy its text." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le moine lit les pages sans texte et pose ce qu'il lit par-dessus, invisible. Vous pouvez ensuite chercher dans le PDF et copier son texte."
+          }
+        }
+      }
+    },
+    "The new password replaces the one of the original." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le nouveau mot de passe remplace celui de l'original."
+          }
+        }
+      }
+    },
+    "The operation could not be completed. Your original PDF has not changed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’opération n’a pas abouti. Votre PDF original reste intact."
+          }
+        }
+      }
+    },
+    "The operation could not be completed. Your original PDFs have not changed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’opération n’a pas abouti. Vos PDF originaux restent intacts."
+          }
+        }
+      }
+    },
+    "The operation was cancelled. Your original PDF has not changed." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The operation was cancelled. Your original PDF has not changed."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’opération a été annulée. Votre PDF original reste intact."
+          }
+        }
+      }
+    },
+    "The page could not be rendered." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La page n'a pas pu être rendue."
+          }
+        }
+      }
+    },
+    "The page could not be updated." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La page n'a pas pu être mise à jour."
+          }
+        }
+      }
+    },
+    "The page has an unusual shape." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La page a une forme inhabituelle."
+          }
+        }
+      }
+    },
+    "The page is found, cropped and flattened. You can still move its corners." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La page est trouvée, recadrée et remise à plat. Les coins restent ajustables."
+          }
+        }
+      }
+    },
+    "The pages follow the reading order and their text stays text. The links and the bookmarks do not follow." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les pages suivent l'ordre de lecture et leur texte reste du texte. Les liens et les signets ne suivent pas."
+          }
+        }
+      }
+    },
+    "The pages that already have their text stay as they are." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les pages qui ont déjà leur texte restent telles quelles."
+          }
+        }
+      }
+    },
+    "The photos slim down, the words stay" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les photos maigrissent, les mots restent"
+          }
+        }
+      }
+    },
+    "The preview could not be displayed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’aperçu n’a pas pu être affiché."
+          }
+        }
+      }
+    },
+    "The saved copies will not require a password." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les copies enregistrées ne demanderont pas de mot de passe."
+          }
+        }
+      }
+    },
+    "The saved copy will not require a password." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The saved copy will not require a password."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La copie enregistrée ne demandera pas de mot de passe."
+          }
+        }
+      }
+    },
+    "The signature placements have not been saved. Opening another PDF will discard them." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les signatures placées n’ont pas été enregistrées. Ouvrir un autre PDF les supprimera."
+          }
+        }
+      }
+    },
+    "The split stopped after file %lld of %lld. The files already written stay in the folder." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La division s’est arrêtée après le fichier %lld sur %lld. Les fichiers déjà écrits restent dans le dossier."
+          }
+        }
+      }
+    },
+    "The text could not be read: this page has no text layer." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte n'a pas pu être lu : cette page n'a pas de couche de texte."
+          }
+        }
+      }
+    },
+    "The text is left out: you get only the photos, as they are in the PDF." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte est laissé de côté : vous récupérez seulement les photos, telles qu'elles sont dans le PDF."
+          }
+        }
+      }
+    },
+    "The text of a page could not be read. Your original PDF has not changed." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte d'une page n'a pas pu être lu. Votre PDF original n'a pas changé."
+          }
+        }
+      }
+    },
+    "The text stays selectable at every level." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte reste sélectionnable, à tous les niveaux."
+          }
+        }
+      }
+    },
+    "The text stays text, and the links stay links." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte reste du texte, et les liens restent des liens."
+          }
+        }
+      }
+    },
+    "The text stays text. A link or a field stays on the half that shows it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le texte reste du texte. Un lien ou un champ reste sur la moitié qui le montre."
+          }
+        }
+      }
+    },
+    "The two passwords are different." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les deux mots de passe sont différents."
+          }
+        }
+      }
+    },
+    "The watermark has not been saved. Opening another PDF will discard it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le filigrane n'a pas été enregistré. Ouvrir un autre PDF l'abandonnera."
+          }
+        }
+      }
+    },
+    "These corners do not make a page: keep the four corners in order around the page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ces coins ne forment pas une page : gardez les quatre coins dans l'ordre, autour de la page."
+          }
+        }
+      }
+    },
+    "These images weigh more than 512 MB together. Make several PDFs." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ces images pèsent plus de 512 Mo ensemble. Faites plusieurs PDF."
+          }
+        }
+      }
+    },
+    "Thick" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Épaisse"
+          }
+        }
+      }
+    },
+    "Thickness" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Épaisseur"
+          }
+        }
+      }
+    },
+    "Thin" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fine"
+          }
+        }
+      }
+    },
+    "This PDF already has a digital signature. Adding a signature would invalidate it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF possède déjà une signature numérique. Ajouter une signature l’invaliderait."
+          }
+        }
+      }
+    },
+    "This PDF contains features that cannot be preserved when merging, such as attachments, layers or dynamic forms." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF contient des éléments que la fusion ne peut pas conserver, par exemple des pièces jointes, des calques ou des formulaires dynamiques."
+          }
+        }
+      }
+    },
+    "This PDF contains features that cannot be preserved when organizing, such as attachments, layers or dynamic forms." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This PDF contains features that cannot be preserved when organizing, such as attachments, layers or dynamic forms."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF contient des éléments que la réorganisation ne peut pas conserver, comme des pièces jointes, des calques ou des formulaires dynamiques."
+          }
+        }
+      }
+    },
+    "This PDF contains features that cannot be preserved, such as attachments, layers or dynamic forms." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF contient des éléments impossibles à conserver, comme des pièces jointes, des calques ou des formulaires dynamiques."
+          }
+        }
+      }
+    },
+    "This PDF could not be read." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF ne peut pas être lu."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature that merging would invalidate." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF possède une signature numérique que la fusion invaliderait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature that organizing would invalidate." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This PDF has a digital signature that organizing would invalidate."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF contient une signature numérique que la réorganisation invaliderait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A compressed copy would lose it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie compressée la perdrait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A copy cut in half would lose it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie coupée en deux la perdrait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A copy with added text would lose it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie avec du texte ajouté la perdrait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A copy with another PDF laid on it would lose it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie avec un autre PDF posé dessus la perdrait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A copy with other bookmarks would lose it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie avec d'autres signets la perdrait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A flattened copy would lose it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie aplatie la perdrait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A protected or unlocked copy would lose it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie protégée ou déverrouillée la perdrait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A redacted copy would lose it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie noircie la perdrait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. A watermark would invalidate it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Un filigrane l'invaliderait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. An edited copy would invalidate it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Une copie modifiée l'invaliderait."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. Its pages cannot be split or extracted without losing it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Ses pages ne peuvent pas être divisées ou extraites sans la perdre."
+          }
+        }
+      }
+    },
+    "This PDF has a digital signature. Page numbers would invalidate it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte une signature numérique. Des numéros de page l’invalideraient."
+          }
+        }
+      }
+    },
+    "This PDF has a single page: there is nothing to split." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF n’a qu’une page : il n’y a rien à diviser."
+          }
+        }
+      }
+    },
+    "This PDF has black-and-white scans. Compression can blur them: check the copy before you send it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF contient des scans en noir et blanc. La compression peut les rendre flous : vérifiez la copie avant de l'envoyer."
+          }
+        }
+      }
+    },
+    "This PDF has files attached to its pages: the flattened copy does not keep them." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF porte des fichiers joints à ses pages : la copie aplatie ne les garde pas."
+          }
+        }
+      }
+    },
+    "This PDF has no bookmark yet." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF n'a pas encore de signet."
+          }
+        }
+      }
+    },
+    "This PDF has no field or annotation to flatten." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF n'a ni champ ni annotation à aplatir."
+          }
+        }
+      }
+    },
+    "This PDF has no password: there is nothing to unlock." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF n'a pas de mot de passe : il n'y a rien à déverrouiller."
+          }
+        }
+      }
+    },
+    "This PDF holds no photo: its pages become the images." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF ne contient pas de photo : ses pages deviennent les images."
+          }
+        }
+      }
+    },
+    "This PDF is protected. Unlock it first, then choose its copy." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF est protégé. Déverrouillez-le d'abord, puis choisissez sa copie."
+          }
+        }
+      }
+    },
+    "This PDF needs a password" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF demande un mot de passe"
+          }
+        }
+      }
+    },
+    "This PDF was already well pressed: no copy is lighter at this level." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce PDF était déjà bien pressé : aucune copie n'est plus légère à ce niveau."
+          }
+        }
+      }
+    },
+    "This is not a protection: a text recognition tool still reads a picture." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce n'est pas une protection : un logiciel de reconnaissance de texte lit toujours une image."
+          }
+        }
+      }
+    },
+    "This page could not be displayed. Try another page." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’afficher cette page. Essayez une autre page."
+          }
+        }
+      }
+    },
+    "This page was deleted" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette page a été supprimée"
+          }
+        }
+      }
+    },
+    "This password did not unlock the PDF. Try again." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce mot de passe n’a pas déverrouillé le PDF. Réessayez."
+          }
+        }
+      }
+    },
+    "This session has reached 512 MB, including files kept for Undo. Start a new merge with smaller files." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette session atteint 512 Mo, y compris les fichiers conservés pour l’annulation. Commencez une nouvelle fusion avec des fichiers plus petits."
+          }
+        }
+      }
+    },
+    "This text could not be drawn. Try a shorter one." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce texte n'a pas pu être dessiné. Essayez plus court."
+          }
+        }
+      }
+    },
+    "Title of the bookmark" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titre du signet"
+          }
+        }
+      }
+    },
+    "Title “%@”" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titre « %@ »"
+          }
+        }
+      }
+    },
+    "To check" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À vérifier"
+          }
+        }
+      }
+    },
+    "Tool" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outil"
+          }
+        }
+      }
+    },
+    "Tools" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Outils"
+          }
+        }
+      }
+    },
+    "Top center" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En haut au centre"
+          }
+        }
+      }
+    },
+    "Top left" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En haut à gauche"
+          }
+        }
+      }
+    },
+    "Top right" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En haut à droite"
+          }
+        }
+      }
+    },
+    "Top | bottom" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haut | bas"
+          }
+        }
+      }
+    },
+    "Try another word, such as “merge”, “reduce” or “sign”." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Essayez un autre mot, comme « fusionner », « réduire » ou « signer »."
+          }
+        }
+      }
+    },
+    "Turn every page into a JPG image." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changez chaque page en image JPG."
+          }
+        }
+      }
+    },
+    "Turn every page into a picture: the text can no longer be copied." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Changez chaque page en image : le texte ne se copie plus."
+          }
+        }
+      }
+    },
+    "Turn right" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pivoter à droite"
+          }
+        }
+      }
+    },
+    "Twenty marks at most: remove one to add another." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vingt marques au plus : retirez-en une pour en ajouter une autre."
+          }
+        }
+      }
+    },
+    "Two PDFs, one page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deux PDF, une seule page"
+          }
+        }
+      }
+    },
+    "Two documents have the same name. Rename one to export." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deux documents portent le même nom. Renommez l'un d'eux pour exporter."
+          }
+        }
+      }
+    },
+    "Type a line of 120 characters at most." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapez une ligne de 120 caractères au plus."
+          }
+        }
+      }
+    },
+    "Under the pages" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sous les pages"
+          }
+        }
+      }
+    },
+    "Undo" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        }
+      }
+    },
+    "Unlock PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déverrouiller le PDF"
+          }
+        }
+      }
+    },
+    "Unlock a PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déverrouiller un PDF"
+          }
+        }
+      }
+    },
+    "Unlock this PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déverrouillez ce PDF"
+          }
+        }
+      }
+    },
+    "Unlocked copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie déverrouillée enregistrée"
+          }
+        }
+      }
+    },
+    "Unlock…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déverrouiller…"
+          }
+        }
+      }
+    },
+    "Unreadable photos" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Photos illisibles"
+          }
+        }
+      }
+    },
+    "Unreadable: only HEIC, JPEG and PNG photos are supported." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Illisible : seules les photos HEIC, JPEG et PNG sont prises en charge."
+          }
+        }
+      }
+    },
+    "Unreadable: the file does not open." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Illisible : le fichier ne s'ouvre pas."
+          }
+        }
+      }
+    },
+    "Updating the page…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour de la page…"
+          }
+        }
+      }
+    },
+    "Use 1 to 32 characters: letters without accents, digits and signs such as - _ @ # &. No € or §." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez 1 à 32 caractères : lettres sans accent, chiffres et signes comme - _ @ # &. Pas de € ni de §."
+          }
+        }
+      }
+    },
+    "Use Import image if you cannot draw a signature." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez Importer une image si vous ne pouvez pas dessiner votre signature."
+          }
+        }
+      }
+    },
+    "Use this signature" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser cette signature"
+          }
+        }
+      }
+    },
+    "Watermark" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filigrane"
+          }
+        }
+      }
+    },
+    "Watermark text" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Texte du filigrane"
+          }
+        }
+      }
+    },
+    "Watermark type" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type de filigrane"
+          }
+        }
+      }
+    },
+    "Watermarked copy saved" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copie avec filigrane enregistrée"
+          }
+        }
+      }
+    },
+    "Watermarks on the document: %lld. Click one to edit it." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filigranes sur le document : %lld. Cliquez-en un pour le modifier."
+          }
+        }
+      }
+    },
+    "Web page to PDF" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Page web en PDF"
+          }
+        }
+      }
+    },
+    "What do you want?" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Que voulez-vous ?"
+          }
+        }
+      }
+    },
+    "What you cover is gone for good" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce que vous couvrez disparaît pour de bon"
+          }
+        }
+      }
+    },
+    "White" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blanc"
+          }
+        }
+      }
+    },
+    "Writing the bookmarks…" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J'écris les signets…"
+          }
+        }
+      }
+    },
+    "Yellow" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jaune"
+          }
+        }
+      }
+    },
+    "You can merge up to 100 PDFs in one session." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pouvez fusionner jusqu’à 100 PDF dans une session."
+          }
+        }
+      }
+    },
+    "You can undo this with ⌘Z." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous pourrez l'annuler avec ⌘Z."
+          }
+        }
+      }
+    },
+    "Your PDF is %@ lighter" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre PDF est %@ plus léger"
+          }
+        }
+      }
+    },
+    "Your PDF is in Word" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre PDF est en Word"
+          }
+        }
+      }
+    },
+    "Your PDF is ready" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre PDF est prêt"
+          }
+        }
+      }
+    },
+    "Your PDFs, **on your Mac** 🙏" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos PDF, **sur votre Mac** 🙏"
+          }
+        }
+      }
+    },
+    "Your changes have not been saved. Opening another PDF will discard them." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos modifications ne sont pas enregistrées. Ouvrir un autre PDF les fera perdre."
+          }
+        }
+      }
+    },
+    "Your document photos become clean PDFs." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos photos de documents deviennent des PDF propres."
+          }
+        }
+      }
+    },
+    "Your documents stay on this Mac." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos documents restent sur ce Mac."
+          }
+        }
+      }
+    },
+    "Your images stay unchanged." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos images restent intactes."
+          }
+        }
+      }
+    },
+    "Your marks" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos marques"
+          }
+        }
+      }
+    },
+    "Your original PDF stays unchanged." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre PDF original reste intact."
+          }
+        }
+      }
+    },
+    "Your original PDF will stay unchanged." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your original PDF will stay unchanged."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre PDF original reste intact."
+          }
+        }
+      }
+    },
+    "Your original PDFs stay unchanged." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos PDF originaux restent intacts."
+          }
+        }
+      }
+    },
+    "Your photos, bound like a missal" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos photos, reliées comme un missel"
+          }
+        }
+      }
+    },
+    "Your scans find their words again" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vos scans retrouvent leurs mots"
+          }
+        }
+      }
+    },
+    "bookmarks" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "signets"
+          }
+        }
+      }
+    },
+    "bookmarks, outline, contents, chapters, navigation" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "signets, sommaire, chapitres, plan, marque-page, navigation"
+          }
+        }
+      }
+    },
+    "compressed" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "compressé"
+          }
+        }
+      }
+    },
+    "edited" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "modifié"
+          }
+        }
+      }
+    },
+    "extracted" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "extrait"
+          }
+        }
+      }
+    },
+    "flattened" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aplati"
+          }
+        }
+      }
+    },
+    "halves" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "coupe"
+          }
+        }
+      }
+    },
+    "numbered" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "numéroté"
+          }
+        }
+      }
+    },
+    "organized" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "organized"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "reorganise"
+          }
+        }
+      }
+    },
+    "overlaid" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "superpose"
+          }
+        }
+      }
+    },
+    "overlay, superimpose, layer, letterhead, background, underlay" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "superposer, superposition, calque, papier à en-tête, en-tête, arrière-plan, fond de page"
+          }
+        }
+      }
+    },
+    "p. %lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "p. %lld"
+          }
+        }
+      }
+    },
+    "per-sheet" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "par-feuille"
+          }
+        }
+      }
+    },
+    "photo" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "photo"
+          }
+        }
+      }
+    },
+    "pixelized" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "pixellise"
+          }
+        }
+      }
+    },
+    "protected" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "protégé"
+          }
+        }
+      }
+    },
+    "redacted" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "noirci"
+          }
+        }
+      }
+    },
+    "signed" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "signé"
+          }
+        }
+      }
+    },
+    "to page" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "à la page"
+          }
+        }
+      }
+    },
+    "unlocked" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "déverrouillé"
+          }
+        }
+      }
+    },
+    "watermarked" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "filigrane"
+          }
+        }
+      }
+    },
+    "“%@”" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "« %@ »"
+          }
+        }
+      }
+    },
+    "“%@” could not be written. Check the folder access and the free space." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "« %@ » n'a pas pu être écrit. Vérifiez l'accès au dossier et l'espace libre."
+          }
+        }
+      }
+    },
+    "⚠︎ %lld pages to check" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "⚠︎ %lld page to check"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "⚠︎ %lld pages to check"
+                }
+              }
+            }
+          }
+        },
+        "fr" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "⚠︎ %lld page à vérifier"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "⚠︎ %lld pages à vérifier"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

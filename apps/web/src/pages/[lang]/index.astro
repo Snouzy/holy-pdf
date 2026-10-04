@@ -1,0 +1,568 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getEntry } from "astro:content";
+import { byCategory, cast, titleEmoji, upcoming, upcomingIds } from "../../cast";
+import { films } from "../../films";
+import Pick from "../../home/Pick.astro";
+import ToolCard from "../../home/ToolCard.astro";
+import { dictionaries, searchTexts } from "../../i18n";
+import { Avatar } from "../../illustrations/Avatar";
+import { Icon } from "../../illustrations/Icon";
+import { Monk } from "../../illustrations/Monk";
+import Base from "../../layouts/Base.astro";
+import Emoji from "../../layouts/Emoji.astro";
+import { alternates, homePath, toolPath } from "../../site";
+import { articlePath, pagePath, sitePages } from "../../sitePages";
+import { languages, type ToolId, toolIds, toolList, tools } from "../../tools";
+
+export const getStaticPaths = (() => languages.map((lang) => ({ params: { lang }, props: { lang } }))) satisfies GetStaticPaths;
+
+const { lang } = Astro.props;
+const t = dictionaries[lang];
+const search = searchTexts[lang];
+const groups = byCategory();
+const proofIcons = ["chip", "offline", "noUser", "shield"] as const;
+const sleepers = (["web-to-pdf"] as const).map((id) => upcoming[id]);
+const monkCount = toolIds.length + upcomingIds.length;
+const stepMonks = ["organize", "jpg-to-pdf", "merge"] as const;
+const ctaTools = ["merge", "compress", "edit", "sign", "organize", "jpg-to-pdf"] as const;
+const guide = await getEntry("articles", `${lang}/paperwork`);
+const proof = await getEntry("articles", `${lang}/local-processing`);
+if (!guide || !proof) throw new Error(`The home page links to two ${lang} articles that are missing`);
+const toolUse = (id: "contract" | "attachment" | "payslip", tool: ToolId) => ({ id, chain: [tool], href: toolPath(tools[tool], lang), link: `${t.toolNames[tool]} →` });
+const uses = [
+  { id: "paperwork", chain: ["jpg-to-pdf", "merge", "compress"], href: articlePath("guides", guide.data.slug, lang), link: t.home.uses.guide },
+  toolUse("contract", "sign"),
+  toolUse("attachment", "compress"),
+  toolUse("payslip", "protect"),
+] satisfies { id: keyof typeof t.home.uses.items; chain: ToolId[]; href: string; link: string }[];
+const privacy = t.home.privacy;
+const film = films[lang];
+---
+
+<Base lang={lang} title={t.home.title} description={t.home.description} paths={alternates(homePath)} clientRouter>
+  <section class="hero">
+    <hgroup>
+      <h1>{t.home.h1}<Emoji char={titleEmoji.home} /></h1>
+      <p class="promises">{t.home.promises}</p>
+    </hgroup>
+    <Pick lang={lang} />
+    {film && (
+      <button class="watch" type="button" aria-haspopup="dialog">
+        <span class="watch-preview"><img src={film.poster} alt="" width="52" height="52" /></span>
+        {t.home.film.watch}
+      </button>
+    )}
+    {film && (
+      <dialog class="film" aria-label={t.home.film.title}>
+        <div class="film-head">
+          <p>{t.home.film.title}</p>
+          <form method="dialog"><button class="film-close" aria-label={t.home.film.close}><Icon name="close" size={20} /></button></form>
+        </div>
+        <video src={film.src} poster={film.poster} controls preload="none" playsinline></video>
+      </dialog>
+    )}
+  </section>
+
+  <section class="monastery" aria-labelledby="at-work" data-index={`/${lang}/search.json`}>
+    <div class="section-head">
+      <h2 id="at-work">{t.home.atWork}<Emoji char={titleEmoji.atWork} /></h2>
+      <div class="section-tools">
+        <p>{t.home.atWorkNote(toolList.length)}</p>
+        <button class="view-toggle" type="button" data-toggle="view" aria-pressed="false">{t.home.compact}</button>
+      </div>
+    </div>
+    <div class="monastery-body">
+      <aside class="filters">
+        <div class="search-field">
+          <svg class="search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14z M20 20l-4-4" />
+          </svg>
+          <label class="visually-hidden" for="tool-search">{search.label}</label>
+          <input id="tool-search" type="search" placeholder={search.label} autocomplete="off" spellcheck="false" />
+        </div>
+        <p
+          class="search-status"
+          aria-live="polite"
+          data-count={Array.from({ length: monkCount + 1 }, (_, n) => search.count(n)).join("|")}
+          data-via={search.via("{word}", "{tool}")}
+        >
+          {search.count(toolList.length)}
+        </p>
+        <h3 class="filters-title" id="categories-title">{search.categories}</h3>
+        <ul class="categories" aria-labelledby="categories-title">
+          <li><button type="button" data-filter="all" aria-pressed="true">{search.all}<span class="count">{monkCount}</span></button></li>
+          {groups.map(({ category, ready, sleeping }) => (
+            <li>
+              <button type="button" data-filter={category} aria-pressed="false" style={`--category: var(--${category})`}>
+                <span class="dot" />{t.categories[category]}<span class="count">{ready.length + sleeping.length}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+        <button class="switch" type="button" role="switch" aria-checked="false"><span class="track" />{search.sleeping}</button>
+      </aside>
+      <div class="results">
+        <ul class="cards">
+          {toolList.map((tool) => (
+            <li data-tool={tool.id} data-category={cast[tool.id].category}>
+              <ToolCard tool={tool} lang={lang} />
+            </li>
+          ))}
+          <li>
+            <button class="more-soon lift" type="button">
+              <span class="sleepers">
+                {sleepers.map((monk) => <Avatar accessory={monk.accessory} mood="sleep" diameter={44} tint="var(--upcoming)" />)}
+              </span>
+              <strong>{t.home.moreSoon(upcomingIds.length)}</strong>
+              <span>{t.home.moreSoonNote}</span>
+              <span class="more-soon-link">{t.home.showSleeping}</span>
+            </button>
+          </li>
+          {upcomingIds.map((id) => (
+            <li data-tool={id} data-category={upcoming[id].category} hidden>
+              <ToolCard asleep={id} lang={lang} />
+            </li>
+          ))}
+        </ul>
+        <div class="compact">
+          {groups.map(({ category, ready, sleeping }) => (
+            <div class="compact-row" data-category={category} style={`--category: var(--${category})`}>
+              <p class="compact-head">
+                <strong>{t.categories[category]}</strong>
+                <span>{t.home.categoryCount(ready.length, sleeping.length)}</span>
+              </p>
+              <ul class="scroll">
+                {ready.map((id) => (
+                  <li data-tool={id}>
+                    <a href={toolPath(tools[id], lang)}>
+                      <Avatar accessory={cast[id].accessory} mood={cast[id].mood} diameter={80} tint={`var(--${category}-tint)`} />
+                      <span>{t.toolShort[id]}</span>
+                    </a>
+                  </li>
+                ))}
+                {sleeping.map((id) => (
+                  <li class="asleep" data-tool={id}>
+                    <Avatar accessory={upcoming[id].accessory} mood="sleep" diameter={80} tint="var(--upcoming)" />
+                    <span>{t.upcoming[id]}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div class="no-result" hidden>
+          <Avatar accessory="none" mood="sleep" diameter={110} tint="var(--upcoming)" />
+          <h3>{search.emptyTitle}</h3>
+          <p>{search.emptyText}</p>
+          <button class="reset" type="button">{search.reset}</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps" aria-labelledby="steps-title">
+    <div class="centered-head">
+      <h2 id="steps-title">{t.home.steps.title}<Emoji char={titleEmoji.done} /></h2>
+      <p>{t.home.steps.lead}</p>
+    </div>
+    <ol>
+      {t.home.steps.items.map(({ title, text }, index) => {
+        const monk = cast[stepMonks[index] ?? "merge"];
+        return (
+          <li class="step">
+            <span class="halo">
+              <span class="step-number">{index + 1}</span>
+              <Monk accessory={monk.accessory} mood={monk.mood} size={128} />
+            </span>
+            <h3>{title}</h3>
+            <p>{text}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </section>
+
+  <section aria-labelledby="uses-title">
+    <div class="section-head">
+      <h2 id="uses-title">{t.home.uses.title}<Emoji char={titleEmoji.uses} /></h2>
+      <p>{t.home.uses.note}</p>
+    </div>
+    <ul class="uses">
+      {uses.map(({ id, chain, href, link }) => (
+        <li style={`--category: var(--${cast[chain[0] ?? "merge"].category}); --category-tint: var(--${cast[chain[0] ?? "merge"].category}-tint)`}>
+          <div class="use-art" aria-hidden="true">
+            {chain.map((tool, index) => (
+              <>
+                {index > 0 && <Icon name="arrow" size={16} />}
+                <Monk accessory={cast[tool].accessory} mood={cast[tool].mood} size={chain.length > 1 ? 70 : 100} />
+              </>
+            ))}
+          </div>
+          <div class="use-text">
+            <p class="use-tools">{chain.map((tool) => t.toolShort[tool]).join(" · ")}</p>
+            <h3>{t.home.uses.items[id].title}</h3>
+            <p>{t.home.uses.items[id].text}</p>
+            <a href={href}>{link}</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="privacy" aria-labelledby="privacy-title">
+    <div class="promise">
+      <div class="paper">
+        <div class="note">
+          <p class="kicker">{privacy.kicker}</p>
+          <h2 id="privacy-title">{privacy.title.before}<span class="highlight">{privacy.title.highlight}</span>{privacy.title.after}<Emoji char={titleEmoji.privacy} /></h2>
+          <p>{privacy.lead}</p>
+          <p class="signature">
+            <svg viewBox="0 0 150 44" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 30c10-22 18-24 16-6s8 14 16-2 10-14 12 0 10 12 18-4 6-10 10 2 12 10 22-6 8-12 14-2 16-4 28-2" />
+            </svg>
+            {t.monks.sign.name}
+          </p>
+        </div>
+      </div>
+      <Monk accessory={cast.sign.accessory} mood={cast.sign.mood} size={200} />
+    </div>
+    <div class="band">
+      <ul class="proofs">
+        {privacy.items.map(({ title, text }, index) => (
+          <li>
+            <span class="proof-icon"><Icon name={proofIcons[index] ?? "check"} size={24} /></span>
+            <span class="proof-text"><strong>{title}</strong><span>{text}</span></span>
+          </li>
+        ))}
+      </ul>
+      <p class="check">{privacy.check} <a href={articlePath("blog", proof.data.slug, lang)}>{privacy.checkLink}</a></p>
+    </div>
+  </section>
+
+  <section class="story" aria-labelledby="story-title">
+    <div class="story-art" aria-hidden="true"><Monk accessory="book" mood="happy" size={230} halo /></div>
+    <div class="story-text">
+      <h2 id="story-title">{t.home.story.title}<Emoji char={titleEmoji.story} /></h2>
+      {t.home.story.paragraphs.map((text) => <p>{text}</p>)}
+      <p class="motto">{t.home.story.motto.before}<span class="highlight">{t.home.story.motto.highlight}</span>{t.home.story.motto.after}</p>
+    </div>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-title">
+    <div class="centered-head">
+      <h2 id="faq-title">{t.home.faq.title}<Emoji char={sitePages.faq.emoji} /></h2>
+      <p>{t.home.faq.lead}</p>
+    </div>
+    <dl class="chat">
+      {film && (
+        <>
+          <dt><span>{t.home.film.question}</span></dt>
+          <dd class="film-answer">
+            <Avatar accessory="none" mood="happy" diameter={44} tint="var(--highlight)" />
+            <div>
+              <p>{t.home.film.answer}</p>
+              <video src={film.src} poster={film.poster} controls preload="none" playsinline></video>
+            </div>
+          </dd>
+        </>
+      )}
+      {t.home.faq.items.map(({ question, answer }) => (
+        <>
+          <dt><span>{question}</span></dt>
+          <dd><Avatar accessory="none" mood="happy" diameter={44} tint="var(--highlight)" /><p>{answer}</p></dd>
+        </>
+      ))}
+    </dl>
+    <a class="faq-more" href={pagePath("faq", lang)}>{t.home.faq.more}</a>
+  </section>
+
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="cta-text">
+      <h2 id="cta-title">{t.home.cta.title}<Emoji char={titleEmoji.cta} /></h2>
+      <p>{t.home.cta.text}</p>
+      <ul class="cta-tools">
+        {ctaTools.map((id) => (
+          <li>
+            <a href={toolPath(tools[id], lang)}>
+              <Avatar accessory={cast[id].accessory} mood={cast[id].mood} diameter={40} tint={`var(--${cast[id].category}-tint)`} />
+              <span class="cta-tool"><strong>{t.home.cta.tools[id]}</strong>{t.monks[id].name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <a class="cta-all" href="#at-work">{t.home.cta.all}</a>
+    </div>
+    <span class="cta-sun"><Monk accessory="stapler" mood="joy" size={250} halo /></span>
+  </section>
+  <script>
+    import "../../home/filters";
+    import "../../home/film";
+  </script>
+</Base>
+
+<style>
+  .hero { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding-block: 3rem 3.5rem; text-align: center; }
+  h1 { max-width: 50rem; margin: 0; font-size: clamp(1.125rem, 2vw, 1.375rem); line-height: 1.2; letter-spacing: -0.01em; color: var(--ink-soft); }
+  .promises { margin: 0.25rem 0 0; font-size: 0.9375rem; font-weight: 700; color: var(--ink-soft); }
+  .watch {
+    display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.25rem 1.125rem 0.25rem 0.25rem; border: 2px solid var(--ink); border-radius: 999px;
+    background: var(--surface); color: var(--ink); font: inherit; font-weight: 800; cursor: pointer; box-shadow: 3px 3px 0 var(--ink);
+    transition-property: translate, box-shadow; transition-duration: 150ms;
+  }
+  .watch-preview { position: relative; display: block; flex-shrink: 0; width: 52px; height: 52px; overflow: hidden; border-radius: 50%; }
+  .watch-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .watch-preview::after { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--monk-ink) 35%, transparent); }
+  .watch-preview::before {
+    content: ""; position: absolute; z-index: 1; left: 55%; top: 50%; width: 14px; height: 16px; translate: -50% -50%;
+    background: var(--paper); clip-path: polygon(0 0, 100% 50%, 0 100%);
+  }
+  .film {
+    width: min(960px, calc(100vw - 2rem)); max-width: none; padding: 0; overflow: hidden; border: 4px solid var(--ink); border-radius: 22px;
+    background: var(--surface); color: var(--ink); box-shadow: 8px 8px 0 var(--ink);
+  }
+  .film::backdrop { background: color-mix(in srgb, var(--monk-ink) 72%, transparent); }
+  .film-head { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.5rem 0.5rem 0.5rem 1.25rem; font-weight: 800; }
+  .film-head p { margin: 0; }
+  .film-close { display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--ink); border-radius: 50%; background: var(--surface); color: var(--ink); cursor: pointer; }
+  .film video { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--bg); }
+  section { margin-block: 2rem; }
+  .monastery ~ section { margin-top: clamp(4.5rem, 9vw, 7.5rem); }
+  .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1rem; margin-bottom: 1.25rem; }
+  .section-head h2 { margin: 0; }
+  .section-head p { margin: 0; font-weight: 600; color: var(--ink-soft); }
+  .section-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+  .view-toggle {
+    min-height: 40px; padding: 0.5rem 0.875rem; border: 1.5px solid var(--line); border-radius: var(--radius-control);
+    background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; cursor: pointer;
+  }
+  .view-toggle[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+  :global(:root:not([data-view])) .view-toggle, :global(:root:not([data-view])) .filters, :global(:root:not([data-view="compact"])) .compact,
+  :global(:root[data-view="compact"]) .cards { display: none; }
+  .compact { display: grid; }
+  .compact-row { display: grid; grid-template-columns: 11rem minmax(0, 1fr); align-items: center; gap: 0.75rem; padding-block: 1rem; border-top: 1px solid var(--line); }
+  .compact-head { display: flex; flex-direction: column; gap: 0.125rem; margin: 0; }
+  .compact-head strong { font-family: var(--font-title); font-weight: 800; font-size: 1.25rem; color: var(--category); }
+  .compact-head span { font-size: 0.875rem; color: var(--muted); }
+  .compact ul { display: flex; gap: 0.5rem; margin: 0; padding: 0 0 0.5rem; overflow-x: auto; list-style: none; scroll-snap-type: x proximity; }
+  .categories.more, .compact ul.more {
+    -webkit-mask-image: linear-gradient(to right, var(--ink) calc(100% - 4rem), transparent);
+    mask-image: linear-gradient(to right, var(--ink) calc(100% - 4rem), transparent);
+  }
+  .compact li { flex-shrink: 0; width: 8.125rem; scroll-snap-align: start; }
+  .compact a, .compact .asleep { display: flex; flex-direction: column; align-items: center; gap: 0.375rem; font-size: 0.9375rem; font-weight: 700; text-align: center; color: var(--ink); text-decoration: none; }
+  .compact .asleep { color: var(--muted); }
+  .monastery [hidden] { display: none; }
+  .monastery-body { display: flex; align-items: flex-start; gap: 2rem; }
+  .results { flex: 1; min-width: 0; }
+  .filters {
+    display: flex; flex: 0 0 17rem; flex-direction: column; gap: 0.75rem; padding: 1.125rem; background: var(--surface); border-radius: 1.25rem; box-shadow: var(--shadow-panel);
+  }
+  @media (width > 900px) {
+    .filters { position: sticky; top: calc(var(--nav-height) + 1rem); align-self: start; max-height: calc(100vh - var(--nav-height) - 2rem); overflow: auto; }
+  }
+  .search-field { position: relative; }
+  .search-icon { position: absolute; left: 0.875rem; top: 50%; translate: 0 -50%; color: var(--muted); pointer-events: none; }
+  .search-field input {
+    width: 100%; min-height: 48px; padding: 0.5rem 0.75rem 0.5rem 2.75rem; border: 1.5px solid var(--line); border-radius: var(--radius-control);
+    background: var(--surface); color: var(--ink); font: inherit; appearance: none;
+  }
+  .search-field input::placeholder { color: var(--muted); opacity: 1; }
+  .search-status { margin: -0.25rem 0 0; font-size: 0.8125rem; font-weight: 600; color: var(--muted); }
+  .filters-title { margin: 0.25rem 0 0; font-family: var(--font-text); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .categories { display: grid; gap: 0.25rem; margin: 0; padding: 0 0 0.75rem; border-bottom: 1px solid var(--line); list-style: none; }
+  .categories button {
+    display: flex; align-items: center; gap: 0.625rem; width: 100%; min-height: 44px; padding: 0.5rem 0.75rem; border: 1.5px solid transparent;
+    border-radius: var(--radius-control); background: none; color: var(--ink); font-weight: 600; text-align: start; cursor: pointer;
+  }
+  .categories button[aria-pressed="true"] { background: var(--accent-tint); color: var(--accent); font-weight: 700; }
+  .dot { flex-shrink: 0; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--category); }
+  .count { margin-inline-start: auto; font-size: 0.8125rem; font-weight: 700; color: var(--muted); }
+  .switch {
+    display: flex; align-items: center; gap: 0.75rem; min-height: 44px; padding: 0; border: none; background: none;
+    color: var(--ink-soft); font-size: 0.875rem; font-weight: 600; line-height: 1.3; text-align: start; cursor: pointer;
+  }
+  .track { position: relative; flex-shrink: 0; width: 2.5rem; height: 1.5rem; border-radius: 999px; background: var(--muted); transition: background-color 150ms; }
+  .track::after {
+    content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: var(--surface); transition: transform 150ms;
+  }
+  .switch[aria-checked="true"] .track { background: var(--accent); }
+  .switch[aria-checked="true"] .track::after { transform: translateX(1rem); }
+  .no-result { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 3rem 1.5rem; background: var(--surface); border-radius: 1.5rem; text-align: center; }
+  .no-result h3, .no-result p { margin: 0; }
+  .no-result p { max-width: 28rem; color: var(--ink-soft); }
+  .reset {
+    min-height: 44px; margin-top: 0.5rem; padding: 0.5rem 1.25rem; border: 1.5px solid var(--accent); border-radius: 999px;
+    background: var(--surface); color: var(--accent); font-weight: 700; cursor: pointer;
+  }
+  .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .more-soon {
+    display: flex; flex-direction: column; justify-content: flex-end; gap: 0.625rem; height: 100%; min-height: 16rem; padding: 1.125rem;
+    width: 100%; border: 2px dashed var(--line); background: none; color: var(--ink); font: inherit; text-align: start; cursor: pointer;
+  }
+  .sleepers { display: flex; flex-wrap: wrap; }
+  .more-soon strong { font-family: var(--font-title); font-weight: 800; font-size: 1.25rem; line-height: 1.1; }
+  .more-soon-link { font-weight: 700; color: var(--accent); }
+  .centered-head { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; margin-bottom: 2.5rem; text-align: center; }
+  .centered-head h2 { margin: 0; }
+  .centered-head p { max-width: 40rem; margin: 0; font-size: 1.125rem; color: var(--ink-soft); }
+  .steps ol { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; margin: 0; padding: 0; list-style: none; }
+  .steps ol::before { content: ""; position: absolute; top: 75px; left: 18%; right: 18%; border-top: 3px dashed var(--line); }
+  .step { display: flex; flex-direction: column; align-items: center; gap: 0.625rem; text-align: center; }
+  .halo {
+    position: relative; display: flex; align-items: flex-end; justify-content: center; width: 150px; height: 150px; margin-bottom: 0.5rem;
+    border-radius: 50%; background: var(--organize-tint);
+  }
+  .step:nth-child(2) .halo { background: var(--convert-tint); }
+  .step:nth-child(3) .halo { background: var(--optimize-tint); }
+  .halo :global(.monk) { margin-bottom: -6px; }
+  .step-number {
+    position: absolute; top: -6px; left: -10px; padding: 0 0.625rem; border: 3px solid var(--stamp); border-radius: 6px; background: var(--bg); color: var(--stamp);
+    font-family: var(--font-title); font-weight: 800; font-size: 1.75rem; line-height: 1.2; transform: rotate(-4deg);
+  }
+  .step:nth-child(2) .step-number { transform: rotate(3deg); }
+  .step h3, .use-text h3 { margin: 0; }
+  .step h3 { font-size: 1.375rem; }
+  .step p { max-width: 18rem; margin: 0; color: var(--ink-soft); }
+  .uses { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16.5rem, 100%), 1fr)); gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .uses li { display: flex; flex-direction: column; overflow: hidden; background: var(--surface); border-radius: var(--radius-panel); box-shadow: var(--shadow-panel); }
+  .use-art { display: flex; align-items: flex-end; justify-content: center; gap: 0.25rem; height: 7.5rem; padding-inline: 0.75rem; overflow: hidden; background: var(--category-tint); }
+  .use-art :global(.monk) { flex-shrink: 0; margin-bottom: -0.25rem; }
+  .use-art :global(.icon) { flex-shrink: 0; margin-bottom: 2.5rem; color: var(--ink); }
+  .use-text { display: flex; flex-direction: column; flex-grow: 1; gap: 0.5rem; padding: 1.125rem 1.25rem 1.25rem; }
+  .use-text h3 { font-size: 1.25rem; }
+  .use-text p { margin: 0; font-size: 0.9375rem; color: var(--ink-soft); }
+  .use-text .use-tools { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--category); }
+  .use-text a { margin-top: auto; padding-top: 0.5rem; font-weight: 700; text-decoration: none; }
+  .privacy { display: flex; flex-direction: column; gap: 2.5rem; }
+  .promise { display: flex; align-items: flex-end; justify-content: center; }
+  .paper { width: min(40rem, 100%); filter: drop-shadow(var(--shadow-sheet)); transform: rotate(-1.5deg); }
+  .note {
+    position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem;
+    padding: clamp(1.5rem, 5vw, 2.75rem) clamp(1.25rem, 5vw, 3rem) clamp(1.25rem, 4vw, 2.25rem);
+    background: repeating-linear-gradient(var(--surface) 0 36px, var(--accent-tint) 36px 38px);
+    clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 40px, 100% 100%, 0 100%);
+  }
+  .note::after { content: ""; position: absolute; top: 0; right: 0; width: 40px; height: 40px; background: linear-gradient(225deg, transparent 50%, var(--fold) 50%); }
+  .note h2, .note p { margin: 0; }
+  .note > p:not([class]) { font-size: 1.125rem; color: var(--ink-soft); }
+  .kicker { font-size: 0.875rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stamp); }
+  .signature { display: flex; flex-direction: column; align-items: flex-end; align-self: flex-end; font-size: 0.875rem; font-weight: 700; color: var(--ink-soft); }
+  .signature svg { width: 150px; height: auto; stroke: var(--ink); }
+  .promise > :global(.monk) { flex-shrink: 0; margin-inline-start: -2.5rem; margin-bottom: -1.5rem; }
+  .band {
+    --panel-line: color-mix(in srgb, var(--on-footer) 22%, var(--footer));
+    display: flex; flex-direction: column; gap: 2rem; padding: clamp(1.25rem, 5vw, 3rem); border: 1px solid var(--panel-line); border-radius: 1.5rem;
+    background: var(--footer); color: color-mix(in srgb, var(--on-footer) 78%, var(--footer));
+  }
+  .proof-text strong { color: var(--on-footer); }
+  .proofs { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); gap: 1.5rem 1rem; margin: 0; padding: 0; list-style: none; }
+  .proofs li { display: flex; align-items: flex-start; gap: 0.75rem; }
+  .proof-icon {
+    display: grid; flex-shrink: 0; place-items: center; width: 3.25rem; height: 3.25rem;
+    border: 1px solid var(--panel-line); border-radius: 14px; background: color-mix(in srgb, var(--on-footer) 7%, var(--footer)); color: var(--highlight);
+  }
+  .proof-text { display: flex; flex-direction: column; gap: 0.125rem; min-width: 0; font-size: 0.875rem; }
+  .proof-text strong { font-size: 1rem; }
+  .check { margin: 0; text-align: center; }
+  .check a { font-weight: 700; color: var(--highlight); text-decoration: none; }
+  .story { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr)); gap: 2.5rem; align-items: center; }
+  .story-art { position: relative; display: flex; justify-content: center; align-items: flex-end; min-height: 20rem; }
+  .story-art::before {
+    content: ""; position: absolute; inset: 1.5rem 18% 0; border: 1.5px solid var(--line);
+    background: repeating-linear-gradient(var(--surface) 0 30px, var(--accent-tint) 30px 32px); transform: rotate(-3deg);
+  }
+  .story-art :global(.monk) { position: relative; }
+  .story-text { display: flex; flex-direction: column; gap: 1rem; }
+  .story-text h2 { margin: 0; }
+  .story-text p { margin: 0; font-size: 1.125rem; color: var(--ink-soft); }
+  .story-text .motto { margin-top: 0.5rem; font-family: var(--font-title); font-weight: 800; font-size: 1.625rem; line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); }
+  .faq { max-width: 50rem; margin-inline: auto; }
+  .chat { display: flex; flex-direction: column; gap: 0.625rem; margin: 0; }
+  .chat dt { display: flex; justify-content: flex-end; margin-top: 0.75rem; transform-origin: bottom right; }
+  .chat dt:first-child { margin-top: 0; }
+  .chat dt span { max-width: min(30rem, 85%); padding: 0.75rem 1.125rem; border-radius: 18px 18px 4px 18px; background: var(--accent); color: var(--on-accent); font-weight: 700; }
+  .chat dd { display: flex; align-items: flex-end; gap: 0.625rem; margin: 0; transform-origin: bottom left; }
+  .chat dd :global(.avatar) { flex-shrink: 0; }
+  .film-answer > div { display: flex; flex-direction: column; gap: 0.375rem; width: min(30rem, 85%); }
+  .film-answer > div p { align-self: flex-start; max-width: none; }
+  .film-answer video { display: block; width: 100%; aspect-ratio: 16 / 9; box-sizing: border-box; border: 1.5px solid var(--ink); border-radius: 18px 18px 18px 4px; background: var(--surface); }
+  .chat dd p { max-width: min(34rem, 85%); margin: 0; padding: 0.75rem 1.125rem; border: 1.5px solid var(--ink); border-radius: 18px 18px 18px 4px; background: var(--surface); }
+  @keyframes bubble-in {
+    from { opacity: 0; transform: translateY(16px) scale(0.92); }
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .chat dt, .chat dd { animation: bubble-in linear both; animation-timeline: view(); animation-range: entry 10% entry 90%; }
+    }
+  }
+  .faq-more { display: block; width: fit-content; margin: 1.75rem auto 0; font-weight: 700; text-decoration: none; }
+  .cta {
+    display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.5rem 2rem; overflow: hidden; isolation: isolate;
+    padding: clamp(2rem, 5vw, 3.5rem) clamp(2rem, 5vw, 3.5rem) 0; border-radius: 1.5rem; background: var(--accent); color: var(--on-accent);
+  }
+  .cta-text { display: flex; flex: 1 1 24rem; flex-direction: column; align-items: flex-start; gap: 1rem; max-width: 40rem; padding-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .cta h2 { margin: 0; color: var(--on-accent); }
+  .cta p { margin: 0; font-size: 1.125rem; }
+  .cta-tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); gap: 0.625rem; width: 100%; margin: 0.5rem 0 0; padding: 0; list-style: none; }
+  .cta-tools a {
+    display: flex; align-items: center; gap: 0.5rem; min-height: 56px; padding: 0 0.75rem 0 0.25rem; border-radius: var(--radius-panel);
+    background: var(--surface); color: var(--ink-soft); text-decoration: none; box-shadow: 0 6px 16px rgb(10 20 80 / 0.18);
+    transition-property: translate, box-shadow; transition-duration: 150ms;
+  }
+  .cta-tool { display: flex; flex-direction: column; font-size: 0.8125rem; line-height: 1.25; }
+  .cta-tool strong { font-size: 1rem; font-weight: 800; color: var(--ink); }
+  .cta-all { color: var(--on-accent); font-weight: 700; text-decoration: none; }
+  .cta-sun { position: relative; display: block; margin-inline-start: auto; margin-bottom: -0.5rem; }
+  .cta-sun::before {
+    content: ""; position: absolute; z-index: -1; left: 50%; top: 38%; width: 2400px; height: 2400px; translate: -50% -50%;
+    background: repeating-conic-gradient(from -90deg, rgb(255 255 255 / 0.1) 0deg 7deg, transparent 7deg 15deg);
+  }
+  .cta-sun :global(.monk) { display: block; }
+  @media (max-width: 75rem) {
+    .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .monastery-body { flex-direction: column; align-items: stretch; gap: 1.25rem; }
+    .filters { flex: none; padding: 0; background: none; box-shadow: none; }
+    .filters-title { display: none; }
+    .categories { display: flex; gap: 0.5rem; padding: 0.125rem 0; border: none; overflow-x: auto; scrollbar-width: none; }
+    .categories li { flex-shrink: 0; }
+    .categories button { width: auto; padding: 0.5rem 1rem; border-color: var(--line); border-radius: 999px; background: var(--surface); white-space: nowrap; }
+    .categories button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--surface); }
+    .categories button[aria-pressed="true"] .count { color: inherit; }
+  }
+  @media (max-width: 700px) {
+    .hero { gap: 1.25rem; padding-block: 1.5rem 2.5rem; }
+    .steps ol::before { display: none; }
+    .promise { flex-direction: column; align-items: center; }
+    .promise > :global(.monk) { order: -1; width: 120px; height: auto; margin: 0 0 -0.25rem; }
+    .steps ol { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+    .cta-sun { margin-inline: auto; }
+    .cta-sun :global(.monk) { width: 140px; height: auto; }
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.625rem; }
+    .more-soon { min-height: 0; padding: 0.875rem; }
+    .sleepers { zoom: 0.8; }
+    .more-soon strong { hyphens: auto; overflow-wrap: break-word; }
+    .compact-row { grid-template-columns: minmax(0, 1fr); }
+    .compact li { width: 5.5rem; }
+    .compact a, .compact .asleep { font-size: 0.8125rem; }
+    .compact :global(.avatar) { zoom: 0.7; }
+  }
+  @media (hover: hover) {
+    .view-toggle:hover { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
+    .view-toggle[aria-pressed="true"]:hover { border-color: var(--accent-hover); background: var(--accent-hover); color: var(--on-accent); }
+    .search-field input:hover { border-color: var(--accent); }
+    .categories button[aria-pressed="false"]:hover { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
+    .switch:hover { color: var(--accent); }
+    .reset:hover { background: var(--accent-tint); color: var(--accent); }
+    .more-soon:hover { color: var(--ink); box-shadow: var(--shadow-panel); }
+    .compact a:hover { color: var(--accent); text-decoration: underline; }
+    .watch:hover { translate: -2px -2px; box-shadow: 5px 5px 0 var(--ink); }
+    .film-close:hover { background: var(--accent-tint); color: var(--accent); }
+    .check a:hover { color: var(--highlight); text-decoration: underline; }
+    .cta-tools a:hover { translate: 0 -2px; box-shadow: 0 10px 22px rgb(10 20 80 / 0.24); }
+    .cta-all:hover { text-decoration: underline; }
+  }
+</style>

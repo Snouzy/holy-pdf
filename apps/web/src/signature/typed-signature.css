@@ -1,0 +1,13 @@
+.signature-typed { display: flex; flex-direction: column; gap: 0.75rem; min-width: 0; }
+.signature-typed > label { display: flex; flex-direction: column; gap: 0.5rem; font-weight: 700; }
+.signature-typed input { box-sizing: border-box; width: 100%; min-width: 0; min-height: 44px; padding: 0.625rem; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--surface); color: var(--ink); font: inherit; font-weight: 400; }
+.signature-typed fieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.signature-typed legend { margin-bottom: 0.5rem; padding: 0; font-weight: 700; }
+.signature-text-styles { display: flex; gap: 0.5rem; }
+.signature-text-styles button { flex: 1; }
+.signature-text-styles [aria-pressed="true"] { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
+.signature-text-preview { display: flex; align-items: center; justify-content: center; min-height: 140px; padding: 0.75rem; box-sizing: border-box; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-control); background: white; color: #46506A; }
+.signature-text-preview canvas { max-width: 100%; max-height: 120px; object-fit: contain; }
+.signature-text-preview span { font-size: 0.875rem; text-align: center; }
+.signature-text-failure { display: flex; align-items: center; flex-direction: column; gap: 0.5rem; text-align: center; }
+.signature-text-failure p { margin: 0; color: #AB382A; font-size: 0.875rem; }

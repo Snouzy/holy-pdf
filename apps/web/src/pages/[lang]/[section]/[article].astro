@@ -1,0 +1,60 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import { dictionaries } from "../../../i18n";
+import { pageTexts } from "../../../i18n/pages";
+import ContentPage from "../../../layouts/ContentPage.astro";
+import { alternates, homePath, siteName } from "../../../site";
+import { articlePath, author, pagePath, sitePages } from "../../../sitePages";
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection("articles");
+  const fileName = (id: string) => id.slice(id.indexOf("/") + 1);
+  return entries.map((entry) => {
+    const { section, lang, slug } = entry.data;
+    const paths = alternates((code) => {
+      const sibling = entries.find((other) => other.data.lang === code && fileName(other.id) === fileName(entry.id));
+      if (!sibling) throw new Error(`The article ${entry.id} has no ${code} version`);
+      return articlePath(sibling.data.section, sibling.data.slug, code);
+    });
+    return { params: { lang, section: sitePages[section].slug[lang], article: slug }, props: { entry, paths } };
+  });
+}) satisfies GetStaticPaths;
+
+const { entry, paths } = Astro.props;
+const { section, lang, title, description, h1, lead, published, updated } = entry.data;
+const { Content } = await render(entry);
+const url = (path: string) => new URL(path, Astro.site).href;
+const day = (date: Date) => date.toISOString().slice(0, 10);
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: siteName, item: url(homePath(lang)) },
+      { "@type": "ListItem", position: 2, name: dictionaries[lang].footer[section], item: url(pagePath(section, lang)) },
+      { "@type": "ListItem", position: 3, name: h1, item: url(paths[lang]) },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: h1,
+    description,
+    datePublished: day(published),
+    dateModified: day(updated ?? published),
+    author: { "@type": "Person", name: author },
+    inLanguage: lang,
+    url: url(paths[lang]),
+  },
+];
+---
+
+<ContentPage lang={lang} title={title} description={description} paths={paths} jsonLd={jsonLd} h1={h1} emoji={sitePages[section].emoji} lead={lead} published={published} updated={updated}>
+  <Content />
+  <p slot="after" class="back"><a href={pagePath(section, lang)}>{pageTexts[lang].back[section]}</a></p>
+</ContentPage>
+
+<style>
+  .back { max-width: 48rem; margin: 3rem auto 0; font-weight: 700; }
+</style>

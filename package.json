@@ -1,0 +1,18 @@
+{
+  "name": "holy-pdf",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSING.md",
+  "packageManager": "pnpm@12.8.1",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @holy-pdf/web dev",
+    "build": "pnpm --filter @holy-pdf/web build",
+    "serve": "pnpm --filter @holy-pdf/web serve",
+    "check": "pnpm --filter @holy-pdf/web check",
+    "test": "pnpm --filter @holy-pdf/web test",
+    "verify": "pnpm --filter @holy-pdf/web verify",
+    "verify:full": "pnpm --filter @holy-pdf/web verify:full"
+  }
+}

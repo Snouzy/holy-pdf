@@ -1,0 +1,55 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "url": [
+        "http://localhost/en/",
+        "http://localhost/fr/",
+        "http://localhost/en/merge-pdf/",
+        "http://localhost/fr/fusionner-pdf/",
+        "http://localhost/en/compress-pdf/",
+        "http://localhost/en/sign-pdf/"
+      ],
+      "numberOfRuns": 3
+    },
+    "assert": {
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": ".*",
+          "aggregationMethod": "median-run",
+          "assertions": {
+            "cumulative-layout-shift": ["error", { "maxNumericValue": 0.02 }],
+            "total-blocking-time": ["error", { "maxNumericValue": 100 }],
+            "categories:performance": ["error", { "minScore": 0.95 }],
+            "categories:seo": ["error", { "minScore": 1 }],
+            "categories:accessibility": ["error", { "minScore": 0.95 }],
+            "categories:best-practices": ["error", { "minScore": 1 }],
+            "resource-summary:font:size": ["error", { "maxNumericValue": 81920 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "/(en|fr)/$",
+          "aggregationMethod": "median-run",
+          "assertions": {
+            "largest-contentful-paint": ["error", { "maxNumericValue": 1500 }],
+            "resource-summary:script:size": ["error", { "maxNumericValue": 24576 }],
+            "resource-summary:document:size": ["error", { "maxNumericValue": 40960 }],
+            "cumulative-layout-shift": ["error", { "maxNumericValue": 0.01 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "/(en|fr)/[a-z-]+/$",
+          "aggregationMethod": "median-run",
+          "assertions": {
+            "largest-contentful-paint": ["error", { "maxNumericValue": 1600 }],
+            "resource-summary:script:size": ["error", { "maxNumericValue": 51200 }]
+          }
+        }
+      ]
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "./.lighthouseci"
+    }
+  }
+}

@@ -1,0 +1,38 @@
+name: Web
+
+on:
+  pull_request:
+    paths: ["apps/web/**", "apps/mac/PDFToolbox/App/SearchTerms.json", "apps/mac/PDFToolbox/Assets.xcassets/Generated/**", "apps/mac/PDFToolbox/HolyPDF.icon/**", "patches/**", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".github/workflows/web.yml"]
+  push:
+    branches: [main]
+    paths: ["apps/web/**", "apps/mac/PDFToolbox/App/SearchTerms.json", "apps/mac/PDFToolbox/Assets.xcassets/Generated/**", "apps/mac/PDFToolbox/HolyPDF.icon/**", "patches/**", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".github/workflows/web.yml"]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @holy-pdf/web exec playwright install --with-deps chromium
+      # The fast check; the three browsers and Lighthouse run locally with `pnpm verify:full`.
+      - run: pnpm verify
+      # Deployment stays off until the repository has a SITE_URL variable and its Cloudflare secrets.
+      - if: github.event_name == 'push' && vars.SITE_URL != ''
+        run: pnpm build
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          INDEXABLE: ${{ vars.INDEXABLE }}
+      - if: github.event_name == 'push' && vars.SITE_URL != ''
+        uses: cloudflare/wrangler-action@v4.1.3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: apps/web
+          packageManager: pnpm
+          wranglerVersion: "4.143.1"
+          command: deploy

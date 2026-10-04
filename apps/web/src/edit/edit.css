@@ -1,0 +1,79 @@
+/* Scrolling sideways makes the box clip: the padding keeps the handles on the page's edges whole. */
+.edit-scroll { width: 100%; padding: 10px; box-sizing: border-box; overflow-x: auto; }
+.edit-sheet {
+  position: relative; width: calc(100% * var(--zoom, 1)); max-width: calc(50rem * var(--zoom, 1)); margin-inline: auto;
+  background: white; box-shadow: var(--shadow-sheet); isolation: isolate; touch-action: none; user-select: none;
+}
+@media (pointer: coarse) {
+  .edit-sheet { width: min(100%, calc((100dvh - 12rem) * var(--page-ratio))); }
+  /* Fingers pinch the browser itself; a zoomed sheet under `touch-action: none` could not be panned. */
+  .edit-zoom, .edit-key { display: none; }
+}
+.edit-sheet > img { display: block; width: 100%; height: 100%; pointer-events: none; }
+.edit-layer { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; cursor: crosshair; }
+.edit-layer[data-tool="select"] { cursor: default; }
+.edit-layer[data-tool="text"] { cursor: text; }
+.edit-text { white-space: pre; }
+.edit-highlight { mix-blend-mode: multiply; }
+.edit-selection { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; pointer-events: none; }
+.edit-handle { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+.edit-handle:is([data-handle="nw"], [data-handle="se"]) { cursor: nwse-resize; }
+.edit-handle:is([data-handle="ne"], [data-handle="sw"]) { cursor: nesw-resize; }
+.edit-handle:is([data-handle="from"], [data-handle="to"]) { cursor: move; }
+.edit-handle:is([data-handle="e"], [data-handle="w"]) { cursor: ew-resize; }
+.edit-typing {
+  position: absolute; z-index: 1; box-sizing: content-box; margin: 0; padding: 0; border: 0; border-radius: 2px;
+  outline: 1.5px dashed var(--accent); outline-offset: 2px; background: transparent; resize: none; overflow: hidden; white-space: pre;
+}
+.edit-typing.is-idle { left: 0; top: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.edit-options { display: flex; flex-direction: column; gap: 1rem; width: 100%; }
+.edit-group { display: flex; flex-direction: column; gap: 0.75rem; min-width: 0; margin: 0; padding: 0; border: 0; }
+.edit-group legend { margin-bottom: 0.5rem; padding: 0; font-weight: 700; }
+.edit-tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.375rem; }
+.board .edit-tools :is(button, .button) { position: relative; flex-direction: column; gap: 0.25rem; min-height: 64px; padding: 0.5rem 0.25rem; font-size: 0.8125rem; }
+/* A keycap, not a badge: a framed capital with a thicker bottom edge, like the key itself. */
+.edit-key {
+  position: absolute; top: 5px; right: 5px; min-width: 1.125rem; height: 1.125rem; padding: 0 0.25rem; box-sizing: border-box;
+  border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4px; background: var(--surface);
+  color: var(--ink-soft, var(--ink)); font: 600 0.6875rem/1rem var(--font-text); text-transform: uppercase; text-align: center;
+}
+.board .edit-tools button[aria-pressed="true"] .edit-key { border-color: var(--accent); color: var(--accent); }
+.board .edit-tools button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
+.edit-swatches { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.board .edit-swatches button {
+  width: 36px; min-width: 36px; height: 36px; min-height: 36px; padding: 0; border-radius: 50%;
+  background: var(--swatch); border: 2px solid var(--line); box-shadow: inset 0 0 0 2px var(--surface);
+}
+.board .edit-swatches button[aria-checked="true"] { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: 1px; }
+.edit-segments { display: flex; flex-direction: column; gap: 0.375rem; font-weight: 600; }
+.edit-segments > div { display: grid; grid-auto-columns: minmax(0, 1fr); grid-auto-flow: column; gap: 0.25rem; padding: 0.25rem; border-radius: 12px; background: var(--bg); }
+.board .edit-segments button { min-height: 36px; border-color: transparent; background: transparent; }
+.board .edit-segments button[aria-checked="true"] { border-color: var(--line); background: var(--surface); }
+.edit-text-style { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.5rem; }
+.edit-text-style label { display: flex; flex-direction: column; gap: 0.25rem; font-weight: 600; }
+.edit-text-style select { min-height: 40px; padding: 0.4rem; border: 1.5px solid var(--line); border-radius: var(--radius-control); background: var(--surface); color: var(--ink); font: inherit; }
+.board .edit-text-style button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
+.edit-actions { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+.board .edit-actions button { font-size: 0.875rem; }
+.edit-ghost { pointer-events: none; }
+.edit-original { fill: none; stroke: var(--accent); stroke-width: 1.5; vector-effect: non-scaling-stroke; pointer-events: none; }
+.edit-font-note { margin: 0.5rem 0 0; font-size: 0.875rem; color: var(--ink-soft, inherit); }
+.edit-object { margin: 0; font-size: 0.9375rem; }
+.edit-object-text { display: block; overflow: hidden; margin-top: 0.25rem; text-overflow: ellipsis; white-space: nowrap; font-style: italic; }
+.edit-added-field rect { fill: rgb(29 78 216 / 0.07); stroke: var(--accent); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.edit-added-field text { fill: rgb(29 78 216 / 0.7); }
+.edit-field { fill: rgb(29 78 216 / 0.07); stroke: rgb(29 78 216 / 0.35); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.edit-choice { position: absolute; z-index: 1; margin: 0; padding: 0 0.2em; border: 1.5px solid var(--accent); border-radius: 2px; background: var(--surface); color: var(--ink); font-family: Helvetica, Arial, sans-serif; }
+.edit-link { fill: rgb(29 78 216 / 0.08); stroke: var(--accent); stroke-width: 1; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }
+.edit-note { cursor: move; }
+.edit-fields { display: flex; flex-direction: column; gap: 0.5rem; }
+.edit-fields label { display: flex; flex-direction: column; gap: 0.25rem; font-weight: 600; }
+.edit-fields :is(input, textarea, select) { min-height: 40px; padding: 0.5rem; border: 1.5px solid var(--line); border-radius: var(--radius-control); background: var(--surface); color: var(--ink); font: inherit; font-weight: 400; }
+.edit-picture { overflow: hidden; }
+.edit-crop .edit-original { pointer-events: none; }
+.edit-typing.is-box { white-space: pre-wrap; overflow-wrap: anywhere; }
+.board .edit-words button { width: auto; min-width: 0; height: 32px; min-height: 32px; padding: 0 0.6rem; border-radius: 8px; background: var(--surface); box-shadow: none; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.02em; }
+.board .edit-words button[aria-checked="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-tint); }
+.edit-stamp text { white-space: pre; }
+.edit-fields label.edit-check { flex-direction: row; align-items: center; gap: 0.5rem; }
+.edit-fields .edit-check input { min-height: 0; width: 1.1rem; height: 1.1rem; }

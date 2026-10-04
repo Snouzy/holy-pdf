@@ -1,0 +1,23 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+fixtures-private/
+
+# Prototype inputs and outputs: pages of the real batch.
+tools/prototype/src/
+tools/prototype/quads.txt
+tools/prototype/pages.json
+tools/prototype/overrides.json
+tools/prototype/out/
+tools/prototype/check/
+tools/prototype/.venv/
+
+# Agent notes and per-machine Claude Code state: never published.
+tasks/
+.claude/worktrees/
+.claude/settings.local.json
+.superpowers/
+node_modules/
