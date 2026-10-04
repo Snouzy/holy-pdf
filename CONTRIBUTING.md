@@ -1,0 +1,48 @@
+# Contributing
+
+Thank you for looking. This page says how the project works so that your time is well spent.
+
+## Where things are
+
+- `apps/web/`: the site (Astro + Preact) and its engine (PDFium and qpdf in WebAssembly, in a Web Worker). This is where development happens.
+- `apps/desktop/`: the desktop app (Tauri), when it lands. It wraps the site.
+- `Packages/Core` and `apps/mac`: the Swift engine and the native Mac app. **Frozen since 4 October 2026**: fixes are welcome, new features are not. The desktop app replaces it.
+- `wiki/`: the documentation, in French. Every tool starts with a spec in `wiki/specs/` (what it does, each decision and its reason) before any code. Code changes update their wiki page in the same commit.
+
+## Before you write code
+
+Open an issue first for anything bigger than a fix. A feature without a spec row is not merged, so the issue is where the spec is agreed. Two rules decide most proposals:
+
+- Everything runs on the user's device. A tool that needs a server is out of scope.
+- No account, no quota, no advertising on the site.
+
+## Set up
+
+```sh
+pnpm install      # at the repository root: a pnpm workspace
+pnpm dev          # http://localhost:4321
+pnpm verify       # types, unit tests, build, SEO checks, Chromium end-to-end
+pnpm verify:full  # adds Firefox, WebKit and Lighthouse
+```
+
+The root scripts forward to `apps/web`; `pnpm --filter @holy-pdf/web <script>` runs any other script of the site.
+
+Node 22.12 or later (CI runs 24, see `.github/workflows/web.yml`) and pnpm. End-to-end tests run against `dist`, so run `pnpm build` before them when you test by hand.
+
+## Rules of the house
+
+- Tests come with the change. Engine behaviour is tested in `tests/engine` against the real WebAssembly build.
+- Never commit a real document, photo or personal file. Test fixtures are synthetic and generated in code.
+- User-facing text exists in French and English (`src/i18n`, `src/content`). French uses « vous », and a non-breaking space inside « » only, as the existing pages do.
+- Comments are in English, and only for a why. The code says the what.
+- Keep the loading budgets: the site must stay fast on a phone.
+
+## Submit
+
+- One pull request per change, merged with a merge commit (no squash, no rebase of a shared branch).
+- Sign off every commit (`git commit -s`). This certifies the [Developer Certificate of Origin](https://developercertificate.org/) and places your contribution under the project licence; see [LICENSING.md](LICENSING.md).
+- Write issues and pull requests in English or French, as you prefer.
+
+## Security
+
+See [SECURITY.md](SECURITY.md). Do not open a public issue for a vulnerability.

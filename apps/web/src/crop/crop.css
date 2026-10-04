@@ -1,0 +1,35 @@
+.crop-sheet {
+  position: relative; width: 100%; max-width: 50rem; margin-inline: auto;
+  background: white; box-shadow: var(--shadow-sheet); cursor: crosshair; touch-action: none; user-select: none;
+}
+@media (pointer: coarse) {
+  .crop-sheet { width: min(100%, calc((100dvh - 12rem) * var(--page-ratio))); }
+}
+.crop-sheet > img { display: block; width: 100%; height: 100%; pointer-events: none; }
+.crop-shade { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.crop-shade > div { position: absolute; box-shadow: 0 0 0 100vmax rgb(20 26 46 / 0.55); }
+.crop-zone { position: absolute; box-sizing: border-box; border: 2px solid var(--accent); cursor: move; container-type: size; }
+/* A small zone stays movable: only its corners resize it, without the wider touch area. */
+@container (max-width: 64px) or (max-height: 64px) {
+  .crop-handle::before { display: none; }
+  .crop-handle:is([data-handle="n"], [data-handle="s"], [data-handle="e"], [data-handle="w"]) { display: none; }
+}
+.crop-handle {
+  position: absolute; width: 14px; height: 14px; margin: -8px; box-sizing: border-box;
+  border: 2px solid var(--accent); border-radius: 3px; background: var(--surface);
+}
+.crop-handle::before { content: ""; position: absolute; inset: -10px; }
+.crop-handle[data-handle="nw"] { left: 0; top: 0; cursor: nwse-resize; }
+.crop-handle[data-handle="n"] { left: 50%; top: 0; cursor: ns-resize; }
+.crop-handle[data-handle="ne"] { left: 100%; top: 0; cursor: nesw-resize; }
+.crop-handle[data-handle="e"] { left: 100%; top: 50%; cursor: ew-resize; }
+.crop-handle[data-handle="se"] { left: 100%; top: 100%; cursor: nwse-resize; }
+.crop-handle[data-handle="s"] { left: 50%; top: 100%; cursor: ns-resize; }
+.crop-handle[data-handle="sw"] { left: 0; top: 100%; cursor: nesw-resize; }
+.crop-handle[data-handle="w"] { left: 0; top: 50%; cursor: ew-resize; }
+.crop-options { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; width: 100%; }
+.crop-segments { display: flex; flex-direction: column; gap: 0.375rem; width: 100%; font-weight: 600; }
+.crop-segments > div { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.25rem; padding: 0.25rem; border-radius: 12px; background: var(--bg); }
+.board .crop-segments button { min-height: 40px; border-color: transparent; background: transparent; }
+.board .crop-segments button[aria-checked="true"] { border-color: var(--line); background: var(--surface); }
+.crop-size { margin: 0; font-variant-numeric: tabular-nums; }

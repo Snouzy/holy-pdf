@@ -1,0 +1,194 @@
+---
+import { cast } from "../cast";
+import { dictionaries } from "../i18n";
+import { Avatar } from "../illustrations/Avatar";
+import { toolPath } from "../site";
+import { type Lang, type ToolId, tools } from "../tools";
+
+type Props = { lang: Lang; compact?: boolean };
+const { lang, compact = false } = Astro.props;
+const t = dictionaries[lang];
+const verbs = Object.entries(t.home.pick.verbs) as [ToolId, string][];
+const [first, firstVerb] = verbs[0] ?? ["merge", t.home.pick.verbs.merge];
+---
+
+<div class:list={["pick", { compact }]}>
+  <div class="sentence">
+    <span>{t.home.pick.before}</span>
+    <span class="visually-hidden" id="pick-label">{t.home.pick.label}</span>
+    <span class="choice">
+      <button class="choice-button" id="pick" type="button" role="combobox" aria-labelledby="pick-label" aria-haspopup="listbox" aria-expanded="false" aria-controls="pick-list">{firstVerb}</button>
+      <div class="choice-list" id="pick-panel" hidden>
+      <ul class="scroll" id="pick-list" role="listbox" aria-labelledby="pick-label">
+        {verbs.map(([id, verb]) => (
+          <li id={`pick-${id}`} role="option" aria-selected={id === first} data-tool={id} data-href={toolPath(tools[id], lang)}>
+            <Avatar accessory={cast[id].accessory} mood={cast[id].mood} diameter={40} tint={`var(--${cast[id].category}-tint)`} />
+            <span class="verb">{verb}</span>
+            <small>{t.monks[id].name}</small>
+          </li>
+        ))}
+      </ul>
+      </div>
+    </span>
+    <span>{t.home.pick.after}</span>
+  </div>
+  <div class="picked">
+    {!compact && (
+      <p data-monk>
+        <Avatar accessory={cast[first].accessory} mood={cast[first].mood} diameter={40} tint={`var(--${cast[first].category}-tint)`} />
+        <span><strong>{t.monks[first].name}</strong> {t.home.pick.monk}</span>
+      </p>
+    )}
+    <a class="go" href={toolPath(tools[first], lang)}>{t.home.pick.go}</a>
+  </div>
+</div>
+
+<script>
+  function setupPick() {
+    const choice = document.querySelector<HTMLButtonElement>("#pick");
+    const panel = document.querySelector<HTMLElement>("#pick-panel");
+    const list = document.querySelector<HTMLElement>("#pick-list");
+    const go = choice?.closest(".pick")?.querySelector<HTMLAnchorElement>(".go");
+    if (!choice || !panel || !list || !go || choice.dataset.live !== undefined) return;
+    choice.dataset.live = "";
+    const options = [...list.querySelectorAll<HTMLElement>('[role="option"]')];
+    const verbOf = (option: HTMLElement) => option.querySelector(".verb")?.textContent ?? "";
+    const plain = (text: string) => text.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
+    let active = 0;
+    let typed = "";
+    let typedAt = 0;
+
+    const highlight = (index: number) => {
+      active = Math.min(Math.max(index, 0), options.length - 1);
+      options.forEach((option, at) => option.classList.toggle("active", at === active));
+      choice.setAttribute("aria-activedescendant", options[active]?.id ?? "");
+      options[active]?.scrollIntoView({ block: "nearest" });
+    };
+    const open = (index = options.findIndex((option) => option.getAttribute("aria-selected") === "true")) => {
+      panel.hidden = false;
+      typed = "";
+      panel.style.translate = "";
+      const { left, right } = panel.getBoundingClientRect();
+      const shift = Math.max(0, right - (innerWidth - 16)) - Math.max(0, 16 - left);
+      if (shift) panel.style.translate = `calc(-50% - ${shift}px) 0`;
+      choice.setAttribute("aria-expanded", "true");
+      highlight(index);
+    };
+    const close = () => {
+      panel.hidden = true;
+      typed = "";
+      choice.setAttribute("aria-expanded", "false");
+      choice.removeAttribute("aria-activedescendant");
+    };
+    const pick = (option: HTMLElement | undefined) => {
+      if (!option) return;
+      for (const other of options) other.setAttribute("aria-selected", String(other === option));
+      choice.textContent = verbOf(option);
+      go.href = option.dataset.href ?? go.href;
+      const monk = go.parentElement?.querySelector("[data-monk]");
+      const avatar = option.querySelector(".avatar");
+      if (monk && avatar) monk.querySelector(".avatar")?.replaceWith(avatar.cloneNode(true));
+      const name = monk?.querySelector("strong");
+      if (name) name.textContent = option.querySelector("small")?.textContent ?? "";
+      close();
+    };
+    const typeAhead = (key: string) => {
+      typed = Date.now() - typedAt > 600 ? key : typed + key;
+      typedAt = Date.now();
+      const found = options.findIndex((option) => plain(verbOf(option)).startsWith(plain(typed)));
+      if (found >= 0) highlight(found);
+    };
+
+    choice.addEventListener("click", () => (panel.hidden ? open() : close()));
+    choice.addEventListener("keydown", (event) => {
+      const shut = panel.hidden;
+      const keys: Record<string, () => void> = shut
+        ? { ArrowDown: () => open(), ArrowUp: () => open(), Enter: () => open(), " ": () => open(), Home: () => open(0), End: () => open(options.length - 1) }
+        : {
+            ArrowDown: () => highlight(active + 1),
+            ArrowUp: () => highlight(active - 1),
+            Home: () => highlight(0),
+            End: () => highlight(options.length - 1),
+            Enter: () => pick(options[active]),
+            " ": () => pick(options[active]),
+            Escape: () => close(),
+          };
+      if (event.key === "Tab" && !shut) pick(options[active]);
+      const action = keys[event.key];
+      if (action) {
+        event.preventDefault();
+        action();
+      } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        if (shut) open();
+        typeAhead(event.key);
+      }
+    });
+    list.addEventListener("mousedown", (event) => event.preventDefault());
+    list.addEventListener("click", (event) => pick((event.target as Element).closest<HTMLElement>('[role="option"]') ?? undefined));
+    choice.addEventListener("blur", close);
+    document.addEventListener("pointerdown", (event) => {
+      if (!panel.hidden && !(event.target instanceof Node && choice.parentElement?.contains(event.target))) close();
+    });
+  }
+
+  document.addEventListener("astro:page-load", setupPick);
+  setupPick();
+</script>
+
+<style>
+  .pick { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+  .sentence {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0.5rem 1rem; margin: 0;
+    font-family: var(--font-title); font-weight: 800; font-size: clamp(1.75rem, 7vw, 3.75rem); line-height: 1.1; letter-spacing: -0.035em;
+  }
+  .choice { position: relative; display: inline-flex; }
+  .choice-button {
+    display: inline-flex; align-items: center; gap: 0.35em; margin: 0; padding: 0.05em 0.4em 0.1em 0.35em; border: 4px solid var(--ink); border-radius: 16px;
+    background: var(--highlight); color: var(--on-highlight); font: inherit; letter-spacing: inherit; cursor: pointer; box-shadow: 5px 5px 0 var(--ink);
+    transition-property: translate, box-shadow; transition-duration: 150ms;
+  }
+  .choice-button::after {
+    content: ""; width: 0.2em; height: 0.2em; border-right: 0.07em solid currentColor; border-bottom: 0.07em solid currentColor; transform: translateY(-30%) rotate(45deg);
+  }
+  .choice-button[aria-expanded="true"]::after { transform: translateY(20%) rotate(-135deg); }
+  .choice-button:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; }
+  .choice-list {
+    position: absolute; z-index: 20; top: calc(100% + 0.75rem); left: 50%; translate: -50% 0; box-sizing: border-box;
+    width: min(20rem, calc(100vw - 2rem)); overflow: hidden; border: 3px solid var(--ink); border-radius: 16px; background: var(--surface); box-shadow: 5px 5px 0 var(--ink);
+    font-family: var(--font-text); font-size: 1rem; font-weight: 400; line-height: 1.25; letter-spacing: normal; text-align: start;
+  }
+  .choice-list[hidden] { display: none; }
+  .choice-list ul { display: grid; gap: 0.25rem; max-height: min(26rem, 60vh); overflow-y: auto; margin: 0; padding: 0.375rem; list-style: none; }
+  .choice-list li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; column-gap: 0.75rem; padding: 0.375rem 0.625rem; border-radius: 10px; cursor: pointer; }
+  .choice-list li :global(.avatar) { grid-row: span 2; }
+  .choice-list li.active { background: var(--accent-tint); }
+  .choice-list .verb { font-family: var(--font-title); font-weight: 800; font-size: 1.125rem; color: var(--ink); }
+  .choice-list small { grid-column: 2; font-size: 0.8125rem; color: var(--ink-soft); }
+  .choice-list li[aria-selected="true"]::after {
+    content: ""; grid-column: 3; grid-row: 1 / span 2; width: 0.35rem; height: 0.7rem; margin-inline-end: 0.25rem;
+    border-right: 3px solid var(--accent); border-bottom: 3px solid var(--accent); transform: rotate(45deg);
+  }
+  .picked {
+    display: flex; align-items: center; justify-content: center; gap: 0.75rem 1.25rem; padding: 0.75rem;
+    border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface); box-shadow: var(--shadow-panel);
+  }
+  .picked p { display: flex; align-items: center; gap: 1rem; margin: 0; font-size: 1.0625rem; text-align: start; }
+  .picked p :global(.avatar) { zoom: 1.6; }
+  .go {
+    display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.5rem; border-radius: 999px;
+    background: var(--accent); color: var(--on-accent); font-weight: 800; text-decoration: none; white-space: nowrap;
+  }
+  .compact { align-items: flex-start; gap: 1.25rem; }
+  .compact .sentence { justify-content: flex-start; font-size: clamp(1.75rem, 5vw, 2.25rem); }
+  .compact .choice-button { border-width: 3px; border-radius: 12px; box-shadow: 4px 4px 0 var(--ink); }
+  .compact .picked { padding: 0; border: none; background: none; box-shadow: none; }
+  @media (max-width: 700px) {
+    .picked { flex-wrap: wrap; border-radius: var(--radius-panel); }
+    .go { flex-grow: 1; justify-content: center; }
+  }
+  @media (hover: hover) {
+    .go:hover { background: var(--accent-hover); color: var(--on-accent); }
+    .choice-button:hover { translate: -2px -2px; box-shadow: 7px 7px 0 var(--ink); }
+    .choice-list li:hover { background: var(--accent-tint); }
+  }
+</style>

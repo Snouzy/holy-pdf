@@ -1,0 +1,20 @@
+diff --git a/package.json b/package.json
+index f4cd73b4be3d693ec3c0de06707192c44dbb2444..1ed55b84c0217a40d2abf31890f282ebf0b350a4 100644
+--- a/package.json
++++ b/package.json
+@@ -10,7 +10,8 @@
+     "./features.json": "./features.json",
+     "./provenance.json": "./provenance.json",
+     "./sbom.cdx.json": "./sbom.cdx.json",
+-    "./qpdf-core.wasm": "./qpdf-core.wasm"
++    "./qpdf-core.wasm": "./qpdf-core.wasm",
++    "./qpdf-core.js": "./qpdf-core.js"
+   },
+   "files": [
+     "index.mjs",
+diff --git a/qpdf-core.js b/qpdf-core.js
+--- a/qpdf-core.js
++++ b/qpdf-core.js
+@@ -2 +2 @@
+-;return Module}})();if(typeof exports==="object"&&typeof module==="object"){module.exports=createQpdfCore;module.exports.default=createQpdfCore}else if(typeof define==="function"&&define["amd"])define([],()=>createQpdfCore);
++;return Module}})();export default createQpdfCore;

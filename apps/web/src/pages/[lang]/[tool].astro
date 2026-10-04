@@ -1,0 +1,195 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import Board from "../../board/Board";
+import { cast } from "../../cast";
+import { faqPage, questionId } from "../../faq";
+import { dictionaries } from "../../i18n";
+import { Avatar } from "../../illustrations/Avatar";
+import { Icon } from "../../illustrations/Icon";
+import Base from "../../layouts/Base.astro";
+import Emoji from "../../layouts/Emoji.astro";
+import { alternates, homePath, siteName, toolPath } from "../../site";
+import { tools } from "../../tools";
+
+export const getStaticPaths = (async () => {
+  const entries = await getCollection("tools");
+  return entries.map((entry) => {
+    const tool = tools[entry.data.tool];
+    return { params: { lang: entry.data.lang, tool: tool.slug[entry.data.lang] }, props: { entry, tool } };
+  });
+}) satisfies GetStaticPaths;
+
+const { entry, tool } = Astro.props;
+const { lang, title, description, h1, steps, faq } = entry.data;
+const t = dictionaries[lang];
+const monk = cast[tool.id];
+const { Content } = await render(entry);
+const url = (path: string) => new URL(path, Astro.site).href;
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: h1,
+    url: url(toolPath(tool, lang)),
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any",
+    browserRequirements: "Requires JavaScript and WebAssembly",
+    inLanguage: lang,
+    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: siteName, item: url(homePath(lang)) },
+      { "@type": "ListItem", position: 2, name: h1, item: url(toolPath(tool, lang)) },
+    ],
+  },
+  faqPage(faq),
+];
+---
+
+<Base lang={lang} title={title} description={description} paths={alternates((code) => toolPath(tool, code))} jsonLd={jsonLd} clientRouter>
+  <div class="workshop">
+    <div class="tool-head">
+      <h1>{h1}<Emoji char={monk.emoji} /></h1>
+      <p class="intro">{t.monks[tool.id].intro}</p>
+    </div>
+
+    <Board client:load transition:persist={`board-${tool.id}`} transition:persist-props toolId={tool.id} lang={lang} monks={{ fr: dictionaries.fr.monks[tool.id], en: dictionaries.en.monks[tool.id] }} />
+    <a class="below" href="#how-to">{t.toolPage.below}</a>
+  </div>
+
+  <section class="how-to" id="how-to">
+    <h2>{t.site.howTo}</h2>
+    <ol class="steps">{steps.map((step) => <li>{step}</li>)}</ol>
+  </section>
+  <section class="prose">
+    <Content />
+  </section>
+  <section class="faq">
+    <h2>{t.site.faq}</h2>
+    {faq.map(({ question, answer }) => (
+      <details id={questionId(question)}>
+        <summary>
+          {question}
+          <span class="faq-sign"><Icon name="plus" size={18} /><Icon name="minus" size={18} /></span>
+        </summary>
+        <p>{answer}</p>
+      </details>
+    ))}
+  </section>
+  <script is:inline>
+    {
+      const reveal = () => {
+        const question = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (question instanceof HTMLDetailsElement) question.open = true;
+      };
+      reveal();
+      window.onhashchange = reveal;
+    }
+  </script>
+  <nav aria-labelledby="related">
+    <h2 id="related">{t.toolPage.otherMonks}</h2>
+    <ul class="related">
+      {tool.related.map((id) => {
+        const other = cast[id];
+        return (
+          <li>
+            <a class="lift" href={toolPath(tools[id], lang)} style={`--tool: var(--${other.category})`}>
+              <Avatar accessory={other.accessory} mood={other.mood} diameter={80} tint={`var(--${other.category}-tint)`} />
+              <span>
+                <strong>{t.toolNames[id]}</strong>
+                <small>{t.monks[id].name}</small>
+              </span>
+              <Icon name="arrow" size={20} />
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </nav>
+</Base>
+
+<style>
+  .workshop { display: contents; }
+  .tool-head { display: flex; flex-direction: column; align-items: center; gap: 0.875rem; padding-top: 3.5rem; text-align: center; }
+  h1 { margin: 0; }
+  .intro { max-width: 39rem; margin: 0; font-size: 1.3125rem; line-height: 1.45; color: var(--ink-soft); }
+  /* Keep section spacing independent of the workshop layout. */
+  section, nav { margin-top: 2.5rem; }
+  h2 { text-align: center; }
+  .how-to { margin-top: 7.5rem; }
+  .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps li {
+    display: flex; flex-direction: column; gap: 0.75rem; padding: 1.75rem; border-radius: var(--radius-panel); background: var(--surface);
+    counter-increment: step; font-size: 1.0625rem; color: var(--ink-soft);
+  }
+  .steps li::before {
+    content: counter(step); display: grid; place-items: center; width: 2.5rem; height: 2.5rem;
+    border-radius: 50%; background: var(--ink); color: var(--bg); font-weight: 800;
+  }
+  .prose { max-width: 48rem; margin-inline: auto; }
+  .faq { max-width: 55rem; margin-inline: auto; }
+  details { margin-top: 0.75rem; border-radius: var(--radius-panel); background: var(--surface); }
+  details[open] { box-shadow: var(--shadow-panel); }
+  summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem 1.5rem; cursor: pointer; font-weight: 700; list-style: none; }
+  summary::-webkit-details-marker { display: none; }
+  summary { border-radius: var(--radius-panel); }
+  summary:focus-visible { outline-offset: -3px; }
+  .faq-sign { display: grid; flex-shrink: 0; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--bg); color: var(--accent); }
+  [open] .faq-sign { background: var(--accent); color: var(--on-accent); }
+  details:not([open]) .faq-sign :global(.icon + .icon), [open] .faq-sign :global(.icon:first-child) { display: none; }
+  details p { margin: 0; padding: 0 1.5rem 1.5rem; color: var(--ink-soft); }
+  .related { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 22rem)); justify-content: center; gap: 1.25rem; margin: 0; padding: 0; list-style: none; }
+  .related a {
+    display: flex; align-items: center; gap: 1rem; padding: 0.25rem 1.25rem 0.25rem 0.25rem;
+    background: var(--surface); border-radius: var(--radius-panel); color: var(--ink); text-decoration: none;
+  }
+  .related span { flex: 1; min-width: 0; }
+  .related strong { display: block; font-family: var(--font-title); font-weight: 800; font-size: 1.0625rem; }
+  .related small { font-weight: 700; color: var(--tool); }
+  .related a :global(.icon) { flex-shrink: 0; color: var(--muted); }
+  .below {
+    display: none; align-items: center; justify-content: center; gap: 0.625rem; padding: 1rem 1rem 1.5rem;
+    font-size: 0.9375rem; font-weight: 700; color: var(--ink-soft); text-decoration: none;
+  }
+  .below::after {
+    content: ""; width: 0.4rem; height: 0.4rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+  }
+  @media (max-width: 900px) {
+    .tool-head { padding-top: 1.5rem; }
+    .intro { font-size: 1.0625rem; }
+    .how-to { margin-top: 4rem; }
+    .steps { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (hover: hover) {
+    summary:hover { color: var(--accent); }
+    details:not([open]) summary:hover .faq-sign { background: var(--accent-tint); }
+    .related a:hover { color: var(--ink); box-shadow: var(--shadow-panel); }
+    .below:hover { color: var(--accent); text-decoration: underline; }
+  }
+
+  :global(main:has(.board, .result)) .tool-head { align-items: flex-start; padding-block: 0 1rem; text-align: start; }
+  :global(main:has(.board, .result)) .intro { display: none; }
+  :global(main:has(.board, .result)) h1 { font-size: clamp(1.875rem, 3vw, 2.625rem); }
+
+  /* Reserve the right column through the explanatory sections so the sticky panel never covers them. */
+  @media (min-width: 64rem) {
+    :global(main:has(.board)) {
+      display: grid;
+      grid-template: "head panel" auto "work panel" 1fr "below panel" auto "how panel" auto "prose panel" auto "faq panel" auto "related panel" auto / minmax(0, 1fr) 27.5rem;
+      max-width: none; padding: 0;
+    }
+    :global(main:has(.board)) .tool-head { grid-area: head; padding: 2.5rem 1.5rem 0; }
+    :global(main:has(.board)) .below { grid-area: below; display: flex; }
+    :global(main:has(.board)) > :is(section, nav) { min-width: 0; width: min(100% - 3rem, 80rem); margin-inline: auto; }
+    :global(main:has(.board)) .how-to { grid-area: how; }
+    :global(main:has(.board)) .prose { grid-area: prose; }
+    :global(main:has(.board)) .faq { grid-area: faq; }
+    :global(main:has(.board)) > nav { grid-area: related; }
+    :global(main:has(.board)) .steps { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  }
+</style>

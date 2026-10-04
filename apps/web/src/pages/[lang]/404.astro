@@ -1,0 +1,54 @@
+---
+import type { GetStaticPaths } from "astro";
+import { titleEmoji } from "../../cast";
+import Pick from "../../home/Pick.astro";
+import { dictionaries } from "../../i18n";
+import { Monk } from "../../illustrations/Monk";
+import Base from "../../layouts/Base.astro";
+import Emoji from "../../layouts/Emoji.astro";
+import { alternates, homePath } from "../../site";
+import { languages } from "../../tools";
+
+export const getStaticPaths = (() => languages.map((lang) => ({ params: { lang }, props: { lang } }))) satisfies GetStaticPaths;
+
+const { lang } = Astro.props;
+const t = dictionaries[lang];
+---
+
+<Base lang={lang} title={t.site.notFoundTitle} description={t.site.notFound} paths={alternates(homePath)}>
+  <section class="lost">
+    <div class="art" aria-hidden="true">
+      <span class="mark">?</span>
+      <span class="mark">?</span>
+      <Monk accessory="loupe" mood="oops" size={250} />
+    </div>
+    <div class="text">
+      <p class="stamp">{t.site.notFoundStamp}</p>
+      <h1>{t.site.notFoundTitle}<Emoji char={titleEmoji.oops} /></h1>
+      <p class="lead">{t.site.notFoundLead}</p>
+      <Pick lang={lang} compact />
+      <a class="home" href={homePath(lang)}>{t.site.backHome}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .lost { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 2rem 3.5rem; max-width: 68rem; margin: 0 auto; padding-block: 4rem; }
+  .art { position: relative; display: flex; align-items: flex-end; justify-content: center; width: 20rem; aspect-ratio: 1; border-radius: 50%; background: var(--organize-tint); }
+  .art :global(.monk) { margin-bottom: -0.625rem; }
+  .mark { position: absolute; top: 2rem; right: 2.5rem; font-family: var(--font-title); font-weight: 800; font-size: 3.25rem; color: var(--accent); transform: rotate(12deg); }
+  .mark + .mark { top: 5rem; right: auto; left: 2rem; font-size: 2.25rem; transform: rotate(-14deg); }
+  .text { display: flex; flex-direction: column; align-items: flex-start; gap: 1.25rem; min-width: 0; }
+  .stamp {
+    margin: 0; padding: 0.25rem 0.75rem; border: 3px solid var(--stamp); border-radius: 6px; color: var(--stamp);
+    font-family: var(--font-title); font-weight: 800; font-size: 0.9375rem; letter-spacing: 0.16em; text-transform: uppercase; transform: rotate(-2deg);
+  }
+  h1 { margin: 0; font-size: clamp(2.25rem, 5vw, 3.5rem); overflow-wrap: anywhere; }
+  .lead { max-width: 34rem; margin: 0; font-size: 1.1875rem; color: var(--ink-soft); }
+  .home { font-weight: 700; }
+  @media (max-width: 760px) {
+    .lost { grid-template-columns: minmax(0, 1fr); justify-items: center; padding-block: 2rem; }
+    .art { width: 14rem; }
+    .art :global(.monk) { width: 170px; height: auto; }
+  }
+</style>
