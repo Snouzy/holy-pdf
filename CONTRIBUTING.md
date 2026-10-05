@@ -5,7 +5,7 @@ Thank you for looking. This page says how the project works so that your time is
 ## Where things are
 
 - `apps/web/`: the site (Astro + Preact) and its engine (PDFium and qpdf in WebAssembly, in a Web Worker). This is where development happens.
-- `apps/desktop/`: the desktop shell (Tauri 2). It opens the built site in the system webview and adds nothing of its own yet. Needs a Rust toolchain (`rustup`): `pnpm desktop:dev` while `pnpm dev` runs, `pnpm desktop:build` for a binary, `pnpm desktop:smoke` for the checks.
+- `apps/desktop/`: the desktop app (Tauri 2). Its entry in `app/` composes the site's tools (the board, the engine, the monks) into an app shell: the monastery, a tool screen, native menus, open and save dialogs. It imports `apps/web/src` by relative path and changes nothing there. Needs a Rust toolchain (`rustup`): `pnpm desktop:dev` (its own Vite server, no need for `pnpm dev`), `pnpm desktop:build` for the bundle, `pnpm desktop:smoke` for the checks.
 - `Packages/Core` and `apps/mac`: the Swift engine and the native Mac app. **Frozen since 4 October 2026**: fixes are welcome, new features are not. The desktop app replaces it.
 - `wiki/`: the documentation, in French. Every tool starts with a spec in `wiki/specs/` (what it does, each decision and its reason) before any code. Code changes update their wiki page in the same commit.
 

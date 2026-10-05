@@ -684,6 +684,18 @@ Deux annulations sont vérifiées entre le deuxième et le troisième geste.
 `pnpm desktop:smoke` (ou `pnpm --filter @holy-pdf/desktop smoke`) compile deux binaires de la coque Tauri et les lance avec `--smoke` (voir la [spec](../specs/2026-10-05-desktop-tauri-design.md)) :
 
 - `smoke:engine` charge la page de test du moteur (`apps/desktop/smoke/`) : le processus sort avec 0 si PDFium, qpdf et les workers tournent dans la webview, servis par `tauri://`.
-- `smoke:site` construit le site, l'embarque, puis visite quatre pages (accueil, Compresser par le lien de l'accueil, FAQ, accueil anglais) sous la CSP de l'appli : la sonde injectée par la coque relève les violations de CSP, les erreurs de script et de chargement ; 0 si les quatre pages sont propres, 1 sinon, 2 si la chaîne n'a pas fini en 120 s, 3 si la fenêtre est fermée ou l'appli quittée avant le verdict.
+- `smoke:app` construit l'entrée bureau (`apps/desktop/app/`), l'embarque, puis la sonde injectée par la coque rapporte trois fois (le monastère, Compresser ouvert par sa carte, le retour par le chevron) sous la CSP de l'appli, en relevant les violations de CSP, les erreurs de script et de chargement ; 0 si les trois rapports sont propres, 1 sinon, 2 si la chaîne n'a pas fini en 120 s, 3 si la fenêtre est fermée ou l'appli quittée avant le verdict.
 
-Rust via rustup est nécessaire ; rien ne tourne en CI. Le serveur de développement du site n'a pas à tourner.
+Rust via rustup est nécessaire ; rien ne tourne en CI. Le serveur de développement du site n'a pas à tourner. `pnpm --filter @holy-pdf/desktop check` vérifie les types de l'entrée et de la page moteur contre les sources du site.
+
+À la main, dans l'appli (`pnpm desktop:dev`) :
+
+1. ⌘O ouvre le dialogue natif, filtré sur les PDF depuis un outil PDF ; les fichiers choisis arrivent dans la planche. Depuis le monastère, « 3 fichiers prêts » s'affiche et les cartes qui ne les acceptent pas sont grisées.
+2. Un PDF lâché sur le monastère ou sur un outil s'ouvre ; le voile « Lâchez, je m'en occupe. » s'affiche pendant le survol.
+3. Compresser un PDF, « Enregistrer… » : le dialogue natif propose le nom de la copie dans le dernier dossier ; « Enregistré » et le nom s'affichent, « Ouvrir » lance le lecteur du système, « Afficher dans le Finder » sélectionne le fichier.
+4. Scanner : deux photos, « Tout enregistrer… » avec une page à vérifier pose la question « Enregistrer quand même ? » ; Supprimer un document pose la sienne.
+5. Passer le système en sombre : l'appli suit sans redémarrer.
+6. Déplacer et redimensionner la fenêtre, quitter, relancer : elle revient au même endroit.
+7. Aide › Site part dans le navigateur, l'appli reste sur son écran.
+8. ⌘Q quitte ; ⌘W ferme la fenêtre et quitte (la garde vient au lot 2).
+9. ⌘Z dans le champ de recherche annule la frappe ; ⌘Z sur la planche annule la retouche ; jamais les deux. ⌘F et ⌘K activent la recherche, ⌘[ ramène au monastère, Entrée ouvre le meilleur moine.

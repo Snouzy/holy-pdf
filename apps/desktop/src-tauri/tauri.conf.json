@@ -4,9 +4,16 @@
   "version": "0.1.0",
   "identifier": "com.snouzylabs.holypdf",
   "build": {
-    "devUrl": "http://localhost:4321",
-    "frontendDist": "../../web/dist",
-    "beforeBuildCommand": "pnpm --filter @holy-pdf/web build"
+    "devUrl": "http://localhost:1420",
+    "beforeDevCommand": "pnpm app:dev",
+    "frontendDist": "../dist-app",
+    "beforeBuildCommand": "pnpm app:build"
+  },
+  "app": {
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' ipc: http://ipc.localhost; worker-src 'self' blob:; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'",
+      "dangerousDisableAssetCspModification": true
+    }
   },
   "bundle": {
     "active": true,

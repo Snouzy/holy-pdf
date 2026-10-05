@@ -22,3 +22,4 @@ tasks/
 .superpowers/
 node_modules/
 apps/desktop/dist-smoke/
+apps/desktop/dist-app/

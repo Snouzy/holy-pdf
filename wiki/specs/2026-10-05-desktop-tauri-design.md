@@ -35,6 +35,8 @@ Les cinq passent en 338 ms sur le binaire compilé, où la page est servie par `
 
 ## Étape 1 : le site dans la coque (5 octobre 2026)
 
+> Dépassée le soir même : la coque charge désormais une entrée dédiée composée avec les briques du site, et `--smoke app` remplace la sonde par pages ([spec de la coque applicative](2026-10-05-desktop-shell-design.md)). Ce qui suit reste vrai pour la CSP, le dépôt et le harnais ; `frontendDist`, `devUrl` et la liste de pages ne le sont plus.
+
 `frontendDist` pointe sur `apps/web/dist`, que `beforeBuildCommand` reconstruit (`pnpm --filter @holy-pdf/web build`, 2,7 s). `pnpm desktop:dev` ouvre le serveur de développement du site (`devUrl`, port 4321), qui doit déjà tourner : pas de `beforeDevCommand`, parce qu'un second `astro dev` dans le même dossier partagerait le cache Vite du premier et le casserait. `pnpm desktop:build` produit l'appli ; le binaire de débogage pèse 59 Mo, `dist` embarqué en entier.
 
 La fenêtre est construite en Rust (`WebviewWindowBuilder`), pas dans `tauri.conf.json` : `dist` n'a pas d'`index.html` à la racine (Cloudflare envoie `/` vers `/en`), donc la coque ouvre `fr` quand la langue du système commence par `fr`, `en` sinon (crate `sys-locale`). Les menus macOS (Édition, Fenêtre, Quitter) sont ceux que Tauri pose par défaut.
