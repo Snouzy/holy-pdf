@@ -1,6 +1,6 @@
 # Bureau : coque Tauri sur le code du site
 
-_Rédigé le 5 octobre 2026. Statut : preuve livrée dans `apps/desktop` ; l'appli vient ensuite._
+_Rédigé le 5 octobre 2026. Statut : preuve livrée dans `apps/desktop`, puis le site construit chargé dans la coque le même jour (étape 1) ; les fonctions de bureau viennent ensuite._
 
 ## Contexte
 
@@ -8,7 +8,7 @@ Le 4 octobre 2026, l'appli Mac en Swift est gelée : deux moteurs (PDFKit sur Ma
 
 ## Ce que la preuve établit
 
-`apps/desktop/smoke/` est une page construite par Vite 8 (la version que le site utilise) depuis les sources du site (`apps/web/src/engine/client.ts` et son worker, importés par chemin relatif, sans copie), types vérifiés par `tsc`. La coque Tauri la charge sous la CSP cible de l'appli (`script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:`), la page enchaîne cinq opérations et renvoie son rapport JSON à Rust par `invoke("smoke_report")`. Rust le désérialise et sort avec 0 seulement si les cinq étapes sont présentes et réussies ; 1 sinon ; 2 si rien n'arrive en 120 s.
+`apps/desktop/smoke/` est une page construite par Vite 8 (la version que le site utilise) depuis les sources du site (`apps/web/src/engine/client.ts` et son worker, importés par chemin relatif, sans copie), types vérifiés par `tsc`. La coque Tauri la charge sous la CSP cible de l'appli (`script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:`), la page enchaîne cinq opérations et renvoie son rapport JSON à Rust par `invoke("smoke_report")`. Rust le désérialise et sort avec 0 seulement si les cinq étapes sont présentes et réussies ; 1 sinon ; 2 si rien n'arrive en 120 s. Depuis l'étape 1, cette page ne se charge que si le binaire est lancé avec `--smoke` (script `smoke:engine`, qui le compile avec `tauri.smoke.conf.json`) ; l'appli ordinaire ne la connaît pas.
 
 | Étape | Ce qu'elle vérifie | Résultat (macOS 26.4.1, 5 octobre 2026) |
 |---|---|---|
@@ -32,11 +32,27 @@ Les cinq passent en 338 ms sur le binaire compilé, où la page est servie par `
 | Icônes | Générées par `tauri icon` depuis `apps/web/public/favicon.svg` rendu en PNG | L'auréole est le logo ; les icônes par défaut de Tauri ne doivent pas apparaître dans le dépôt |
 | Outils | Rust via rustup, Tauri CLI, Vite et TypeScript épinglés en dépendances du paquet | `tauri dev` appelle `cargo` par le PATH : `~/.cargo/bin` doit y être (rustup l'y met par défaut) ; `pnpm install` à la racine suffit côté JS |
 
+## Étape 1 : le site dans la coque (5 octobre 2026)
+
+`frontendDist` pointe sur `apps/web/dist`, que `beforeBuildCommand` reconstruit (`pnpm --filter @holy-pdf/web build`, 2,7 s). `pnpm desktop:dev` ouvre le serveur de développement du site (`devUrl`, port 4321), qui doit déjà tourner : pas de `beforeDevCommand`, parce qu'un second `astro dev` dans le même dossier partagerait le cache Vite du premier et le casserait. `pnpm desktop:build` produit l'appli ; le binaire de débogage pèse 59 Mo, `dist` embarqué en entier.
+
+La fenêtre est construite en Rust (`WebviewWindowBuilder`), pas dans `tauri.conf.json` : `dist` n'a pas d'`index.html` à la racine (Cloudflare envoie `/` vers `/en`), donc la coque ouvre `fr` quand la langue du système commence par `fr`, `en` sinon (crate `sys-locale`). Les menus macOS (Édition, Fenêtre, Quitter) sont ceux que Tauri pose par défaut.
+
+**CSP.** Tauri autorise les scripts inline d'une page en hachant ceux de cette page seule dans sa politique. Or l'accueil et les pages d'outil utilisent le `ClientRouter` d'Astro : la page suivante arrive sans rechargement, et ses scripts, inconnus de la politique de la première, seraient refusés. De plus, les hachages de styles que Tauri ajoute rendent `'unsafe-inline'` caduc, ce qui bloquerait les attributs `style=` du site (436 sur l'accueil). Donc `build.rs` calcule les hachages SHA-256 de tous les scripts inline de `dist` (7 distincts pour 87 pages ; JSON-LD exclu), écrit la politique entière dans `TAURI_CONFIG` pour le codegen, et pose `dangerousDisableAssetCspModification` : la politique est la même pour toutes les pages, `script-src 'self' 'wasm-unsafe-eval'` plus ces hachages, `style-src 'self' 'unsafe-inline'`, et `connect-src 'self' ipc: http://ipc.localhost` pour le protocole d'appel de Tauri (sans quoi chaque `invoke` passe par son repli `postMessage`, après une violation).
+
+**Fumée.** Le binaire accepte `--smoke` : seul, il charge la page de test du moteur ; suivi de chemins (`--smoke fr fr/compresser-pdf fr/faq en`), il charge le site avec une sonde injectée avant chaque page (`smoke/probe.js`), qui relève les violations de CSP, les erreurs de script et de chargement, puis passe à la page suivante par un lien de la page quand il existe (le routeur d'Astro fait alors le changement, sous la politique de la première page) ou par `location.assign`. Elle retire `document.startViewTransition` avant les scripts de la page : derrière d'autres fenêtres le document est caché, WebKit saute alors la transition de vue et le routeur laisse une promesse rejetée (vu à la première exécution) ; sans l'API, le routeur fait le même remplacement du DOM et exécute les mêmes scripts, et le test ne dépend plus de la place de la fenêtre sur le bureau. Rust vérifie l'ordre des pages et sort avec 0 après la dernière page propre, 1 à la première erreur, 2 sans rapport en 120 s, 3 si la fenêtre est fermée avant le verdict (sinon sa fermeture rendrait 0, le code d'une fin ordinaire). Sans `--smoke`, ni chien de garde ni sonde.
+
+| Vérification | Résultat (macOS 26.4.1, 5 octobre 2026) |
+|---|---|
+| Page moteur, cinq étapes, sous la CSP générée | 5/5 en 380 ms sur `tauri://localhost` |
+| Accueil `fr`, puis Compresser par le lien de l'accueil (routeur), puis FAQ, puis accueil `en` | 4 pages sans violation ni erreur, trois exécutions de suite (10 à 34 s) ; la chaîne `pnpm desktop:smoke` entière prend 48 s |
+
 ## Ce qui vient ensuite
 
 Dans l'ordre, chacun avec sa ligne ici :
 
-1. `frontendDist` vers `apps/web/dist`, fenêtre ouverte sur `fr/index.html` (ou la langue du système), menus et raccourcis système. Retirer alors le chien de garde et `smoke_report` de la coque, ou les garder derrière une variable d'environnement que seul le script `smoke` pose : sinon l'appli se fermerait au bout de deux minutes.
+1. Liens externes (GitHub, stores, mentions) : ils remplacent aujourd'hui le site dans la fenêtre, sans retour ; les ouvrir dans le navigateur (`on_navigation` et `tauri-plugin-opener`). « Voir » le résultat passe par `window.open`, que WKWebView ignore : ouvrir le fichier avec le lecteur du système.
 2. Ouvrir un PDF par double-clic (association de fichiers), déposer depuis le Finder ou l'Explorateur, enregistrer sur place par le dialogue natif, traiter un dossier entier.
-3. Mise à jour automatique, signature Mac et Windows, vente directe ; stores ensuite.
-4. Linux quand WebKitGTK aura fait tourner cette même preuve.
+3. Régime : `dist` fait 63 Mo, dont les films de l'accueil (9,5 Mo), OpenCV (13 Mo), trois cœurs Tesseract et PDFium en double ; n'embarquer que ce que le bureau sert.
+4. Mise à jour automatique, signature Mac et Windows, vente directe ; stores ensuite.
+5. Windows : les scripts `smoke:*` nomment le binaire Unix (`src-tauri/target/debug/holy-pdf`), à adapter. Linux quand WebKitGTK aura fait tourner ces mêmes vérifications.

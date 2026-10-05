@@ -4,21 +4,9 @@
   "version": "0.1.0",
   "identifier": "com.snouzylabs.holypdf",
   "build": {
-    "frontendDist": "../dist-smoke"
-  },
-  "app": {
-    "windows": [
-      {
-        "title": "Holy PDF",
-        "width": 800,
-        "height": 600,
-        "resizable": true,
-        "fullscreen": false
-      }
-    ],
-    "security": {
-      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; worker-src 'self' blob:; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'"
-    }
+    "devUrl": "http://localhost:4321",
+    "frontendDist": "../../web/dist",
+    "beforeBuildCommand": "pnpm --filter @holy-pdf/web build"
   },
   "bundle": {
     "active": true,

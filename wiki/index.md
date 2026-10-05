@@ -55,7 +55,7 @@ Ouvrable dans Obsidian : **Ouvrir un dossier comme coffre**, puis choisir le dos
 
 - [Mac : Signer un PDF](specs/2026-10-01-mac-sign-design.md) — signature locale dessinée/importée, conservation du PDF et budgets de performance.
 
-- [Bureau : coque Tauri sur le code du site](specs/2026-10-05-desktop-tauri-design.md) — la preuve que le moteur du site tourne dans la webview de Tauri (PDFium, qpdf, workers, `tauri://`), et l'ordre des étapes de l'appli.
+- [Bureau : coque Tauri sur le code du site](specs/2026-10-05-desktop-tauri-design.md) — la preuve que le moteur du site tourne dans la webview de Tauri (PDFium, qpdf, workers, `tauri://`), le site construit chargé dans la coque, la CSP et les tests de fumée, et l'ordre des étapes suivantes.
 - [Web : Superposer](specs/2026-10-03-web-overlay-design.md) — les pages d'un PDF sur ou sous celles d'un autre.
 - [Web : Signets](specs/2026-10-03-web-bookmarks-design.md) — lire, poser, renommer, ranger et retirer les signets d'un PDF.
 - [Web : Réparer](specs/2026-10-03-web-repair-design.md) — qpdf relit un PDF abîmé, PDFium en secours.

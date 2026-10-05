@@ -4,8 +4,11 @@
   "license": "SEE LICENSE IN LICENSING.md",
   "type": "module",
   "scripts": {
-    "smoke:build": "tsc --noEmit && vite build",
-    "smoke": "pnpm smoke:build && tauri dev --no-watch"
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "smoke": "pnpm smoke:engine && pnpm smoke:site",
+    "smoke:engine": "tauri build --debug --no-bundle --config src-tauri/tauri.smoke.conf.json && src-tauri/target/debug/holy-pdf --smoke",
+    "smoke:site": "tauri build --debug --no-bundle && src-tauri/target/debug/holy-pdf --smoke fr fr/compresser-pdf fr/faq en"
   },
   "dependencies": {
     "@tauri-apps/api": "2.12.1"

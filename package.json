@@ -14,6 +14,8 @@
     "test": "pnpm --filter @holy-pdf/web test",
     "verify": "pnpm --filter @holy-pdf/web verify",
     "verify:full": "pnpm --filter @holy-pdf/web verify:full",
+    "desktop:dev": "pnpm --filter @holy-pdf/desktop dev",
+    "desktop:build": "pnpm --filter @holy-pdf/desktop build",
     "desktop:smoke": "pnpm --filter @holy-pdf/desktop smoke"
   }
 }

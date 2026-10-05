@@ -680,4 +680,9 @@ Deux annulations sont vérifiées entre le deuxième et le troisième geste.
 
 ## Bureau
 
-`pnpm desktop:smoke` (ou `pnpm --filter @holy-pdf/desktop smoke`) construit la page de test du moteur et la lance dans la coque Tauri ; le processus sort avec 0 si PDFium, qpdf et les workers tournent dans la webview (voir la [spec](../specs/2026-10-05-desktop-tauri-design.md)). Rust via rustup est nécessaire ; rien ne tourne en CI.
+`pnpm desktop:smoke` (ou `pnpm --filter @holy-pdf/desktop smoke`) compile deux binaires de la coque Tauri et les lance avec `--smoke` (voir la [spec](../specs/2026-10-05-desktop-tauri-design.md)) :
+
+- `smoke:engine` charge la page de test du moteur (`apps/desktop/smoke/`) : le processus sort avec 0 si PDFium, qpdf et les workers tournent dans la webview, servis par `tauri://`.
+- `smoke:site` construit le site, l'embarque, puis visite quatre pages (accueil, Compresser par le lien de l'accueil, FAQ, accueil anglais) sous la CSP de l'appli : la sonde injectée par la coque relève les violations de CSP, les erreurs de script et de chargement ; 0 si les quatre pages sont propres, 1 sinon, 2 si une page ne répond pas en 120 s.
+
+Rust via rustup est nécessaire ; rien ne tourne en CI. Le serveur de développement du site n'a pas à tourner.
