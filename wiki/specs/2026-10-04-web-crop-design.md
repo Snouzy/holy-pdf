@@ -1,41 +1,41 @@
-# Web — Rogner un PDF
+# Web: Crop a PDF
 
-_Rédigé le 4 octobre 2026. Demandé le 4 octobre, après la comparaison avec iLovePDF. Le Mac n'a pas cet outil._
+_Written on 4 October 2026. Requested on 4 October, after the comparison with iLovePDF. The Mac app does not have this tool._
 
-Frère Cadreur (`/fr/rogner-pdf`, `/en/crop-pdf`) garde la zone choisie d'une page, ou de toutes, et enregistre la copie.
+Brother Framer (`/fr/rogner-pdf`, `/en/crop-pdf`) keeps the chosen area of one page, or of all pages, and saves the copy.
 
-## Objectif
+## Goal
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- on trace sur la page affichée la zone à garder, puis on la déplace ou la redimensionne par ses poignées ;
-- la zone s'applique à toutes les pages, ou à la page affichée seulement ;
-- la copie montre exactement la zone tracée, page pivotée comprise ;
-- rien d'autre ne change dans le fichier.
+- you draw the area to keep on the displayed page, then move it or resize it by its handles;
+- the area applies to all pages, or to the displayed page only;
+- the copy shows exactly the drawn area, rotated pages included;
+- nothing else changes in the file.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Moteur | `engine/crop.ts` règle la CropBox de chaque page visée (`FPDFPage_SetCropBox`) sur la zone, convertie des axes de la page telle que le lecteur la voit (`pageFrame`) vers ceux du fichier | C'est le cadre que les lecteurs affichent et impriment. Une page déjà rognée se rogne dans son cadre visible |
-| Contenu hors zone | Il reste dans le fichier, invisible. Les pages et la FAQ le disent, et renvoient à Noircir pour le retirer | Retirer le contenu demanderait de redessiner la page en image, comme Noircir |
-| Zone | En fractions de la page affichée, depuis son coin haut gauche. Sur toutes les pages, la même fraction de chaque page | Des pages de tailles différentes perdent la même part de leurs marges |
-| Tracé | Tirer sur la page, hors de la zone, trace une zone neuve ; tirer dans la zone la déplace ; huit poignées la redimensionnent. 2 % de la page au moins dans chaque sens, avec une tolérance d'arrondi côté moteur. Sous 64 px à l'écran, la zone ne garde que ses quatre coins, sans zone de toucher élargie | Comme iLovePDF. Une poignée poussée au minimum donnait 0,019999… et le moteur refusait la zone. Une petite zone couverte de poignées ne se déplaçait plus |
-| Départ | La zone laisse 5 % de marge de chaque côté | On voit tout de suite le cadre et ses poignées |
-| Pages | « Toutes les pages » (par défaut) ou « Page N seulement » | Comme iLovePDF |
-| Taille | Le panneau affiche la taille de la page rognée en millimètres | On sait ce qu'on obtient avant d'enregistrer |
-| PDF signé | Refusé (`alreadySigned`) | Toute réécriture invalide la signature |
-| PDF protégé | Ouvert avec son mot de passe ; la copie le garde | Comme Signets et Modifier |
-| Moine | « Frère Cadreur » (« Brother Framer »), le cadre, en joie, catégorie Modifier | Cadrer, c'est choisir ce que l'on garde |
+| Engine | `engine/crop.ts` sets the CropBox of each target page (`FPDFPage_SetCropBox`) to the area, converted from the axes of the page as the viewer shows it (`pageFrame`) to the axes of the file | It is the box that viewers display and print. A page that is already cropped is cropped within its visible box |
+| Content outside the area | It stays in the file, hidden. The pages and the FAQ say so, and point to Redact to remove it | To remove the content, the page would have to be redrawn as an image, like Redact does |
+| Area | In fractions of the displayed page, from its top left corner. On all pages, the same fraction of each page | Pages of different sizes lose the same share of their margins |
+| Drawing | Dragging on the page, outside the area, draws a new area; dragging inside the area moves it; eight handles resize it. At least 2% of the page in each direction, with a rounding tolerance on the engine side. Below 64 px on screen, the area keeps only its four corners, with no enlarged touch zone | Like iLovePDF. A handle pushed to the minimum gave 0.019999… and the engine refused the area. A small area covered with handles could no longer be moved |
+| Start | The area leaves a 5% margin on each side | You see the box and its handles at once |
+| Pages | "All pages" (default) or "Page N only" | Like iLovePDF |
+| Size | The panel shows the size of the cropped page in millimeters | You know what you get before you save |
+| Signed PDF | Refused (`alreadySigned`) | Any rewrite invalidates the signature |
+| Protected PDF | Opened with its password; the copy keeps it | Like Bookmarks and Edit |
+| Monk | "Brother Framer" (« Frère Cadreur »), the frame, joyful, Edit category | To frame is to choose what you keep |
 
-## Limites connues
+## Known limits
 
-- Pas de rognage automatique sur le contenu.
-- Une seule zone par enregistrement : pour rogner deux pages différemment, enregistrer deux fois.
-- Le contenu hors zone se retrouve si l'on agrandit à nouveau le cadre dans un autre logiciel.
+- No automatic crop to the content.
+- One area per save: to crop two pages differently, save twice.
+- The content outside the area comes back if you enlarge the box again in another program.
 
 ## Tests
 
-- Moteur (`tests/engine/crop.test.ts`) : cadre relu par pdf.js sur toutes les pages ou sur une seule ; page pivotée de 90° et de 270° ; page déjà rognée ; la marque laissée dans la zone reste à la même place relative ; zone poussée au minimum par une poignée acceptée ; zone impossible refusée ; PDF signé refusé, PDF protégé qui le reste.
-- Modèle (`tests/unit/cropBox.test.ts`) : zone tracée dans les deux sens, déplacée sans sortir de la page, redimensionnée par chaque poignée, taille minimale.
-- Navigateur (`tests/e2e/crop.spec.ts`) : zone tracée, toutes les pages ou une seule, copie relue. La taille affichée peut varier d'un millimètre selon le navigateur : le test l'accepte.
+- Engine (`tests/engine/crop.test.ts`): box reread by pdf.js on all pages or on one page; page rotated by 90° and by 270°; page already cropped; the mark left in the area stays at the same relative place; area pushed to the minimum by a handle accepted; impossible area refused; signed PDF refused, protected PDF that stays protected.
+- Model (`tests/unit/cropBox.test.ts`): area drawn in both directions, moved without leaving the page, resized by each handle, minimum size.
+- Browser (`tests/e2e/crop.spec.ts`): area drawn, all pages or one page, copy reread. The displayed size can vary by one millimeter from one browser to another: the test accepts it.

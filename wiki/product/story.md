@@ -1,56 +1,56 @@
-# Histoire de Holy PDF
+# The story of Holy PDF
 
-Le récit fondateur de Holy PDF, à la première personne, pour présenter le projet. Il part du manque de place sur l'ordinateur et des démarches administratives de la famille. Les [versions pour les réseaux sociaux](social-posts.md) en reprennent le fil.
+The founding story of Holy PDF, in the first person, to present the project. It starts from the lack of space on the computer and from the family's paperwork. The [social media versions](social-posts.md) follow the same thread.
 
-## Le récit
+## The story
 
-Il me restait 5 Go sur mon ordinateur. Parfois moins, quand la mémoire débordait sur le disque.
+I had 5 GB left on my computer. Sometimes less, when memory spilled over onto the disk.
 
-Alors j'ai commencé à faire du tri.
+So I started to clean up.
 
-Pendant longtemps, j'avais beaucoup utilisé Photoshop et Illustrator. Puis mes habitudes avaient changé. La génération d'images, Canva qui s'améliorait, Photopea pour certaines retouches… Petit à petit, j'ouvrais moins les logiciels Adobe.
+For a long time, I had used Photoshop and Illustrator a lot. Then my habits changed. Image generation, Canva getting better, Photopea for some edits… Little by little, I opened the Adobe apps less often.
 
-J'ai fini par les désinstaller pour récupérer de la place.
+In the end, I uninstalled them to get some space back.
 
-Mais il en restait un auquel je m'accrochais : Acrobat.
+But there was one I held on to: Acrobat.
 
-Parce que, dans la famille, je suis la personne à qui on envoie les documents. Une signature à ajouter. Des PDF à fusionner pour un dossier. Des photos de papiers à transformer en un seul PDF pour mes parents.
+Because in the family, I am the person people send documents to. A signature to add. PDFs to merge for an application file. Photos of papers to turn into a single PDF for my parents.
 
-J'en étais arrivé à garder mon abonnement Adobe pour ça. Quelques PDF, de temps en temps.
+I had come to keep my Adobe subscription just for that. A few PDFs, from time to time.
 
-Puis le manque de place a gagné. J'ai supprimé Acrobat aussi, un peu à contrecœur, en me disant : « Pour faire ça une fois par mois, je trouverai bien un outil en ligne. »
+Then the lack of space won. I deleted Acrobat too, a bit reluctantly, and told myself: "For something I do once a month, I'll find an online tool."
 
-Je pensais que ce serait vite réglé.
+I thought it would be sorted out quickly.
 
-Sauf que, dans les outils que je trouvais, soit il fallait payer, soit je devais confier mes fichiers à un site sans bien comprendre ce qu'ils devenaient.
+Except that, in the tools I found, either I had to pay, or I had to hand my files to a site without really understanding what happened to them.
 
-Pour une recette de gâteau au yaourt, je me pose moins de questions.
+For a yogurt cake recipe, I ask myself fewer questions.
 
-Pour la carte d'identité de ma mère, j'aimerais quand même savoir où elle va.
+For my mother's ID card, I would still like to know where it goes.
 
-Et je n'avais pas envie de reprendre un abonnement pour une démarche occasionnelle.
+And I did not want to take a subscription again for an occasional task.
 
-À force de chercher une solution pour ces petites tâches, il y a eu la fois de trop. J'en ai eu marre. J'ai décidé de construire l'outil dont j'avais besoin.
+After searching again and again for a solution to these small tasks, one time was one too many. I had had enough. I decided to build the tool I needed.
 
-C'est comme ça qu'est né Holy PDF.
+That is how Holy PDF was born.
 
-Le principe : les documents sont traités directement dans le navigateur. Ils restent sur l'appareil, sans être envoyés à un serveur pour être convertis ou assemblés.
+The principle: the documents are processed directly in the browser. They stay on the device. They are not sent to a server to be converted or assembled.
 
-La version web permet déjà de fusionner des PDF, de remettre leurs pages dans le bon ordre, de transformer des images en PDF, de signer et de scanner. Les outils disponibles sont gratuits et utilisables sans compte.
+The web version can already merge PDFs, put their pages back in the right order, turn images into PDFs, sign and scan. The available tools are free and work without an account.
 
-Je continue à construire le projet autour de ces besoins très ordinaires : préparer un dossier, aider ses parents, s'occuper d'un document et passer à autre chose.
+I keep building the project around these very ordinary needs: prepare an application file, help your parents, deal with a document and move on.
 
-Si vous êtes aussi la personne à qui toute la famille envoie ses PDF, vous voyez probablement très bien de quoi je parle.
+If you are also the person the whole family sends its PDFs to, you probably know exactly what I mean.
 
-## Repères pour les prochaines versions
+## Guidelines for the next versions
 
-- Conserver les détails vécus : les 5 Go, la désinstallation progressive, l'abonnement gardé pour les PDF et les documents de la mère. Ne pas inventer de durée de développement, de prix payé ou de nombre d'utilisateurs.
-- Parler d'Acrobat ou de l'abonnement Adobe pour les anciens usages. Ne pas laisser entendre que Reader impose à tout le monde un abonnement.
-- Raconter les alternatives rencontrées comme une expérience personnelle. Ne pas affirmer que tous les concurrents sont payants ou exploitent les documents.
-- La signature est un besoin à l'origine du projet ; Signer est disponible sur le site depuis le 2 octobre 2026, et sur Mac. Le Scanner est sur le site depuis le 3 octobre 2026, avec redressement et texte cherchable : décrire ce qu'il fait, pas plus.
-- La [documentation web](../development/web-version.md) décrit le traitement des fichiers dans le navigateur. Cela ne signifie pas que le site ne fait aucune requête réseau pour charger ses pages et son moteur.
-- Le récit décrit la gratuité des outils web disponibles, conformément aux [textes de marque](brand.md). Il ne promet pas la gratuité de tous les futurs produits : la [feuille de route](roadmap.md) a tranché le 4 octobre 2026 (site gratuit sans compte, code sous AGPL-3.0, appli de bureau payante en achat unique).
+- Keep the real details: the 5 GB, the gradual uninstalling, the subscription kept for PDFs and the mother's documents. Do not invent a development time, a price paid or a number of users.
+- Talk about Acrobat or the Adobe subscription for the past uses. Do not suggest that Reader forces a subscription on everyone.
+- Tell the alternatives met along the way as a personal experience. Do not claim that all competitors are paid or exploit documents.
+- Signing is a need at the origin of the project. Sign has been available on the site since 2 October 2026, and on Mac. The Scanner has been on the site since 3 October 2026, with perspective correction and searchable text: describe what it does, nothing more.
+- The [web documentation](../development/web-version.md) describes how files are processed in the browser. This does not mean that the site makes no network request to load its pages and its engine.
+- The story describes the free web tools that are available, in line with the [brand texts](brand.md). It does not promise that all future products will be free: the [roadmap](roadmap.md) decided on 4 October 2026 (free site with no account, code under AGPL-3.0, paid desktop app as a one-time purchase).
 
-## Référence narrative
+## Narrative reference
 
-Le [post Show HN de Workout.cool](https://news.ycombinator.com/item?id=44309320), publié le 18 juin 2025, raconte l'attachement de son auteur à un projet, sa frustration devant son abandon, puis sa décision de reconstruire un outil utile. Son mouvement narratif inspire celui-ci : situation vécue, frustration concrète, décision, résultat, ouverture aux lecteurs. Les faits et formulations de Holy PDF viennent du récit du fondateur et du wiki du projet. Le succès du post de référence ne permet pas d'isoler l'effet du storytelling.
+The [Workout.cool Show HN post](https://news.ycombinator.com/item?id=44309320), published on 18 June 2025, tells of its author's attachment to a project, their frustration when it was abandoned, then their decision to rebuild a useful tool. Its narrative movement inspires this one: lived situation, concrete frustration, decision, result, opening to the readers. The facts and wording of Holy PDF come from the founder's story and from the project wiki. The success of the reference post does not let us isolate the effect of the storytelling.

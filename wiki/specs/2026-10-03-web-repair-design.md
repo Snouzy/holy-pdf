@@ -1,30 +1,30 @@
-# Web — Réparer un PDF
+# Web: Repair a PDF
 
-_Rédigé et livré le 3 octobre 2026. Le Mac n'a pas cet outil._
+_Written and delivered on 3 October 2026. The Mac app does not have this tool._
 
-Frère Ravaudeur (`/fr/reparer-pdf`, `/en/repair-pdf`) relit les PDF abîmés et en écrit une copie propre, qui s'ouvre partout.
+Brother Mender (`/fr/reparer-pdf`, `/en/repair-pdf`) rereads damaged PDFs and writes a clean copy, which opens everywhere.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Moteur | qpdf reconstruit le fichier (`repairPdf` dans `engine/compact.ts`, même worker jetable que Compresser), sans flux d'objets. Si qpdf trouve le fichier abîmé ou ne se charge pas, PDFium relit et réécrit (`engine/repair.ts`) ; si PDFium échoue aussi, l'erreur de qpdf s'affiche (« Réessayer » quand il ne s'est pas chargé). Une copie sans page est refusée | Sonde du 3 octobre sur neuf fichiers cassés : PDFium n'ouvre ni un fichier tronqué ni un fichier sans table `xref` ; qpdf les relit. Sans flux d'objets, la copie s'ouvre dans les lecteurs anciens |
-| Quand | À l'ouverture, sur cette page seulement : le worker garde la copie réparée, la carte montre ses pages, le bouton la rend | Sinon le fichier qu'on vient réparer serait refusé dès l'ouverture (« endommagé ») |
-| Fin de fichier | Un commentaire `%%EOF` est ajouté avant la relecture | qpdf perd le dernier objet d'un fichier qui s'arrête juste après lui (« EOF after endobj ») : c'est ce que laisse un logiciel arrêté avant d'écrire sa table |
-| Illisible | « Ce PDF est trop abîmé : rien ne s'y relit. » sur la carte | Le message général (« endommagé et ne peut pas être ouvert ») ne dit rien de neuf sur cette page |
-| PDF protégé | Le mot de passe est demandé (qpdf dit « invalid password », traduit en mot de passe requis ou incorrect), qpdf le reçoit, la copie le garde. Un PDF protégé coupé avant son trailer est refusé : la copie qui a perdu `/Encrypt` est rejetée | qpdf garde le chiffrement d'origine. Sans trailer, il ne sait plus que le fichier est chiffré et recopie les flux chiffrés : toutes les pages sortaient blanches |
-| PDF signé | Refusé (`alreadySigned`) | Toute réécriture invalide la signature |
-| Moine | « Frère Ravaudeur » (« Brother Mender »), l'agrafeuse, concentré, catégorie Optimiser | Ravauder, c'est raccommoder |
+| Engine | qpdf rebuilds the file (`repairPdf` in `engine/compact.ts`, the same disposable worker as Compress), without object streams. If qpdf reports the file as damaged, or does not load, PDFium rereads and rewrites it (`engine/repair.ts`); if PDFium fails too, the qpdf error shows ("Try again" when qpdf did not load). A copy with no page is refused | Probe of 3 October on nine broken files: PDFium opens neither a truncated file nor a file without an `xref` table; qpdf rereads them. Without object streams, the copy opens in old viewers |
+| When | At opening, on this page only: the worker keeps the repaired copy, the card shows its pages, the button returns it | Otherwise the file you came to repair would be refused at opening ("damaged") |
+| End of file | A `%%EOF` comment is added before the reread | qpdf loses the last object of a file that stops just after it ("EOF after endobj"): this is what a program leaves when it stops before it writes its table |
+| Unreadable | "This PDF is too damaged: nothing in it can be read." on the card | The general message ("damaged and cannot be opened") says nothing new on this page |
+| Protected PDF | The password is asked for (qpdf says "invalid password", translated into password required or password incorrect), qpdf receives it, and the copy keeps it. A protected PDF cut before its trailer is refused: the copy that lost `/Encrypt` is rejected | qpdf keeps the original encryption. Without a trailer, it no longer knows that the file is encrypted and copies the encrypted streams as they are: all the pages came out blank |
+| Signed PDF | Refused (`alreadySigned`) | Any rewrite invalidates the signature |
+| Monk | "Brother Mender" (« Frère Ravaudeur »), the stapler, focused, Optimize category | « Ravauder » means « raccommoder »: to mend |
 
-## Limites connues
+## Known limits
 
-- Ce qui manque au fichier ne revient pas : un fichier coupé perd ses dernières pages, une page dont l'arbre est effacé est perdue.
-- Un fichier sain est réécrit aussi ; l'écran ne dit pas s'il y avait quelque chose à réparer.
-- 128 Mo au plus, comme Compresser : au-delà, PDFium ne prend pas le relais, deux copies n'y tiendraient pas.
-- Un PDF protégé dont la fin est perdue ne se répare pas.
+- What the file lacks does not come back: a cut file loses its last pages, and a page whose tree is erased is lost.
+- A healthy file is rewritten too; the screen does not say if there was something to repair.
+- 128 MB at most, like Compress: above that, PDFium does not take over, because two copies would not fit.
+- A protected PDF whose end is lost cannot be repaired.
 
 ## Tests
 
-- Moteur (`tests/engine/repair.test.ts`) : fichier coupé à 80 % et 60 %, table `xref` perdue, fichier sain réécrit, secours PDFium quand qpdf échoue, fichier illisible refusé, mot de passe demandé, refusé s'il est faux, puis gardé ; PDF protégé coupé refusé ; qpdf non chargé ou fichier trop gros ; copie sans page refusée ; PDF signé refusé. Relecture par pdf.js.
-- qpdf (`tests/engine/qpdf.test.ts`) : la réécriture rendue même plus lourde, en mode réparation.
-- Navigateur (`tests/e2e/repair.spec.ts`) : PDF coupé réparé avec ses trois pages ; fichier illisible signalé, bouton inactif.
+- Engine (`tests/engine/repair.test.ts`): file cut at 80% and 60%, lost `xref` table, healthy file rewritten, PDFium fallback when qpdf fails, unreadable file refused, password asked for, refused if wrong, then kept; cut protected PDF refused; qpdf not loaded or file too large; copy with no page refused; signed PDF refused. Reread with pdf.js.
+- qpdf (`tests/engine/qpdf.test.ts`): the rewrite is returned even when it is heavier, in repair mode.
+- Browser (`tests/e2e/repair.spec.ts`): cut PDF repaired with its three pages; unreadable file reported, button disabled.

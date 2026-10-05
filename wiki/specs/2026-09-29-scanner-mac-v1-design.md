@@ -1,68 +1,68 @@
-# Scanner Mac v1 — design
+# Scanner Mac v1: design
 
-_Rédigé le 29 septembre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré le 1er octobre 2026 (PR #2 et #7)._
+_Written on 29 September 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped on 1 October 2026 (PRs #2 and #7)._
 
-## Contexte
+## Context
 
-`pdf-toolbox` est une appli qui regroupe des outils PDF, à la manière d'iLovePDF, avec à terme une version iPhone et une version Web, et une possible commercialisation. Le **Scanner** est son premier module : il transforme des photos de documents prises au téléphone en PDF propres, comme sortis d'un scanner.
+`pdf-toolbox` is an app that gathers PDF tools, in the manner of iLovePDF, with an iPhone version and a Web version later on, and possibly a commercial release. The **Scanner** is its first module: it turns photos of documents taken with a phone into clean PDFs, as if they came out of a scanner.
 
-Le pipeline a d'abord été mis au point à la main, en Python et OpenCV, sur un lot réel de 17 photos (11 documents administratifs). Cette spec en reprend les réglages et les pièges. Les valeurs de référence sont dans [Algorithme du scanner](../development/algorithm.md).
+The pipeline was first tuned by hand, in Python and OpenCV, on a real batch of 17 photos (11 administrative documents). This spec takes over its settings and its pitfalls. The reference values are in [Scanner algorithm](../development/algorithm.md).
 
-## Objectif et critères de réussite
+## Goal and success criteria
 
-Déposer un lot de photos, valider les regroupements proposés, corriger les pages signalées, et obtenir un PDF par document, en quelques minutes et sans script.
+Drop a batch of photos, confirm the proposed groupings, correct the flagged pages, and get one PDF per document, in a few minutes and without a script.
 
-La v1 est réussie quand, sur le lot privé de 17 photos :
+v1 succeeds when, on the private batch of 17 photos:
 
-- les 11 PDF produits valent ceux du prototype Python (recadrage, papier blanc, ombres retirées, filigrane gardé, coins recouverts nettoyés) ;
-- chaque page dont les coins auto sont faux est marquée ⚠︎ (le prototype en avait 9) ;
-- les 17 pages sont mises à l'endroit sans intervention (7 photos du lot étaient couchées) ;
-- au moins 10 des 11 regroupements sont justes sans retouche ;
-- au moins 9 des 11 dates proposées sont justes ;
-- une page est traitée en moins de 1 s sur puce M, et le lot entier est prêt en moins de 20 s ;
-- un PDF pèse en moyenne moins de 500 Ko par page.
+- the 11 PDFs produced are as good as those of the Python prototype (crop, white paper, shadows removed, watermark kept, covered corners cleaned);
+- each page whose automatic corners are wrong is marked ⚠︎ (the prototype had 9);
+- the 17 pages are turned upright without intervention (7 photos of the batch were lying on their side);
+- at least 10 of the 11 groupings are right without a touch-up;
+- at least 9 of the 11 proposed dates are right;
+- a page is processed in less than 1 s on an M chip, and the whole batch is ready in less than 20 s;
+- a PDF weighs on average less than 500 KB per page.
 
-## Portée
+## Scope
 
-**Dans la v1 :**
+**In v1:**
 
-- appli macOS 15+, SwiftUI, en français et en anglais ;
-- import par glisser-déposer ou sélecteur : HEIC, JPEG, PNG ;
-- détection de la page, redressement, mise à l'endroit automatique, nettoyage (mode Document ou Couleur) ;
-- correction manuelle : 4 coins déplaçables avec loupe, gomme blanche, rotation par quart de tour, annulation ;
-- OCR sur l'appareil : suggestions de regroupement et de nom, couche de texte invisible dans les PDF ;
-- export : un PDF par document, format réel, sans métadonnées de localisation.
+- macOS 15+ app, SwiftUI, in French and in English;
+- import by drag and drop or picker: HEIC, JPEG, PNG;
+- page detection, straightening, automatic upright rotation, cleaning (Document or Color mode);
+- manual correction: 4 draggable corners with a magnifier, white eraser, quarter-turn rotation, undo;
+- on-device OCR: grouping and name suggestions, invisible text layer in the PDFs;
+- export: one PDF per document, real size, without location metadata.
 
-**Hors v1**, chacun avec sa propre spec plus tard : appli iPhone, version Web, autres outils PDF (fusion, découpe, compression, OCR d'un PDF existant, signature), paiement et licence, reprise de session, OCR structuré de macOS 26.
+**Outside v1**, each one with its own spec later: iPhone app, Web version, other PDF tools (merge, split, compress, OCR of an existing PDF, signature), payment and license, session restore, structured OCR of macOS 26.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Plateformes à terme | Apple + Web | Choix produit |
-| Langage | Swift natif (Vision, Core Image, PDFKit / Core Graphics) | Vision détecte les pages et lit le texte mieux que tout équivalent portable. Rust n'aurait partagé que la partie facile |
-| Web | Réécriture plus tard, en suivant `algorithm.md` et les mêmes photos de test | Aucun code commun possible avec Vision |
-| Dépôt | Monorepo `Snouzy/pdf-toolbox`, sans outil de monorepo | Les paquets Swift se partagent en local entre Mac et iPhone ; le Web réutilisera les photos de test |
-| Documentation | Wiki dans le dépôt (`wiki/`, compatible Obsidian) | La doc change dans le même commit que le code |
-| Version minimale | macOS 15 | API Swift récentes de Vision, parc large |
-| Confidentialité | Bac à sable, fichiers choisis par l'utilisateur uniquement, **aucun droit réseau** | Promesse « rien n'est envoyé » vérifiable, et exigence App Store |
-| Dépendances | Aucune bibliothèque tierce en v1 | Frameworks Apple d'abord |
-| Session | Pas de sauvegarde en v1 ; confirmation avant de quitter avec des documents non exportés | Outil de lot, YAGNI |
+| Target platforms | Apple + Web | Product choice |
+| Language | Native Swift (Vision, Core Image, PDFKit / Core Graphics) | Vision detects pages and reads text better than any portable equivalent. Rust would have shared only the easy part |
+| Web | Rewrite later, following `algorithm.md` and the same test photos | No shared code is possible with Vision |
+| Repository | Monorepo `Snouzy/pdf-toolbox`, without a monorepo tool | The Swift packages are shared locally between Mac and iPhone; the Web will reuse the test photos |
+| Documentation | Wiki in the repository (`wiki/`, compatible with Obsidian) | The docs change in the same commit as the code |
+| Minimum version | macOS 15 | Recent Swift APIs of Vision, large installed base |
+| Privacy | Sandbox, files chosen by the user only, **no network entitlement** | The "nothing is sent" promise can be verified, and the App Store requires it |
+| Dependencies | No third-party library in v1 | Apple frameworks first |
+| Session | No save in v1; confirmation before quitting with documents not exported | Batch tool, YAGNI |
 
-## Structure du dépôt
+## Repository structure
 
 ```
 pdf-toolbox/
 ├── Packages/
-│   └── Core/                un seul Swift package, plusieurs modules :
-│       ├── ScanCore         moteur du scanner
-│       ├── PDFCore          écriture PDF, partagée par les futurs outils
-│       ├── ScanSession      état d'un lot : pages, documents, retouches, export (Mac et iPhone)
-│       └── ScanCLI          outil en ligne de commande, banc d'essai du moteur
+│   └── Core/                one Swift package, several modules:
+│       ├── ScanCore         scanner engine
+│       ├── PDFCore          PDF writing, shared by the future tools
+│       ├── ScanSession      state of a batch: pages, documents, edits, export (Mac and iPhone)
+│       └── ScanCLI          command-line tool, test bench for the engine
 ├── apps/
-│   └── mac/                 projet Xcode : coquille + module Scanner
-├── fixtures/                photos de test sans données personnelles + résultats attendus
-├── fixtures-private/        ignoré par git : les vraies photos, pour les tests locaux
+│   └── mac/                 Xcode project: shell + Scanner module
+├── fixtures/                test photos without personal data + expected results
+├── fixtures-private/        ignored by git: the real photos, for local tests
 ├── wiki/
 │   ├── index.md
 │   ├── development/
@@ -70,242 +70,242 @@ pdf-toolbox/
 │   │   ├── algorithm.md
 │   │   └── tests.md
 │   ├── product/
-│   │   ├── roadmap.md       tous les outils visés, par phase
-│   │   └── brand.md         identité de marque (le moine copiste)
+│   │   ├── roadmap.md       all planned tools, by phase
+│   │   └── brand.md         brand identity (the copyist monk)
 │   └── specs/
-├── tools/prototype/         le prototype Python d'origine, pour référence
+├── tools/prototype/         the original Python prototype, for reference
 ├── CLAUDE.md
 └── AGENTS.md
 ```
 
-Un seul paquet avec plusieurs modules plutôt que plusieurs paquets : les frontières d'import restent imposées par les modules, et `swift test` lance tout d'un coup.
+One package with several modules instead of several packages: the modules still enforce the import boundaries, and `swift test` runs everything at once.
 
-`fixtures-private/` ne doit jamais être commité : les photos réelles portent des données personnelles. Un dépôt privé reste un tiers et peut devenir public.
+`fixtures-private/` must never be committed: the real photos carry personal data. A private repository is still a third party and can become public.
 
-## Le moteur `ScanCore`
+## The `ScanCore` engine
 
-Chaque brique prend des données et rend des données. Pas de protocole ni de singleton : Vision et Core Image sont appelés directement, dans les seules briques qui en ont besoin.
+Each building block takes data and returns data. No protocol and no singleton: the code calls Vision and Core Image directly, only in the blocks that need them.
 
-### Coordonnées
+### Coordinates
 
-Le modèle stocke toute position en **coordonnées normalisées de page** (0 à 1, origine en haut à gauche) : coins, zones de gomme, boîtes de texte. Les conversions vers les pixels d'une photo, les pixels du rendu ou les points PDF vivent dans un seul fichier, `Geometry.swift`. Vision utilise une origine en bas à gauche : la conversion se fait là aussi, et nulle part ailleurs.
+The model stores every position in **normalized page coordinates** (0 to 1, origin at the top left): corners, eraser areas, text boxes. The conversions to the pixels of a photo, the pixels of the render or PDF points live in a single file, `Geometry.swift`. Vision uses an origin at the bottom left: that conversion also happens there, and nowhere else.
 
-### Briques
+### Building blocks
 
-| Brique | Entrée → sortie | Détail |
+| Block | Input → output | Detail |
 |---|---|---|
-| `ImageLoader` | URL → image orientée + date de prise de vue | ImageIO, orientation EXIF appliquée, réduction à 4096 px sur le grand côté |
-| `PageDetector` | image → `Quad` + indicateurs de confiance | Vision `VNDetectDocumentSegmentationRequest` (éprouvée par le prototype), puis affinage des bords (voir ci-dessous) |
-| `Rectifier` | image + `Quad` → page droite | Correction de perspective (Core Image), calage du rapport √2, taille de rendu |
-| `OrientationDetector` | page droite → nombre de quarts de tour | OCR rapide dans les 4 sens sur une version réduite ; on garde le sens qui lit le plus de texte. 7 photos sur 17 du lot réel étaient couchées |
-| `Enhancer` | page + réglages → page nettoyée | Mode Document ou Couleur, filigrane gardé ou non |
-| `EraseMask` | page + zones gommées → page finale | Zones en coordonnées de page, rejouées à chaque rendu |
-| `TextReader` | page → lignes (texte, boîte, hauteur) | Vision `VNRecognizeTextRequest`, niveau précis, langues `ro-RO`, `fr-FR`, `en-US` (le roumain est pris en charge, vérifié le 29/09), correction linguistique désactivée |
-| `DocumentSuggester` | lignes de toutes les pages, dans l'ordre d'import → documents proposés | Règles déterministes, voir ci-dessous |
+| `ImageLoader` | URL → oriented image + capture date | ImageIO, EXIF orientation applied, scaled down to 4,096 px on the long side |
+| `PageDetector` | image → `Quad` + confidence indicators | Vision `VNDetectDocumentSegmentationRequest` (proven by the prototype), then edge refinement (see below) |
+| `Rectifier` | image + `Quad` → straight page | Perspective correction (Core Image), snap to the √2 ratio, render size |
+| `OrientationDetector` | straight page → number of quarter turns | Fast OCR in the 4 directions on a reduced version; the direction that reads the most text wins. 7 of the 17 photos of the real batch were lying on their side |
+| `Enhancer` | page + settings → cleaned page | Document or Color mode, watermark kept or not |
+| `EraseMask` | page + erased areas → final page | Areas in page coordinates, replayed at each render |
+| `TextReader` | page → lines (text, box, height) | Vision `VNRecognizeTextRequest`, accurate level, languages `ro-RO`, `fr-FR`, `en-US` (Romanian is supported, checked on 29 September), language correction off |
+| `DocumentSuggester` | lines of all pages, in import order → proposed documents | Deterministic rules, see below |
 
-Les erreurs sont typées : `ScanError` (`unreadableFile`, `unsupportedFormat`, `renderFailed`, `ocrUnavailable`) dans `ScanCore`, `PDFWriteError` (`emptyDocument`, `invalidImage`, `renderFailed`, `cannotWrite`) dans `PDFCore`. Une page sans page détectée n'est pas une erreur : elle sort marquée ⚠︎. L'interface traduit les erreurs via le catalogue de chaînes.
+The errors are typed: `ScanError` (`unreadableFile`, `unsupportedFormat`, `renderFailed`, `ocrUnavailable`) in `ScanCore`, `PDFWriteError` (`emptyDocument`, `invalidImage`, `renderFailed`, `cannotWrite`) in `PDFCore`. A page where no page is detected is not an error: it comes out marked ⚠︎. The interface translates the errors through the string catalog.
 
-### Affinage des bords
+### Edge refinement
 
-Vision rend un quadrilatère approché. Il est faux quand une autre feuille recouvre un coin. Chaque bord est donc réajusté sur l'image réduite au quart, en niveaux de gris, floutée 5×5 :
+Vision returns an approximate quadrilateral. It is wrong when another sheet covers a corner. So each edge is fitted again on the image scaled down to a quarter, in grayscale, blurred 5×5:
 
-1. 80 échantillons le long du bord, de 6 % à 94 % de sa longueur ;
-2. pour chacun, un profil de luminosité le long de la normale extérieure, sur ±3 % du petit côté de l'image ;
-3. la chute `I(s) − I(s+3)` est calculée ; l'échantillon est gardé si sa chute maximale dépasse 12 ;
-4. on retient la position **la plus extérieure** dont la chute dépasse 60 % du maximum, parce qu'un texte gras juste sous le bord chute plus fort que le bord du papier ;
-5. une droite robuste est ajustée (4 passes, rejet des résidus au-delà de max(1,5 ; 2,5 × médiane)) ;
-6. les coins sont les intersections des droites voisines, ce qui reconstruit aussi un coin caché.
+1. 80 samples along the edge, from 6% to 94% of its length;
+2. for each sample, a brightness profile along the outer normal, over ±3% of the short side of the image;
+3. the drop `I(s) − I(s+3)` is computed; the sample is kept if its maximum drop is more than 12;
+4. the **outermost** position whose drop is more than 60% of the maximum is kept, because bold text just under the edge drops more sharply than the edge of the paper;
+5. a robust line is fitted (4 passes, residuals beyond max(1.5, 2.5 × median) rejected);
+6. the corners are the intersections of the neighboring lines, which also rebuilds a hidden corner.
 
-### Signalement ⚠︎
+### ⚠︎ flag
 
-Une page est marquée à vérifier si l'un de ces cas se produit :
+A page is marked for review if one of these cases occurs:
 
-- le rapport des côtés n'est proche ni de √2 ni d'un format connu (écart > 6 %) ;
-- un bord garde moins de 70 % d'échantillons valides après l'ajustement ;
-- un coin affiné s'écarte de plus de 1 % de la diagonale du coin donné par Vision.
+- the side ratio is close neither to √2 nor to a known size (gap > 6%);
+- an edge keeps less than 70% of valid samples after the fit;
+- a refined corner is more than 1% of the diagonal away from the corner that Vision gave.
 
-Une observation de Vision de confiance inférieure à 0,5 compte comme « aucune page détectée » : image entière, page marquée ⚠︎.
+A Vision observation with a confidence below 0.5 counts as "no page detected": whole image, page marked ⚠︎.
 
-Sur le lot réel, le prototype avait 9 pages fausses et le moteur Swift 10, toutes signalées. Les seuils se règlent sur les photos de test.
+On the real batch, the prototype had 9 wrong pages and the Swift engine 10, all flagged. The thresholds are tuned on the test photos.
 
-### Nettoyage, mode Document
+### Cleaning, Document mode
 
-1. estimation du papier : dilatation (disque de 15 px), puis flou gaussien σ 5 (le prototype prenait une médiane de 21 px, que Core Image n'a pas) ;
-2. si le filigrane est gardé : on calcule aussi une fermeture (disque de 91 px) de cette estimation, qui remplit les traits du filigrane. Dans les zones d'ombre, repérées par rapport au niveau local du papier éclairé (dilatation 101 px au quart de résolution, flou σ 40), on revient à l'estimation fine. Sans ça, la traînée entre deux ombres reste grise ;
-3. division de la page par l'estimation du papier ;
-4. niveaux : noir à 0,12, blanc à 0,86, gamma 1,35 ;
-5. netteté : 1,5 × image − 0,5 × flou σ 1,2 ;
-6. marge blanche de 24 px sur le pourtour.
+1. paper estimate: dilation (15 px disk), then Gaussian blur σ 5 (the prototype used a 21 px median, which Core Image does not have);
+2. if the watermark is kept: a closing (91 px disk) of this estimate is also computed, which fills the strokes of the watermark. In the shadow areas, found relative to the local level of the lit paper (101 px dilation at quarter resolution, blur σ 40), the fine estimate is used again. Without this, the streak between two shadows stays gray;
+3. division of the page by the paper estimate;
+4. levels: black at 0.12, white at 0.86, gamma 1.35;
+5. sharpening: 1.5 × image − 0.5 × blur σ 1.2;
+6. white margin of 24 px all around.
 
-Mode Couleur (certificats à fond de sécurité) : étirement des niveaux entre les centiles 0,5 et 99 par canal, rien d'autre.
+Color mode (certificates with a security background): level stretch between the 0.5 and 99 percentiles per channel, nothing else.
 
-**Filigrane gardé ou non :** détecté automatiquement, avec un interrupteur par page pour forcer. Règle retenue : gardé si, sur l'intérieur de la page (marges de 10 % exclues, au quart de résolution), l'écart entre la fermeture et l'estimation fine dépasse 0,08 sur plus de 2,4 % des pixels, hors masque d'ombre (< 0,5). Elle est juste sur les 16 pages en mode Document du lot privé. La détection reste donc automatique.
+**Watermark kept or not:** detected automatically, with a per-page switch to force it. Rule chosen: kept if, on the inside of the page (10% margins excluded, at quarter resolution), the gap between the closing and the fine estimate is more than 0.08 on more than 2.4% of the pixels, outside the shadow mask (< 0.5). It is right on the 16 Document-mode pages of the private batch. So the detection stays automatic.
 
-### Format et taille de rendu
+### Format and render size
 
-- rapport à moins de 6 % de √2 : calé sur √2, grand côté de 2339 px (A4 à 200 dpi) ;
-- autre rapport : taille mesurée, petit côté de 1654 px ;
-- grand côté plafonné à 7016 px (environ 89 cm à 200 dpi) : des coins glissés en bande étroite ne demandent pas des millions de pixels. Des coins confondus ne donnent pas de rendu ;
-- format PDF par page : `Auto` (A4 pour √2, sinon taille en pixels à 200 dpi), `A4`, `A5`, `Lettre`. Une photo ne donne pas la taille physique : l'utilisateur choisit A5 pour une facture de carnet.
+- ratio within 6% of √2: snapped to √2, long side of 2,339 px (A4 at 200 dpi);
+- other ratio: measured size, short side of 1,654 px;
+- long side capped at 7,016 px (about 89 cm at 200 dpi): corners dragged into a narrow strip do not ask for millions of pixels. Corners that coincide give no render;
+- PDF size per page: `Auto` (A4 for √2, otherwise the size in pixels at 200 dpi), `A4`, `A5`, `Letter`. A photo does not give the physical size: the user chooses A5 for an invoice from a receipt book.
 
-### Suggestions de documents
+### Document suggestions
 
-Entrée : les lignes OCR de toutes les pages, dans l'ordre d'import.
+Input: the OCR lines of all pages, in import order.
 
-**Regroupement** : une page rejoint le document précédent si leurs marqueurs de page se suivent. Marqueurs reconnus dans le haut (10 %) ou le bas (12 %) de la page :
+**Grouping**: a page joins the previous document if their page markers follow each other. Markers recognized in the top (10%) or the bottom (12%) of the page:
 
-- `x / n` et `x/n` ;
-- `Pagina x din n`, `Page x of n`, `Page x sur n` ;
-- un nombre seul centré en bas de page.
+- `x / n` and `x/n`;
+- `Pagina x din n`, `Page x of n`, `Page x sur n`;
+- a lone number centered at the bottom of the page.
 
-Sinon, la page ouvre un nouveau document.
+Otherwise, the page starts a new document.
 
-**Titre** : la ligne de plus grande hauteur dans les 40 % du haut de la première page, parmi les lignes d'au moins 3 lettres, d'au plus 4 mots et de confiance OCR d'au moins 0,5, en excluant les lignes qui reviennent dans au moins max(2, ⌈documents/3⌉) documents du lot (en-têtes d'institution comme « MINISTERUL JUSTIȚIEI »). Le titre est converti en ASCII (ș → s), garde au plus 6 mots, séparés par des tirets.
+**Title**: the tallest line in the top 40% of the first page, among the lines of at least 3 letters, at most 4 words and an OCR confidence of at least 0.5. Lines that come back in at least max(2, ⌈documents/3⌉) documents of the batch are excluded (institution headers such as "MINISTERUL JUSTIȚIEI"). The title is converted to ASCII (ș → s) and keeps at most 6 words, separated by hyphens.
 
-**Date** : la plus récente des dates du document (`jj.mm.aaaa`, `jj/mm/aaaa`, `aaaa-mm-jj`) qui ne dépasse pas la date de référence. La date de référence est la date de prise de vue de la première photo du document, ou aujourd'hui si elle manque. Les dates d'avant 1990 sont ignorées, ainsi que celles des lignes de validité (`valabil`, `valable`, `valid until`, `valid till`, `valid through`, `valid to`, `expir`). Sans date valable, on prend la date de référence.
+**Date**: the most recent of the dates of the document (`dd.mm.yyyy`, `dd/mm/yyyy`, `yyyy-mm-dd`) that is not later than the reference date. The reference date is the capture date of the first photo of the document, or today if it is missing. Dates before 1990 are ignored, and so are those of the validity lines (`valabil`, `valable`, `valid until`, `valid till`, `valid through`, `valid to`, `expir`). With no valid date, the reference date is used.
 
-Cette règle simple donnait 9 dates justes sur 11 sur le lot réel. Les deux écarts : une date de fin de validité (« valabilă până la data … ») et la date d'un certificat cité dans un extrait. Ignorer les lignes de validité corrige le premier. Le second reste : la règle prend une date citée dans le corps du texte, pas la date d'émission. Une règle à points (mots d'émission, position) a été essayée sur papier : elle se trompe sur un document où une même date citée dans le texte revient trois fois.
+This simple rule gave 9 right dates out of 11 on the real batch. The two misses: an end-of-validity date ("valabilă până la data …") and the date of a certificate quoted in an extract. The validity lines, now ignored, fix the first one. The second one remains: the rule takes a date quoted in the body of the text, not the issue date. A scoring rule (issue words, position) was tried on paper: it fails on a document where the same date, quoted in the text, comes back three times.
 
-**Nom** : `AAAA-MM-JJ_Titre`. En l'absence de titre : `AAAA-MM-JJ_Document-N`. Chaque suggestion garde sa raison lisible (« Pagina 1 din 3 · 21.09.2026 »), affichée sur la planche.
+**Name**: `YYYY-MM-DD_Title`. With no title: `YYYY-MM-DD_Document-N`. Each suggestion keeps its readable reason ("Pagina 1 din 3 · 21.09.2026"), shown on the board.
 
 ## `PDFCore`
 
-En v1, une seule responsabilité : écrire un PDF à partir de pages image.
+In v1, a single responsibility: write a PDF from image pages.
 
-- une page PDF par image, à la taille du format choisi (A4 = 595,28 × 841,89 pt, A5 = 419,53 × 595,28 pt). L'image y garde son rapport, centrée ;
-- image en JPEG qualité 0,53 dans ImageIO (≈ libjpeg 80 à 81, le 80 du prototype ; le 0,8 d'ImageIO vaut ≈ libjpeg 94 et alourdissait les pages), sans métadonnées. Le flux JPEG doit être embarqué tel quel, sans recompression : c'est à vérifier dès le départ par la taille des fichiers ;
-- couche de texte invisible : chaque ligne OCR est dessinée en mode texte invisible (Core Text) dans sa boîte, police mise à l'échelle sur la largeur ;
-- titre du document dans les métadonnées PDF.
+- one PDF page per image, at the size of the chosen format (A4 = 595.28 × 841.89 pt, A5 = 419.53 × 595.28 pt). The image keeps its ratio on the page, centered;
+- image as JPEG at quality 0.53 in ImageIO (≈ libjpeg 80 to 81, the 80 of the prototype; the 0.8 of ImageIO is ≈ libjpeg 94 and made the pages heavier), without metadata. The JPEG stream must be embedded as is, without recompression: check this from the start through the file size;
+- invisible text layer: each OCR line is drawn in invisible text mode (Core Text) in its box, with the font scaled to the width;
+- document title in the PDF metadata.
 
-Les futurs outils (fusion, découpe, compression) viendront s'ajouter ici.
+The future tools (merge, split, compress) will come here.
 
-## L'appli Mac
+## The Mac app
 
-### Coquille
+### Shell
 
-L'accueil est une grille d'outils par catégorie, avec recherche, favoris et « Récemment utilisé », sur le modèle de PDF24 Tools. En v1, la grille ne montre que les outils disponibles, donc le Scanner seul, et la recherche, les favoris et les récents arrivent avec la phase 1 de la [feuille de route](../product/roadmap.md). Ajouter un outil, c'est un dossier sous `Features/` et une entrée dans la grille : pas de registre ni de système de plug-in. Les illustrations viendront de l'[identité de marque](../product/brand.md) ; en attendant, un symbole SF par outil.
+The home screen is a grid of tools by category, with search, favorites and "Recently used", on the model of PDF24 Tools. In v1, the grid shows only the available tools, so the Scanner alone; search, favorites and recent tools come with phase 1 of the [roadmap](../product/roadmap.md). To add a tool, you add a folder under `Features/` and an entry in the grid: no registry and no plug-in system. The illustrations will come from the [brand identity](../product/brand.md); until then, one SF Symbol per tool.
 
-### Écrans du Scanner
+### Scanner screens
 
-1. **Démarrage** : zone de dépôt, bouton « Choisir des photos… », les 3 étapes, la mention « rien n'est envoyé ».
-2. **Planche** (vue principale) :
-   - une ligne par document, avec nom modifiable, raison de la suggestion, nombre de pages et vignettes ;
-   - un bandeau de conseils en haut de la planche, qu'on ferme avec « × » ; il ne revient pas après un relancement, sauf par Aide → « Afficher les conseils ». Tant qu'il est affiché, la ligne d'aide du bas est masquée ;
-   - un clic sur une page ouvre la correction ;
-   - au survol, la page se soulève, un anneau l'entoure, le pointeur devient une main, et deux boutons apparaissent : « Corriger » et « Supprimer » ;
-   - un clic droit sur une page ouvre un menu : « Corriger… » et « Supprimer la page » ;
-   - supprimer une page ne demande pas de confirmation : ⌘Z la rend ;
-   - chaque changement de la planche s'annule avec ⌘Z et se rétablit avec ⇧⌘Z : suppression d'une page ou d'un document, déplacement d'une page, nouveau document, nom. Une annulation revient sur la planche ; un renommage s'annule en une fois ;
-   - glisser une page la déplace vers un autre document ; la déposer dans la case vide en fin de ligne crée un document. Cette case n'apparaît que dans un document d'au moins deux pages : seule, une page forme déjà son document. L'image glissée est la page seule, sans anneau ni boutons ;
-   - un ⚠︎ orange marque les pages à vérifier ; son infobulle donne les raisons, une par ligne ;
-   - un bouton « ⚠︎ N pages à vérifier » filtre la planche. Le filtre s'éteint dans deux cas : quand la dernière page marquée est supprimée depuis la planche, et quand on revient à une planche où plus rien n'est à vérifier. Il reste allumé pendant une correction. Sans page à vérifier, le bouton disparaît ; « Ajouter des photos… » et « Exporter », calés à droite, ne bougent pas ;
-   - l'en-tête d'un document a un bouton crayon (« Renommer »), un bouton « Télécharger… » et un menu ⋯ : « Télécharger le PDF… », « Renommer » (met le curseur dans le nom), « Supprimer le document… ». La confirmation donne le nom et le nombre de pages, et dit « Vous pourrez l'annuler avec ⌘Z. ». Ces boutons se surlignent au survol ;
-   - le téléchargement ouvre un panneau d'enregistrement en feuille, avec le nom déjà rempli. Il n'attend que les rendus de son document : l'import d'autres photos ne le retarde pas. Un toast montre « Enregistrement de « Nom.pdf »… » pendant l'écriture, puis « « Nom.pdf » enregistré » avec « Afficher dans le Finder » ; il se ferme seul après 4 s, et attend tant que le pointeur est dessus. Une erreur nomme le fichier choisi dans le panneau et reste affichée jusqu'à sa fermeture. Un document supprimé pendant l'enregistrement ne donne pas d'erreur ;
-   - le nom se modifie dans le champ. Un clic ailleurs sur la planche, sur la barre du bas ou dans la barre d'outils, ou « Retour », valide ; « Échap » rend l'ancien nom ;
-   - le menu Fichier a « Ajouter des photos… » (⌘O) et « Exporter… » (⌘E), actifs quand les boutons de la planche le sont. Ils sont grisés pendant une correction.
-3. **Correction** (un clic sur une page) :
-   - la photo à gauche, avec les 4 coins et une loupe sur le coin tenu ; le résultat à droite, avec une petite roue à côté de « Résultat » tant que le rendu se calcule ;
-   - outils Coins et Gomme (taille réglable, grisée hors de la gomme), Pivoter (quart de tour), Annuler et Rétablir, Télécharger… (le document de la page, comme sur la planche), Page suivante. Pivoter, Annuler et Rétablir ont une infobulle ; celle d'Annuler et de Rétablir nomme l'action, comme le menu Édition (« Annuler Déplacer les coins ») ;
-   - sur la dernière page, « Page suivante » devient « Terminer » et ramène à la planche ;
-   - avec l'outil Coins, le titre du résultat dit de choisir la gomme pour effacer autour de la page ;
-   - pointeurs : une main ouverte sur un coin, fermée pendant le glissement, même au-delà de la photo ; un viseur sur le résultat avec la gomme ;
-   - des coins croisés sont refusés : un message de 3 secondes l'explique sous la photo, et le coin revient à sa place. Une bonne retouche, Annuler ou Rétablir l'efface ;
-   - avec la gomme, la pastille « Mise à jour de la page… » couvre le résultat tant que la page tournée ou redressée n'est pas prête ; un échec de ce rendu la remplace par « La page n'a pas pu être mise à jour. ». Si la gomme peut travailler, aucune pastille : la ligne d'état dit l'échec ;
-   - la ligne d'état explique la page : ⚠︎ orange tant qu'une raison de vérifier demeure, « Coins posés à la main. » sans ⚠︎ si rien d'autre ne gêne, octogone rouge si le rendu a échoué ;
-   - le toast d'enregistrement s'affiche sur le résultat, au-dessus de la barre de réglages ;
-   - en bas : rendu, filigrane, format, et « Rétablir la détection auto ».
-4. **Export** (feuille) :
-   - la liste des PDF, cochables, et le dossier de destination ;
-   - s'il reste des pages marquées ⚠︎, une ligne les compte (« 2 pages sont encore à vérifier. »), avec un bouton « Vérifier » qui ferme la feuille et ouvre la première, filtre allumé ;
-   - options : texte cherchable, ouvrir le dossier ensuite ;
-   - rappel du 200 dpi, du format réel et de la position GPS jamais copiée.
+1. **Start**: drop zone, "Choose photos…" button, the 3 steps, the "nothing is sent" note.
+2. **Board** (main view):
+   - one row per document, with an editable name, the reason for the suggestion, the page count and the thumbnails;
+   - a tips banner at the top of the board, which you close with "×"; it does not come back after a relaunch, except through Help → "Show tips". While it shows, the help line at the bottom is hidden;
+   - a click on a page opens the correction;
+   - on hover, the page lifts, a ring surrounds it, the pointer becomes a hand, and two buttons appear: "Correct" and "Delete";
+   - a right-click on a page opens a menu: "Correct…" and "Delete page";
+   - the deletion of a page asks for no confirmation: ⌘Z brings it back;
+   - you undo each change on the board with ⌘Z and redo it with ⇧⌘Z: deletion of a page or a document, move of a page, new document, name. An undo goes back to the board; a rename is undone in one step;
+   - a drag moves a page to another document; a drop in the empty slot at the end of a row creates a document. This slot appears only in a document of at least two pages: a page alone already forms its own document. The dragged image is the page alone, without the ring or the buttons;
+   - an orange ⚠︎ marks the pages to check; its tooltip gives the reasons, one per line;
+   - a "⚠︎ N pages to check" button filters the board. The filter turns off in two cases: when the last marked page is deleted from the board, and when you come back to a board where nothing is left to check. It stays on during a correction. With no page to check, the button disappears; "Add photos…" and "Export", aligned on the right, do not move;
+   - the header of a document has a pencil button ("Rename"), a "Download…" button and a ⋯ menu: "Download the PDF…", "Rename" (puts the cursor in the name), "Delete the document…". The confirmation gives the name and the page count, and says "You can undo it with ⌘Z.". These buttons highlight on hover;
+   - the download opens a save panel as a sheet, with the name already filled in. It waits only for the renders of its own document: an import of other photos does not delay it. A toast shows "Saving “Name.pdf”…" during the write, then "“Name.pdf” saved" with "Show in Finder"; it closes on its own after 4 s, and waits while the pointer is on it. An error names the file chosen in the panel and stays on screen until it is closed. A document deleted during the save gives no error;
+   - you edit the name in the field. A click elsewhere on the board, on the bottom bar or in the toolbar, or "Return", confirms; "Escape" restores the old name;
+   - the File menu has "Add photos…" (⌘O) and "Export…" (⌘E), active when the buttons of the board are. They are grayed out during a correction.
+3. **Correction** (a click on a page):
+   - the photo on the left, with the 4 corners and a magnifier on the corner you hold; the result on the right, with a small spinner next to "Result" while the render is computing;
+   - Corners and Eraser tools (adjustable size, grayed out outside the eraser), Rotate (quarter turn), Undo and Redo, Download… (the document of the page, as on the board), Next page. Rotate, Undo and Redo have a tooltip; the Undo and Redo tooltips name the action, like the Edit menu ("Undo Move Corners");
+   - on the last page, "Next page" becomes "Done" and goes back to the board;
+   - with the Corners tool, the title of the result says to choose the eraser to erase around the page;
+   - pointers: an open hand on a corner, closed during the drag, even beyond the photo; a crosshair on the result with the eraser;
+   - crossed corners are refused: a 3-second message under the photo explains why, and the corner goes back to its place. A good edit, Undo or Redo clears the message;
+   - with the eraser, the "Updating the page…" badge covers the result while the turned or straightened page is not ready; if this render fails, "The page could not be updated." replaces it. If the eraser can work, there is no badge: the status line reports the failure;
+   - the status line explains the page: orange ⚠︎ while a reason to check remains, "Corners set by hand." without ⚠︎ if nothing else is wrong, red octagon if the render failed;
+   - the save toast shows on the result, above the settings bar;
+   - at the bottom: render, watermark, format, and "Restore automatic detection".
+4. **Export** (sheet):
+   - the list of the PDFs, with checkboxes, and the destination folder;
+   - if pages marked ⚠︎ remain, a line counts them ("2 pages are still to check."), with a "Check" button that closes the sheet and opens the first one, with the filter on;
+   - options: searchable text, open the folder afterwards;
+   - reminder of the 200 dpi, of the real size and of the GPS position, never copied.
 
-### État
+### State
 
-Un modèle observable `ScannerSession`, sur l'acteur principal :
+An observable model, `ScannerSession`, on the main actor:
 
-- `pages` : photo source (URL), statut (`queued`, `processing`, `ready`, `failed(ScanError)`), coins auto et coins corrigés, réglages (rendu, filigrane, format), zones gommées, lignes OCR, drapeau « à vérifier » ;
-- `documents` : nom, identifiants de pages ordonnés, raison de la suggestion.
+- `pages`: source photo (URL), status (`queued`, `processing`, `ready`, `failed(ScanError)`), automatic corners and corrected corners, settings (render, watermark, format), erased areas, OCR lines, "to check" flag;
+- `documents`: name, ordered page identifiers, reason for the suggestion.
 
-Coins, réglages et gomme passent par l'`UndoManager` de la fenêtre, comme les changements de la planche. Une annulation de la planche est l'opération inverse, pas une copie de la planche : un import arrivé entre-temps reste. Une page supprimée pendant son import, quand c'était la dernière en cours, revient dans un document à elle.
+Corners, settings and eraser go through the `UndoManager` of the window, like the changes on the board. An undo on the board is the inverse operation, not a copy of the board: an import that arrived in the meantime stays. A page deleted during its import, when it was the last one in progress, comes back in a document of its own.
 
-### Traitement et performance
+### Processing and performance
 
-- une file de traitement en arrière-plan (groupe de tâches borné au nombre de cœurs). Chaque page apparaît sur la planche dès qu'elle est prête ;
-- **mémoire** : aucune photo décodée n'est gardée. Une page garde son URL source, une vignette et son rendu JPEG ; la photo est relue quand une retouche l'exige. 17 photos de 24 Mpx décodées pèseraient 1,6 Go ;
-- ordre des étapes par page : chargement → détection → redressement → mise à l'endroit → nettoyage → gomme → encodage JPEG et OCR ;
-- une retouche ne relance que les étapes en aval : une gomme refait le rendu et l'OCR, pas la détection (l'OCR tourne sur la page gommée, donc un texte gommé n'entre jamais dans le PDF), un coin ou une rotation refait le redressement, le nettoyage et l'OCR ;
-- pendant le glisser d'un coin, seul le tracé bouge (moins de 16 ms par image) ; le rendu se recalcule au lâcher. Rien ne change de taille pendant un glisser ;
-- les suggestions de documents sont recalculées quand toutes les pages ont leur OCR, et jamais après une modification manuelle des regroupements.
+- a background processing queue (task group limited to the number of cores). Each page appears on the board as soon as it is ready;
+- **memory**: no decoded photo is kept. A page keeps its source URL, a thumbnail and its JPEG render; the photo is read again when an edit requires it. 17 decoded 24 Mpx photos would weigh 1.6 GB;
+- order of the steps per page: loading → detection → straightening → upright rotation → cleaning → eraser → JPEG encoding and OCR;
+- an edit runs again only the steps downstream: an eraser stroke redoes the render and the OCR, not the detection (the OCR runs on the erased page, so an erased text never goes into the PDF); a corner or a rotation redoes the straightening, the cleaning and the OCR;
+- during the drag of a corner, only the outline moves (less than 16 ms per frame); the render is computed again on release. Nothing changes size during a drag;
+- the document suggestions are computed again when all pages have their OCR, and never after a manual change of the groupings.
 
-### Relevé de la revue du moteur
+### Findings from the engine review
 
-Points relevés à la revue du moteur, pour l'appli. Tous sont traités :
+Points found during the engine review, for the app. All are handled:
 
-- avec des coins posés par l'utilisateur, ne pas lancer la détection Vision ;
-- vérifier l'annulation entre deux pages ;
-- les zones gommées sont en coordonnées de la page à l'endroit : tourner une page après une gomme doit tourner les zones du même quart de tour ;
-- `PageSizing.renderSize` doit plafonner le grand côté du rendu et refuser NaN (l'utilisateur glisse les coins) ;
-- un échec de l'OCR garde la page, sans couche de texte, et la marque ;
-- `PDFWriter.write` ne remplace jamais un fichier. Pour le choix « remplacer », l'appli écrit d'abord le nouveau PDF, puis le met à la place de l'ancien avec `FileManager.replaceItemAt` : l'ancien reste intact si l'écriture échoue ;
-- quand `write` ajoute un suffixe (« -2 »), le titre du PDF garde le nom demandé : l'appli doit le recalculer ou choisir le nom avant l'écriture ;
-- `NameFormatting.duplicates` compare les noms en tenant compte de la casse, alors qu'APFS n'en tient pas compte : « Scan » et « scan » sont un seul fichier.
+- with corners set by the user, do not run the Vision detection;
+- check undo across two pages;
+- the erased areas are in the coordinates of the upright page: a rotation of a page after an eraser stroke must rotate the areas by the same quarter turn;
+- `PageSizing.renderSize` must cap the long side of the render and refuse NaN (the user drags the corners);
+- an OCR failure keeps the page, without a text layer, and marks it;
+- `PDFWriter.write` never replaces a file. For the "replace" choice, the app first writes the new PDF, then puts it in place of the old one with `FileManager.replaceItemAt`: the old one stays intact if the write fails;
+- when `write` adds a suffix ("-2"), the PDF title keeps the requested name: the app must compute it again or choose the name before the write;
+- `NameFormatting.duplicates` compares the names with case sensitivity, but APFS is not case-sensitive: "Scan" and "scan" are one file.
 
-## Gestion des erreurs
+## Error handling
 
-| Cas | Comportement |
+| Case | Behavior |
 |---|---|
-| Fichier illisible ou format inconnu | Page « Illisible » avec la raison, le lot continue |
-| Aucune page détectée | Coins aux bords de la photo, page marquée ⚠︎ |
-| Détection douteuse | Page marquée ⚠︎ (règles plus haut) |
-| Pas de texte lu | Document à part, nommé `date-de-la-photo_Document-N` |
-| Deux documents au même nom | Signalés sur la planche, export bloqué tant que ce n'est pas réglé |
-| PDF déjà présent | Choix : remplacer, ou suffixe « -2 » (pas d'espace ni de parenthèse dans les noms de fichier) |
-| Dossier inaccessible, disque plein | Message clair, les documents restent dans l'appli |
-| Suppression d'une page | Immédiate, ⌘Z la rend |
-| Suppression d'un document | Confirmation nommée : « Supprimer « Contrat » et ses 3 pages ? », qui rappelle ⌘Z |
+| Unreadable file or unknown format | "Unreadable" page with the reason, the batch continues |
+| No page detected | Corners at the edges of the photo, page marked ⚠︎ |
+| Doubtful detection | Page marked ⚠︎ (rules above) |
+| No text read | Separate document, named `photo-date_Document-N` |
+| Two documents with the same name | Flagged on the board, export blocked until this is resolved |
+| PDF already there | Choice: replace, or suffix "-2" (no space and no parenthesis in the file names) |
+| Folder not accessible, disk full | Clear message, the documents stay in the app |
+| Deletion of a page | Immediate, ⌘Z brings it back |
+| Deletion of a document | Confirmation with the name: "Delete “Contract” and its 3 pages?", which mentions ⌘Z |
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Logique pure | `Geometry`, calage de format, `DocumentSuggester` sur des lignes OCR écrites à la main (marqueurs FR/RO/EN, dates, titres, en-têtes répétés) | `ScanCoreTests` |
-| Images de synthèse | Page penchée sur fond gris, générée en code, avec ombre de téléphone, filigrane, texte gras près du bord, coin recouvert. Vérifie les coins (tolérance 0,5 % de la diagonale) et le blanc du papier | `ScanCoreTests` |
-| Photos de test | 5-6 vraies photos sans donnée personnelle, avec leurs coins attendus en JSON. Reporté après la v1 | `fixtures/` |
-| Lot privé | Les 17 photos réelles, lancées seulement si `fixtures-private/` existe (sinon la suite est désactivée par `.enabled(if:)`) | local |
-| PDF | Nombre de pages, taille des pages, texte extractible, absence de métadonnées de localisation, taille du fichier | `PDFCoreTests` |
-| Performance | Temps par page sur le lot privé, repère < 1 s, en build optimisé seulement | `PrivateBatchTests` (`ScanCLITests`) |
+| Pure logic | `Geometry`, format snapping, `DocumentSuggester` on OCR lines written by hand (FR/RO/EN markers, dates, titles, repeated headers) | `ScanCoreTests` |
+| Synthetic images | Tilted page on a gray background, generated in code, with a phone shadow, a watermark, bold text near the edge, a covered corner. Checks the corners (tolerance 0.5% of the diagonal) and the white of the paper | `ScanCoreTests` |
+| Test photos | 5-6 real photos without personal data, with their expected corners in JSON. Postponed until after v1 | `fixtures/` |
+| Private batch | The 17 real photos, run only if `fixtures-private/` exists (otherwise `.enabled(if:)` disables the suite) | local |
+| PDF | Page count, page size, extractable text, no location metadata, file size | `PDFCoreTests` |
+| Performance | Time per page on the private batch, target < 1 s, in optimized build only | `PrivateBatchTests` (`ScanCLITests`) |
 
-L'interface est vérifiée à la main en v1 : les tests d'interface automatisés coûtent plus cher à entretenir qu'ils ne rapportent à ce stade.
+The interface is checked by hand in v1: automated interface tests cost more to maintain than they bring at this stage.
 
-## Vérifications préalables
+## Preliminary checks
 
-Faites le 29/09 pendant la rédaction du plan :
+Done on 29 September during the writing of the plan:
 
-- **le roumain est dans les langues de l'OCR** de Vision (`ro-RO`) ;
-- **le JPEG est embarqué sans recompression** dans un PDF Core Graphics : 408 Ko de JPEG donnent un PDF de 418 Ko, et le texte invisible s'extrait ;
-- **Core Image suit en vitesse** : dilatation, fermeture 91 px et flou coûtent 50 à 110 ms chacun sur une page A4 de 200 dpi ;
-- `CIDivideBlendMode` calcule fond ÷ entrée, et `oriented(.right)` tourne d'un quart de tour dans le sens horaire.
+- **Romanian is among the OCR languages** of Vision (`ro-RO`);
+- **the JPEG is embedded without recompression** in a Core Graphics PDF: 408 KB of JPEG give a PDF of 418 KB, and the invisible text can be extracted;
+- **Core Image is fast enough**: dilation, 91 px closing and blur cost 50 to 110 ms each on an A4 page at 200 dpi;
+- `CIDivideBlendMode` computes background ÷ input, and `oriented(.right)` turns a quarter turn clockwise.
 
-Restent à mesurer dans le plan, sur le lot privé, chacune avec sa solution de repli :
+Still to measure in the plan, on the private batch, each one with its fallback:
 
-1. **Qualité de l'OCR roumain** sur les marqueurs de page, les dates et les titres. Repli : les titres sans accents sont acceptables.
-2. **Nettoyage en Core Image** fidèle au prototype Python. Core Image n'a pas de médiane de 21 px : flou gaussien à la place, comparé au rendu Python par l'écart moyen de pixels. Repli : médiane 3×3 répétée.
-3. **Détection du filigrane** juste sur les 16 pages en mode Document. Repli : interrupteur manuel, éteint par défaut.
+1. **Quality of the Romanian OCR** on the page markers, the dates and the titles. Fallback: titles without diacritics are acceptable.
+2. **Cleaning in Core Image** faithful to the Python prototype. Core Image has no 21 px median: Gaussian blur instead, compared with the Python render by the mean pixel difference. Fallback: repeated 3×3 median.
+3. **Watermark detection** right on the 16 Document-mode pages. Fallback: manual switch, off by default.
 
-## Règles techniques
+## Technical rules
 
-Détaillées dans le guide technique de l'époque (`git show mac-final:wiki/development/technical-guide.md`) :
+Detailed in the technical guide of the time (`git show mac-final:wiki/development/technical-guide.md`):
 
-- Swift 6, concurrence stricte ; pas de `!` ni de `as!` sans commentaire qui justifie ;
-- états en enums à valeurs associées, erreurs typées ;
-- pas d'abstraction prématurée : un protocole seulement s'il y a au moins deux implémentations ou un service externe (premier cas prévu : le paiement) ;
-- une seule source pour les coordonnées (`Geometry.swift`) ;
-- frameworks Apple avant toute dépendance ;
-- mesurer avant d'optimiser, avec les repères de cette spec ;
-- commentaires en anglais, seulement pour le pourquoi ;
-- chaînes d'interface dans le catalogue Xcode, FR et EN, dès le départ.
+- Swift 6, strict concurrency; no `!` and no `as!` without a comment that justifies it;
+- states as enums with associated values, typed errors;
+- no premature abstraction: a protocol only if there are at least two implementations or an external service (first expected case: payment);
+- a single source for coordinates (`Geometry.swift`);
+- Apple frameworks before any dependency;
+- measure before you optimize, with the benchmarks of this spec;
+- comments in English, only for the why;
+- interface strings in the Xcode catalog, FR and EN, from the start.
 
-## Suite prévue
+## Planned next steps
 
-Appli iPhone (réutilise `ScanCore` et `PDFCore`, ajoute la caméra), version Web (réécriture selon `algorithm.md`), autres outils PDF dans `PDFCore` et la coquille, puis la couche commerciale.
+iPhone app (reuses `ScanCore` and `PDFCore`, adds the camera), Web version (rewrite that follows `algorithm.md`), other PDF tools in `PDFCore` and the shell, then the commercial layer.

@@ -1,72 +1,72 @@
-# Mac — OCR
+# Mac: OCR
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Quatrième des six outils commandés le 2 octobre (avant : [Numéros de page](2026-10-02-mac-page-numbers-design.md), [Protéger et Déverrouiller](2026-10-02-mac-protect-unlock-design.md), [Compresser](2026-10-02-mac-compress-design.md) ; ensuite : Noircir)._
+_Written on 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`. Fourth of the six tools ordered on 2 October (before: [Page numbers](2026-10-02-mac-page-numbers-design.md), [Protect and Unlock](2026-10-02-mac-protect-unlock-design.md), [Compress](2026-10-02-mac-compress-design.md); next: Redact)._
 
-## Objectif
+## Goal
 
-Rendre un PDF scanné cherchable dans Holy PDF pour Mac : lire le texte que montrent ses pages et le poser par-dessus, invisible, puis enregistrer la copie. Vision et PDFKit seulement, sans nouveau moteur.
+Make a scanned PDF searchable in Holy PDF for Mac: read the text that its pages show, put it on top of them, invisible, then save the copy. Vision and PDFKit only, with no new engine.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- une page sans texte porte, dans la copie, le texte lu dans son image : la recherche le trouve, la sélection le copie ;
-- le texte ajouté est invisible, et placé là où le lecteur voit les mots, y compris sur une page pivotée ;
-- une page qui a déjà son texte n'est pas touchée ;
-- un PDF où il n'y a rien à ajouter n'est pas enregistré, et l'écran le dit avant de demander où enregistrer ;
-- le fichier d'origine n'est jamais modifié ;
-- les tests du paquet, de l'appli et des textes passent, sans avertissement du compilateur.
+- a page without text carries, in the copy, the text read in its image: search finds it, selection copies it;
+- the added text is invisible, and placed where the reader sees the words, also on a rotated page;
+- a page that already has its text is not touched;
+- a PDF with nothing to add is not saved, and the screen says so before it asks where to save;
+- the original file is never modified;
+- the package, app and text tests pass, with no compiler warning.
 
-## Deux voies comparées (sondes du 2 octobre)
+## Two paths compared (probes of 2 October)
 
-Cinq pages d'un livre de 1886, rendues en images sans texte :
+Five pages of a book from 1886, rendered as images without text:
 
-| Voie | Durée | Lecture d'une ligne |
+| Path | Duration | Reading of one line |
 |---|---|---|
-| Option d'écriture de PDFKit (`saveTextFromOCROption`) | 5,5 s | « Unt a narrow strip from the belly tol », une ligne manquante |
-| Lecture du Scanner (`TextReader`, Vision en mode précis) sur la page rendue à 2 400 px | 1,8 s | « Cut a narrow strip from the belly for » |
+| PDFKit write option (`saveTextFromOCROption`) | 5.5 s | "Unt a narrow strip from the belly tol", one line missing |
+| Scanner reading (`TextReader`, Vision in accurate mode) on the page rendered at 2,400 px | 1.8 s | "Cut a narrow strip from the belly for" |
 
-Vision lit mieux et trois fois plus vite, donne la progression page par page et s'annule entre deux pages. Entre 1 600, 2 400 et 3 200 px, la lecture change peu ; 2 400 px tient un A4 à 200 ppp.
+Vision reads better and three times faster, reports progress page by page, and can be cancelled between two pages. Between 1,600, 2,400 and 3,200 px, the reading changes little; 2,400 px holds an A4 page at 200 dpi.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Lecture | Celle du Scanner : `TextReader.read`, Vision en mode précis, roumain, français et anglais, sans correction linguistique | Déjà éprouvée sur les documents administratifs ; la correction réécrit les noms, les numéros et les dates |
-| Écriture | `PDFTextLayer.adding` : la brique `PageOverlay` du Filigrane dessine la page, puis le texte en mode invisible, avec `PDFWriter.drawInvisibleText` du Scanner | Deux briques déjà testées. L'image de la page n'est pas réencodée par nous |
-| Indépendance | `PDFCore` ne connaît pas Vision : il reçoit la fonction de lecture. L'appli lui passe celle de `ScanCore` | `PDFCore` et `ScanCore` restent deux modules sans lien |
-| Pages lues | Celles qui ont moins de 50 caractères de texte : une page scannée porte souvent un tampon (un numéro de page posé par cette appli, un en-tête de fax, la marque d'un scanner). Ce que la page dit déjà n'est pas écrit une deuxième fois. Une page qui a son texte, même mauvais, reste telle quelle | Sans cela, « numéroter puis lire » dans cette appli ne lirait rien. Une deuxième couche sur une page tapée doublerait chaque mot dans la recherche |
-| Annotations | Les champs de formulaire, les notes et les tampons posés sur la page ne sont pas lus | Leur texte n'est pas celui de la page, et il peut changer après coup |
-| Mémoire | `render` vide ce que PDFKit garde après chaque page | Mesuré le 2 octobre : 625 Mo pour 40 pages avant, 3 Mo après |
-| Lecture non enregistrée | Ouvrir un autre PDF ou quitter demande confirmation tant que la copie lue n'est pas enregistrée | La lecture d'un long scan prend des minutes |
-| Rien à ajouter | Le moteur rend `nil` : l'écran dit qu'il n'y a pas de texte à ajouter, rien n'est enregistré | Une copie identique n'a pas de sens |
-| Deux temps | « Lire le texte » lit et affiche le résultat ; « Enregistrer la copie avec son texte… » vient ensuite | L'utilisateur voit ce qui a été lu avant de choisir où enregistrer |
-| Ce qui a été lu | Les lignes lues sont surlignées sur l'aperçu de la page | Le texte ajouté est invisible : sans cela, rien ne montre le travail |
-| Progression | « Lecture de la page 4 sur 12… » pendant la lecture de la page 4, avec « Annuler » ; l'annulation prend effet à la page suivante | 300 pages demandent deux minutes |
-| Moine | « Frère Lecteur », loupe, l'air appliqué pour ne pas doubler Frère Loupe | L'accessoire du site pour l'OCR |
+| Reading | The Scanner's reading: `TextReader.read`, Vision in accurate mode, Romanian, French and English, with no language correction | Already proven on administrative documents; correction rewrites names, numbers and dates |
+| Writing | `PDFTextLayer.adding`: the Watermark's `PageOverlay` building block draws the page, then the text in invisible mode, with the Scanner's `PDFWriter.drawInvisibleText` | Two building blocks that are already tested. We do not re-encode the page image |
+| Independence | `PDFCore` does not know Vision: it receives the reading function. The app gives it the one from `ScanCore` | `PDFCore` and `ScanCore` stay two modules with no link |
+| Pages read | Pages with fewer than 50 characters of text: a scanned page often carries a stamp (a page number added by this app, a fax header, the mark of a scanner). What the page already says is not written a second time. A page that has its text, even bad text, stays as it is | Without this, "number, then read" in this app would read nothing. A second layer on a typed page would double each word in search |
+| Annotations | Form fields, notes and stamps put on the page are not read | Their text is not the text of the page, and it can change later |
+| Memory | `render` empties what PDFKit keeps after each page | Measured on 2 October: 625 MB for 40 pages before, 3 MB after |
+| Unsaved reading | Opening another PDF or quitting asks for confirmation while the read copy is not saved | Reading a long scan takes minutes |
+| Nothing to add | The engine returns `nil`: the screen says there is no text to add, and nothing is saved | An identical copy has no purpose |
+| Two steps | "Read the text" reads and shows the result; "Save the copy with its text…" comes next | The user sees what was read before choosing where to save |
+| What was read | The lines read are highlighted on the page preview | The added text is invisible: without this, nothing shows the work |
+| Progress | "Reading page 4 of 12…" while page 4 is read, with "Cancel"; the cancellation takes effect at the next page | 300 pages take two minutes |
+| Monk | "Brother Reader", magnifying glass, a focused look so as not to repeat Brother Lens | The site's accessory for OCR |
 
-## Parcours
+## Flow
 
-1. Ouvrir ou déposer un PDF. Un fichier protégé demande son mot de passe.
-2. « Lire le texte ». La barre du bas donne la page en cours.
-3. L'écran dit sur combien de pages du texte a été ajouté, et surligne les lignes lues sur la page affichée ; ou dit qu'il n'y a rien à ajouter.
-4. « Enregistrer la copie avec son texte… » propose `nom-ocr.pdf`.
+1. Open or drop a PDF. A protected file asks for its password.
+2. "Read the text". The bottom bar shows the current page.
+3. The screen says on how many pages text was added, and highlights the lines read on the displayed page; or it says that there is nothing to add.
+4. "Save the copy with its text…" suggests `name-ocr.pdf`.
 
-## Limites connues
+## Known limits
 
-- Par défaut, trois langues lues ensemble : roumain, français, anglais. Depuis le 2 octobre au soir, « Langue du texte » propose aussi chacune des langues que Vision lit sur ce Mac, une à la fois. La langue choisie sert à la lecture suivante : la lecture déjà faite reste à l'écran, un clic dans une liste ne doit pas jeter des minutes de lecture. Les lettres latines se lisent pareil dans toutes les langues (Vision lit sans correction de langue) : le choix compte pour les autres écritures, japonais, chinois, coréen, arabe, thaï. Le choix n'est pas gardé d'un lancement de l'appli à l'autre.
-- Une page qui mêle 50 caractères ou plus de texte tapé et une image avec des mots n'est pas lue.
-- Les lignes de faible confiance ne sont pas écartées : une photo ou un schéma peut donner quelques mots sans sens.
-- La copie lue reste en mémoire jusqu'à son enregistrement ou à la fermeture du document.
-- Un texte existant de mauvaise qualité (un ancien OCR) n'est pas remplacé : PDFKit ne sait pas retirer du texte d'une page.
-- L'écriture manuscrite et les très petits caractères d'un scan grossier se lisent mal : la copie porte ce que Vision a lu, erreurs comprises.
-- Les limites de PDFKit à l'écriture s'appliquent (spec du Filigrane) : lenteur et fichiers gonflés sur certains scans en JBIG2.
-- La copie d'un PDF protégé s'ouvre sans mot de passe, et l'écran le dit.
+- By default, three languages are read together: Romanian, French, English. Since the evening of 2 October, "Language of the text" also offers each of the languages that Vision reads on this Mac, one at a time. The chosen language applies to the next reading: the reading already done stays on screen, because a click in a list must not throw away minutes of reading. Latin letters read the same in all languages (Vision reads without language correction): the choice matters for the other scripts, Japanese, Chinese, Korean, Arabic, Thai. The choice is not kept from one launch of the app to the next.
+- A page that mixes 50 or more characters of typed text and an image with words is not read.
+- Lines with low confidence are not discarded: a photo or a diagram can give a few words with no meaning.
+- The read copy stays in memory until it is saved or the document is closed.
+- Existing text of poor quality (an old OCR) is not replaced: PDFKit cannot remove text from a page.
+- Handwriting and very small characters in a coarse scan read badly: the copy carries what Vision read, errors included.
+- The limits of PDFKit when it writes apply (Watermark spec): slowness and swollen files on some JBIG2 scans.
+- The copy of a protected PDF opens without a password, and the screen says so.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Moteur | Une page scannée reçoit les lignes lues, sur une image de 2 400 px, avec la progression ; le texte est invisible ; il tombe au bon endroit sous les quatre rotations ; les pages qui ont du texte ne sont pas lues ; un scan qui porte un numéro de page est lu, sans réécrire le numéro ; une lecture annulée s'arrête à la page suivante ; rien à ajouter rend `nil` ; un lecteur en échec arrête le travail ; PDF signé refusé, PDF protégé ouvert ; le surlignage de l'aperçu | `PDFTextLayerTests` |
-| Outil | Lire un scan avec Vision, surlignage sur l'aperçu, copie cherchable enregistrée, original intact ; une lecture non enregistrée compte comme une modification ; un PDF tapé n'a rien à lire ; un autre PDF efface le résultat | `OCRSessionTests` |
-| Écrans | Départ, prêt, texte lu en clair, en sombre et en anglais, rien à ajouter | `OCRSnapshots` |
-| Fichiers réels | Cinq pages scannées d'un livre : 2,2 s, les cinq pages cherchables (« CUTTING UP A HOG » trouvé), fichier de 7 460 à 7 496 Ko. Un formulaire tapé et une page pivotée : rien à ajouter | Sonde du 2 octobre, non gardée |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
+| Engine | A scanned page receives the lines read, on a 2,400 px image, with progress; the text is invisible; it lands in the right place under the four rotations; pages that have text are not read; a scan that carries a page number is read, and the number is not written again; a cancelled reading stops at the next page; nothing to add returns `nil`; a reader that fails stops the work; signed PDF refused, protected PDF opened; the highlighting on the preview | `PDFTextLayerTests` |
+| Tool | Read a scan with Vision, highlighting on the preview, searchable copy saved, original intact; an unsaved reading counts as a change; a typed PDF has nothing to read; another PDF clears the result | `OCRSessionTests` |
+| Screens | Start, ready, text read in light mode, in dark mode and in English, nothing to add | `OCRSnapshots` |
+| Real files | Five scanned pages of a book: 2.2 s, all five pages searchable ("CUTTING UP A HOG" found), file of 7,460 to 7,496 KB. A typed form and a rotated page: nothing to add | Probe of 2 October, not kept |
+| Texts | All translated, never the informal « tu » | `check-strings.py` |

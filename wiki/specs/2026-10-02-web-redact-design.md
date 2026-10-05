@@ -1,35 +1,35 @@
-# Web — Noircir un PDF
+# Web: Redact a PDF
 
-_Rédigé et livré le 2 octobre 2026. Même règle que [Noircir sur Mac](2026-10-02-mac-redact-design.md), choisie par l'auteur : une page qui porte une zone noire devient une image à 200 ppp._
+_Written and shipped on 2 October 2026. Same rule as [Redact on the Mac](2026-10-02-mac-redact-design.md), chosen by the author: a page that carries a black zone becomes an image at 200 dpi._
 
-Frère Encrier (`/fr/noircir-pdf`, `/en/redact-pdf`) couvre de noir ce que le visiteur trace sur les pages d'un PDF, puis donne une copie où ce contenu n'existe plus.
+Brother Inkpot (`/fr/noircir-pdf`, `/en/redact-pdf`) covers in black what the visitor draws on the pages of a PDF, then gives a copy where this content no longer exists.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Moteur | `engine/redact.ts` rend chaque page marquée telle que le lecteur la voit, à 200 ppp, peint les zones en noir sur des pixels entiers, encode l'image en JPEG (qualité 0,8), puis vide la page sur place et y pose l'image | Ce que l'image ne montre pas quitte le fichier |
-| Vider sur place | La page garde son objet : ses objets de contenu et ses annotations partent, l'image prend leur place, rotation et boîtes gardées | Sonde du 2 octobre : PDFium n'écrit pas les objets d'origine que plus rien n'atteint, et les signets et liens vers la page la visent toujours. Supprimer puis recréer la page cassait le signet |
-| Annotations | Avant de quitter la page, chaque annotation est vidée : valeur et valeur par défaut, texte, adresse d'un lien, apparence | Une annotation retirée reste atteignable par l'arbre de balises (`OBJR`), par une bulle ou par son champ |
-| Champs | La valeur d'un champ passe par l'API de formulaire de PDFium (`EPDFAnnot_SetFormFieldValue`), qui écrit là où le champ la garde, parfois un parent sans `/Type /Annot` | `FPDFAnnot_GetLinkedAnnot` ne remonte pas jusqu'à ce parent |
-| Autres pages | Une bulle ou une réponse liée à une annotation retirée, et un autre widget d'un champ retiré, sont vidés et retirés de leur page | Trois fuites prouvées par la sonde, comme sur Mac |
-| Formulaire | L'environnement de formulaire est ouvert sans `FORM_OnAfterLoadPage` | Avec lui, PDFium génère une apparence pour chaque annotation qui n'en a pas, avant qu'elle soit vidée, et PDFium écrit toujours les objets créés pendant la session |
-| Refus | Un PDF signé (`alreadySigned`) ; un formulaire XFA (`xfaForm`, erreur nouvelle) | XFA garde ses valeurs dans un flux XML qu'aucune page n'atteint et que PDFium ne sait pas modifier |
-| Grandes pages | Le plus grand côté de l'image est plafonné à 6 000 pixels | Une affiche à 200 ppp demanderait des gigaoctets |
-| Éditeur | `redact/RedactEditor.tsx`, chargé avec le premier fichier comme celui de la signature. Glisser trace une zone, un clic n'en trace pas ; une croix retire une zone ; une poignée au coin opposé la déplace, au glisser ou aux flèches (Maj : plus vite), sans la laisser sortir de la page (depuis le 3 octobre, comme la signature). Croix et poignée font 22 px, leur cible 44 px ; « Vider cette page » retire celles de la page ; la liste des pages marque d'un ■ celles qui en ont | Aucun poids sur le premier affichage. Pas de zoom ni d'annulation (⌘Z) dans ce lot |
-| Écran tactile | La feuille tient dans la hauteur de l'écran | Un doigt sur la page trace au lieu de faire défiler : il faut de la place autour pour défiler |
-| Moine | « Frère Encrier » (« Brother Inkpot »), la gomme, l'air appliqué | Le nom du Mac |
+| Engine | `engine/redact.ts` renders each marked page as the reader sees it, at 200 dpi, paints the zones black on whole pixels, encodes the image as JPEG (quality 0.8), then empties the page in place and puts the image on it | What the image does not show leaves the file |
+| Empty in place | The page keeps its object: its content objects and its annotations go, the image takes their place, rotation and boxes are kept | Probe of 2 October: PDFium does not write the original objects that nothing reaches any more, and the bookmarks and links to the page still point at it. Deleting then re-creating the page broke the bookmark |
+| Annotations | Before it leaves the page, each annotation is emptied: value and default value, text, link address, appearance | A removed annotation stays reachable through the tag tree (`OBJR`), through a popup or through its field |
+| Fields | The value of a field goes through the PDFium form API (`EPDFAnnot_SetFormFieldValue`), which writes where the field keeps it, sometimes in a parent without `/Type /Annot` | `FPDFAnnot_GetLinkedAnnot` does not go up to that parent |
+| Other pages | A popup or a reply linked to a removed annotation, and another widget of a removed field, are emptied and removed from their page | Three leaks proven by the probe, as on the Mac |
+| Form | The form environment is opened without `FORM_OnAfterLoadPage` | With it, PDFium generates an appearance for each annotation that has none, before the annotation is emptied, and PDFium always writes the objects created during the session |
+| Refusal | A signed PDF (`alreadySigned`); an XFA form (`xfaForm`, new error) | XFA keeps its values in an XML stream that no page reaches and that PDFium cannot modify |
+| Large pages | The long side of the image is capped at 6,000 pixels | A poster at 200 dpi would need gigabytes |
+| Editor | `redact/RedactEditor.tsx`, loaded with the first file, like the signature editor. A drag draws a zone, a click does not; a cross removes a zone; a handle at the opposite corner moves it, by drag or with the arrow keys (Shift: faster), and does not let it leave the page (since 3 October, like the signature). Cross and handle are 22 px, their target 44 px; "Clear this page" removes the zones of the page; the page list marks with a ■ the pages that have zones | No weight on the first display. No zoom and no undo (⌘Z) in this milestone |
+| Touch screen | The sheet fits in the height of the screen | A finger on the page draws instead of scrolling: there must be space around the page to scroll |
+| Monk | "Brother Inkpot" (« Frère Encrier »), the eraser, the focused look | The name from the Mac |
 
-## Limites connues
+## Known limits
 
-- Toute la page noircie devient une image : son autre texte ne se sélectionne plus, ses champs de formulaire disparaissent.
-- Le titre du document, ses signets, ses métadonnées et les textes de remplacement de l'arbre de balises (`/Alt`, `/ActualText`) ne sont pas relus. L'écran le dit pour le titre, les signets et les métadonnées.
-- La valeur par défaut (`/DV`) d'un champ dont les widgets sont des enfants reste dans le fichier : aucune fonction de PDFium n'atteint ce parent pour l'écrire. C'est une valeur posée par l'auteur du formulaire, pas une saisie.
-- Une vignette de page (`/Thumb`) reste dans le fichier.
-- Un champ de la page noircie disparaît aussi des autres pages où il apparaît.
-- Une page noircie pèse environ 1 Mo au format A4.
+- The whole redacted page becomes an image: its other text can no longer be selected, and its form fields disappear.
+- The document title, its bookmarks, its metadata and the replacement texts of the tag tree (`/Alt`, `/ActualText`) are not checked. The screen says so for the title, the bookmarks and the metadata.
+- The default value (`/DV`) of a field whose widgets are children stays in the file: no PDFium function reaches this parent to write it. It is a value set by the author of the form, not user input.
+- A page thumbnail (`/Thumb`) stays in the file.
+- A field of the redacted page also disappears from the other pages where it appears.
+- A redacted page weighs about 1 MB in A4 format.
 
 ## Tests
 
-- Moteur (`tests/engine/redact.test.ts`) : six secrets d'une page (texte, objet de formulaire, note avec bulle et réponse sur l'autre page, lien atteint par l'arbre de balises, champ, champ partagé avec l'autre page) absents des octets et des flux décompressés ; autre page, signet et lien gardés ; image de 833 × 1 111 pixels pour 300 × 400 points, zone noire ; zone et taille affichée gardées sous les quatre rotations ; plafond de 6 000 pixels ; zones vides ou hors page ignorées ; PDF signé et formulaire XFA refusés.
-- Navigateur (`tests/e2e/redact.spec.ts`) : copie sans le texte de la page noircie, l'autre page gardée ; un clic ne trace pas de zone ; retrait d'une zone et d'une page ; zone déplacée par sa poignée et aux flèches, gardée dans la page ; croix et poignée de 22 px au plus, touchées à 18 px de leur centre.
+- Engine (`tests/engine/redact.test.ts`): six secrets of a page (text, form object, note with a popup and a reply on the other page, link reached through the tag tree, field, field shared with the other page) are absent from the bytes and from the decompressed streams; other page, bookmark and link kept; image of 833 × 1,111 pixels for 300 × 400 points, black zone; zone and displayed size kept under the four rotations; cap of 6,000 pixels; empty or off-page zones ignored; signed PDF and XFA form refused.
+- Browser (`tests/e2e/redact.spec.ts`): copy without the text of the redacted page, the other page kept; a click does not draw a zone; removal of a zone and of a page; zone moved by its handle and with the arrow keys, kept in the page; cross and handle of 22 px at most, hit at 18 px from their center.

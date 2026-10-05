@@ -7,7 +7,7 @@ Thank you for looking. This page says how the project works so that your time is
 - `apps/web/`: the site (Astro + Preact) and its engine (PDFium and qpdf in WebAssembly, in a Web Worker). This is where development happens.
 - `apps/desktop/`: the desktop app (Tauri 2). Its entry in `app/` composes the site's tools (the board, the engine, the monks) into an app shell: the monastery, a tool screen, native menus, open and save dialogs. It imports `apps/web/src` by relative path and changes nothing there. Needs a Rust toolchain (`rustup`): `pnpm desktop:dev` (its own Vite server, no need for `pnpm dev`), `pnpm desktop:build` for the bundle, `pnpm desktop:smoke` for the checks.
 - The native Swift app and its engine (`Packages/Core`, `apps/mac`) were removed on 5 October 2026: the desktop app replaces them. The tag `mac-final` keeps their last state.
-- `wiki/`: the documentation, in French. Every tool starts with a spec in `wiki/specs/` (what it does, each decision and its reason) before any code. Code changes update their wiki page in the same commit.
+- `wiki/`: the documentation, in English. Every tool starts with a spec in `wiki/specs/` (what it does, each decision and its reason) before any code. Code changes update their wiki page in the same commit.
 
 ## Before you write code
 
@@ -31,7 +31,7 @@ Node 22.12 or later (CI runs 24, see `.github/workflows/web.yml`) and pnpm. End-
 
 ## Rules of the house
 
-- Tests come with the change. Engine behaviour is tested in `tests/engine` against the real WebAssembly build.
+- Tests come with the change. Engine behavior is tested in `tests/engine` against the real WebAssembly build.
 - Never commit a real document, photo or personal file. Test fixtures are synthetic and generated in code.
 - User-facing text exists in French and English (`src/i18n`, `src/content`). French uses « vous », and a non-breaking space inside « » only, as the existing pages do.
 - Comments are in English, and only for a why. The code says the what.
@@ -40,8 +40,8 @@ Node 22.12 or later (CI runs 24, see `.github/workflows/web.yml`) and pnpm. End-
 ## Submit
 
 - One pull request per change, merged with a merge commit (no squash, no rebase of a shared branch).
-- Sign off every commit (`git commit -s`). This certifies the [Developer Certificate of Origin](https://developercertificate.org/) and places your contribution under the project licence; see [LICENSING.md](LICENSING.md).
-- Write issues and pull requests in English or French, as you prefer.
+- Sign off every commit (`git commit -s`). This certifies the [Developer Certificate of Origin](https://developercertificate.org/) and places your contribution under the project license; see [LICENSING.md](LICENSING.md).
+- Write issues and pull requests in English or French, as you prefer. The wiki, the docs and code comments are in English.
 
 ## Security
 

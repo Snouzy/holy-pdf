@@ -1,14 +1,14 @@
-# Web — Pixelliser un PDF
+# Web: Pixelize a PDF
 
-_Rédigé et livré le 2 octobre 2026._
+_Written and shipped on 2 October 2026._
 
-Frère Vitrail (`/fr/pixelliser-pdf`, `/en/pixelize-pdf`) change chaque page d'un ou plusieurs PDF en image JPEG, à 150 ppp (normale) ou 300 ppp (élevée). Le texte ne se sélectionne plus et ne se copie plus. Ce n'est pas une protection : un logiciel de reconnaissance de texte lit toujours une image, et la FAQ le dit.
+Brother Glass (`/fr/pixelliser-pdf`, `/en/pixelize-pdf`) turns each page of one or more PDFs into a JPEG image, at 150 ppi (normal) or 300 ppi (high). The text can no longer be selected or copied. This is not a protection: text recognition software still reads an image, and the FAQ says so.
 
-## Moteur
+## Engine
 
-`engine/pixelize.ts`, appelé par la requête `transform` : chaque page est rendue telle que le lecteur la voit (`renderPage`), encodée en JPEG (qualité 0,85) par l'encodeur du Worker, puis posée sur une page neuve de même taille, sans rotation. L'encodage étant asynchrone, cette opération ne passe pas par `transformPdf`, qui reste synchrone.
+`engine/pixelize.ts`, called by the `transform` request: each page is rendered as the reader sees it (`renderPage`), encoded as JPEG (quality 0.85) by the Worker's encoder, then placed on a new page of the same size, with no rotation. Because the encoding is asynchronous, this operation does not go through `transformPdf`, which stays synchronous.
 
 ## Tests
 
-- Moteur (`tests/engine/pixelize.test.ts`) : aucune ligne de texte, une image par page, tailles affichées gardées (une page tournée sort à l'italienne, sans rotation).
-- Navigateur (`tests/e2e/pixelize.spec.ts`) : copie sans texte, au format A4.
+- Engine (`tests/engine/pixelize.test.ts`): no text line, one image per page, displayed sizes kept (a rotated page comes out in landscape, with no rotation).
+- Browser (`tests/e2e/pixelize.spec.ts`): copy with no text, in A4 format.

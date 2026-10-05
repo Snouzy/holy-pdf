@@ -1,55 +1,55 @@
-# Mac — Aplatir
+# Mac: Flatten
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Demandé par l'auteur le 2 octobre, après l'[accueil par catégories](2026-10-02-mac-home-design.md) : le site a l'outil depuis le même jour ([spec du site](2026-10-02-web-flatten-design.md))._
+_Written on 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`. Requested by the author on 2 October, after the [home by categories](2026-10-02-mac-home-design.md): the site has had the tool since the same day ([site spec](2026-10-02-web-flatten-design.md))._
 
-## Objectif
+## Goal
 
-Figer un PDF rempli ou annoté dans Holy PDF pour Mac : les champs de formulaire remplis et les annotations passent dans le contenu des pages, puis on enregistre la copie. Ils gardent leur aspect et ne se modifient plus. PDFKit seulement.
+Freeze a filled or annotated PDF in Holy PDF for Mac: the filled form fields and the annotations move into the page content, then you save the copy. They keep their look and can no longer be edited. PDFKit only.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- la valeur d'un champ rempli devient du texte de la page, et le champ disparaît ;
-- la page a le même aspect avant et après ;
-- le texte reste du texte, les signets restent, et les liens restent des liens ;
-- un PDF sans champ ni annotation est refusé dès l'ouverture, avec la raison ;
-- le fichier d'origine n'est jamais modifié ;
-- les tests du paquet, de l'appli et des textes passent, sans avertissement du compilateur.
+- the value of a filled field becomes page text, and the field disappears;
+- the page looks the same before and after;
+- text stays text, bookmarks stay, and links stay links;
+- a PDF with no field and no annotation is refused when it opens, with the reason;
+- the original file is never modified;
+- the package, app and string tests pass, with no compiler warning.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Moteur | `PDFFlattening.flattened` : l'option d'écriture `burnInAnnotationsOption` de PDFKit | Sonde du 2 octobre : la valeur d'un champ du formulaire W-9 se retrouve dans le texte de la page, et moins de 0,02 % des pixels changent |
-| Liens | PDFKit grave toutes les annotations, liens compris ; un lien n'a rien à dessiner et cesserait de marcher. Les liens sont relevés avant, puis reposés sur la copie aplatie : adresse, ou page et point de destination | Le site perd les liens (PDFium retire toutes les annotations). Un sommaire qui ne mène plus nulle part serait une perte muette. Sonde : 113 liens sur 113 retrouvés |
-| Ce que le lecteur ne voit pas | Avant la gravure, le moteur retire les annotations cachées (drapeau Hidden) et les bulles des notes. PDFKit, lui, les graverait : la valeur d'un champ caché apparaîtrait dans la page, et une bulle laissée ouverte poserait une boîte opaque sur le texte | Deux défauts prouvés par la relecture du 2 octobre. Le moteur du site (PDFium) saute aussi les deux |
-| Rien à aplatir | `PDFFlattening.survey` compte les champs et les annotations visibles, sans les liens ni les bulles. À zéro, le PDF est refusé à l'ouverture : « Ce PDF n'a ni champ ni annotation à aplatir » | Une copie identique n'a pas de sens, et le dire avant le panneau d'enregistrement évite un détour |
-| Écran | La session et l'écran communs, sans réglage ; l'écran dit combien de champs et d'annotations seront aplatis | Comme sur le site : pas de réglage |
-| Moine | « Frère Rouleau », le livre, souriant : la pose du site | Même personnage que sur le site |
+| Engine | `PDFFlattening.flattened`: the PDFKit write option `burnInAnnotationsOption` | Probe of 2 October: the value of a field of the W-9 form ends up in the page text, and less than 0.02% of the pixels change |
+| Links | PDFKit burns in all annotations, links included; a link has nothing to draw and would stop working. The links are recorded first, then put back on the flattened copy: address, or page and destination point | The site loses the links (PDFium removes all annotations). A table of contents that no longer leads anywhere would be a silent loss. Probe: 113 links out of 113 found again |
+| What the reader does not see | Before the burn-in, the engine removes the hidden annotations (Hidden flag) and the note pop-ups. PDFKit would burn them in: the value of a hidden field would appear on the page, and a pop-up left open would put an opaque box over the text | Two defects proven by the review of 2 October. The site's engine (PDFium) also skips both |
+| Nothing to flatten | `PDFFlattening.survey` counts the fields and the visible annotations, without links or pop-ups. At zero, the PDF is refused when it opens: "This PDF has no field or annotation to flatten" | An identical copy makes no sense, and saying so before the save panel avoids a detour |
+| Screen | The shared session and screen, with no setting; the screen says how many fields and annotations will be flattened | As on the site: no setting |
+| Monk | "Brother Roller", the book, smiling: the site's pose | Same character as on the site |
 
-## Parcours
+## Flow
 
-1. Ouvrir ou déposer un PDF rempli ou annoté. Un fichier protégé demande son mot de passe.
-2. L'écran dit combien de champs et d'annotations il a trouvés.
-3. « Enregistrer la copie aplatie… » propose `nom-aplati.pdf`.
+1. Open or drop a filled or annotated PDF. A protected file asks for its password.
+2. The screen says how many fields and annotations it found.
+3. "Save the flattened copy…" suggests `nom-aplati.pdf`.
 
-## Limites connues
+## Known limits
 
-- Un champ vide ou sans apparence n'a rien à dessiner : il disparaît sans laisser de trace.
-- Le texte d'une note (sa bulle) n'est pas écrit dans la page : seule son icône est gravée.
-- Un fichier joint à une page par une annotation n'est pas gardé dans la copie : l'écran le dit à l'ouverture.
-- Un formulaire vide s'aplatit en cases vides qui ne se remplissent plus : l'écran ne prévient pas.
-- Une annotation qui ne s'imprime pas (un bouton « Imprimer ») est gravée et s'imprimera.
-- Deux écritures PDFKit se suivent quand le PDF a des liens : trois minutes sans « Annuler » sur la publication IRS de 142 pages et 2 955 liens.
-- Un lien qui lance autre chose qu'une adresse ou un saut dans le document (un script, un fichier) n'est pas reposé.
-- Les limites de PDFKit à l'écriture s'appliquent (spec du Filigrane, spec de Protéger pour les étiquettes de pages).
-- La copie d'un PDF protégé s'ouvre sans mot de passe, et l'écran le dit.
+- An empty field or a field with no appearance has nothing to draw: it disappears without a trace.
+- The text of a note (its pop-up) is not written into the page: only its icon is burned in.
+- A file attached to a page by an annotation is not kept in the copy: the screen says so when the PDF opens.
+- An empty form flattens into empty boxes that can no longer be filled: the screen does not warn.
+- An annotation that does not print (a "Print" button) is burned in and will print.
+- Two PDFKit writes run one after the other when the PDF has links: three minutes without "Cancel" on the 142-page IRS publication with 2,955 links.
+- A link that launches something other than an address or a jump in the document (a script, a file) is not put back.
+- The PDFKit write limits apply (Watermark spec, Protect spec for page labels).
+- The copy of a protected PDF opens without a password, and the screen says so.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Moteur | Valeur du champ dans le texte de la page, champ et carré disparus, signet gardé ; même aspect ; les deux liens (adresse et saut) marchent encore ; champ caché, bulle ouverte et lien caché ni dessinés ni comptés ; fichier joint compté ; compte des champs et annotations ; PDF signé refusé, PDF protégé ouvert | `PDFFlatteningTests` |
-| Outil | Compte affiché, copie aplatie enregistrée, original intact ; PDF sans rien à aplatir refusé à l'ouverture | `FlattenSessionTests` |
-| Écrans | Départ, prêt en clair, en sombre et en anglais, copie enregistrée, rien à aplatir | `FlattenSnapshots` |
-| Fichiers réels | Sept PDF de `fixtures-private/pdfs` : les 23 champs du W-9 aplatis, surlignage et tampon gravés, 113 liens gardés | Sonde du 2 octobre, non gardée |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
+| Engine | Field value in the page text, field and square annotation gone, bookmark kept; same look; both links (address and jump) still work; hidden field, open pop-up and hidden link neither drawn nor counted; attached file counted; count of fields and annotations; signed PDF refused, protected PDF opened | `PDFFlatteningTests` |
+| Tool | Count shown, flattened copy saved, original intact; PDF with nothing to flatten refused when it opens | `FlattenSessionTests` |
+| Screens | Start, ready in light, in dark and in English, copy saved, nothing to flatten | `FlattenSnapshots` |
+| Real files | Seven PDFs from `fixtures-private/pdfs`: the 23 fields of the W-9 flattened, highlight and stamp burned in, 113 links kept | Probe of 2 October, not kept |
+| Strings | All translated, never the informal « tu » | `check-strings.py` |

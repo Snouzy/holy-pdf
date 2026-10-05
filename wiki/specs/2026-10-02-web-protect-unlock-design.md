@@ -1,21 +1,21 @@
-# Web — Protéger et Déverrouiller un PDF
+# Web: Protect and Unlock a PDF
 
-_Rédigé et livré le 2 octobre 2026._
+_Written and shipped on 2 October 2026._
 
-## Ce que font les outils
+## What the tools do
 
-- **Protéger** (Frère Cadenas, `/fr/proteger-pdf`, `/en/protect-pdf`) : un ou plusieurs PDF reçoivent le même mot de passe. Il faut le taper deux fois, à l'identique, avant que le bouton s'active. Le mot de passe sert à ouvrir le fichier ; une fois ouvert, le PDF s'imprime et se copie normalement (toutes les permissions accordées, mot de passe propriétaire égal au mot de passe d'ouverture).
-- **Déverrouiller** (Frère Passe-partout, `/fr/deverrouiller-pdf`, `/en/unlock-pdf`) : la planche demande le mot de passe de chaque PDF protégé, comme pour les autres outils, puis enregistre une copie sans chiffrement. Un PDF qui s'ouvre sans mot de passe mais restreint l'impression ou la copie en sort aussi sans restriction.
+- **Protect** (Brother Padlock, `/fr/proteger-pdf`, `/en/protect-pdf`): one or more PDFs get the same password. You must type it twice, identically, before the button turns on. The password opens the file. Once open, the PDF prints and copies normally (all permissions granted, owner password equal to the open password).
+- **Unlock** (Brother Passkey, `/fr/deverrouiller-pdf`, `/en/unlock-pdf`): the board asks for the password of each protected PDF, as for the other tools, then saves a copy with no encryption. A PDF that opens without a password but restricts printing or copying also comes out with no restriction.
 
-Aucun mot de passe n'est deviné, envoyé ni stocké : il reste dans la mémoire de la page.
+No password is guessed, sent or stored: it stays in the page's memory.
 
-## Moteur
+## Engine
 
-Une seule requête générique du Worker, `transform`, applique une opération à une copie de chaque document (`engine/transform.ts`) : `EPDF_SetEncryption` pour Protéger, `EPDF_RemoveEncryption` pour Déverrouiller, sur un second handle de l'original (`reopenPdf`), puis `savePdf`. Le document ouvert reste intact pour les aperçus et le lancement suivant. Les prochains outils « un fichier donne un fichier » (Aplatir, Pixelliser…) ajoutent leur opération à `TransformOp` et à `transformPdf`, sans nouvelle plomberie dans la planche.
+A single generic Worker request, `transform`, applies an operation to a copy of each document (`engine/transform.ts`): `EPDF_SetEncryption` for Protect, `EPDF_RemoveEncryption` for Unlock, on a second handle of the original (`reopenPdf`), then `savePdf`. The open document stays intact for the previews and the next run. The next "one file in, one file out" tools (Flatten, Pixelize…) add their operation to `TransformOp` and to `transformPdf`, with no new plumbing in the board.
 
-Un PDF qui porte une signature numérique est refusé (« Ce PDF contient déjà une signature numérique… ») : toute réécriture invaliderait la signature.
+A PDF that carries a digital signature is refused ("This PDF already contains a digital signature…"): any rewrite would invalidate the signature.
 
 ## Tests
 
-- Moteur (`tests/engine/transform.test.ts`) : le fichier protégé exige son mot de passe dans PDFium et dans pdf.js, un mauvais mot de passe est refusé, la copie déverrouillée s'ouvre sans mot de passe, un PDF signé est refusé pour les deux opérations.
-- Navigateur (`tests/e2e/protect-unlock.spec.ts`) : le bouton reste grisé tant que les deux mots de passe diffèrent, la copie téléchargée s'appelle `<nom>-protected.pdf` et ne s'ouvre qu'avec le mot de passe ; la copie déverrouillée s'appelle `<nom>-unlocked.pdf` et s'ouvre sans.
+- Engine (`tests/engine/transform.test.ts`): the protected file requires its password in PDFium and in pdf.js, a wrong password is refused, the unlocked copy opens without a password, a signed PDF is refused for both operations.
+- Browser (`tests/e2e/protect-unlock.spec.ts`): the button stays grayed out while the two passwords differ, the downloaded copy is named `<name>-protected.pdf` and opens only with the password; the unlocked copy is named `<name>-unlocked.pdf` and opens without it.

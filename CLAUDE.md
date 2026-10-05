@@ -1,19 +1,20 @@
-# pdf-toolbox
+# Holy PDF
 
-Avant toute tâche, lire [wiki/index.md](wiki/index.md) puis le [guide technique](wiki/development/technical-guide.md).
+Before any task, read [wiki/index.md](wiki/index.md), then the [technical guide](wiki/development/technical-guide.md).
 
-- Dépôt public sous AGPL-3.0 (décision du 4 octobre 2026) : tout ce qui est commité est lisible par tous. Licence, marque et contributions : [LICENSING.md](LICENSING.md), [BRAND.md](BRAND.md), [CONTRIBUTING.md](CONTRIBUTING.md).
-- L'appli Swift (`apps/mac`, `Packages/Core`) a été retirée le 5 octobre 2026 ; son dernier état est au tag `mac-final`. Le bureau est l'appli Tauri `apps/desktop/`, bâtie sur le code du site.
-- Specs dans `wiki/specs/`. Les plans d'exécution ne sont plus commités (dossier `tasks/`, non suivi) : ils s'adressent aux agents et citent la machine de l'auteur.
-- Un changement de code met à jour sa page du wiki dans le même commit.
-- Ne jamais commiter `fixtures-private/` ni aucune photo réelle.
-- Bureau : `pnpm desktop:smoke` (Rust via rustup) et `pnpm --filter @holy-pdf/desktop check`.
-- Site : `apps/web`, workspace pnpm à la racine (`pnpm dev`, `pnpm verify` depuis la racine : types, unitaires, build, SEO, e2e Chromium). `pnpm verify:full` ajoute Firefox, WebKit et Lighthouse.
+- Public repository under AGPL-3.0 (decision of 4 October 2026): everything committed is readable by anyone. License, brand and contributions: [LICENSING.md](LICENSING.md), [BRAND.md](BRAND.md), [CONTRIBUTING.md](CONTRIBUTING.md).
+- The wiki, the docs and code comments are in English, and so are your commit messages and pull requests: most contributors read English (decision of 5 October 2026). French user-facing texts stay in French: the French dictionaries (`apps/web/src/i18n`, `apps/web/src/scanner/texts.ts`, `apps/web/src/signature/`, `apps/desktop/app/texts.ts`, the French menus in `apps/desktop/src-tauri/src/lib.rs`), the Markdown under `apps/web/src/content/*/fr/`, and the French post drafts in `wiki/product/social-posts.md`.
+- The Swift app (`apps/mac`, `Packages/Core`) was removed on 5 October 2026; its last state is at the tag `mac-final`. The desktop app is the Tauri app in `apps/desktop/`, built on the site's code.
+- Specs live in `wiki/specs/`. Execution plans are no longer committed (the `tasks/` folder is untracked): they are written for agents and name the author's machine.
+- A code change updates its wiki page in the same commit.
+- Never commit `fixtures-private/` or any real photo.
+- Desktop: `pnpm desktop:smoke` (Rust through rustup) and `pnpm --filter @holy-pdf/desktop check`.
+- Site: `apps/web`, a pnpm workspace at the root (`pnpm dev`, and `pnpm verify` from the root: types, unit tests, build, SEO, Chromium end-to-end). `pnpm verify:full` adds Firefox, WebKit and Lighthouse.
 
-## Fusion vers `main`
+## Merging into `main`
 
-Exception à la règle globale « jamais `main` », pour ce dépôt seulement (décisions de l'utilisateur, 30 septembre et 2 octobre 2026) :
+Exception to the global "never `main`" rule, for this repository only (the user's decisions of 30 September and 2 October 2026):
 
-- Claude fusionne lui-même ses PR vers `main` avec `gh pr merge <n> --merge`, sans redemander, dès que leurs tests passent en local, puis dit ce qui est parti.
-- Avant de fusionner un changement du site : `pnpm verify`. `pnpm verify:full` seulement si le changement touche la mise en page, les polices, les budgets de chargement ou le moteur.
-- Jamais de `git push` direct sur `main`. Pas de `--squash` ni de `--rebase` sur une PR dont une autre PR reprend les commits.
+- Claude merges its own pull requests into `main` with `gh pr merge <n> --merge`, without asking again, as soon as their tests pass locally, then says what went out.
+- Before merging a site change: `pnpm verify`. `pnpm verify:full` only when the change touches the layout, the fonts, the load budgets or the engine.
+- Never a direct `git push` to `main`. No `--squash` or `--rebase` on a pull request whose commits another pull request reuses.

@@ -1,192 +1,192 @@
-# Web : pages du pied de page — design
+# Web: footer pages, design
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/web/`. Modèle : les pages « À propos », « Confidentialité » et « Conditions » de workout.cool (`content/<page>/<langue>.mdx`, gabarit centré, texte en `prose`), adaptées au site Astro._
+_Written on 2 October 2026. Status: shipped in `apps/web/`. Model: the "About", "Privacy" and "Terms" pages of workout.cool (`content/<page>/<language>.mdx`, centered template, text in `prose`), adapted to the Astro site._
 
-## Contexte
+## Context
 
-Le pied de page a cinq colonnes de liens (voir la [spec du design system](2026-09-30-web-design-system-design.md)). Treize liens pointent vers `#`, parce que leurs pages n'existent pas encore (choix du 1er octobre 2026) : Nouveautés, FAQ, Blog, Guides PDF, Appli Mac, Appli iPhone, Confidentialité, Conditions d'utilisation, Mentions légales, Cookies, À propos, Contact, Presse.
+The footer has five columns of links (see the [design system spec](2026-09-30-web-design-system-design.md)). Thirteen links point to `#`, because their pages do not exist yet (choice of 1 October 2026): What's new, FAQ, Blog, PDF guides, Mac app, iPhone app, Privacy, Terms of use, Legal notice, Cookies, About, Contact, Press.
 
-Le 2 octobre, il a été décidé de faire toutes ces pages, comme sur workout.cool, en reprenant ses éléments : l'éditeur, l'hébergeur, l'adresse de contact, la trame de l'« À propos ».
+On 2 October, the decision was to make all these pages, as on workout.cool, and to reuse its elements: the publisher, the host, the contact address, the outline of the "About" page.
 
-Ce que Holy PDF ne reprend pas de workout.cool : les comptes, le paiement, les conditions générales de vente, la publicité Ezoic et ses cookies. Holy PDF n'a rien de tout cela. Le site ne dépose aucun cookie et ne charge aucun outil d'analyse ; il garde seulement deux clés dans `localStorage` (`theme`, `view`).
+What Holy PDF does not take from workout.cool: the accounts, the payment, the terms of sale, the Ezoic advertising and its cookies. Holy PDF has none of these. The site sets no cookie and loads no analytics tool; it keeps only two keys in `localStorage` (`theme`, `view`).
 
-## Objectif et critères de réussite
+## Goal and success criteria
 
-Chaque lien du pied de page, réseaux sociaux mis à part, mène à une vraie page, en français et en anglais.
+Each footer link, apart from the social networks, leads to a real page, in French and in English.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- les 12 pages et les 2 premiers articles existent dans les deux langues ;
-- le pied de page n'a plus de `#`, sauf sur les icônes des réseaux sociaux ;
-- ajouter une page, un article ou une langue ne demande de toucher qu'aux fichiers décrits dans la section « Ajouter du contenu » ;
-- ces pages ne chargent aucun JavaScript en plus de celui de `Base.astro` ;
-- les tests de la section Tests passent.
+- the 12 pages and the first 2 articles exist in both languages;
+- the footer has no `#` any more, except on the social network icons;
+- to add a page, an article or a language, you only touch the files described in the "Add content" section;
+- these pages load no JavaScript beyond the JavaScript of `Base.astro`;
+- the tests of the Tests section pass.
 
-## Portée
+## Scope
 
-**Dans la spec :** les 12 pages, les 2 articles, le gabarit, les deux collections, les deux routes, les liens du pied de page, les tests et le wiki.
+**In the spec:** the 12 pages, the 2 articles, the template, the two collections, the two routes, the footer links, the tests and the wiki.
 
-**Hors spec :** les liens des réseaux sociaux (comptes à créer), un formulaire de contact ou d'inscription (aucun serveur), un flux RSS, d'autres articles, la recherche dans ces pages, l'achat du domaine et le routage des e-mails.
+**Out of the spec:** the social network links (accounts to create), a contact or sign-up form (no server), an RSS feed, other articles, search in these pages, the purchase of the domain and the e-mail routing.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Format | Markdown avec frontmatter, collections Astro | Même modèle que `content/tools`. MDX ajouterait `@astrojs/mdx` sans besoin : aucune page ne met de composant dans son texte. |
-| Slugs | Dans `src/sitePages.ts`, comme `tools.ts` | Les liens sont typés : `pagePath("privacy", lang)` ne compile pas pour une page inconnue. Une langue de plus force un slug pour chaque page. |
-| Mac et iPhone | Une seule page « Applis », sections `#mac` et `#iphone` | Deux pages « bientôt » seraient deux pages maigres. |
-| Contenu manquant | Un vrai contenu minimal partout | Choix de l'auteur : pas de page vide « en méditation ». |
-| Adresse e-mail | `hello@holy-pdf.com` | Comme `hello@workout.cool`. Elle marche une fois le domaine acheté et Cloudflare Email Routing réglé. |
-| Éditeur | Snouzylabs S.R.L., société de droit roumain qui édite aussi workout.cool, Mathias BRADICEANU directeur de la publication (décision du 5 octobre 2026) | LCEN, art. 6-III-1 : un éditeur professionnel donne sa dénomination, son siège, son téléphone, son capital social, son immatriculation (CUI) et le nom du directeur de la publication. Siège, téléphone, capital et CUI à ajouter dès que l'auteur les transmet |
-| Libellés du gabarit | `src/i18n/pages.ts`, à part de `fr.ts` et `en.ts` | `Board.tsx` importe les dictionnaires entiers : ces libellés n'ont rien à faire dans le JavaScript des pages outils (même piège que `frSearch`). |
+| Format | Markdown with frontmatter, Astro collections | Same model as `content/tools`. MDX would add `@astrojs/mdx` with no need: no page puts a component in its text. |
+| Slugs | In `src/sitePages.ts`, like `tools.ts` | The links are typed: `pagePath("privacy", lang)` does not compile for an unknown page. One more language forces a slug for each page. |
+| Mac and iPhone | A single "Apps" page, sections `#mac` and `#iphone` | Two "soon" pages would be two thin pages. |
+| Missing content | A real minimal content everywhere | Choice of the author: no empty "in meditation" page. |
+| E-mail address | `hello@holy-pdf.com` | Like `hello@workout.cool`. It works once the domain is bought and Cloudflare Email Routing is set up. |
+| Publisher | Snouzylabs S.R.L., a company under Romanian law that also publishes workout.cool, Mathias BRADICEANU as publication director (decision of 5 October 2026) | LCEN, art. 6-III-1: a professional publisher gives its company name, its registered office, its phone number, its share capital, its registration (CUI) and the name of the publication director. Registered office, phone number, capital and CUI are to be added as soon as the author sends them |
+| Template labels | `src/i18n/pages.ts`, separate from `fr.ts` and `en.ts` | `Board.tsx` imports the whole dictionaries: these labels have no place in the JavaScript of the tool pages (same trap as `frSearch`). |
 
-## Adresses
+## Addresses
 
-`src/sitePages.ts` exporte `pageIds`, la table `sitePages` (slug par langue, émoji) et `pagePath(id, lang)`.
+`src/sitePages.ts` exports `pageIds`, the `sitePages` table (slug per language, emoji) and `pagePath(id, lang)`.
 
-| Page | Id | FR | EN | Émoji |
+| Page | Id | FR | EN | Emoji |
 |---|---|---|---|---|
-| Nouveautés | `news` | `/fr/nouveautes` | `/en/whats-new` | 🔔 |
+| What's new | `news` | `/fr/nouveautes` | `/en/whats-new` | 🔔 |
 | FAQ | `faq` | `/fr/faq` | `/en/faq` | 🙋 |
 | Blog | `blog` | `/fr/blog` | `/en/blog` | ✍️ |
-| Guides PDF | `guides` | `/fr/guides` | `/en/guides` | 🧭 |
-| Applis | `apps` | `/fr/applis` | `/en/apps` | 🕯️ |
-| Confidentialité | `privacy` | `/fr/confidentialite` | `/en/privacy` | 🤫 |
-| Conditions d'utilisation | `terms` | `/fr/conditions-utilisation` | `/en/terms` | 📜 |
-| Mentions légales | `notice` | `/fr/mentions-legales` | `/en/legal-notice` | ⚖️ |
+| PDF guides | `guides` | `/fr/guides` | `/en/guides` | 🧭 |
+| Apps | `apps` | `/fr/applis` | `/en/apps` | 🕯️ |
+| Privacy | `privacy` | `/fr/confidentialite` | `/en/privacy` | 🤫 |
+| Terms of use | `terms` | `/fr/conditions-utilisation` | `/en/terms` | 📜 |
+| Legal notice | `notice` | `/fr/mentions-legales` | `/en/legal-notice` | ⚖️ |
 | Cookies | `cookies` | `/fr/cookies` | `/en/cookies` | 🍪 |
-| À propos | `about` | `/fr/a-propos` | `/en/about` | 🙏 |
+| About | `about` | `/fr/a-propos` | `/en/about` | 🙏 |
 | Contact | `contact` | `/fr/contact` | `/en/contact` | ✉️ |
-| Presse | `press` | `/fr/presse` | `/en/press` | 📰 |
+| Press | `press` | `/fr/presse` | `/en/press` | 📰 |
 
-Un article vit sous la page de sa section : `/{lang}/{slug de blog ou guides}/{slug de l'article}`.
+An article lives under the page of its section: `/{lang}/{blog or guides slug}/{article slug}`.
 
 | Article | Section | FR | EN |
 |---|---|---|---|
 | `local-processing` | blog | `/fr/blog/vos-pdf-restent-sur-votre-appareil` | `/en/blog/your-pdfs-stay-on-your-device` |
 | `paperwork` | guides | `/fr/guides/preparer-un-dossier-administratif-en-pdf` | `/en/guides/prepare-paperwork-as-one-pdf` |
 
-Aucun slug de page ne doit égaler un slug d'outil ni `search.json` : un test le vérifie.
+No page slug may be equal to a tool slug or to `search.json`: a test checks it.
 
 ## Collections
 
-`src/content.config.ts` ajoute deux collections à `tools`.
+`src/content.config.ts` adds two collections to `tools`.
 
-**`pages`** : `src/content/pages/{fr,en}/<id>.md`.
+**`pages`**: `src/content/pages/{fr,en}/<id>.md`.
 
-| Champ | Type | Rôle |
+| Field | Type | Role |
 |---|---|---|
-| `page` | `z.enum(pageIds)` | la page |
-| `lang` | `z.enum(languages)` | la langue |
-| `title` | chaîne, 60 caractères au plus | `<title>` |
-| `description` | chaîne, de 70 à 160 caractères | `<meta name="description">` |
-| `h1` | chaîne | le titre visible, sans émoji |
-| `lead` | chaîne | le sous-titre sous le titre |
-| `updated` | date, facultative | « Mis à jour le … », sur les pages juridiques |
+| `page` | `z.enum(pageIds)` | the page |
+| `lang` | `z.enum(languages)` | the language |
+| `title` | string, 60 characters at most | `<title>` |
+| `description` | string, from 70 to 160 characters | `<meta name="description">` |
+| `h1` | string | the visible title, without emoji |
+| `lead` | string | the subtitle under the title |
+| `updated` | date, optional | "Updated …", on the legal pages |
 
-**`articles`** : `src/content/articles/{fr,en}/<id>.md`. Les deux langues d'un article ont le même nom de fichier : c'est ainsi qu'elles s'apparient pour le changement de langue.
+**`articles`**: `src/content/articles/{fr,en}/<id>.md`. The two languages of an article have the same file name: this is how they pair up for the language switch.
 
-| Champ | Type | Rôle |
+| Field | Type | Role |
 |---|---|---|
-| `section` | `"blog"` ou `"guides"` | la liste qui le montre |
-| `lang` | `z.enum(languages)` | la langue |
-| `slug` | chaîne en minuscules, chiffres et tirets | la fin de l'adresse |
-| `title`, `description`, `h1`, `lead` | comme `pages` | |
-| `published` | date | la date de l'article |
-| `updated` | date, facultative | la date de la dernière retouche |
+| `section` | `"blog"` or `"guides"` | the list that shows it |
+| `lang` | `z.enum(languages)` | the language |
+| `slug` | string of lowercase letters, digits and hyphens | the end of the address |
+| `title`, `description`, `h1`, `lead` | as in `pages` | |
+| `published` | date | the date of the article |
+| `updated` | date, optional | the date of the last edit |
 
 ## Routes
 
-- `src/pages/[lang]/[page].astro` construit les 24 pages. Astro 7 garde les deux routes `[lang]/[tool]` et `[lang]/[page]` : chacune construit les chemins de son `getStaticPaths`, et le serveur de développement passe à la suivante quand la première ne connaît pas le chemin (`matchAllRoutes`). Pour `blog` et `guides`, la page ajoute sous son texte la liste des articles de sa section et de sa langue, du plus récent au plus ancien.
-- `src/pages/[lang]/[section]/[article].astro` construit les articles.
+- `src/pages/[lang]/[page].astro` builds the 24 pages. Astro 7 keeps the two routes `[lang]/[tool]` and `[lang]/[page]`: each one builds the paths of its `getStaticPaths`, and the development server goes to the next one when the first one does not know the path (`matchAllRoutes`). For `blog` and `guides`, the page adds under its text the list of the articles of its section and its language, from the newest to the oldest.
+- `src/pages/[lang]/[section]/[article].astro` builds the articles.
 
-Le changement de langue (`paths` de `Base.astro`) mène à la même page dans l'autre langue ; pour un article, à son pendant.
+The language switch (`paths` of `Base.astro`) leads to the same page in the other language; for an article, to its counterpart.
 
-## Gabarit
+## Template
 
-`src/layouts/ContentPage.astro`, sur `Base.astro`. La barre du haut, le pied de page, le thème et la langue restent ceux du site.
+`src/layouts/ContentPage.astro`, on top of `Base.astro`. The top bar, the footer, the theme and the language stay those of the site.
 
-- **En-tête centré**, comme sur workout.cool : le `h1`, avec l'émoji de la page collé au dernier mot (règle de marque) ; le `lead` dessous, en `--ink-soft`, à la taille de l'intro des outils ; sur les pages juridiques, « Mis à jour le 2 octobre 2026 ».
-- **Le texte** : une colonne `.prose` de 48 rem centrée, comme sous les outils ; `h2` à gauche ; liens en `--accent`, soulignés ; tableaux simples.
-- **Les moines** : sur « À propos », un moine content, sans auréole (l'auréole est réservée au logo) ; sur « Applis », le moine endormi et le tampon « Bientôt » des outils à venir. Les autres pages n'en ont pas.
-- **Blog et Guides** : chaque article en carte (titre, date, `lead`), la carte entière est un lien.
-- **Article** : sous le titre, « 2 octobre 2026 · Mathias Bradiceanu » ; à la fin, un lien vers sa liste.
-- **Dates** : formatées au build par `Intl.DateTimeFormat(lang, { dateStyle: "long" })`.
+- **Centered header**, as on workout.cool: the `h1`, with the emoji of the page attached to the last word (brand rule); the `lead` under it, in `--ink-soft`, at the size of the tool intro; on the legal pages, "Updated October 2, 2026".
+- **The text**: a `.prose` column of 48 rem, centered, as under the tools; `h2` on the left; links in `--accent`, underlined; simple tables.
+- **The monks**: on "About", a happy monk, without a halo (the halo is reserved for the logo); on "Apps", the sleeping monk and the "Soon" stamp of the upcoming tools. The other pages have no monk.
+- **Blog and Guides**: each article as a card (title, date, `lead`), and the whole card is a link.
+- **Article**: under the title, "October 2, 2026 · Mathias Bradiceanu"; at the end, a link to its list.
+- **Dates**: formatted at build time by `Intl.DateTimeFormat(lang, { dateStyle: "long" })`.
 
-Le gabarit ne charge aucun îlot Preact ni aucun script en plus de ceux de `Base.astro`.
+The template loads no Preact island and no script beyond those of `Base.astro`.
 
-## Données structurées
+## Structured data
 
-- Chaque page : `BreadcrumbList` (Holy PDF › la page).
-- Chaque article : `BreadcrumbList` (Holy PDF › Blog ou Guides › l'article) et `BlogPosting` (`headline`, `description`, `datePublished`, `dateModified`, `author` de type `Person`, `inLanguage`, `url`).
-- Pas de `FAQPage` : la FAQ générale n'en a pas plus que les pages outils.
+- Each page: `BreadcrumbList` (Holy PDF › the page).
+- Each article: `BreadcrumbList` (Holy PDF › Blog or Guides › the article) and `BlogPosting` (`headline`, `description`, `datePublished`, `dateModified`, `author` of type `Person`, `inLanguage`, `url`).
+- No `FAQPage`: the general FAQ does not have one, and neither do the tool pages.
 
-Les pages entrent dans le sitemap. Elles n'entrent pas dans la recherche d'outils de l'accueil.
+The pages go into the sitemap. They do not go into the tool search of the home page.
 
-## Pied de page
+## Footer
 
-`SiteFooter.astro` garde `later` pour les seules icônes des réseaux sociaux. Les autres liens appellent `pagePath` ; « Appli Mac (bientôt) » et « Appli iPhone (bientôt) » mènent à `pagePath("apps", lang)` suivi de `#mac` et `#iphone`.
+`SiteFooter.astro` keeps `later` for the social network icons only. The other links call `pagePath`; "Mac app (soon)" and "iPhone app (soon)" lead to `pagePath("apps", lang)` followed by `#mac` and `#iphone`.
 
-## Contenu
+## Content
 
-Chaque page existe en français et en anglais. Les faits viennent du wiki. Aucun chiffre inventé : ni nombre d'utilisateurs, ni date de lancement, ni durée de développement. Pas de nombre d'outils dans les textes : il changerait à chaque outil livré.
+Each page exists in French and in English. The facts come from the wiki. No invented figure: no number of users, no launch date, no development time. No number of tools in the texts: it would change with each tool shipped.
 
-Les textes juridiques sont une base sérieuse, pas un avis d'avocat : ils restent dans « Textes à relire » de la [marque](../product/brand.md).
+The legal texts are a serious base, not the opinion of a lawyer: they stay in "Texts to review" of the [brand](../product/brand.md).
 
-### Juridique
+### Legal
 
-- **Mentions légales** : éditeur Snouzylabs S.R.L., directeur de la publication Mathias BRADICEANU ; contact `hello@holy-pdf.com` ; hébergeur Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis ; propriété intellectuelle : les textes, le code et les fichiers des illustrations sous AGPL-3.0-or-later, le nom, le logo et le moine réservés ([BRAND.md](../../BRAND.md)) ; crédits : Bricolage Grotesque et Figtree (SIL Open Font License), Simple Icons (CC0), PDFium et qpdf, avec un lien vers `/licenses/`.
-- **Confidentialité** : responsable du traitement Snouzylabs S.R.L., représentée par Mathias BRADICEANU ; les fichiers sont traités dans le navigateur et le site ne les reçoit jamais ; pas de compte, pas d'outil d'analyse ; Cloudflare traite les données techniques des requêtes (adresse IP, navigateur, page demandée) pour servir le site et le protéger, et transfère ces données aux États-Unis sous le Data Privacy Framework, auquel il est certifié ; les e-mails reçus servent seulement à répondre, puis sont supprimés ; droits d'accès, de rectification, d'effacement et d'opposition ; réclamation à la CNIL.
-- **Conditions d'utilisation** : service gratuit, sans compte, fourni « en l'état », sans garantie de disponibilité ; l'utilisateur garde ses droits sur ses documents et en reste responsable (usage licite, droits sur le contenu) ; Signer pose une image de signature, qui n'est ni une signature électronique avancée ni une signature qualifiée au sens du règlement eIDAS, faute de certificat ; garder ses originaux ; les moines, les textes et le code appartiennent au projet, les composants tiers suivent leur licence ; conditions modifiables, date en tête ; droit français.
-- **Cookies** : aucun cookie ; un tableau des deux clés de `localStorage` (`theme` : le thème choisi ; `view` : la vue compacte de l'accueil), qui restent sur l'appareil et ne sont jamais envoyées ; comment les effacer depuis le navigateur.
+- **Legal notice**: publisher Snouzylabs S.R.L., publication director Mathias BRADICEANU; contact `hello@holy-pdf.com`; host Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, United States; intellectual property: the texts, the code and the illustration files under AGPL-3.0-or-later, the name, the logo and the monk reserved ([BRAND.md](../../BRAND.md)); credits: Bricolage Grotesque and Figtree (SIL Open Font License), Simple Icons (CC0), PDFium and qpdf, with a link to `/licenses/`.
+- **Privacy**: data controller Snouzylabs S.R.L., represented by Mathias BRADICEANU; the files are processed in the browser and the site never receives them; no account, no analytics tool; Cloudflare processes the technical data of the requests (IP address, browser, requested page) to serve the site and protect it, and transfers this data to the United States under the Data Privacy Framework, to which it is certified; the e-mails received serve only to reply, then they are deleted; rights of access, rectification, erasure and objection; complaint to the CNIL.
+- **Terms of use**: free service, without an account, provided "as is", with no guarantee of availability; the user keeps their rights on their documents and stays responsible for them (lawful use, rights on the content); Sign puts a signature image, which is neither an advanced electronic signature nor a qualified signature in the sense of the eIDAS regulation, because there is no certificate; keep your originals; the monks, the texts and the code belong to the project, the third-party components follow their license; the terms can change, with the date at the top; French law.
+- **Cookies**: no cookie; a table of the two `localStorage` keys (`theme`: the chosen theme; `view`: the compact view of the home page), which stay on the device and are never sent; how to clear them from the browser.
 
 ### Holy PDF
 
-- **À propos**, sur la trame de workout.cool : pourquoi Holy PDF ; l'histoire, reprise de l'[histoire de Holy PDF](../product/story.md) et de ses repères ; le principe du traitement local ; qui est derrière, Mathias Bradiceanu, aussi créateur de Workout.cool ; écrire au monastère.
-- **Contact** : l'adresse ; pour un bug, le navigateur, l'outil et les étapes ; **ne jamais joindre un document personnel** ; un renvoi vers la Presse.
-- **Presse** : Holy PDF en un paragraphe ; les faits (gratuit, traitement local, sans compte, les familles d'outils) ; le fondateur et un lien vers « À propos » ; le logo à télécharger (`/favicon.svg`) ; le contact, avec « Presse » en objet.
+- **About**, on the outline of workout.cool: why Holy PDF; the story, taken from the [story of Holy PDF](../product/story.md) and its guidelines; the principle of local processing; who is behind it, Mathias Bradiceanu, also the creator of Workout.cool; write to the monastery.
+- **Contact**: the address; for a bug, the browser, the tool and the steps; **never attach a personal document**; a pointer to Press.
+- **Press**: Holy PDF in one paragraph; the facts (free, local processing, no account, the tool families); the founder and a link to "About"; the logo to download (`/favicon.svg`); the contact, with "Press" as the subject.
 
-### Produit
+### Product
 
-- **Nouveautés** : un journal daté, du plus récent au plus ancien, tiré de l'historique git : les outils Organiser, puis Compresser et PDF en JPG, puis Signer (entrée ajoutée au rebase, voir Risques). Chaque entrée renvoie vers ses outils.
-- **FAQ** : sept questions générales (gratuit, compte, fichiers envoyés, navigateurs, téléphone, taille des fichiers, appli), plus la valeur de la signature au rebase ; puis la liste des outils, construite depuis `toolList`.
-- **Applis** : `#mac` présente le scanner Mac d'après sa [spec](2026-09-29-scanner-mac-v1-design.md) (des photos de documents deviennent des PDF propres, redressés, un PDF par document) ; `#iphone` dit qu'il viendra après. Les deux sont « Bientôt », et invitent à écrire pour être prévenu.
+- **What's new**: a dated log, from the newest to the oldest, taken from the git history: the Organize tools, then Compress and PDF to JPG, then Sign (entry added at the rebase, see Risks). Each entry links to its tools.
+- **FAQ**: seven general questions (free, account, files sent, browsers, phone, file size, app), plus the value of the signature at the rebase; then the list of tools, built from `toolList`.
+- **Apps**: `#mac` presents the Mac scanner from its [spec](2026-09-29-scanner-mac-v1-design.md) (photos of documents become clean, straightened PDFs, one PDF per document); `#iphone` says that it will come later. Both are "Soon", and invite visitors to write to be told.
 
-### Ressources
+### Resources
 
-- **Blog**, premier article, « Comment Holy PDF traite vos PDF sans les envoyer » : PDFium compilé en WebAssembly, dans un Worker ; ce que le réseau charge malgré tout (les pages, le moteur) et ce qu'il ne transporte jamais (les fichiers) ; comment le vérifier soi-même dans l'onglet Réseau des outils de développement. Il suit les repères de [Version Web](../development/web-version.md) : ne pas dire que le site ne fait aucune requête.
-- **Guides**, premier guide, « Préparer un dossier administratif en un seul PDF » : les photos des papiers avec JPG en PDF, Fusionner, Organiser, Compresser sous la taille demandée, puis Signer. C'est le besoin du récit fondateur, et il ne fait doublon avec aucune page outil.
+- **Blog**, first article, « Comment Holy PDF traite vos PDF sans les envoyer » ("How Holy PDF works on your PDFs without uploading them"): PDFium compiled to WebAssembly, in a Worker; what the network loads all the same (the pages, the engine) and what it never carries (the files); how to check it yourself in the Network tab of the developer tools. It follows the guidelines of [Web version](../development/web-version.md): do not say that the site makes no request.
+- **Guides**, first guide, « Préparer un dossier administratif en un seul PDF » ("Prepare your paperwork as a single PDF"): the photos of the papers with JPG to PDF, Merge, Organize, Compress under the required size, then Sign. This is the need of the founding story, and it duplicates no tool page.
 
-## Ajouter du contenu
+## Add content
 
-- **Un article** : un fichier `.md` par langue, même nom, dans `src/content/articles/<lang>/`. Aucun fichier TS à toucher.
-- **Une page** : un id et ses slugs dans `sitePages.ts`, un `.md` par langue, un lien dans `SiteFooter.astro` si elle y figure.
-- **Une langue** : la langue dans `languages` (`tools.ts`) ; TypeScript demande alors un slug pour chaque page et chaque outil, et un libellé dans `i18n/pages.ts` ; puis un `.md` par page et par article.
+- **An article**: one `.md` file per language, with the same name, in `src/content/articles/<lang>/`. No TS file to touch.
+- **A page**: an id and its slugs in `sitePages.ts`, one `.md` per language, and a link in `SiteFooter.astro` if the page appears there.
+- **A language**: the language in `languages` (`tools.ts`); TypeScript then asks for a slug for each page and each tool, and a label in `i18n/pages.ts`; then one `.md` per page and per article.
 
 ## Tests
 
-- **Unitaire** : `tests/unit/sitePages.test.ts` vérifie que les slugs sont sûrs dans une adresse, uniques dans une langue, et qu'aucun n'égale un slug d'outil ni `search.json` ; il vérifie aussi les dates, à l'ouest de UTC comme ailleurs. Les fichiers de chaque page et de chaque article dans chaque langue sont vérifiés dans `tests/unit/content.test.ts`, à côté de ceux des outils. `tests/unit/fonts.test.ts` couvre aussi ces textes.
-- **Navigateur** (`tests/e2e/pages.spec.ts`) :
-  - en français et en anglais, chaque lien du pied de page, réseaux sociaux mis à part, répond 200 et montre un `h1` ;
-  - chaque lien interne du texte des pages et des articles répond 200 ;
-  - le changement de langue mène de `/fr/confidentialite` à `/en/privacy`, et d'un article à son pendant ;
-  - `/fr/applis#mac` et `#iphone` existent ;
-  - un article renvoie vers sa liste, et sa liste vers lui ;
-  - à 390 px, aucune de ces pages ne défile de côté.
-- **SEO** (`tests/seo/pages.test.ts`, `pnpm test:seo`) : la suite vérifie déjà chaque page construite (titre, description d'au moins 70 caractères, un seul `h1` avec son émoji collé, langue, `canonical`, `hreflang`, fil d'Ariane, sitemap). Son décompte ajoute les fichiers de `content/pages` et `content/articles`, et un test vérifie que ces pages n'hydratent aucun îlot.
-- **Vérifications** : `pnpm check`, le build, les suites existantes. Pas de nouveau budget Lighthouse (cycle léger voulu par l'auteur) ; une mesure ponctuelle d'une page juridique confirme qu'elle pèse moins que l'accueil.
+- **Unit**: `tests/unit/sitePages.test.ts` checks that the slugs are safe in an address, unique in a language, and that none is equal to a tool slug or to `search.json`; it also checks the dates, west of UTC as elsewhere. The files of each page and each article in each language are checked in `tests/unit/content.test.ts`, next to those of the tools. `tests/unit/fonts.test.ts` also covers these texts.
+- **Browser** (`tests/e2e/pages.spec.ts`):
+  - in French and in English, each footer link, apart from the social networks, answers 200 and shows an `h1`;
+  - each internal link in the text of the pages and articles answers 200;
+  - the language switch leads from `/fr/confidentialite` to `/en/privacy`, and from an article to its counterpart;
+  - `/fr/applis#mac` and `#iphone` exist;
+  - an article links to its list, and its list links to it;
+  - at 390 px, none of these pages scrolls sideways.
+- **SEO** (`tests/seo/pages.test.ts`, `pnpm test:seo`): the suite already checks each built page (title, description of at least 70 characters, a single `h1` with its emoji attached, language, `canonical`, `hreflang`, breadcrumb, sitemap). Its count adds the files of `content/pages` and `content/articles`, and a test checks that these pages hydrate no island.
+- **Checks**: `pnpm check`, the build, the existing suites. No new Lighthouse budget (light cycle wanted by the author); a one-off measurement of a legal page confirms that it weighs less than the home page.
 
 ## Wiki
 
-Dans le même commit que le code :
+In the same commit as the code:
 
-- [Version Web](../development/web-version.md) : une section « Pages de contenu », avec « Ajouter du contenu » ;
-- la [spec du design system](2026-09-30-web-design-system-design.md) : le pied de page n'a plus de `#` hors réseaux sociaux ;
-- la [marque](../product/brand.md) : les textes des pages et des articles entrent dans « Textes à relire » ;
-- [Tests](../development/tests.md) et l'[index](../index.md).
+- [Web version](../development/web-version.md): a "Content pages" section, with "Add content";
+- the [design system spec](2026-09-30-web-design-system-design.md): the footer has no `#` any more outside the social networks;
+- the [brand](../product/brand.md): the texts of the pages and articles go into "Texts to review";
+- [Tests](../development/tests.md) and the [index](../index.md).
 
-## Risques
+## Risks
 
-- **Cookies de Cloudflare** : le site statique n'en pose pas, mais une option de protection contre les robots peut ajouter `__cf_bm`. Vérifier les en-têtes `Set-Cookie` après le premier déploiement, et corriger la page Cookies si besoin.
-- **Signer** : en ligne depuis le 2 octobre 2026. Les pages le citent : son entrée des Nouveautés, sa question de FAQ, la section Signature des Conditions, le fait de la Presse, et les crédits de qpdf et des fichiers tiers.
-- **Adresse e-mail** : elle ne reçoit rien tant que le domaine n'est pas acheté. Le site n'est pas en ligne d'ici là.
+- **Cloudflare cookies**: the static site sets none, but a bot protection option can add `__cf_bm`. Check the `Set-Cookie` headers after the first deployment, and correct the Cookies page if needed.
+- **Sign**: online since 2 October 2026. The pages mention it: its What's new entry, its FAQ question, the Signature section of the Terms, the Press fact, and the credits of qpdf and of the third-party files.
+- **E-mail address**: it receives nothing until the domain is bought. The site is not online until then.

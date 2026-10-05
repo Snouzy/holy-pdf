@@ -1,26 +1,26 @@
-# Web — Numéroter les pages d'un PDF
+# Web: Add page numbers to a PDF
 
-_Rédigé et livré le 2 octobre 2026. Mêmes réglages que l'appli Mac ([spec Mac](2026-10-02-mac-page-numbers-design.md))._
+_Written and shipped on 2 October 2026. Same settings as the Mac app ([Mac spec](2026-10-02-mac-page-numbers-design.md))._
 
-## Ce que fait l'outil
+## What the tool does
 
-Frère Folio (`/fr/numeroter-pdf`, `/en/page-numbers-pdf`) écrit un numéro sur les pages d'un PDF, un fichier à la fois :
+Brother Folio (`/fr/numeroter-pdf`, `/en/page-numbers-pdf`) writes a number on the pages of a PDF, one file at a time:
 
-- format « 1 », « 1 / 12 » ou « Page 1 » ;
-- six positions, en haut ou en bas, à gauche, au centre ou à droite, à 24 points du bord ;
-- premier numéro de 0 à 9 999, taille de 6 à 36 points ;
-- toutes les pages, ou une plage. La première page de la plage porte le premier numéro ; dans « 1 / 12 », le total est le dernier numéro écrit.
+- format "1", "1 / 12" or "Page 1";
+- six positions, top or bottom, left, center or right, 24 points from the edge;
+- first number from 0 to 9,999, size from 6 to 36 points;
+- all pages, or a range. The first page of the range gets the first number; in "1 / 12", the total is the last number written.
 
-## Moteur
+## Engine
 
-Une opération `numbers` de la requête `transform` (`engine/numbers.ts`). Le numéro est un vrai texte en Helvetica, la police standard de PDFium, ajouté au contenu de la page : il reste sélectionnable, et le texte d'origine aussi. Ses axes suivent la page telle que le lecteur la voit (`pageFrame`, partagé avec Signer) : le numéro est à l'endroit et au bon coin sur une page pivotée ou recadrée. La fin de la plage est ramenée à la dernière page.
+An operation `numbers` of the `transform` request (`engine/numbers.ts`). The number is real text in Helvetica, the standard PDFium font, added to the page content: it stays selectable, and so does the original text. Its axes follow the page as the reader sees it (`pageFrame`, shared with Sign): the number is upright and in the right corner on a rotated or cropped page. The end of the range is clamped to the last page.
 
-## Limites
+## Limits
 
-- Pas d'aperçu en direct : on voit le résultat après la numérotation, dans le PDF téléchargé.
-- Un fichier à la fois, pour que la plage se règle sur les pages du document ouvert.
+- No live preview: you see the result after the numbering, in the downloaded PDF.
+- One file at a time, so that the range is set on the pages of the open document.
 
 ## Tests
 
-- Moteur (`tests/engine/numbers.test.ts`) : texte de chaque format, premier numéro et plage lus par pdf.js ; position relue par pdf.js en coordonnées de la page affichée, sous les quatre rotations ; plage ramenée à la dernière page.
-- Navigateur (`tests/e2e/page-numbers.spec.ts`) : format, coin et plage choisis avant que le PDF ait fini de s'ouvrir, puis copie relue par pdf.js.
+- Engine (`tests/engine/numbers.test.ts`): text of each format, first number and range read by pdf.js; position read back by pdf.js in the coordinates of the displayed page, under the four rotations; range clamped to the last page.
+- Browser (`tests/e2e/page-numbers.spec.ts`): format, corner and range chosen before the PDF has finished opening, then copy read back by pdf.js.

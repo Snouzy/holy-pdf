@@ -1,34 +1,34 @@
-# Web — PDF en Word
+# Web: PDF to Word
 
-_Rédigé et livré le 2 octobre 2026, dans le lot qui finissait le catalogue du site. Le Mac a l'outil depuis le même jour ([spec Mac](2026-10-02-mac-pdf-to-word-design.md))._
+_Written and shipped on 2 October 2026, in the milestone that finished the site catalog. The Mac app has had the tool since the same day ([Mac spec](2026-10-02-mac-pdf-to-word-design.md))._
 
-Frère Copiste (`/fr/pdf-en-word`, `/en/pdf-to-word`) recopie le texte et les images d'un ou plusieurs PDF dans un document Word (.docx) modifiable.
+Brother Copyist (`/fr/pdf-en-word`, `/en/pdf-to-word`) copies the text and the images of one or more PDFs into an editable Word document (.docx).
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Moteur | `engine/word.ts` lit le texte avec PDFium, caractère par caractère ; `engine/docx.ts` écrit le .docx à la main (XML et `fflate`) | Aucune dépendance nouvelle : une bibliothèque .docx pèserait plus que le reste de l'outil |
-| Ordre | Celui où PDFium lit la page, qui suit les colonnes | Trier par hauteur mêlait les lignes de deux colonnes (constaté sur la publication 17 de l'IRS) |
-| Lignes | PDFium place un saut de ligne entre les lignes qu'il trouve ; une espace qu'il ajoute prend le style du mot précédent | Ces caractères générés n'appartiennent à aucun objet texte |
-| Paragraphes | Un paragraphe s'arrête : à un écart de plus de 1,6 fois la taille du texte, à un retour vers le haut (colonne suivante), à un changement de taille, à une ligne qui commence par une puce ou un numéro, ou après une phrase terminée sur une ligne courte | Un texte en drapeau a des lignes courtes partout. « Courte » se mesure aux lignes qui partent de la même marge, pas à la page, sinon chaque ligne d'une colonne de gauche serait courte |
-| Style | Police, taille, gras, italique par passage. La taille est celle de `Tf` multipliée par l'échelle de la matrice du caractère. Gras et italique se lisent dans le nom de la police (`Helvetica-Bold`, `Times-Italic`), puis dans sa graisse et ses drapeaux | Les polices standard ne déclarent ni graisse ni drapeaux utiles (sonde du 2 octobre). Le nom PostScript devient une famille que Word connaît (`TimesNewRomanPSMT` → Times New Roman) |
-| Images | Rendues par `FPDFImageObj_GetRenderedBitmap` (masque compris, posées sur du blanc) ; une image droite sans masque garde ses propres pixels, plus fins ; JPEG 0,85, plus grand côté 2 400 px ; insérée avant le premier paragraphe qui commence plus bas qu'elle dans la même bande | Le rendu de PDFium fait un pixel par point : trop flou pour une photo |
-| Scan lu par l'OCR | Une image qui couvre plus de 80 % d'une page qui a du texte est laissée de côté | Son texte est déjà dans le document. Une page sans texte garde son image, pour que le document ne soit pas vide |
-| Page | Une page Word par page du PDF, toutes à la taille de la première, marges de 72 points ; une image plus large que le texte est réduite à sa largeur | Une section par page compliquerait le document pour un gain rare |
-| Fichier | `nom-word.docx`, type `application/vnd.openxmlformats-officedocument.wordprocessingml.document` ; l'écran de résultat dit « document Word » | Le suffixe suit celui des autres outils |
-| Moine | « Frère Copiste » (« Brother Copyist »), la plume, l'air content | Celui qui recopie ; l'air content le distingue de Frère Plume, appliqué |
+| Engine | `engine/word.ts` reads the text with PDFium, character by character; `engine/docx.ts` writes the .docx by hand (XML and `fflate`) | No new dependency: a .docx library would weigh more than the rest of the tool |
+| Order | The order in which PDFium reads the page, which follows the columns | A sort by height mixed the lines of two columns (seen on IRS Publication 17) |
+| Lines | PDFium puts a line break between the lines it finds; a space that it adds takes the style of the previous word | These generated characters belong to no text object |
+| Paragraphs | A paragraph ends: at a gap of more than 1.6 times the text size, at a jump back up (next column), at a size change, at a line that starts with a bullet or a number, or after a sentence that ends on a short line | A ragged text has short lines everywhere. "Short" is measured against the lines that start from the same margin, not against the page; otherwise each line of a left column would be short |
+| Style | Font, size, bold, italic per run. The size is the `Tf` size multiplied by the scale of the character matrix. Bold and italic are read in the font name (`Helvetica-Bold`, `Times-Italic`), then in its weight and its flags | The standard fonts declare no useful weight or flags (probe of 2 October). The PostScript name becomes a family that Word knows (`TimesNewRomanPSMT` → Times New Roman) |
+| Images | Rendered by `FPDFImageObj_GetRenderedBitmap` (mask included, laid on white); an upright image without a mask keeps its own pixels, which are finer; JPEG 0.85, longest side 2,400 px; inserted before the first paragraph that starts lower than the image in the same band | The PDFium render makes one pixel per point: too blurry for a photo |
+| Scan read by OCR | An image that covers more than 80% of a page that has text is left out | Its text is already in the document. A page without text keeps its image, so that the document is not empty |
+| Page | One Word page per PDF page, all at the size of the first one, 72-point margins; an image wider than the text is reduced to the text width | One section per page would complicate the document for a rare gain |
+| File | `name-word.docx`, type `application/vnd.openxmlformats-officedocument.wordprocessingml.document`; the result screen says "Word document" | The suffix follows the suffix of the other tools |
+| Monk | "Brother Copyist" (« Frère Copiste »), the quill, the happy look | The one who copies; the happy look sets this monk apart from Brother Quill, who looks diligent |
 
-## Limites connues
+## Known limits
 
-- Les tableaux deviennent des lignes de texte ; les colonnes sont recopiées l'une après l'autre.
-- L'alignement, l'interligne, les couleurs du texte, les dessins vectoriels et les liens ne sont pas repris.
-- Une page pivotée garde des images dans le sens de la page d'origine.
-- Un intertitre en gras sur la même ligne que le texte, ou un résumé en retrait, peut couper un paragraphe en deux.
-- Un scan sans OCR ne donne que son image.
+- Tables become lines of text; the columns are copied one after the other.
+- Alignment, line spacing, text colors, vector drawings and links are not carried over.
+- A rotated page keeps its images in the orientation of the original page.
+- A bold run-in heading on the same line as the text, or an indented abstract, can split a paragraph in two.
+- A scan without OCR gives only its image.
 
-## Vérifications
+## Checks
 
-- Moteur (`tests/engine/word.test.ts`) : police, taille, gras et italique par passage ; paragraphes (ligne courte après une phrase, écart, puce, texte en drapeau) ; deux colonnes lues l'une après l'autre ; une page par page ; image à sa place et réduite à la largeur du texte ; scan gardé seul, laissé de côté derrière son texte lu ; fichier ouvert par `textutil` (macOS, sauté ailleurs).
-- Navigateur (`tests/e2e/pdf-to-word.spec.ts`) : document téléchargé, texte et saut de page.
-- Sonde du 2 octobre sur quatre PDF réels de `fixtures-private` (article arXiv, formulaire W-9, publication 17 de l'IRS en 142 pages, fiche NASA) : les quatre s'ouvrent ; 142 pages en 3,3 s dans Node.
+- Engine (`tests/engine/word.test.ts`): font, size, bold and italic per run; paragraphs (short line after a sentence, gap, bullet, ragged text); two columns read one after the other; one page per page; image at its place and reduced to the text width; scan kept alone, left out behind its OCR text; file opened by `textutil` (macOS, skipped elsewhere).
+- Browser (`tests/e2e/pdf-to-word.spec.ts`): document downloaded, text and page break.
+- Probe of 2 October on four real PDFs from `fixtures-private` (arXiv paper, W-9 form, IRS Publication 17 in 142 pages, NASA fact sheet): all four open; 142 pages in 3.3 s in Node.

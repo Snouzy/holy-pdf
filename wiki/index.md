@@ -1,93 +1,93 @@
-# pdf-toolbox — wiki
+# Holy PDF wiki
 
-Ouvrable dans Obsidian : **Ouvrir un dossier comme coffre**, puis choisir le dossier `wiki/`.
+You can open it in Obsidian: **Open folder as vault**, then choose the `wiki/` folder.
 
-## Produit
+## Product
 
-- [Feuille de route](product/roadmap.md) — tous les outils visés, leur faisabilité et les phases.
-- [Identité de marque](product/brand.md) — Holy PDF : le nom, un moine par outil, la palette Encre bleue.
-- [Histoire de Holy PDF](product/story.md) — le manque de place, les PDF de la famille et la naissance du projet.
-- [Posts de présentation](product/social-posts.md) — les déclinaisons LinkedIn, Instagram et X.
+- [Roadmap](product/roadmap.md): all the planned tools, their feasibility and the phases.
+- [Brand identity](product/brand.md): Holy PDF, with the name, one monk per tool and the Blue Ink palette.
+- [The story of Holy PDF](product/story.md): the lack of space, the family's PDFs and the birth of the project.
+- [Launch posts](product/social-posts.md): the LinkedIn, Instagram and X versions.
 
-## Développement
+## Development
 
-- [Guide technique](development/technical-guide.md) — où est quoi, règles de code du site et de l'appli de bureau, performance, confidentialité, git.
-- [Algorithme du scanner](development/algorithm.md) — le pipeline, indépendant du langage, et ses mesures.
-- [Tests](development/tests.md) — commandes, niveaux, vérifications à la main.
-- [Version Web](development/web-version.md) — site Astro, moteur dans le navigateur, pièges connus.
-- [Benchmark de compression](development/compression-benchmark-2026-10-01.md) — comparaison PDFium, qpdf, Cantoo et MuPDF, mesures navigateur et limites.
-- [Mots-clés du site](development/web-keywords.md) — l'adresse de chaque outil en français et en anglais, les candidats de recherche, volumes à vérifier.
+- [Technical guide](development/technical-guide.md): where things are, code rules for the site and the desktop app, performance, privacy, git.
+- [Scanner algorithm](development/algorithm.md): the pipeline, independent of the language, and its measurements.
+- [Tests](development/tests.md): commands, levels, manual checks.
+- [Web version](development/web-version.md): Astro site, engine in the browser, known pitfalls.
+- [Compression benchmark](development/compression-benchmark-2026-10-01.md): comparison of PDFium, qpdf, Cantoo and MuPDF, browser measurements and limits.
+- [Site keywords](development/web-keywords.md): the address of each tool in French and in English, the search candidates, volumes to check.
 
 ## Specs
 
-_Les specs « Mac : … » décrivent l'appli Swift, retirée le 5 octobre 2026 ; son code est au tag `mac-final`. Elles restent comme archive des décisions._
+_The "Mac: …" specs describe the Swift app, removed on 5 October 2026; its code is at the tag `mac-final`. They stay as an archive of the decisions._
 
-- [Mac : Modifier un PDF, étape A](specs/2026-10-04-mac-edit-design.md) — ajouts écrits dans la page, toutes les lettres, images recadrées, pivotées et retournées ; B (annotations, liens) et C (contenu d'origine) suivent.
-- [Mac : Filigrane](specs/2026-10-02-mac-watermark-design.md) — texte ou image dans le contenu des pages, opacité, angle, plage, sans moteur ajouté.
+- [Mac: Edit a PDF (step A: additions in the page)](specs/2026-10-04-mac-edit-design.md): additions written into the page, every letter, images cropped, rotated and flipped; B (annotations, links) and C (original content) follow.
+- [Mac: Watermark](specs/2026-10-02-mac-watermark-design.md): text or image in the content of the pages, opacity, angle, range, with no added engine.
 
-- [Mac : Numéros de page](specs/2026-10-02-mac-page-numbers-design.md) — format, position, premier numéro, plage ; les briques communes aux outils qui enregistrent une copie.
+- [Mac: Page numbers](specs/2026-10-02-mac-page-numbers-design.md): format, position, first number, range; the building blocks shared by the tools that save a copy.
 
-- [Mac : Compresser](specs/2026-10-02-mac-compress-design.md) — trois niveaux, deux écritures PDFKit en concurrence dont le filtre Quartz, rien d'enregistré sans gain.
+- [Mac: Compress](specs/2026-10-02-mac-compress-design.md): three levels, two PDFKit writers in competition, one of them with the Quartz filter, nothing saved without a gain.
 
-- [Mac : Aplatir](specs/2026-10-02-mac-flatten-design.md) — champs remplis et annotations dans le contenu des pages, liens gardés.
+- [Mac: Flatten](specs/2026-10-02-mac-flatten-design.md): filled fields and annotations put into the content of the pages, links kept.
 
-- [Mac : Pages par feuille, Couper les pages en deux, Pixelliser](specs/2026-10-02-mac-sheets-design.md) — trois outils d'un seul réglage, les règles du site, progression et annulation dans la session commune.
+- [Mac: Pages per sheet, Split pages in half, Pixelize](specs/2026-10-02-mac-sheets-design.md): three tools with a single setting each, the site's rules, progress and cancellation in the shared session.
 
-- [Mac : Ajouter des signets](specs/2026-10-02-mac-bookmarks-design.md) — lire, poser, renommer et retirer les signets ; ce qu'un outil lit à l'ouverture dans la session commune.
+- [Mac: Add bookmarks](specs/2026-10-02-mac-bookmarks-design.md): read, add, rename and remove bookmarks; what a tool reads at opening in the shared session.
 
-- [Mac : Superposer deux PDF](specs/2026-10-02-mac-overlay-design.md) — les pages d'un PDF sur ou sous celles d'un autre, aperçu fidèle des deux positions.
+- [Mac: Overlay two PDFs](specs/2026-10-02-mac-overlay-design.md): the pages of one PDF over or under the pages of another, an accurate preview of both positions.
 
-- [Mac : PDF en Word](specs/2026-10-02-mac-pdf-to-word-design.md) — texte, styles et images dans un .docx écrit à la main ; les polices lues dans le contenu des pages.
+- [Mac: PDF to Word](specs/2026-10-02-mac-pdf-to-word-design.md): text, styles and images in a .docx written by hand; the fonts read in the content of the pages.
 
-- [Mac : Accueil par catégories, avec recherche](specs/2026-10-02-mac-home-design.md) — les cinq catégories du site, sa recherche portée en Swift, ses mots copiés par un script.
+- [Mac: Home by categories, with search](specs/2026-10-02-mac-home-design.md): the site's five categories, its search ported to Swift, its words copied by a script.
 
-- [Mac : Images en PDF et PDF en images](specs/2026-10-02-mac-images-design.md) — une page A4 par image, un JPG par page, les règles du site.
+- [Mac: Images to PDF and PDF to images](specs/2026-10-02-mac-images-design.md): one A4 page per image, one JPG per page, the site's rules.
 
-- [Mac : Noircir](specs/2026-10-02-mac-redact-design.md) — zones noires au glisser ; la page noircie devient une image à 200 ppp, rien de son contenu ne reste dans le fichier.
+- [Mac: Redact](specs/2026-10-02-mac-redact-design.md): black areas drawn by dragging; the redacted page becomes an image at 200 dpi, and nothing of its content stays in the file.
 
-- [Mac : OCR](specs/2026-10-02-mac-ocr-design.md) — la lecture Vision du Scanner posée en texte invisible sur les pages sans texte, lignes lues surlignées.
+- [Mac: OCR](specs/2026-10-02-mac-ocr-design.md): the Vision reading of the Scanner put as invisible text on the pages without text, with the lines read highlighted.
 
-- [Mac : Protéger et Déverrouiller](specs/2026-10-02-mac-protect-unlock-design.md) — mot de passe en AES-128 à l'écriture ; copie sans chiffrement, avec le mot de passe connu seulement.
+- [Mac: Protect and Unlock](specs/2026-10-02-mac-protect-unlock-design.md): AES-128 password when the copy is written; copy without encryption, with the known password only.
 
-- [Mac : Diviser et Extraire](specs/2026-10-02-mac-split-extract-design.md) — ciseaux entre les pages, pages cochées, sur le moteur d'Organiser.
+- [Mac: Split a PDF and Extract pages](specs/2026-10-02-mac-split-extract-design.md): scissors between the pages, checked pages, on the engine of Organize.
 
-- [Mac : Organiser les pages](specs/2026-10-02-mac-organize-design.md) — grille native, ordre, rotation et suppression sans rastérisation.
+- [Mac: Organize pages](specs/2026-10-02-mac-organize-design.md): native grid, order, rotation and deletion without rasterization.
 
-- [Mac : Fusionner des PDF](specs/2026-10-01-mac-merge-design.md) — assemblage natif, conservation, limites et aperçus à la demande.
+- [Mac: Merge PDF files](specs/2026-10-01-mac-merge-design.md): native assembly, preservation, limits and previews on demand.
 
-- [Mac : Signer un PDF](specs/2026-10-01-mac-sign-design.md) — signature locale dessinée/importée, conservation du PDF et budgets de performance.
+- [Mac: Sign a PDF](specs/2026-10-01-mac-sign-design.md): local signature, drawn or imported, preservation of the PDF and performance budgets.
 
-- [Bureau : coque Tauri sur le code du site](specs/2026-10-05-desktop-tauri-design.md) — la preuve que le moteur du site tourne dans la webview de Tauri (PDFium, qpdf, workers, `tauri://`), le site construit chargé dans la coque, la CSP et les tests de fumée, et l'ordre des étapes suivantes.
-- [Bureau : la coque applicative](specs/2026-10-05-desktop-shell-design.md) — l'appli de bureau composée avec les briques du site, sans le site autour : monastère, écran d'outil, barre de titre, ouverture et enregistrement natifs, et les changements que la planche demande.
-- [Web : Superposer](specs/2026-10-03-web-overlay-design.md) — les pages d'un PDF sur ou sous celles d'un autre.
-- [Web : Signets](specs/2026-10-03-web-bookmarks-design.md) — lire, poser, renommer, ranger et retirer les signets d'un PDF.
-- [Web : Réparer](specs/2026-10-03-web-repair-design.md) — qpdf relit un PDF abîmé, PDFium en secours.
-- [Web : Modifier](specs/2026-10-04-web-edit-design.md) — texte, images, formes, crayon et surligneur ajoutés dans la page.
-- [Web : Rogner](specs/2026-10-04-web-crop-design.md) — la zone tracée devient le cadre de la page, sur une page ou sur toutes.
-- [Web : Scanner](specs/2026-10-02-web-scanner-design.md) — photos de documents en PDF propres, moteur du Mac porté sur OpenCV.js.
-- [Web : PDF en Word](specs/2026-10-02-web-pdf-to-word-design.md) — texte, styles et images dans un .docx écrit à la main.
-- [Web : OCR](specs/2026-10-02-web-ocr-design.md) — texte lu par Tesseract.js et posé invisible sur les pages scannées.
-- [Web : Noircir](specs/2026-10-02-web-redact-design.md) — zones tracées en noir, la page devient une image et son contenu quitte le fichier.
-- [Web : Pixelliser](specs/2026-10-02-web-pixelize-design.md) — pages en images JPEG, texte non copiable.
+- [Desktop: Tauri shell on the site's code](specs/2026-10-05-desktop-tauri-design.md): the proof that the site's engine runs in the Tauri webview (PDFium, qpdf, workers, `tauri://`), the built site loaded in the shell, the CSP and the smoke tests, and the order of the next steps.
+- [Desktop: the app shell, design](specs/2026-10-05-desktop-shell-design.md): the desktop app built from the site's building blocks, without the site around them: monastery, tool screen, title bar, native open and save, and the changes that the board needs.
+- [Web: Overlay two PDFs](specs/2026-10-03-web-overlay-design.md): the pages of one PDF over or under the pages of another.
+- [Web: Add bookmarks](specs/2026-10-03-web-bookmarks-design.md): read, add, rename, arrange and remove the bookmarks of a PDF.
+- [Web: Repair a PDF](specs/2026-10-03-web-repair-design.md): qpdf reads a damaged PDF again, with PDFium as a fallback.
+- [Web: Edit a PDF](specs/2026-10-04-web-edit-design.md): text, images, shapes, pencil and highlighter added into the page.
+- [Web: Crop a PDF](specs/2026-10-04-web-crop-design.md): the drawn area becomes the box of the page, on one page or on all of them.
+- [Web: Scanner](specs/2026-10-02-web-scanner-design.md): photos of documents into clean PDFs, the Mac engine ported to OpenCV.js.
+- [Web: PDF to Word](specs/2026-10-02-web-pdf-to-word-design.md): text, styles and images in a .docx written by hand.
+- [Web: OCR](specs/2026-10-02-web-ocr-design.md): text read by Tesseract.js and put, invisible, on the scanned pages.
+- [Web: Redact a PDF](specs/2026-10-02-web-redact-design.md): areas drawn in black, the page becomes an image and its content leaves the file.
+- [Web: Pixelize a PDF](specs/2026-10-02-web-pixelize-design.md): pages turned into JPEG images, text that cannot be copied.
 
-- [Web : Couper en deux](specs/2026-10-02-web-split-in-half-design.md) — chaque page en deux moitiés, dans le sens de lecture.
+- [Web: Split the pages in half](specs/2026-10-02-web-split-in-half-design.md): each page in two halves, in reading order.
 
-- [Web : Pages par feuille](specs/2026-10-02-web-pages-per-sheet-design.md) — 2 à 16 pages par feuille A4, texte gardé.
+- [Web: Pages per sheet](specs/2026-10-02-web-pages-per-sheet-design.md): 2 to 16 pages per A4 sheet, text kept.
 
-- [Web : Aplatir](specs/2026-10-02-web-flatten-design.md) — champs et annotations figés dans le contenu des pages.
+- [Web: Flatten a PDF](specs/2026-10-02-web-flatten-design.md): fields and annotations fixed into the content of the pages.
 
-- [Web : Filigrane](specs/2026-10-02-web-watermark-design.md) — texte en travers des pages, couleur, opacité, angle, largeur et plage.
+- [Web: Add a watermark](specs/2026-10-02-web-watermark-design.md): text across the pages, color, opacity, angle, width and range.
 
-- [Web : Numéroter les pages](specs/2026-10-02-web-page-numbers-design.md) — format, six positions, premier numéro, taille et plage, texte dans le contenu.
+- [Web: Add page numbers to a PDF](specs/2026-10-02-web-page-numbers-design.md): format, six positions, first number, size and range, text in the content.
 
-- [Web : Protéger et Déverrouiller](specs/2026-10-02-web-protect-unlock-design.md) — mot de passe ajouté ou retiré dans le navigateur, requête `transform` générique.
+- [Web: Protect and Unlock a PDF](specs/2026-10-02-web-protect-unlock-design.md): password added or removed in the browser, generic `transform` request.
 
-- [Web : Signer un PDF](specs/2026-10-01-web-sign-design.md) — main levée, texte manuscrit ou PNG/JPG/JPEG, placements locaux et budgets de performance.
+- [Web: Sign a PDF](specs/2026-10-01-web-sign-design.md): freehand, handwritten text or PNG/JPG/JPEG, local placements and performance budgets.
 
-- [Scanner Mac v1](specs/2026-09-29-scanner-mac-v1-design.md) — moteur, appli Mac, erreurs, tests.
-- [Mac : design system Holy PDF](specs/2026-10-01-mac-design-system-design.md) — nom, icône, moines, police des titres, vouvoiement, images exportées du site.
-- [Web : socle et outils Organiser](specs/2026-09-29-web-organiser-design.md) — site Astro, planche, moteur PDFium, budgets de performance.
-- [Web : design system Holy PDF](specs/2026-09-30-web-design-system-design.md) — couleurs, polices, moines, accueil D2, pages outils, mode sombre.
-- [Web : parcours d'un outil, Compresser et PDF en JPG](specs/2026-09-30-web-parcours-lot1-design.md) — régler, lancer, récupérer ; compression des images ; pages ou photos en JPG.
-- [Web : pages du pied de page](specs/2026-10-02-web-pages-design.md) — juridique, À propos, Contact, Presse, Nouveautés, FAQ, Applis, blog et guides, en FR et EN.
-- [Web : refonte de l'accueil et FAQ par outil](specs/2026-10-02-web-landing-design.md) — haut compact sans zone d'import, sections du bas, FAQ en conversation, questions de chaque outil liées depuis la page FAQ.
+- [Scanner Mac v1: design](specs/2026-09-29-scanner-mac-v1-design.md): engine, Mac app, errors, tests.
+- [Mac app: Holy PDF design system, design](specs/2026-10-01-mac-design-system-design.md): name, icon, monks, title font, the formal « vous », images exported from the site.
+- [Web version: foundation and Organize tools, design](specs/2026-09-29-web-organiser-design.md): Astro site, board, PDFium engine, performance budgets.
+- [Web version: Holy PDF design system, design](specs/2026-09-30-web-design-system-design.md): colors, fonts, monks, D2 home page, tool pages, dark mode.
+- [Web version: a tool's flow, Compress and PDF to JPG, design](specs/2026-09-30-web-parcours-lot1-design.md): set, run, get the result; compression of the images; pages or photos as JPG.
+- [Web: footer pages, design](specs/2026-10-02-web-pages-design.md): legal pages, About, Contact, Press, What's new, FAQ, Apps, blog and guides, in FR and EN.
+- [Web: home page redesign and FAQ per tool](specs/2026-10-02-web-landing-design.md): compact top without a drop zone, lower sections, FAQ as a conversation, the questions of each tool linked from the FAQ page.

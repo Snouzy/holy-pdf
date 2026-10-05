@@ -1,88 +1,88 @@
-# Mac — Filigrane
+# Mac: Watermark
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`._
+_Written 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`._
 
-## Objectif
+## Goal
 
-Poser un filigrane sur un PDF dans Holy PDF pour Mac : un texte (« Confidentiel », « Brouillon ») ou une image (un logo), avec son opacité, son angle et les pages concernées, puis enregistrer une copie. Aucun serveur, aucun compte, aucun nouveau moteur : PDFKit, Core Graphics, Core Text et ImageIO.
+Put a watermark on a PDF in Holy PDF for Mac: a text ("Confidential", "Draft") or an image (a logo), with its opacity, its angle and the pages it covers, then save a copy. No server, no account, no new engine: PDFKit, Core Graphics, Core Text and ImageIO.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- le filigrane apparaît sur les pages choisies, à l'endroit, à la taille, à l'angle et à l'opacité vus à l'écran, y compris sur une page pivotée ou recadrée ;
-- il fait partie du contenu de la page : un lecteur PDF ne le propose pas comme annotation à supprimer ;
-- le texte d'origine reste sélectionnable, et les champs de formulaire, les liens et les signets restent ;
-- le fichier d'origine n'est jamais modifié ;
-- les tests du paquet, de l'appli et des textes passent, sans avertissement du compilateur.
+- the watermark appears on the chosen pages, at the position, size, angle and opacity seen on screen, including on a rotated or cropped page;
+- it is part of the page content: a PDF reader does not offer it as an annotation to delete;
+- the original text stays selectable, and the form fields, links and bookmarks stay;
+- the original file is never modified;
+- the package, app and string tests pass, with no compiler warning.
 
-## Portée
+## Scope
 
-**Dans la spec :** un filigrane par document, texte ou image ; couleur du texte ; opacité ; angle ; position et taille à la souris ; toutes les pages ou une plage ; enregistrement d'une copie ; Frère Tampon sur l'accueil et sur l'écran de départ ; textes français et anglais.
+**In the spec:** one watermark per document, text or image; text color; opacity; angle; position and size with the mouse; all pages or a range; saving a copy; Brother Stamp on the home screen and on the start screen; French and English strings.
 
-**Hors spec :** la mosaïque (filigrane répété sur la page), plusieurs filigranes à la fois, le choix de la police, le filigrane sous le contenu, une liste libre de pages (« 1, 3, 5-8 »), le retrait d'un filigrane existant, les numéros de page.
+**Out of the spec:** tiling (a watermark repeated on the page), several watermarks at once, font choice, a watermark under the content, a free list of pages ("1, 3, 5-8"), removal of an existing watermark, page numbers.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Technique | Une sous-classe de `PDFPage` dessine le filigrane après le contenu de la page. PDFKit l'écrit dans le contenu à l'export | Essai du 2 octobre : le filigrane n'est plus une annotation, et 23 champs sur 23, 113 liens sur 113 et les signets restent. C'est la technique des exemples d'Apple |
-| Écarté | Une annotation, comme la signature | Elle se sélectionne et se supprime dans n'importe quel lecteur : ce n'est pas un filigrane |
-| Écarté | L'option d'écriture `burnInAnnotationsOption` | Elle aplatit toutes les annotations : les champs de formulaire du document disparaissent (essai : 24 annotations, puis 0) |
-| Placement | À la souris, comme la signature : déplacer, tirer le coin. La même position, en proportion de la page visible, vaut pour toutes les pages choisies | Choix de l'auteur. Réutilise le geste de Signer |
-| Plusieurs filigranes (3 octobre 2026) | « En poser un autre » ajoute un filigrane comme le filigrane sélectionné, au milieu de la page, et le sélectionne ; un clic sur un filigrane de la page le sélectionne, et le panneau édite celui-là (texte, couleur, opacité, angle, pages). « Retirer de la page » retire le filigrane sélectionné, jamais le dernier. Un filigrane vidé de son texte part de lui-même quand un autre est sélectionné, et tant qu'il est sélectionné rien ne s'enregistre. La copie d'un filigrane posé sur certaines pages s'étend jusqu'à la page affichée ; changer de page sélectionne un filigrane de cette page. Cinquante au plus. Un pas d'annulation reprend toute la disposition | Demande de l'auteur le 3 octobre : plusieurs « CONFIDENTIEL » sur une page, posés librement comme les signatures sur le web. Chaque filigrane est indépendant : changer le texte de l'un ne change pas les autres |
-| Pages | Toutes, ou une plage « de la page … à la page … » | Choix de l'auteur. Deux champs, pas de syntaxe à expliquer. Depuis le 2 octobre au soir, chaque champ se tape ou se règle aux flèches (`NumberField`, partagé avec les Numéros de page) : sur 300 pages, cliquer une flèche 200 fois n'est pas un réglage |
-| Texte | Police système en gras, une ligne, 80 caractères au plus. Il devient du vrai texte dans la page | Simple, lisible, et la recherche le trouve |
-| Image | PNG ou JPEG, mêmes limites que la signature (10 Mio, 16 Mpx, ramenée à 1 Mpx). La transparence d'un PNG est gardée | Réutilise `SignatureImage`. Essai : une image sur 14 pages n'est écrite qu'une fois dans le fichier (+257 Ko pour un logo de 309 Ko) |
-| Aperçu | Chaque filigrane est rendu une fois en image par le même code que l'export, puis posé sur l'aperçu de la page ; deux filigranes de même aspect partagent leur image, et un filigrane garde son dernier dessin pendant qu'un curseur bouge plus vite que le dessin (relecture du 3 octobre). À l'export, une image posée cinquante fois est décodée une fois. Aucun calcul PDF pendant un geste | Ce qu'on voit est ce qu'on exporte, et le geste reste fluide |
-| Moine | « Frère Tampon » (« Brother Stamp »), accessoire tampon, catégorie Modifier, exporté du dessin du site : une ligne de plus dans `export-monk-assets.mjs` et dans `MonkAssetTests` | Le site prévoit déjà cet accessoire pour l'outil `watermark` |
-| Moteur | PDFKit, comme Signer, Fusionner et Organiser | Choix de l'auteur : pas de nouveau moteur |
+| Technique | A subclass of `PDFPage` draws the watermark after the page content. PDFKit writes it into the content on export | Test of 2 October: the watermark is no longer an annotation, and 23 fields of 23, 113 links of 113 and the bookmarks stay. This is the technique of Apple's samples |
+| Rejected | An annotation, like the signature | Any reader can select and delete it: that is not a watermark |
+| Rejected | The write option `burnInAnnotationsOption` | It flattens all annotations: the form fields of the document disappear (test: 24 annotations, then 0) |
+| Placement | With the mouse, like the signature: move it, drag the corner. The same position, as a proportion of the visible page, applies to all chosen pages | Author's choice. Reuses the Sign gesture |
+| Several watermarks (3 October 2026) | "Place another one" adds a watermark like the selected watermark, in the middle of the page, and selects it; a click on a watermark of the page selects it, and the panel edits that one (text, color, opacity, angle, pages). "Remove from the page" removes the selected watermark, never the last one. A watermark emptied of its text goes away by itself when another one is selected, and while it is selected nothing is saved. The copy of a watermark placed on some pages extends its range to the displayed page; a change of page selects a watermark of that page. Fifty at most. One undo step restores the whole layout | Author's request on 3 October: several "CONFIDENTIAL" on one page, placed freely like the signatures on the web. Each watermark is independent: a change to the text of one does not change the others |
+| Pages | All, or a range "from page … to page …" | Author's choice. Two fields, no syntax to explain. Since the evening of 2 October, you can type each field or set it with the arrows (`NumberField`, shared with Page numbers): on 300 pages, 200 clicks on an arrow is not a setting |
+| Text | Bold system font, one line, 80 characters at most. It becomes real text in the page | Simple, readable, and search finds it |
+| Image | PNG or JPEG, same limits as the signature (10 MiB, 16 Mpx, reduced to 1 Mpx). The transparency of a PNG is kept | Reuses `SignatureImage`. Test: an image on 14 pages is written only once in the file (+257 KB for a 309 KB logo) |
+| Preview | Each watermark is rendered once as an image by the same code as the export, then placed on the page preview; two watermarks with the same look share their image, and a watermark keeps its last drawing while a slider moves faster than the drawing (review of 3 October). On export, an image placed fifty times is decoded once. No PDF computation during a gesture | What you see is what you export, and the gesture stays smooth |
+| Monk | "Brother Stamp" (« Frère Tampon » in French), stamp accessory, Edit category, exported from the site drawing: one more line in `export-monk-assets.mjs` and in `MonkAssetTests` | The site already plans this prop for the `watermark` tool |
+| Engine | PDFKit, like Sign, Merge and Organize | Author's choice: no new engine |
 
-## Parcours
+## Flow
 
-1. **Ouvrir** ou déposer un PDF. Un fichier protégé demande son mot de passe. Un PDF signé numériquement est refusé : le filigrane invaliderait sa signature.
-2. **Régler**, dans le panneau de droite, de haut en bas :
-   - Texte ou Image (bascule) ;
-   - le texte et sa couleur, ou « Choisir une image… » ;
-   - Opacité : curseur de 10 à 100 %, 30 % au départ ;
-   - Angle : curseur de −90° à 90°, 45° au départ pour un texte, 0° pour une image ;
-   - Pages : « Toutes les pages » ou « De la page … à la page … ».
-3. **Placer** : la page s'affiche à gauche, le filigrane par-dessus, au centre au départ. On le glisse pour le déplacer et on tire son coin pour changer sa taille. Les boutons page précédente et page suivante montrent le résultat sur les autres pages ; une page hors de la plage s'affiche sans filigrane.
-4. **Enregistrer une copie…** : le panneau macOS propose `nom-filigrane.pdf` (`nom-watermarked.pdf` en anglais). L'écran dit ensuite quel fichier est enregistré et propose « Afficher dans le Finder ».
+1. **Open** or drop a PDF. A protected file asks for its password. A digitally signed PDF is refused: the watermark would invalidate its signature.
+2. **Set**, in the right panel, from top to bottom:
+   - Text or Image (toggle);
+   - the text and its color, or "Choose an image…";
+   - Opacity: slider from 10 to 100%, 30% at start;
+   - Angle: slider from −90° to 90°, 45° at start for a text, 0° for an image;
+   - Pages: "All pages" or "From page … to page …".
+3. **Place**: the page shows on the left, the watermark on top of it, centered at start. Drag it to move it, and drag its corner to change its size. The previous page and next page buttons show the result on the other pages; a page outside the range shows without a watermark.
+4. **Save a copy…**: the macOS panel suggests `nom-filigrane.pdf` (`nom-watermarked.pdf` in English). The screen then says which file is saved and offers "Show in Finder".
 
-⌘O ouvre, ⌘E enregistre, ⌘Z annule le dernier réglage ou déplacement. Ouvrir un autre PDF ou quitter avec un filigrane non enregistré demande confirmation, comme dans Signer.
+⌘O opens, ⌘E saves, ⌘Z undoes the last setting or move. When a watermark is not saved, the app asks for confirmation before it opens another PDF or quits, as in Sign.
 
-## Moteur
+## Engine
 
-Dans `PDFCore`, sans AppKit ni UIKit.
+In `PDFCore`, without AppKit or UIKit.
 
-- `Watermark` : le contenu (texte et couleur, ou image), le centre et la largeur en proportion de la page visible (origine en haut à gauche), l'angle, l'opacité, la plage de pages.
-- `PDFWatermarkDocument`, un acteur : il ouvre le PDF (mot de passe, refus des signatures numériques), donne les tailles de pages et l'aperçu d'une page, et écrit la copie filigranée. Chaque export repart des données d'origine : rien ne s'accumule.
-- Le dessin vit dans une seule fonction, utilisée par l'export et par l'image d'aperçu du filigrane.
-- **Coordonnées** : la position est exprimée dans la page telle qu'elle s'affiche, après CropBox et rotation, comme les placements de Signer. La conversion passe par la même géométrie (`SignatureGeometry`, renommée pour servir aux deux outils).
-- **Commun avec les autres outils** : l'ouverture, le déverrouillage, le contrôle des signatures numériques, la mesure des pages et le rendu d'un aperçu sont les briques partagées de `PDFCore`, mises en commun le 2 octobre pour Signer, Fusionner et Organiser. Les erreurs sont celles de `PDFToolError`. Côté appli, la lecture du fichier, la protection de l'original (`FileIdentity`), le panneau d'enregistrement et le menu de l'outil (`ToolMenu`) sont aussi partagés.
+- `Watermark`: the content (text and color, or image), the center and the width as a proportion of the visible page (origin at the top left), the angle, the opacity, the page range.
+- `PDFWatermarkDocument`, an actor: it opens the PDF (password, refusal of digital signatures), gives the page sizes and the preview of a page, and writes the watermarked copy. Each export starts again from the original data: nothing accumulates.
+- The drawing lives in a single function, used by the export and by the preview image of the watermark.
+- **Coordinates**: the position is expressed in the page as it displays, after CropBox and rotation, like the placements of Sign. The conversion goes through the same geometry (`SignatureGeometry`, renamed to serve both tools).
+- **Shared with the other tools**: opening, unlocking, the digital signature check, page measurement and preview rendering are the shared building blocks of `PDFCore`, pooled on 2 October for Sign, Merge and Organize. The errors are those of `PDFToolError`. On the app side, the file read, the protection of the original (`FileIdentity`), the save panel and the tool menu (`ToolMenu`) are shared too.
 
-Copie d'un PDF protégé : elle s'ouvre sans mot de passe, et l'écran le dit, comme dans Signer.
+Copy of a protected PDF: it opens without a password, and the screen says so, as in Sign.
 
-## Limites connues
+## Known limits
 
-- **Lenteur de PDFKit sur certains fichiers.** L'écriture PDFKit réencode certains contenus. Mesuré le 1er octobre : un document de 142 pages riche en polices met environ 2 minutes et passe de 3 à 13 Mo ; un livre scanné en JBIG2 et JPEG 2000 passe de 17 à 468 Mo. Les PDF ordinaires et les scans JPEG ne sont pas touchés (0,1 à 0,3 s, poids presque égal). La limite vaut aussi pour Signer, Fusionner et Organiser. L'écran montre une progression et permet d'attendre ; il ne promet pas de durée.
-- Le filigrane est dessiné par-dessus le contenu. Un lecteur ne le supprime pas d'un clic, mais un éditeur de PDF peut toujours retirer un élément d'une page : ce n'est pas une protection.
-- Les balises d'accessibilité et les profils d'archivage (PDF/A) du document d'origine ne sont pas garantis après l'écriture PDFKit.
+- **PDFKit is slow on some files.** The PDFKit write re-encodes some content. Measured on 1 October: a 142-page document rich in fonts takes about 2 minutes and grows from 3 to 13 MB; a book scanned in JBIG2 and JPEG 2000 grows from 17 to 468 MB. Ordinary PDFs and JPEG scans are not affected (0.1 to 0.3 s, almost the same size). The limit also applies to Sign, Merge and Organize. The screen shows progress and lets you wait; it does not promise a duration.
+- The watermark is drawn over the content. A reader does not delete it with one click, but a PDF editor can always remove an element from a page: it is not a protection.
+- The accessibility tags and the archiving profiles (PDF/A) of the original document are not guaranteed after the PDFKit write.
 
 ## Performance
 
-- Ouverture, aperçu et export hors de l'acteur principal.
-- Un aperçu de page à la fois, 1 600 px au plus sur le grand côté.
-- Le filigrane est rendu en image une fois par changement de réglage, jamais pendant un glisser.
-- PDF de 256 Mio au plus, comme Signer.
-- Repères sur un PDF de synthèse de 20 pages : aperçu en moins de 1 s, export en moins de 3 s.
+- Opening, preview and export off the main actor.
+- One page preview at a time, 1,600 px at most on the long side.
+- The watermark is rendered as an image once per change of setting, never during a drag.
+- PDF of 256 MiB at most, like Sign.
+- Benchmarks on a synthetic 20-page PDF: preview in less than 1 s, export in less than 3 s.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Moteur | Le filigrane tombe au bon endroit sous les quatre rotations et avec une CropBox ; la plage de pages est respectée ; l'opacité et l'angle changent les pixels attendus ; le texte du filigrane est dans le contenu et pas dans les annotations ; texte d'origine, liens, champs et signets gardés ; l'original intact ; deux exports de suite donnent un seul filigrane ; une image sur 20 pages pèse moins de deux fois l'image | `PDFCoreTests` |
-| Session | Réglages, déplacement, taille, plage invalide refusée, annulation, export, confirmation avant d'abandonner | `PDFToolboxTests` |
-| Marque | Frère Tampon est dans le catalogue, en clair et en sombre, à jour avec le dessin du site | `PDFToolboxTests`, script d'export |
-| Écrans | Captures de l'écran de départ et de l'atelier, en clair et en sombre | `PDFToolboxTests` |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
-| À la main | Glisser et redimensionner le filigrane à la souris ; ouvrir le résultat dans Aperçu et vérifier qu'aucune annotation ne se sélectionne | `wiki/development/tests.md` |
+| Engine | The watermark lands in the right place under the four rotations and with a CropBox; the page range is respected; opacity and angle change the expected pixels; the watermark text is in the content and not in the annotations; original text, links, fields and bookmarks kept; the original intact; two exports in a row give a single watermark; an image on 20 pages weighs less than twice the image | `PDFCoreTests` |
+| Session | Settings, move, size, invalid range refused, undo, export, confirmation before abandoning | `PDFToolboxTests` |
+| Brand | Brother Stamp is in the catalog, in light and dark, up to date with the site drawing | `PDFToolboxTests`, export script |
+| Screens | Snapshots of the start screen and the workshop, in light and dark | `PDFToolboxTests` |
+| Strings | All translated, never the informal « tu » | `check-strings.py` |
+| By hand | Drag and resize the watermark with the mouse; open the result in Preview and check that no annotation can be selected | `wiki/development/tests.md` |

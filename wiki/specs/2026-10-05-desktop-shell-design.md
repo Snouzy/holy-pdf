@@ -1,222 +1,222 @@
-# Bureau : la coque applicative — design
+# Desktop: the app shell, design
 
-_Rédigé le 5 octobre 2026. Statut : lot 1 livré le 5 octobre (côté site, puis l'entrée bureau) ; lots 2 et 3 à venir. Suite de [Bureau : coque Tauri sur le code du site](2026-10-05-desktop-tauri-design.md), dont l'étape 1 chargeait le site entier dans la fenêtre._
+_Written on 5 October 2026. Status: milestone 1 delivered on 5 October (site side first, then the desktop entry); milestones 2 and 3 to come. Follows [Desktop: Tauri shell on the site's code](2026-10-05-desktop-tauri-design.md), whose step 1 loaded the whole site in the window._
 
-## Contexte
+## Context
 
-L'étape 1 de la coque Tauri ouvre le site construit dans la webview du système : 86 pages, l'en-tête et le pied du site, les textes de référencement sous chaque outil, le sélecteur de langue, 63 Mo embarqués. Ça marche, et ça ressemble à un site dans une fenêtre (remarque de l'auteur, 5 octobre 2026).
+Step 1 of the Tauri shell opens the built site in the system webview: 86 pages, the site header and footer, the SEO texts under each tool, the language switcher, 63 MB embedded. It works, and it looks like a site in a window (the author's remark, 5 October 2026).
 
-L'appli Mac en Swift, gelée le 4 octobre, avait la forme juste : une seule fenêtre, l'accueil « Le monastère » en grille par catégories, le champ « Chercher un outil » dans la barre de titre, un écran par outil avec la page à gauche et un panneau fixe à droite, le chevron de retour, ⌘O, une copie enregistrée par le dialogue natif, « Afficher dans le Finder » ([accueil](2026-10-02-mac-home-design.md), [design system Mac](2026-10-01-mac-design-system-design.md)). Elle n'avait ni association de fichiers, ni fichiers récents, ni mise à jour.
+The Mac app in Swift, frozen on 4 October, had the right form: a single window, the monastery home screen as a grid by category, the "Search a tool" field in the title bar, one screen per tool with the page on the left and a fixed panel on the right, the back chevron, ⌘O, a copy saved through the native dialog, "Show in Finder" ([home](2026-10-02-mac-home-design.md), [Mac design system](2026-10-01-mac-design-system-design.md)). It had no file associations, no recent files and no updates.
 
-Le site a déjà presque tout ce qu'il faut, et les parts sont nettes :
+The site already has almost everything needed, and the parts are clearly separated:
 
-- **Réutilisable tel quel** : la planche (`Board`, `apps/web/src/board/Board.tsx`), seul îlot Preact du site, trois props (`toolId`, `lang`, `monks`), qui ne lit ni l'URL, ni l'historique, ni le titre de la page ; les éditeurs qu'elle charge, dont le Scanner, qui a son propre enregistrement et ses propres questions ; le moteur (`board/engine.ts`) ; les illustrations (`Monk`, `Scene`, `Avatar`, `ToolIcon`) ; `tokens.css` et `fonts.ts` ; les dictionnaires (`dictionaries[lang]`, `boardTexts`, `searchTexts`) ; la recherche (`home/search.ts`, sans DOM).
-- **Lié à la page, pas à la planche** : dès 64 rem, et seulement quand des documents sont ouverts (`main:has(.board)`), la planche se fond dans la grille de la page outil (`[tool].astro`), et son panneau se cale sous `--nav-height` ; les globaux de `Base.astro` ; le thème, posé sur `<html data-theme>` par le script inline de `Base.astro` (`tokens.css` n'a pas de règle `prefers-color-scheme`) ; le voile du dépôt, dessiné par `Base.astro`.
-- **Astro seulement** : les cartes (`home/ToolCard.astro`), le choix « Je veux… » (`Pick.astro`), les filtres (`home/filters.ts`, du DOM sur le balisage de l'accueil), les pages.
+- **Reusable as is**: the board (`Board`, `apps/web/src/board/Board.tsx`), the only Preact island of the site, with three props (`toolId`, `lang`, `monks`), which reads neither the URL, nor the history, nor the page title; the editors it loads, including the Scanner, which has its own saving and its own questions; the engine (`board/engine.ts`); the illustrations (`Monk`, `Scene`, `Avatar`, `ToolIcon`); `tokens.css` and `fonts.ts`; the dictionaries (`dictionaries[lang]`, `boardTexts`, `searchTexts`); the search (`home/search.ts`, without DOM).
+- **Tied to the page, not to the board**: from 64 rem, and only when documents are open (`main:has(.board)`), the board merges into the grid of the tool page (`[tool].astro`), and its panel sits under `--nav-height`; the globals of `Base.astro`; the theme, set on `<html data-theme>` by the inline script of `Base.astro` (`tokens.css` has no `prefers-color-scheme` rule); the drop overlay, drawn by `Base.astro`.
+- **Astro only**: the cards (`home/ToolCard.astro`), the "I want to…" picker (`Pick.astro`), the filters (`home/filters.ts`, DOM code on the home page markup), the pages.
 
-Trois gestes du site n'existent pas dans WKWebView sous wry : le lien `<a download>` est annulé sans gestionnaire de téléchargement (`download.ts`, et l'enregistrement du Scanner dans `ScannerApp.tsx`), `window.open` ne fait rien (« Voir » dans `Result.tsx` ouvrait un onglet), `confirm()` ne s'affiche pas et répond « non » (deux fois dans le Scanner). Le dépôt de fichiers, lui, est intercepté par Tauri tant qu'on ne le lui retire pas.
+Three site gestures do not exist in WKWebView under wry: the `<a download>` link is cancelled without a download handler (`download.ts`, and the Scanner's saving in `ScannerApp.tsx`); `window.open` does nothing ("View" in `Result.tsx` opened a tab); `confirm()` does not show and answers "no" (twice in the Scanner). File drop is a different case: Tauri intercepts it unless the shell turns off its drop handler.
 
-La pratique courante (VS Code, Obsidian, Linear, Stirling PDF v2 qui passe sur Tauri) : une seule base de composants, deux entrées. Le site marketing d'un côté, la coque applicative de l'autre. On ne cache pas des sections du site : on compose une autre page avec les mêmes briques.
+Common practice (VS Code, Obsidian, Linear, Stirling PDF v2, which is moving to Tauri): one component base, two entries. The marketing site on one side, the app shell on the other. You do not hide sections of the site: you compose another page with the same building blocks.
 
-## Principe : une appli du système, pas un site dans une fenêtre
+## Principle: a system app, not a site in a window
 
-Décision de l'auteur, 5 octobre 2026 : l'appli de bureau se juge comme une appli native de son système. Sur Mac, elle doit se comporter et se présenter comme l'appli Swift gelée le 4 octobre (retirée le 5, son code est au tag `mac-final`) ; sur Windows comme une appli Windows ; sur Linux comme une appli du bureau. Le web est sa technique, pas son allure. Concrètement :
+The author's decision, 5 October 2026: judge the desktop app as a native app of its system. On Mac, it must behave and look like the Swift app frozen on 4 October (removed on the 5th; its code is at the `mac-final` tag). On Windows, like a Windows app. On Linux, like an app of the desktop environment. The web is how it is built, not how it looks. In practice:
 
-- **La fenêtre est celle du système** : barre de titre intégrée sur Mac, décorations natives ailleurs, taille et position mémorisées, mode sombre et couleur d'accent du système, police système pour les commandes (Bricolage pour les grands titres seulement, comme sur Mac).
-- **Les gestes sont ceux du système** : menus dans la langue avec leurs raccourcis (⌘O, ⌘W, ⌘Q, ⌘Z), dialogues natifs pour ouvrir et enregistrer, dépôt de fichiers n'importe où, double-clic dans le Finder ou l'Explorateur, « Afficher dans le Finder », une garde avant de quitter avec un résultat non enregistré.
-- **Rien du web ne transparaît** : pas d'en-tête ni de pied de site, pas de texte de référencement, pas de sélecteur de langue, pas d'URL ni de navigation par pages, pas de « télécharger » ni de « nouvel onglet », pas de lien qui remplace l'appli dans sa fenêtre, pas de bouton de thème.
-- **Le document est au centre** : il reste ouvert d'un outil à l'autre, et l'appli ne recharge jamais.
+- **The window is the system's window**: integrated title bar on Mac, native decorations elsewhere, remembered size and position, the system's dark mode and accent color, the system font for the controls (Bricolage for the large titles only, as on Mac).
+- **The gestures are the system's gestures**: menus in the system language with their shortcuts (⌘O, ⌘W, ⌘Q, ⌘Z), native dialogs to open and save, file drop anywhere, double-click in Finder or Explorer, "Show in Finder", a guard before you quit with an unsaved result.
+- **Nothing of the web shows through**: no site header or footer, no SEO text, no language switcher, no URL or page navigation, no "download" or "new tab", no link that replaces the app in its window, no theme button.
+- **The document is at the center**: it stays open from one tool to the next, and the app never reloads.
 
-Le test : quelqu'un qui connaît l'appli Swift ne doit pas voir la différence dans la première minute, et quelqu'un qui connaît le site ne doit pas y penser. Chaque décision ci-dessous découle de ce principe ; une décision qui le contredit se justifie dans sa ligne, ou ne se prend pas.
+The test: someone who knows the Swift app must not see the difference in the first minute, and someone who knows the site must not be reminded of it. Each decision below follows from this principle. A decision that contradicts it gives its reason in its row, or is not taken.
 
-## Objectif et critères de réussite
+## Goal and success criteria
 
-À l'ouverture, Holy PDF pour le bureau est une appli : on reconnaît la marque et le monastère, et rien ne rappelle un site.
+When it opens, Holy PDF for desktop is an app: you recognize the brand and the monastery, and nothing recalls a site.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- la fenêtre s'ouvre sur le monastère, sans en-tête ni pied de site, sans texte de référencement, sans sélecteur de langue, sans lien qui remplace l'appli dans la fenêtre ;
-- un outil s'ouvre dans la même fenêtre, planche à gauche et panneau à droite, et le chevron ramène au monastère ; le document courant suit quand on change d'outil, si l'outil suivant l'accepte ;
-- ⌘O ouvre le dialogue natif, un fichier lâché n'importe où dans la fenêtre, monastère compris, s'ouvre, un double-clic sur un PDF dans le Finder ouvre l'appli avec lui ;
-- un résultat s'enregistre par le dialogue natif, sous le nom que la planche lui donne déjà, Scanner compris, puis « Ouvrir » et « Afficher dans le Finder » marchent ;
-- le thème, la langue et la taille de la fenêtre suivent le système, et la fenêtre revient où on l'a laissée ;
-- quitter un outil ferme ses documents dans le moteur (un test le compte) ;
-- l'appli n'embarque ni les films ni les pages du site ;
-- `pnpm desktop:smoke` passe : la page moteur, puis la coque sondée (monastère, un outil, retour) sans violation ni erreur ;
-- `pnpm verify` passe, avec les tests des changements faits au site pour la coque.
+- the window opens on the monastery, with no site header or footer, no SEO text, no language switcher, no link that replaces the app in the window;
+- a tool opens in the same window, board on the left and panel on the right, and the chevron goes back to the monastery; the current document follows when you change tools, if the next tool accepts it;
+- ⌘O opens the native dialog; a file dropped anywhere in the window, the monastery included, opens; a double-click on a PDF in Finder opens the app with it;
+- a result is saved through the native dialog, under the name the board already gives it, the Scanner included, then "Open" and "Show in Finder" work;
+- the theme, the language and the window size follow the system, and the window comes back where you left it;
+- leaving a tool closes its documents in the engine (a test counts them);
+- the app embeds neither the site's videos nor its pages;
+- `pnpm desktop:smoke` passes: the engine page, then the probed shell (monastery, a tool, back) with no violation and no error;
+- `pnpm verify` passes, with the tests of the changes made to the site for the shell.
 
-## Portée
+## Scope
 
-**Dans la spec :** l'entrée bureau (`apps/desktop/app/`), le monastère, l'écran d'outil, la barre de titre, les menus et raccourcis, l'ouverture (dialogue, dépôt, double-clic), l'enregistrement (copie, dialogue natif, ouvrir, afficher, Scanner compris), le thème, la langue, la fenêtre, les liens externes, le poids, la fumée, et les changements du site qu'elle demande.
+**In the spec:** the desktop entry (`apps/desktop/app/`), the monastery, the tool screen, the title bar, the menus and shortcuts, opening (dialog, drop, double-click), saving (copy, native dialog, open, show in folder, the Scanner included), the theme, the language, the window, the external links, the bundle size, the smoke test, and the site changes it requires.
 
-**Hors spec :** la mise à jour automatique, la signature et la vente (lot 3 de la [spec Tauri](2026-10-05-desktop-tauri-design.md)), traiter un dossier entier, enregistrer sur place, les favoris et les fichiers récents, des préférences (langue ou thème choisis à la main), les vérifications sur Windows et Linux (la coque est écrite pour les trois ; elles viennent avec le lot 3), Turborepo et le paquet partagé.
+**Out of the spec:** automatic updates, signing and sales (milestone 3 of the [Tauri spec](2026-10-05-desktop-tauri-design.md)), processing a whole folder, saving in place, favorites and recent files, preferences (language or theme chosen by hand), the checks on Windows and Linux (the shell is written for all three; the checks come with milestone 3), Turborepo and the shared package.
 
-## Décisions
+## Decisions
 
-### La coque
+### The shell
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Entrée | `apps/desktop/app/index.html` et `App.tsx` (Preact), construits par Vite dans `dist-app` ; `frontendDist` y pointe | Une appli compose les briques du site ; elle n'en cache pas des morceaux |
-| Serveur de développement | `pnpm desktop:dev` lance le serveur Vite de cette entrée par `beforeDevCommand` (`devUrl`, port 1420, `cacheDir` sous `apps/desktop`), après avoir copié les dossiers `ocr/` et `scan/` dans le dossier public du site, que Vite sert en développement | Un serveur à part laisse le `pnpm dev` du site tranquille, et la coque se lance d'une commande |
-| Ce qui vient du site | Importé par chemin relatif depuis `apps/web/src`, comme la page de fumée : planche, éditeurs, moteur, illustrations, `tokens.css`, `fonts.ts`, dictionnaires, `home/search.ts` | Sans copie. Le paquet partagé viendra avec Turborepo, après la question `Packages/` vs `packages/` ([feuille de route](../product/roadmap.md)) |
-| Preact | `@preact/preset-vite` et `preact` dans `apps/desktop`, à la version exacte du site, `resolve.dedupe: ["preact"]` ; `compat` comme le site (`dnd-kit` importe `react`) ; `app/` entre dans `tsconfig.json` avec `jsxImportSource` | La page de fumée n'a pas de JSX ; deux copies de Preact casseraient les hooks |
-| Ce qui est propre à l'appli | Le monastère en Preact (`Monastery.tsx` : cartes depuis `cast`, `toolNames`, `toolShort`, `monks`, `upcoming`), la barre de titre, l'écran d'outil et sa grille, la recherche en mémoire, l'enregistreur natif, les textes de l'appli, `app.css` | `ToolCard.astro`, `Pick.astro` et `filters.ts` sont de l'Astro et du DOM écrits pour une page : les réécrire en Preact coûte moins que les rendre partageables, et la carte tient en trente lignes |
-| Textes | Chaque texte vit avec le code qui l'affiche, français et anglais, aux règles du site (« vous », espace insécable à l'intérieur des « ») : les écrans propres à l'appli dans `app/texts.ts` ; les mots de la page de résultat et l'erreur d'écriture dans `i18n/fr.ts` et `en.ts` ; la question du Scanner dans `scanner/texts.ts` ; les menus dans `lib.rs`. Voir « Textes » plus bas | `Result` et le Scanner sont du code du site, qui n'importe rien de l'appli ; les menus sont construits en Rust avant la page |
-| Navigation | Un état dans `App.tsx` : le monastère, ou un outil. Pas de routeur, pas d'URL. La barre latérale, le chevron ← de la barre et ⌘[ ramènent au monastère ; le titre de la fenêtre dit « Holy PDF » ou le nom de l'outil (`setTitle`). La planche est montée avec `key={toolId}` | La pile de navigation du Mac. La planche ne lit pas l'URL ; une clé par outil garantit un démontage propre |
-| Langue et système | Rust lit la langue (`sys-locale`) et le système (`std::env::consts::OS`) et les donne à la page par un script d'initialisation (`window.__HOLY__ = { lang, os }`) ; `fr` si la langue commence par `fr`, `en` sinon | Les menus sont construits en Rust et doivent être dans la langue ; `navigator.language` dans WKWebView n'est pas garanti suivre le système |
-| Thème | `data-theme` suit `prefers-color-scheme`, en direct ; pas de bouton | Le script de `Base.astro` n'est pas là ; une appli suit le système. Le choix à la main vient avec les préférences |
-| Fenêtre | Minimale 64 rem × 680 px (1 024 × 680), par défaut 1 280 × 840 ; greffon `window-state` pour la taille et la position | Sous 64 rem la planche reprend son panneau flottant de page web ; une appli revient où on l'a laissée |
-| Barre latérale | `Sidebar.tsx`, à gauche sous la barre de titre, 15 rem, collée à l'écran (`position: sticky`) et défilante : « Monastère » en tête avec l'avatar du moine, puis les cinq thématiques (`byCategory`, `t.categories`) et leurs outils, icône au trait (`ToolIcon`) et nom court (`toolShort`), l'outil ouvert en surbrillance (`aria-current`), l'outil à venir grisé « Bientôt ». Visible à partir de 80 rem (1 280 px, la largeur par défaut) ; en dessous, elle se cache et le chevron de la barre de titre reprend | La liste de sources du Mac (Finder, Mail) : passer d'un frère à l'autre sans repasser par le monastère (demande de l'auteur, 5 octobre, « comme Stirling PDF »). Sous 1 280 px, trois colonnes (barre, table, panneau) écraseraient la table |
-| Barre de titre | Mac : `title_bar_style: Overlay`, `hidden_title`, feux de signalisation décalés ; la barre de l'appli (52 px, `data-tauri-drag-region="deep"`) porte le chevron, le titre et, à droite, le champ « Chercher un outil ». Windows et Linux : décorations du système, la même barre sans décalage. `--nav-height` vaut 52 px, fixe | La barre de titre intégrée est le signe le plus visible d'une appli Mac ; `deep` fait glisser toute la barre, pas seulement son fond. La planche cale son panneau sur `--nav-height` |
-| Menus | Rust, libellés dans la langue : le menu de l'appli (À propos ; sur Mac, Services, Masquer, Masquer les autres, Tout afficher ; Quitter), Fichier (Ouvrir… ⌘O, Fermer ⌘W), Édition (Annuler ⌘Z, Rétablir ⇧⌘Z, puis couper, copier, coller, tout sélectionner, prédéfinis), Fenêtre, Aide (Site, Code source, FAQ dans le navigateur ; Licences au lot 3). Ouvrir, Annuler et Rétablir émettent un événement à la page ; Fermer et Quitter sont traités en Rust jusqu'au lot 2, où la garde les fera passer par la page | Les entrées prédéfinies ont des libellés anglais. Annuler prédéfini envoie `undo:` à WebKit, que la planche n'entend pas : l'entrée de l'appli l'envoie au champ actif (`execCommand`) ou à la planche, jamais aux deux. Le Scanner répond déjà à ⇧⌘Z. Quitter prédéfini ne pose aucune question |
-| Liens externes | `on_navigation` n'accepte que l'origine de l'appli et `devUrl` ; `http(s)` et `mailto` partent dans le navigateur par `opener.open_url`, tout autre schéma est bloqué. `on_new_window` fait de même pour `window.open` | Un lien ne doit jamais remplacer l'appli dans sa fenêtre ; un `file://` lâché ne doit pas non plus sortir |
-| Capacités | `core:default` plus `core:window:allow-set-title` et `allow-start-dragging` ; `dialog:default` ; `fs:allow-read-file` et `fs:allow-write-file` (les chemins choisis dans un dialogue entrent dans le périmètre `fs`) ; `opener:default` (qui couvre « Afficher dans le Finder ») plus `opener:allow-open-path` sur `$HOME/**` et `/Volumes/**` ; `window-state:default`. La fermeture gardée du lot 2 ajoutera `allow-close` et `allow-destroy` | `core:window:default` n'a aucun réglage : le titre et le glisser de la barre en ont besoin. Le périmètre d'`opener` est une liste fixe dans la capacité, sans ajout à l'exécution comme `fs` : le dossier personnel et les volumes externes couvrent ce que le dialogue d'enregistrement propose |
-| CSP | Politique fixe dans `tauri.conf.json`, avec `dangerousDisableAssetCspModification` : `default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' ipc: http://ipc.localhost; worker-src 'self' blob:; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'`. `build.rs` perd le balayage des scripts inline du site | L'entrée de l'appli n'a aucun script inline : Vite les met dans des fichiers, et les hachages de l'étape 1 n'ont plus d'objet. Le seul style inline est celui des polices, que `main.tsx` injecte et que `'unsafe-inline'` autorise |
-| Poids | `dist-app` = ce que Vite empaquette (planche, éditeurs, moteur : PDFium 4,6 Mo, qpdf 2,2 Mo, polices) plus `ocr/`, `scan/` et `licenses/` copiés depuis `apps/web/public` à la fin de la construction (`writeBundle`, `copyPublicDir: false`), parce que `tesseract.ts` et `scanWorker.ts` les lisent par chemin absolu sur l'origine. En développement, `publicDir` pointe sur `apps/web/public`. Les scripts `copy-ocr.mjs` et `copy-scan.mjs` du site, qui remplissent ces dossiers, tournent avant `desktop:dev` et `desktop:build` | Pas de films, pas de pages. Mesuré le 5 octobre : 41 Mo, dont 18 pour les trois cœurs Tesseract et leurs langues, 15 pour OpenCV et libheif, 7,5 pour l'appli ; contre 63 pour le site entier. Un seul cœur Tesseract viendra plus tard |
-| Polices | `main.tsx` pose les deux liens de préchargement (`preloadedFonts`, les mêmes fichiers hachés que `fonts.ts` importe) puis injecte `fontFaces` | `fonts.ts` n'exporte que des chaînes, c'est `Base.astro` qui les écrit, et un `index.html` statique ne lit pas un export ; avec `font-display: optional`, une police ratée au premier rendu manque toute la session, le préchargement l'évite |
-| Globaux | Passent dans `apps/web/src/styles/base.css`, importé par `Base.astro` et par l'appli : `box-sizing`, `body` (fond, encre, police), `button { font: inherit }`, `a` et `a:hover`, la transition de `:where(a, button, summary, label)`, `.scroll`, `.drop-overlay`, `.visually-hidden`, `:focus-visible`, les titres, `.highlight`, `.lift`, la règle « réduire les animations ». `.tool-glyph` (le tracé des icônes au trait) est pour l'instant copié dans `app.css`, à passer dans `base.css`. Restent dans `Base.astro` : `--nav-top`, `--nav-height` et ses valeurs au défilement, le `padding-top` du `body`, la largeur de `main`, `.tool-glyph`, la requête à 75 rem | Deux copies divergeraient en silence ; les boutons de la planche comptent sur la transition commune ; les règles de la barre du site ne concernent que lui |
-| Fumée | `--smoke` seul garde la page moteur ; `--smoke app` charge l'appli sous une sonde (`smoke/app-probe.js`) qui rapporte le monastère, ouvre Compresser par sa carte, rapporte l'écran d'outil, revient par le chevron et rapporte encore : trois rapports, chacun sans violation ni erreur ; `smoke:site` devient `smoke:app`. Codes 0, 1, 2 et 3 inchangés | Sans URL, la liste de pages de l'étape 1 n'a plus de sens ; les gestes de la sonde remplacent les liens |
+| Entry | `apps/desktop/app/index.html` and `App.tsx` (Preact), built by Vite into `dist-app`; `frontendDist` points there | An app composes the site's building blocks; it does not hide parts of the site |
+| Development server | `pnpm desktop:dev` starts the Vite server of this entry through `beforeDevCommand` (`devUrl`, port 1420, `cacheDir` under `apps/desktop`), after it copies the `ocr/` and `scan/` folders into the site's public folder, which Vite serves in development | A separate server leaves the site's `pnpm dev` alone, and the shell starts with one command |
+| What comes from the site | Imported by relative path from `apps/web/src`, like the smoke test page: board, editors, engine, illustrations, `tokens.css`, `fonts.ts`, dictionaries, `home/search.ts` | No copy. The shared package will come with Turborepo, after the `Packages/` vs `packages/` question ([roadmap](../product/roadmap.md)) |
+| Preact | `@preact/preset-vite` and `preact` in `apps/desktop`, at the site's exact version, `resolve.dedupe: ["preact"]`; `compat` like the site (`dnd-kit` imports `react`); `app/` goes into `tsconfig.json` with `jsxImportSource` | The smoke test page has no JSX; two copies of Preact would break the hooks |
+| What belongs to the app only | The monastery in Preact (`Monastery.tsx`: cards from `cast`, `toolNames`, `toolShort`, `monks`, `upcoming`), the title bar, the tool screen and its grid, the in-memory search, the native saver, the app texts, `app.css` | `ToolCard.astro`, `Pick.astro` and `filters.ts` are Astro and DOM code written for a page: to rewrite them in Preact costs less than to make them shareable, and the card fits in thirty lines |
+| Texts | Each text lives with the code that shows it, in French and English, under the site's rules (« vous », a non-breaking space inside « »): the app's own screens in `app/texts.ts`; the result page words and the write error in `i18n/fr.ts` and `en.ts`; the Scanner question in `scanner/texts.ts`; the menus in `lib.rs`. See "Texts" below | `Result` and the Scanner are site code, which imports nothing from the app; the menus are built in Rust before the page |
+| Navigation | One state in `App.tsx`: the monastery, or a tool. No router, no URL. The sidebar, the bar's ← chevron and ⌘[ go back to the monastery; the window title says "Holy PDF" or the tool name (`setTitle`). The board is mounted with `key={toolId}` | The Mac's navigation stack. The board does not read the URL; one key per tool guarantees a clean unmount |
+| Language and system | Rust reads the language (`sys-locale`) and the system (`std::env::consts::OS`) and gives them to the page through an initialization script (`window.__HOLY__ = { lang, os }`); `fr` if the language starts with `fr`, `en` otherwise | The menus are built in Rust and must be in the system language; in WKWebView, `navigator.language` is not guaranteed to follow the system |
+| Theme | `data-theme` follows `prefers-color-scheme`, live; no button | The `Base.astro` script is not there; an app follows the system. The manual choice comes with the preferences |
+| Window | Minimum 64 rem × 680 px (1,024 × 680), default 1,280 × 840; `window-state` plugin for the size and the position | Below 64 rem, the board goes back to its floating web page panel; an app comes back where you left it |
+| Sidebar | `Sidebar.tsx`, on the left under the title bar, 15 rem, stuck to the screen (`position: sticky`) and scrollable: "Monastery" at the top with the monk's avatar, then the five categories (`byCategory`, `t.categories`) and their tools, with line icon (`ToolIcon`) and short name (`toolShort`), the open tool highlighted (`aria-current`), the upcoming tool grayed out with "Soon". Visible from 80 rem (1,280 px, the default width); below that, it hides and the title bar chevron comes back | The Mac's source list (Finder, Mail): go from one brother to another without going back through the monastery (the author's request, 5 October, "like Stirling PDF"). Below 1,280 px, three columns (sidebar, table, panel) would crush the table |
+| Title bar | Mac: `title_bar_style: Overlay`, `hidden_title`, traffic lights offset; the app bar (52 px, `data-tauri-drag-region="deep"`) holds the chevron, the title and, on the right, the "Search a tool" field. Windows and Linux: system decorations, the same bar without the offset. `--nav-height` is 52 px, fixed | The integrated title bar is the most visible sign of a Mac app; with `deep`, the whole bar drags the window, not only its background. The board aligns its panel on `--nav-height` |
+| Menus | Rust, labels in the system language: the app menu (About; on Mac, Services, Hide, Hide Others, Show All; Quit), File (Open… ⌘O, Close ⌘W), Edit (Undo ⌘Z, Redo ⇧⌘Z, then Cut, Copy, Paste, Select All, predefined), Window, Help (Website, Source code, FAQ in the browser; Licenses in milestone 3). Open, Undo and Redo send an event to the page; Close and Quit are handled in Rust until milestone 2, where the guard will route them through the page | The predefined items have English labels. The predefined Undo sends `undo:` to WebKit, which the board does not hear: the app's item sends it to the active field (`execCommand`) or to the board, never to both. The Scanner already answers ⇧⌘Z. The predefined Quit asks no question |
+| External links | `on_navigation` accepts only the app origin and `devUrl`; `http(s)` and `mailto` go to the browser through `opener.open_url`, and any other scheme is blocked. `on_new_window` does the same for `window.open` | A link must never replace the app in its window; a dropped `file://` must not get out either |
+| Capabilities | `core:default` plus `core:window:allow-set-title` and `allow-start-dragging`; `dialog:default`; `fs:allow-read-file` and `fs:allow-write-file` (the paths chosen in a dialog enter the `fs` scope); `opener:default` (which covers "Show in Finder") plus `opener:allow-open-path` on `$HOME/**` and `/Volumes/**`; `window-state:default`. The guarded close of milestone 2 will add `allow-close` and `allow-destroy` | `core:window:default` has no setter permissions: the title and the bar drag need them. The `opener` scope is a fixed list in the capability, with no runtime additions like `fs`: the home folder and the external volumes cover what the save dialog offers |
+| CSP | Fixed policy in `tauri.conf.json`, with `dangerousDisableAssetCspModification`: `default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; connect-src 'self' ipc: http://ipc.localhost; worker-src 'self' blob:; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'`. `build.rs` no longer scans the site's inline scripts | The app entry has no inline script: Vite puts the scripts in files, and the hashes of step 1 have no purpose any more. The only inline style is the font style, which `main.tsx` injects and `'unsafe-inline'` allows |
+| Bundle size | `dist-app` = what Vite bundles (board, editors, engine: PDFium 4.6 MB, qpdf 2.2 MB, fonts) plus `ocr/`, `scan/` and `licenses/` copied from `apps/web/public` at the end of the build (`writeBundle`, `copyPublicDir: false`), because `tesseract.ts` and `scanWorker.ts` read them by absolute path on the origin. In development, `publicDir` points to `apps/web/public`. The site's `copy-ocr.mjs` and `copy-scan.mjs` scripts, which fill these folders, run before `desktop:dev` and `desktop:build` | No videos, no pages. Measured on 5 October: 41 MB, of which 18 for the three Tesseract cores and their languages, 15 for OpenCV and libheif, 7.5 for the app; against 63 for the whole site. A single Tesseract core will come later |
+| Fonts | `main.tsx` adds the two preload links (`preloadedFonts`, the same hashed files that `fonts.ts` imports), then injects `fontFaces` | `fonts.ts` exports only strings, `Base.astro` writes them, and a static `index.html` cannot read an export; with `font-display: optional`, a font missed at the first render is missing for the whole session, and the preload prevents that |
+| Globals | They move to `apps/web/src/styles/base.css`, imported by `Base.astro` and by the app: `box-sizing`, `body` (background, ink, font), `button { font: inherit }`, `a` and `a:hover`, the transition of `:where(a, button, summary, label)`, `.scroll`, `.drop-overlay`, `.visually-hidden`, `:focus-visible`, the headings, `.highlight`, `.lift`, the "reduce motion" rule. `.tool-glyph` (the stroke of the line icons) is copied into `app.css` for now, to move into `base.css` later. These stay in `Base.astro`: `--nav-top`, `--nav-height` and its values on scroll, the `body` `padding-top`, the `main` width, `.tool-glyph`, the 75 rem query | Two copies would drift apart silently; the board buttons rely on the shared transition; the site bar rules concern only the site |
+| Smoke test | `--smoke` alone keeps the engine page; `--smoke app` loads the app under a probe (`smoke/app-probe.js`) that reports the monastery, opens Compress through its card, reports the tool screen, goes back through the chevron and reports again: three reports, each with no violation and no error; `smoke:site` becomes `smoke:app`. Exit codes 0, 1, 2 and 3 unchanged | Without URLs, the page list of step 1 has no meaning any more; the probe's gestures replace the links |
 
-### La planche dans la coque
+### The board in the shell
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Écran d'outil | Le haut de page du site (nom de l'outil et son émoji, la phrase du moine), puis la planche. Dès que des documents sont ouverts (`main:has(.board)`, la condition du site), la grille `"head panel" auto "work panel" 1fr / minmax(0, 1fr) 27.5rem` de `[tool].astro` sans les sections du dessous. Sinon (planche vide, résultat, Scanner), une colonne. Le haut de page se compacte et la phrase se cache sous `.board` comme sous `.result`, la règle du site | Sans la condition, la carte vide, la page de résultat et le Scanner tomberaient à côté d'une colonne de panneau vide |
-| Recherche | ⌘F et ⌘K activent le champ. Sur le monastère, il filtre les cartes en direct ; Entrée ouvre le meilleur résultat. Sur un écran d'outil, il ouvre une palette flottante avec les mêmes résultats, Échap la ferme. Règles et mots de `home/search.ts` et `searchTexts` ; une demande faite de mots vides (« pdf », « le ») laisse le monastère en place, comme sur le site ; la construction de l'index, écrite aujourd'hui dans la route `search.json.ts`, passe dans `home/index.ts` que la route et l'appli appellent | Une seule source pour les mots, règle déjà posée pour le Mac. ⌘F est celui du Mac, ⌘K celui des applis de bureau d'aujourd'hui |
-| Props nouvelles de la planche | `files`, `saver`, `confirm` et `onDocumentChange`, toutes facultatives, avec leur valeur par défaut dans la planche | Astro ne passe pas de fonction à un îlot : le site monte la planche comme aujourd'hui |
-| Fichiers reçus par la planche | `files`, réactive : chaque nouveau tableau passe par `addFiles` ; un outil à un fichier remplace le sien, comme quand on en choisit un autre | Une prop lue au montage seul n'atteindrait pas une planche déjà à l'écran (⌘O sur un outil ouvert) |
-| Ce que la planche tient | `onDocumentChange({ files, unsaved })` : les fichiers du document courant (le résultat s'il existe, sinon les sources) et s'il reste un résultat non enregistré. Le Scanner y contribue avec son propre état. Un résultat passé à l'outil suivant sans avoir été enregistré reste `unsaved` | La coque fait suivre le document d'un outil à l'autre et garde la fermeture ; les sources seules seraient fausses après Compresser ; une copie jamais enregistrée ne doit pas se perdre en silence |
-| Le document suit | En changeant d'outil (palette, ou chevron puis carte), la coque donne à l'outil suivant les fichiers du document courant qu'il accepte (`accepts`, `multipleFiles`) ; un outil qui n'en accepte aucun part vide. « Retour » et « Recommencer » dans la planche abandonnent le résultat sans question, comme sur le site | Sur le bureau on travaille un document : compresser, puis signer la copie |
-| Nettoyage au démontage | La planche ferme ses documents du moteur et la couche de superposition, et oublie ses vignettes, quand elle se démonte | Le site repart de zéro à chaque page ; l'appli ne recharge jamais. Aujourd'hui les documents ne se ferment que dans `addFiles`, `remove` et `startOver` |
-| Enregistreur | `board/deliver.ts` définit un enregistreur : `kind` (`download` ou `save`) et `save(bytes, name, type)`, qui rend l'une de trois issues, enregistré à un chemin, téléchargé, ou annulé ; par défaut, le téléchargement actuel. La planche le reçoit en prop (`saver`) et le passe à `Result` et au Scanner, qui enregistre par lui aussi ; le mot des boutons suit `kind` (« Télécharger » ou « Enregistrer… ») | Sans gestionnaire, wry annule le lien `<a download>`, celui de `download.ts` comme celui du Scanner. Un dialogue annulé n'est pas un téléchargement : `unsaved`, « Enregistré » et l'état enregistré du Scanner en dépendent. Le Scanner ne doit pas importer le lot de la planche (`ScannerApp.tsx`) : une prop, comme le moteur et le squelette qu'il reçoit déjà |
-| Enregistrer dans la coque | L'enregistreur de la coque : dialogue `save` du greffon `dialog`, nom proposé par la planche (`fileName.ts`), dernier dossier mémorisé (Documents au début), écriture par `fs.writeFile`, chemin rendu. Plusieurs fichiers restent un zip, un seul dialogue | Un dialogue depuis Rust dans `on_download` bloquerait la boucle principale |
-| Après l'enregistrement | La page de résultat montre « Enregistré », le nom du fichier, « Ouvrir » (`opener.openPath`) et « Afficher dans le Finder » (`revealItemInDir`). Une erreur d'écriture s'affiche sur la ligne d'indication de la page de résultat (celle des erreurs d'aujourd'hui), avec un texte nouveau | Le geste du Mac après chaque copie ; le moine de la page de résultat a une humeur fixe |
-| « Voir » avant d'enregistrer | Le même aperçu que celui des vignettes de la planche, dans la page : les PDF produits sont rouverts dans le moteur le temps de l'aperçu, fichier par fichier pour Diviser, les JPEG montrés tels quels. Sur chaque résultat sauf Word, à côté d'« Enregistrer… ». Aucun greffon, aucune écriture : la capacité n'ouvre pas `$TEMP` | `window.open` ne fait rien dans WKWebView, et ni un onglet ni Aperçu ne montrent un ZIP ; regarder un résultat avant de l'enregistrer est un geste normal d'appli (demandes de l'auteur, 5 octobre) |
-| Questions du Scanner | Un dialogue de la planche à message et deux libellés (`ConfirmDialog`, rendu avec chaque écran de la planche, qui s'en sert aussi pour sa question des images sur Fusionner), donné au Scanner en prop (`confirm`) comme l'enregistreur ; ses deux `confirm()` l'utilisent, avec les libellés de chaque question dans `scanner/texts.ts` (la question avant d'enregistrer suit `kind` : « Télécharger quand même ? » ou « Enregistrer quand même ? », Annuler / Télécharger ou Enregistrer) | wry n'affiche pas `confirm()` sur Mac : la question ne s'affiche pas et la réponse est « non ». `RemoveDialog` de la planche est lié à un document et à ses deux libellés |
-| Ouvrir par le bouton | Le bouton de la planche garde son `<input type=file>` : dans WKWebView, wry ouvre le panneau natif (sans tenir compte de `accept`) | Rien à changer |
-| Ouvrir par ⌘O | ⌘O et Fichier › Ouvrir… passent par le greffon `dialog` (filtres selon l'outil ouvert : PDF ; JPEG, PNG, HEIC ; PDF, JPEG, PNG sur Fusionner ; tout sur le monastère), puis `fs.readFile`, et donnent les fichiers à la planche par `files` ou, sur le monastère, à l'état « fichiers arrivés » | Un `click()` sur l'entrée de fichier depuis un menu n'a pas de geste utilisateur |
-| Dépôt | La coque appelle `disable_drag_drop_handler()`. Sur un écran d'outil, le dépôt arrive à `useFileDrop` comme sur le site ; sur le monastère, `App.tsx` appelle `useFileDrop` lui-même et dessine le voile | Tauri intercepte le dépôt et ne donne que des chemins, Mac compris ; la planche attend des `File`. Seule la planche empêche aujourd'hui la navigation du navigateur vers le fichier lâché, et le voile vient de `Base.astro` |
-| Fichiers arrivés sur le monastère | Quand des fichiers arrivent (dépôt, ⌘O, double-clic) ou quand le chevron revient avec un document ouvert : sous le titre, « 3 fichiers prêts. Choisissez un outil. » et « Changer de fichiers » ; les cartes qui n'acceptent pas ces fichiers sont grisées (`aria-disabled`, dans l'ordre du clavier mais sans effet). Une carte ouvre son outil avec les fichiers qu'il accepte ; ⌘O depuis un outil donne tout à la planche, qui dit elle-même ce qu'elle refuse | Le monastère oriente, comme l'ancienne zone de dépôt de l'accueil du site |
-| Double-clic | `bundle.fileAssociations` (PDF, JPEG, PNG, HEIC) avec `rank: "Alternate"`. Mac : `RunEvent::Opened { urls }` ; Windows et Linux : les arguments, et le greffon `single-instance` relaie ceux d'un second lancement. Rust ajoute chaque chemin au périmètre `fs` et le garde jusqu'à ce que la page le demande (`invoke("take_opened")` au démarrage, puis un événement). Un outil ouvert qui accepte ces fichiers les reçoit par `files` ; sinon ils vont au monastère | L'appli ne doit pas devenir le lecteur de PDF par défaut ; les chemins hors dialogue ne sont pas dans le périmètre `fs` ; un lancement à froid livre le fichier avant que la page écoute |
-| Garde à la fermeture | Fermer (⌘W, bouton rouge : `onCloseRequested`) et Quitter (⌘Q, entrée de l'appli) demandent « Le résultat de Compresser n'est pas enregistré. » (Garder / Quitter) quand `unsaved` est vrai ; sinon la fenêtre se ferme et l'appli quitte | Le Mac avait cette garde ; `beforeunload` du Scanner ne s'affiche pas dans WKWebView |
-| Garde au changement d'outil | La barre latérale, le chevron puis une carte, ou la palette, ne demandent rien quand l'outil suivant prend le résultat : il suit. Quand il ne le prend pas, « Le résultat de Compresser n'est pas enregistré. » (Rester / Changer d'outil) | Compresser puis Signer est le parcours normal, pas une perte ; la question ne vient que si le résultat serait abandonné |
+| Tool screen | The site's page header (tool name and its emoji, the monk's sentence), then the board. As soon as documents are open (`main:has(.board)`, the site's condition), the `"head panel" auto "work panel" 1fr / minmax(0, 1fr) 27.5rem` grid of `[tool].astro`, without the sections below. Otherwise (empty board, result, Scanner), one column. The page header becomes compact and the sentence hides under `.board` as under `.result`, the site's rule | Without the condition, the empty card, the result page and the Scanner would sit next to an empty panel column |
+| Search | ⌘F and ⌘K focus the field. On the monastery, it filters the cards live; Return opens the best result. On a tool screen, it opens a floating palette with the same results, and Escape closes it. Rules and words from `home/search.ts` and `searchTexts`; a query made only of stop words (« pdf », « le ») leaves the monastery in place, as on the site; the index build, written today in the `search.json.ts` route, moves into `home/index.ts`, which the route and the app call | One source for the words, a rule already set for the Mac. ⌘F is the Mac's shortcut, ⌘K the shortcut of today's desktop apps |
+| New board props | `files`, `saver`, `confirm` and `onDocumentChange`, all optional, with their default value in the board | Astro does not pass a function to an island: the site mounts the board as today |
+| Files received by the board | `files`, reactive: each new array goes through `addFiles`; a one-file tool replaces its file, as when you choose another one | A prop read only at mount would not reach a board already on screen (⌘O on an open tool) |
+| What the board holds | `onDocumentChange({ files, unsaved })`: the files of the current document (the result if it exists, otherwise the sources) and whether an unsaved result remains. The Scanner contributes its own state. A result passed to the next tool without being saved stays `unsaved` | The shell carries the document from one tool to the next and guards the close; the sources alone would be wrong after Compress; a copy never saved must not get lost silently |
+| The document follows | When you change tools (palette, or chevron then card), the shell gives the next tool the files of the current document that it accepts (`accepts`, `multipleFiles`); a tool that accepts none of them starts empty. The board's back and start-over buttons drop the result without a question, as on the site | On the desktop you work on a document: compress, then sign the copy |
+| Cleanup on unmount | When it unmounts, the board closes its engine documents and the overlay layer, and forgets its thumbnails | The site starts from zero on each page; the app never reloads. Today the documents close only in `addFiles`, `remove` and `startOver` |
+| Saver | `board/deliver.ts` defines a saver: `kind` (`download` or `save`) and `save(bytes, name, type)`, which returns one of three outcomes: saved at a path, downloaded, or cancelled; by default, the current download. The board receives it as a prop (`saver`) and passes it to `Result` and to the Scanner, which also saves through it; the button wording follows `kind` ("Download" or "Save…") | Without a handler, wry cancels the `<a download>` link, the one in `download.ts` as well as the Scanner's. A cancelled dialog is not a download: `unsaved`, "Saved" and the Scanner's saved state depend on it. The Scanner must not import the board's chunk (`ScannerApp.tsx`): a prop, like the engine and the skeleton it already receives |
+| Saving in the shell | The shell's saver: the `save` dialog of the `dialog` plugin, name suggested by the board (`fileName.ts`), last folder remembered (Documents at first), write through `fs.writeFile`, path returned. Several files stay a zip, with one dialog | A dialog from Rust in `on_download` would block the main loop |
+| After saving | The result page shows "Saved", the file name, "Open" (`opener.openPath`) and "Show in Finder" (`revealItemInDir`). A write error shows on the hint line of the result page (the line used for errors today), with a new text | The Mac's gesture after each copy; the monk of the result page has a fixed mood |
+| "View" before saving | The same preview as the board's thumbnail preview, in the page: the produced PDFs are reopened in the engine for the time of the preview, file by file for Split, and the JPEGs are shown as they are. On each result except Word, next to "Save…". No plugin, no write: the capability does not open `$TEMP` | `window.open` does nothing in WKWebView, and neither a tab nor Preview shows a ZIP; to look at a result before you save it is a normal app gesture (the author's requests, 5 October) |
+| Scanner questions | A board dialog with a message and two labels (`ConfirmDialog`, rendered with each board screen; the board also uses it for its images question on Merge), given to the Scanner as a prop (`confirm`) like the saver; its two `confirm()` calls use it, with the labels of each question in `scanner/texts.ts` (the question before saving follows `kind`: "Download anyway?" or "Save anyway?", Cancel / Download or Save) | wry does not show `confirm()` on Mac: the question does not show and the answer is "no". The board's `RemoveDialog` is tied to a document and to its two labels |
+| Open with the button | The board button keeps its `<input type=file>`: in WKWebView, wry opens the native panel (it ignores `accept`) | Nothing to change |
+| Open with ⌘O | ⌘O and File › Open… go through the `dialog` plugin (filters by the open tool: PDF; JPEG, PNG, HEIC; PDF, JPEG, PNG on Merge; everything on the monastery), then `fs.readFile`, and give the files to the board through `files` or, on the monastery, to the "files arrived" state | A `click()` on the file input from a menu has no user gesture |
+| Drop | The shell calls `disable_drag_drop_handler()`. On a tool screen, the drop reaches `useFileDrop` as on the site; on the monastery, `App.tsx` calls `useFileDrop` itself and draws the overlay | Tauri intercepts the drop and gives only paths, Mac included; the board expects `File` objects. Today only the board prevents the browser from navigating to the dropped file, and the overlay comes from `Base.astro` |
+| Files arrived on the monastery | When files arrive (drop, ⌘O, double-click) or when the chevron comes back with an open document: under the title, "3 files ready. Pick a tool." and "Change files"; the cards that do not accept these files are grayed out (`aria-disabled`, in the keyboard order but with no effect). A card opens its tool with the files it accepts; ⌘O from a tool gives everything to the board, which itself says what it refuses | The monastery guides, like the old drop zone of the site's home page |
+| Double-click | `bundle.fileAssociations` (PDF, JPEG, PNG, HEIC) with `rank: "Alternate"`. Mac: `RunEvent::Opened { urls }`; Windows and Linux: the arguments, and the `single-instance` plugin relays those of a second launch. Rust adds each path to the `fs` scope and keeps it until the page asks for it (`invoke("take_opened")` at startup, then an event). An open tool that accepts these files receives them through `files`; otherwise they go to the monastery | The app must not become the default PDF reader; paths that do not come from a dialog are not in the `fs` scope; a cold launch delivers the file before the page listens |
+| Guard on close | Close (⌘W, red button: `onCloseRequested`) and Quit (⌘Q, app menu item) ask "The result of Compress is not saved." (Keep / Quit) when `unsaved` is true; otherwise the window closes and the app quits | The Mac had this guard; the Scanner's `beforeunload` does not show in WKWebView |
+| Guard on tool change | The sidebar, the chevron then a card, or the palette ask nothing when the next tool takes the result: it follows. When the next tool does not take it, "The result of Compress is not saved." (Stay / Switch tool) | Compress then Sign is the normal path, not a loss; the question comes only if the result would be dropped |
 
-### Écarté
+### Rejected
 
-| Option | Raison |
+| Option | Reason |
 |---|---|
-| Cacher les sections du site par CSS (`data-desktop`) | Les textes restent dans le DOM, le modèle page par outil et les 63 Mo aussi ; l'effet « site embarqué » resterait |
-| Une barre latérale permanente des outils | Écartée le matin du 5 octobre (trois colonnes ne tiennent pas dans 1 024 px), rouverte le soir à la demande de l'auteur : voir « Barre latérale » dans les décisions. Elle n'est permanente qu'à partir de la largeur par défaut de la fenêtre |
-| Rendre `ToolCard.astro` partageable | Une carte Preact de trente lignes contre une migration des pages du site |
-| Un enregistreur en module partagé (`setSaver`) | Le Scanner devrait importer le lot de la planche, que `ScannerApp.tsx` interdit |
+| Hide the site sections with CSS (`data-desktop`) | The texts stay in the DOM, and so do the page-per-tool model and the 63 MB; the "embedded site" effect would remain |
+| A permanent sidebar of the tools | Rejected on the morning of 5 October (three columns do not fit in 1,024 px), reopened in the evening at the author's request: see "Sidebar" in the decisions. It is permanent only from the default window width |
+| Make `ToolCard.astro` shareable | A thirty-line Preact card against a migration of the site pages |
+| A saver in a shared module (`setSaver`) | The Scanner would have to import the board's chunk, which `ScannerApp.tsx` forbids |
 
-## Écrans
+## Screens
 
-### Le monastère
+### The monastery
 
-- **Barre** : à gauche, rien (les feux sur Mac) ; au centre, « Holy PDF » ; à droite, le champ « Chercher un outil ». Toute la barre déplace la fenêtre.
-- **Haut** : le titre en Bricolage, surligné comme le Mac, et la phrase de confiance. Pas de tampon, pas de zone de dépôt dessinée : la fenêtre entière reçoit les fichiers, avec le voile « Lâchez, je m'en occupe. ».
-- **Les catégories** : Organiser, Convertir, Modifier, Optimiser, Sécurité, dans l'ordre et avec les noms du site (`cast.ts`, `categories`). Chaque carte reprend la carte du site : bandeau de 150 px sur la teinte de la catégorie avec le moine (112 px) et sa scène, le nom du moine en légende, le nom de l'outil, une phrase. Toute la carte est un bouton ; au survol, elle se soulève comme sur le site (`.lift`). Grille adaptative, trois cartes par rangée à 1 024 px comme à 1 280 px (la barre latérale prend 15 rem), quatre à partir d'environ 1 424 px.
-- **Bientôt** : l'outil à venir (`upcomingIds`) sous sa catégorie, l'icône au trait de l'outil et l'étiquette « Bientôt · en méditation », comme la carte du site, non cliquable.
-- **Recherche** : dès un mot utile, les catégories laissent la place aux moines trouvés, du meilleur au moins bon, avec la ligne « 3 moines · « réduire » → Compresser » du site. Rien trouvé : « Aucun moine ne fait ça… pour l'instant », la phrase du site et « Voir tous les moines ».
-- **Fichiers arrivés** (dépôt, ⌘O, double-clic) : l'état décrit plus haut.
+- **Bar**: on the left, nothing (the traffic lights on Mac); in the center, "Holy PDF"; on the right, the "Search a tool" field. The whole bar moves the window.
+- **Top**: the title in Bricolage, highlighted like the Mac, and the trust sentence. No stamp, no drawn drop zone: the whole window receives the files, with the "Let go, I'll take care of them." overlay.
+- **The categories**: Organize, Convert, Edit, Optimize, Security, in this order and with the site's names (`cast.ts`, `categories`). Each card reuses the site card: a 150 px band in the category tint with the monk (112 px) and his scene, the monk's name as a caption, the tool name, one sentence. The whole card is a button; on hover, it lifts as on the site (`.lift`). Adaptive grid: three cards per row at 1,024 px as at 1,280 px (the sidebar takes 15 rem), four from about 1,424 px.
+- **Soon**: the upcoming tool (`upcomingIds`) under its category, with the tool's line icon and the "Soon · in meditation" tag, like the site card, not clickable.
+- **Search**: as soon as there is one useful word, the categories give way to the monks found, from the best match to the worst, with the site's line "3 monks · “reduce” → Compress". Nothing found: "No monk does that… yet", the site's sentence and "See all the monks".
+- **Files arrived** (drop, ⌘O, double-click): the state described above.
 
-### L'écran d'outil
+### The tool screen
 
-- **Barre** : le chevron ← « Monastère » (sous 80 rem ; au-delà, la barre latérale le remplace), le nom de l'outil, le champ de recherche (palette).
-- **Haut de page** : le nom de l'outil et son émoji en titre, la phrase du moine (`monks[id].intro`), alignés à gauche, compacts : le haut de page du site en mode atelier, où la phrase se cache dès que des documents sont ouverts.
-- **La planche** : vide, c'est la carte en pointillés du site avec son moine et son bouton « Choisir des PDF » ; avec des documents, la table à gauche et le panneau à droite, collé au bord droit sous la barre, comme l'atelier du site. Rien sous la planche : ni « Comment faire », ni FAQ, ni autres moines.
-- **Résultat** : la page de résultat du site, avec « Enregistrer… » en bouton principal et « Voir » à côté (l'aperçu dans la page, fichier par fichier). Une fois enregistré : « Enregistré », le nom du fichier, « Ouvrir », « Afficher dans le Finder ». « Retour » revient à la table avec les fichiers.
-- **Changer d'outil** avec un document ouvert : par la barre latérale, la palette, ou le chevron puis une carte. Les fichiers acceptés par l'outil suivant l'y attendent ; si l'outil suivant ne prend pas un résultat non enregistré, la question « Rester / Changer d'outil » se pose.
+- **Bar**: the ← "Monastery" chevron (below 80 rem; above, the sidebar replaces it), the tool name, the search field (palette).
+- **Page header**: the tool name and its emoji as the title, the monk's sentence (`monks[id].intro`), aligned left, compact: the site's page header in workshop mode, where the sentence hides as soon as documents are open.
+- **The board**: when empty, it is the site's dashed card with its monk and its "Choose PDF files" button; with documents, the table on the left and the panel on the right, stuck to the right edge under the bar, like the site's workshop. Nothing under the board: no "How to do it", no FAQ, no other monks.
+- **Result**: the site's result page, with "Save…" as the main button and "View" next to it (the preview in the page, file by file). Once saved: "Saved", the file name, "Open", "Show in Finder". The back button returns to the table with the files.
+- **Change tools** with an open document: through the sidebar, the palette, or the chevron then a card. The files that the next tool accepts wait for you there; if the next tool does not take an unsaved result, the "Stay / Switch tool" question comes up.
 
-### Enregistrer
+### Saving
 
-1. « Enregistrer… » ouvre le dialogue natif, dans le dernier dossier utilisé (ou Documents), avec le nom que la planche donne au téléchargement sur le site.
-2. L'écriture passe par `fs.writeFile`. Une erreur (dossier en lecture seule, disque plein) s'affiche sur la ligne d'indication de la page de résultat : « L'enregistrement a échoué : » et la raison donnée par le système.
-3. Le chemin enregistré sert à « Ouvrir » et « Afficher dans le Finder ».
-4. Plusieurs fichiers (Diviser, PDF en JPG) : un zip, un dialogue. Un dossier de sortie avec des fichiers numérotés, comme le Mac, vient au lot 2.
-5. Le Scanner enregistre par le même enregistreur, avec son nom actuel.
+1. "Save…" opens the native dialog, in the last folder used (or Documents), with the name the board gives the download on the site.
+2. The write goes through `fs.writeFile`. An error (read-only folder, full disk) shows on the hint line of the result page: "Saving failed:" and the reason the system gives.
+3. The saved path serves "Open" and "Show in Finder".
+4. Several files (Split, PDF to JPG): one zip, one dialog. An output folder with numbered files, like the Mac, comes in milestone 2.
+5. The Scanner saves through the same saver, with its current name.
 
-## Textes
+## Texts
 
-Français puis anglais, chacun dans le fichier du code qui l'affiche :
+French then English, each in the file of the code that shows it:
 
-| Où | Clé | Français | Anglais |
+| Where | Key | French | English |
 |---|---|---|---|
-| `app/texts.ts` | Titre du monastère, Mac | « Vos PDF, sur votre Mac 🙏 » (« sur votre Mac » surligné) | "Your PDFs, on your Mac 🙏" |
-| `app/texts.ts` | Titre, Windows | « Vos PDF, sur votre PC 🙏 » | "Your PDFs, on your PC 🙏" |
-| `app/texts.ts` | Titre, Linux | « Vos PDF, sur votre ordinateur 🙏 » | "Your PDFs, on your computer 🙏" |
-| `app/texts.ts` | Phrase de confiance | « Tout est traité ici : rien n'est envoyé. » | "Everything happens here: nothing is sent." |
+| `app/texts.ts` | Monastery title, Mac | « Vos PDF, sur votre Mac 🙏 » (« sur votre Mac » surligné) | "Your PDFs, on your Mac 🙏" |
+| `app/texts.ts` | Title, Windows | « Vos PDF, sur votre PC 🙏 » | "Your PDFs, on your PC 🙏" |
+| `app/texts.ts` | Title, Linux | « Vos PDF, sur votre ordinateur 🙏 » | "Your PDFs, on your computer 🙏" |
+| `app/texts.ts` | Trust sentence | « Tout est traité ici : rien n'est envoyé. » | "Everything happens here: nothing is sent." |
 | `app/texts.ts` | Chevron | « Monastère » | "Monastery" |
-| `app/texts.ts` | Fichiers arrivés | « 3 fichiers prêts. Choisissez un outil. », « Changer de fichiers » | "3 files ready. Pick a tool.", "Change files" |
-| `app/texts.ts` | Garde | « Le résultat de Compresser n'est pas enregistré. », « Garder », « Quitter », « Rester », « Changer d'outil » | "The result of Compress is not saved.", "Keep", "Quit", "Stay", "Switch tool" |
-| `i18n/fr.ts`, `en.ts` | Page de résultat | « Enregistrer… », « Enregistré », « Ouvrir », « Afficher dans le Finder » (« dans l'Explorateur », « dans le dossier » sur Linux) | "Save…", "Saved", "Open", "Show in Finder" ("in Explorer", "in folder") |
-| `i18n/fr.ts`, `en.ts` | Erreur d'écriture | « L'enregistrement a échoué : » | "Saving failed:" |
-| `scanner/texts.ts` | Question avant d'enregistrer | « Enregistrer quand même ? », « Annuler », « Enregistrer » | "Save anyway?", "Cancel", "Save" |
+| `app/texts.ts` | Files arrived | « 3 fichiers prêts. Choisissez un outil. », « Changer de fichiers » | "3 files ready. Pick a tool.", "Change files" |
+| `app/texts.ts` | Guard | « Le résultat de Compresser n'est pas enregistré. », « Garder », « Quitter », « Rester », « Changer d'outil » | "The result of Compress is not saved.", "Keep", "Quit", "Stay", "Switch tool" |
+| `i18n/fr.ts`, `en.ts` | Result page | « Enregistrer… », « Enregistré », « Ouvrir », « Afficher dans le Finder » (« dans l'Explorateur », « dans le dossier » sur Linux) | "Save…", "Saved", "Open", "Show in Finder" ("in Explorer", "in folder") |
+| `i18n/fr.ts`, `en.ts` | Write error | « L'enregistrement a échoué : » | "Saving failed:" |
+| `scanner/texts.ts` | Question before saving | « Enregistrer quand même ? », « Annuler », « Enregistrer » | "Save anyway?", "Cancel", "Save" |
 | `lib.rs` | Menus | « Fichier », « Ouvrir… », « Fermer », « Édition », « Annuler », « Rétablir », « Couper », « Copier », « Coller », « Tout sélectionner », « Fenêtre », « Réduire », « Aide », « Site », « Code source », « Questions fréquentes », « À propos de Holy PDF », « Services », « Masquer Holy PDF », « Masquer les autres », « Tout afficher », « Quitter Holy PDF » | "File", "Open…", "Close", "Edit", "Undo", "Redo", "Cut", "Copy", "Paste", "Select All", "Window", "Minimize", "Help", "Website", "Source code", "FAQ", "About Holy PDF", "Services", "Hide Holy PDF", "Hide Others", "Show All", "Quit Holy PDF" |
 
-Le reste vient du site quand le site l'a déjà (« Chercher un outil », « Aucun moine ne fait ça… pour l'instant », « Voir tous les moines », « Lâchez, je m'en occupe. », les noms et les phrases des outils).
+The rest comes from the site when the site already has it ("Search a tool", "No monk does that… yet", "See all the monks", "Let go, I'll take care of them.", the tool names and sentences).
 
 ## Structure
 
 ```
 apps/desktop/
   app/
-    index.html        #app et le script main.tsx
-    main.tsx          lit window.__HOLY__, pose lang et data-theme, précharge et injecte les polices, monte App
-    App.tsx           l'état d'écran, le document qui suit, les événements des menus, la garde, le dépôt du monastère
-    Titlebar.tsx      chevron (sous 80 rem), titre, champ de recherche et palette
-    Sidebar.tsx       la liste de sources : Monastère, thématiques et outils, l'outil ouvert en surbrillance
-    Monastery.tsx     catégories, cartes, moine endormi, résultats, fichiers arrivés
-    ToolScreen.tsx    haut de page, grille de l'atelier sous condition, Board avec key, files, saver, onDocumentChange
-    saver.ts          dialog, fs, opener : l'enregistreur de la coque
-    files.ts          les fichiers qu'un outil accepte (par le nom : un fichier lu depuis un chemin n'a pas de type)
-    shell.ts          ce que Rust a donné : langue, système
-    texts.ts          les textes de l'appli, fr et en
-    app.css           barre, grille, monastère, sur les tokens du site
-  smoke/app-probe.js  la sonde de `--smoke app`
-  vite.config.ts      deux modes (app, smoke), preset Preact, publicDir du site en dev, copie de ocr/, scan/, licenses/ à la construction
+    index.html        #app and the main.tsx script
+    main.tsx          reads window.__HOLY__, sets lang and data-theme, preloads and injects the fonts, mounts App
+    App.tsx           the screen state, the document that follows, the menu events, the guard, the monastery drop
+    Titlebar.tsx      chevron (below 80 rem), title, search field and palette
+    Sidebar.tsx       the source list: Monastery, categories and tools, the open tool highlighted
+    Monastery.tsx     categories, cards, sleeping monk, results, files arrived
+    ToolScreen.tsx    page header, workshop grid under a condition, Board with key, files, saver, onDocumentChange
+    saver.ts          dialog, fs, opener: the shell's saver
+    files.ts          the files a tool accepts (by name: a file read from a path has no type)
+    shell.ts          what Rust gave: language, system
+    texts.ts          the app texts, fr and en
+    app.css           bar, grid, monastery, on the site's tokens
+  smoke/app-probe.js  the `--smoke app` probe
+  vite.config.ts      two modes (app, smoke), Preact preset, the site's publicDir in dev, copy of ocr/, scan/, licenses/ at build time
   tsconfig.json       + app/, jsxImportSource preact
   src-tauri/
-    build.rs          tauri_build::build() seul
-    src/lib.rs        langue et système, barre de titre, menus, on_navigation, on_new_window, dépôt natif coupé, fumée ; Opened et take_opened au lot 2
+    build.rs          tauri_build::build() only
+    src/lib.rs        language and system, title bar, menus, on_navigation, on_new_window, native drop off, smoke test; Opened and take_opened in milestone 2
     capabilities/default.json
-    tauri.conf.json   frontendDist ../dist-app, devUrl 1420, csp fixe, plugins ; fileAssociations au lot 2
+    tauri.conf.json   frontendDist ../dist-app, devUrl 1420, fixed csp, plugins; fileAssociations in milestone 2
 apps/web/src/
-  styles/base.css     les globaux sortis de Base.astro
-  layouts/Base.astro  importe base.css, garde les règles de la barre
-  board/Board.tsx     props facultatives files, saver, confirm, onDocumentChange ; nettoyage au démontage
-  board/deliver.ts    le type de l'enregistreur, ses trois issues, le téléchargement par défaut
-  board/Result.tsx    Télécharger ou Enregistrer… selon kind, Enregistré, Ouvrir, Afficher, ligne d'erreur
-  board/ConfirmDialog.tsx   message et deux libellés
-  scanner/            saver et confirm en props, plus de confirm() ni de lien de téléchargement ; scanner/texts.ts
-  home/index.ts       la construction de l'index, appelée par search.json.ts et par l'appli
-  i18n/fr.ts, en.ts   les mots de la page de résultat et l'erreur d'écriture
+  styles/base.css     the globals taken out of Base.astro
+  layouts/Base.astro  imports base.css, keeps the bar rules
+  board/Board.tsx     optional props files, saver, confirm, onDocumentChange; cleanup on unmount
+  board/deliver.ts    the saver type, its three outcomes, the default download
+  board/Result.tsx    Download or Save… by kind, Saved, Open, Show, error line
+  board/ConfirmDialog.tsx   message and two labels
+  scanner/            saver and confirm as props, no more confirm() or download link; scanner/texts.ts
+  home/index.ts       the index build, called by search.json.ts and by the app
+  i18n/fr.ts, en.ts   the result page words and the write error
 ```
 
-## Lots
+## Milestones
 
-1. **La coque** : l'entrée, Preact, le monastère et son dépôt, l'écran d'outil, la barre, les menus et ⌘O, la recherche, la langue et le système, le thème, la fenêtre mémorisée, les liens externes, l'enregistreur (page de résultat et Scanner), le dialogue du Scanner, le nettoyage au démontage, `base.css`, les polices, la CSP fixe, la fumée `app`, la copie des dossiers, la mesure du poids. À la fin du lot, on ouvre un PDF par le bouton, par ⌘O ou par dépôt, on le travaille, on enregistre la copie et on l'ouvre : l'appli est utilisable.
-2. **Les fichiers** : le double-clic, « Ouvrir avec » et le second lancement, le document qui suit d'un outil à l'autre (le Scanner annonce alors ses pages, pas toutes les photos reçues), la garde à la fermeture, le dossier de sortie pour Diviser et PDF en JPG, et le worker du Scanner terminé au démontage (il fuit à chaque visite, sur le site comme dans la coque).
-3. **La distribution** : le lot 3 de la [spec Tauri](2026-10-05-desktop-tauri-design.md) (mise à jour, signature, vente), Aide › Licences (les textes de `licenses/` dans un panneau de l'appli), puis les vérifications sur Windows et Linux.
+1. **The shell**: the entry, Preact, the monastery and its drop, the tool screen, the bar, the menus and ⌘O, the search, the language and the system, the theme, the remembered window, the external links, the saver (result page and Scanner), the Scanner dialog, the cleanup on unmount, `base.css`, the fonts, the fixed CSP, the `app` smoke test, the folder copy, the size measurement. At the end of the milestone, you open a PDF with the button, with ⌘O or by drop, you work on it, you save the copy and you open it: the app is usable.
+2. **The files**: the double-click, "Open With" and the second launch, the document that follows from one tool to the next (the Scanner then announces its pages, not all the photos it received), the guard on close, the output folder for Split and PDF to JPG, and the Scanner worker terminated on unmount (it leaks on each visit, on the site as in the shell).
+3. **Distribution**: milestone 3 of the [Tauri spec](2026-10-05-desktop-tauri-design.md) (updates, signing, sales), Help › Licenses (the texts of `licenses/` in an app panel), then the checks on Windows and Linux.
 
-## Limites connues
+## Known limits
 
-- Plusieurs fichiers sortent en zip au lot 1.
-- Pas de fichiers récents, pas d'enregistrement sur place, pas de préférences.
-- La langue et le thème suivent le système seulement.
-- La fenêtre fermée quitte l'appli (le Mac la gardait ouverte en arrière-plan).
-- Quitter depuis le Dock ne pose pas la question de la garde : macOS termine l'appli sans passer par la page.
-- Au lot 1, « Fermer » et « Quitter » ne posent pas encore la question de la garde, et le document ne suit pas encore d'un outil à l'autre : la planche les annonce (`onDocumentChange`), la coque ne les écoute qu'au lot 2. Changer d'outil par la barre latérale, la palette ou le chevron abandonne donc un résultat non enregistré sans question.
-- « Ouvrir » et « Afficher dans le Finder » ne marchent que sous le dossier personnel et `/Volumes` : ailleurs, l'erreur s'affiche sur la ligne de la page de résultat alors que le fichier est bien enregistré.
+- Several files come out as a zip in milestone 1.
+- No recent files, no saving in place, no preferences.
+- The language and the theme follow the system only.
+- Closing the window quits the app (the Mac app kept running in the background).
+- Quit from the Dock does not ask the guard question: macOS ends the app without going through the page.
+- In milestone 1, "Close" and "Quit" do not ask the guard question yet, and the document does not follow from one tool to the next yet: the board announces them (`onDocumentChange`), but the shell listens to them only in milestone 2. So a tool change through the sidebar, the palette or the chevron drops an unsaved result without a question.
+- "Open" and "Show in Finder" work only under the home folder and `/Volumes`: elsewhere, the error shows on the result page line, even though the file is saved.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Site, unitaires | Les tests du site tournent sans DOM : la logique nouvelle est dans des fonctions pures. `documentOf` donne les sources tant que rien n'est fait, puis le résultat en fichiers, `unsaved` tant qu'il n'est pas enregistré ; `release` ferme chaque document et la couche dans un moteur factice et révoque les aperçus ; l'enregistreur par défaut télécharge et rend « téléchargé » ; `searchIndex` liste chaque outil, prêts d'abord, avec noms, mots et libellé. Le reste (props de la planche, `Result`, le Scanner et son dialogue) est couvert par les parcours e2e | `apps/web/tests/unit/document.test.ts`, `deliver.test.ts`, `searchIndex.test.ts` |
-| Site, e2e | Les parcours existants passent avec `base.css`, l'enregistreur par défaut et le dialogue du Scanner | `pnpm verify` |
-| Appli, types | `tsc --noEmit` sur `app/` et `smoke/` | `pnpm --filter @holy-pdf/desktop check` |
-| Appli, fumée | Page moteur ; puis le monastère, Compresser par sa carte, retour, sans violation ni erreur | `pnpm desktop:smoke` |
-| À la main | Ouvrir par ⌘O, par dépôt sur le monastère et sur un outil, par double-clic ; enregistrer, Ouvrir, Afficher dans le Finder ; le Scanner enregistre et pose sa question ; mode sombre ; fenêtre retrouvée ; un lien externe part dans le navigateur ; ⌘Q avec un résultat non enregistré ; Compresser puis Signer sans question, puis Compresser puis JPG en PDF avec la question ; ⌘Z dans un champ de texte annule la frappe, ⌘Z sur la planche annule la retouche, jamais les deux | `wiki/development/tests.md`, section Bureau |
+| Site, unit | The site tests run without DOM: the new logic is in pure functions. `documentOf` gives the sources while nothing is done, then the result as files, `unsaved` until it is saved; `release` closes each document and the layer in a fake engine and revokes the previews; the default saver downloads and returns "downloaded"; `searchIndex` lists each tool, ready ones first, with names, words and label. The rest (board props, `Result`, the Scanner and its dialog) is covered by the e2e flows | `apps/web/tests/unit/document.test.ts`, `deliver.test.ts`, `searchIndex.test.ts` |
+| Site, e2e | The existing flows pass with `base.css`, the default saver and the Scanner dialog | `pnpm verify` |
+| App, types | `tsc --noEmit` on `app/` and `smoke/` | `pnpm --filter @holy-pdf/desktop check` |
+| App, smoke test | Engine page; then the monastery, Compress through its card, back, with no violation and no error | `pnpm desktop:smoke` |
+| By hand | Open with ⌘O, by drop on the monastery and on a tool, by double-click; save, Open, Show in Finder; the Scanner saves and asks its question; dark mode; window restored; an external link goes to the browser; ⌘Q with an unsaved result; Compress then Sign with no question, then Compress then JPG to PDF with the question; ⌘Z in a text field undoes the typing, ⌘Z on the board undoes the edit, never both | `wiki/development/tests.md`, Desktop section |

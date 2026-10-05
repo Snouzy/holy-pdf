@@ -1,54 +1,54 @@
-# Web — Scanner
+# Web: Scanner
 
-_Rédigé le 2 octobre 2026. Lots A et C livrés le 3 octobre (moteur, planche, correction, export), lot B le même jour (lecture, mise à l'endroit, suggestions, texte cherchable). Choix de l'auteur (2 octobre) : parité avec le [Scanner Mac](2026-09-29-scanner-mac-v1-design.md), détection par OpenCV.js, décodeur HEIC. L'algorithme est celui d'[Algorithme du scanner](../development/algorithm.md), avec les mêmes photos de test._
+_Written on 2 October 2026. Milestones A and C shipped on 3 October (engine, board, correction, export), milestone B the same day (reading, upright orientation, suggestions, searchable text). Author's choice (2 October): parity with the [Mac Scanner](2026-09-29-scanner-mac-v1-design.md), detection by OpenCV.js, HEIC decoder. The algorithm is the one in [Scanner algorithm](../development/algorithm.md), with the same test photos._
 
-Frère Scanner (`/fr/scanner`, `/en/scanner`) transforme des photos de documents en PDF propres, comme sortis d'un scanner : page détectée et redressée, papier blanc, ombres retirées, un PDF par document.
+Brother Snap (`/fr/scanner`, `/en/scanner`) turns photos of documents into clean PDFs, as if they came out of a scanner: page detected and straightened, white paper, shadows removed, one PDF per document.
 
-## Ce qui change par rapport au Mac
+## What changes compared to the Mac
 
-| Sujet | Mac | Web | Raison |
+| Topic | Mac | Web | Reason |
 |---|---|---|---|
-| Détection approchée | Vision `VNDetectDocumentSegmentationRequest` | OpenCV.js : niveaux de gris réduits, flou, Canny, dilatation, plus grand contour convexe à quatre sommets (`approxPolyDP`) couvrant au moins 20 % de la photo ; sinon la photo entière, page ⚠︎ | Pas de Vision dans un navigateur. L'affinage des bords d'`algorithm.md` suit, à l'identique |
-| Redressement, nettoyage | Core Image | OpenCV.js (`warpPerspective`, dilatation, flou, opérations par pixel) | Mêmes paramètres |
-| HEIC | ImageIO | libheif (WebAssembly), chargé seulement quand un HEIC arrive ; la date de prise de vue est lue dans l'élément EXIF du fichier (`heicCaptureDay`) | Seul Safari décode le HEIC, et libheif ne donne pas l'EXIF |
-| Lecture | Vision, roumain, français, anglais | Tesseract.js, `ron+fra+eng`, déjà servi par l'OCR du site, plus le roumain | Le lot de référence est roumain |
-| Mise à l'endroit | OCR rapide dans les 4 sens | Tesseract à 1 200 px dans les 4 sens, même score | Le cœur LSTM n'a pas de détection d'orientation |
-| Écriture PDF | PDFCore (Core Graphics) | Moteur PDFium du site : une page par image, JPEG embarqué sans recompression, texte invisible (`writeTextLayer`), titre dans les métadonnées | Les briques existent |
-| Calcul | File bornée au nombre de cœurs | Un worker du Scanner (OpenCV, libheif), une page à la fois ; Tesseract dans son propre worker | La mémoire d'un téléphone : une photo de 24 Mpx décodée pèse 96 Mo |
-| Téléchargement | Panneau d'enregistrement | Un PDF, ou un .zip quand il y en a plusieurs ; sur téléphone, le partage | Comme les autres outils du site |
-| Annulation | ⌘Z, ⇧⌘Z, menu Édition | ⌘Z / Ctrl+Z, ⇧⌘Z / Ctrl+Y, et deux boutons | Pas de menu dans une page web |
+| Approximate detection | Vision `VNDetectDocumentSegmentationRequest` | OpenCV.js: reduced grayscale, blur, Canny, dilation, largest convex contour with four vertices (`approxPolyDP`) that covers at least 20% of the photo; otherwise the whole photo, page ⚠︎ | No Vision in a browser. The edge refinement of `algorithm.md` follows, unchanged |
+| Straightening, cleaning | Core Image | OpenCV.js (`warpPerspective`, dilation, blur, per-pixel operations) | Same parameters |
+| HEIC | ImageIO | libheif (WebAssembly), loaded only when a HEIC file arrives; the capture date is read from the EXIF item of the file (`heicCaptureDay`) | Only Safari decodes HEIC, and libheif does not give the EXIF |
+| Reading | Vision, Romanian, French, English | Tesseract.js, `ron+fra+eng`, already served by the site's OCR, plus Romanian | The reference batch is Romanian |
+| Upright orientation | Fast OCR in the 4 directions | Tesseract at 1,200 px in the 4 directions, same score | The LSTM core has no orientation detection |
+| PDF writing | PDFCore (Core Graphics) | The site's PDFium engine: one page per image, JPEG embedded without recompression, invisible text (`writeTextLayer`), title in the metadata | The building blocks exist |
+| Computing | Queue bounded to the number of cores | One Scanner worker (OpenCV, libheif), one page at a time; Tesseract in its own worker | The memory of a phone: a decoded 24 Mpx photo weighs 96 MB |
+| Download | Save panel | One PDF, or a .zip when there are several; on phones, the share sheet | Like the other tools of the site |
+| Undo | ⌘Z, ⇧⌘Z, Edit menu | ⌘Z / Ctrl+Z, ⇧⌘Z / Ctrl+Y, and two buttons | No menu in a web page |
 
-## Poids
+## Weight
 
-Rien au chargement de la page. Au premier fichier : OpenCV.js (13,3 Mo, environ 3,5 Mo compressés) et le worker du Scanner. Au premier HEIC : libheif (1,5 Mo). À la première lecture : Tesseract et ses langues (environ 7 Mo, gardés par le navigateur). Les fichiers sont copiés dans `public/scan/` et `public/ocr/` avant `dev` et `build`, comme pour l'OCR.
+Nothing when the page loads. At the first file: OpenCV.js (13.3 MB, about 3.5 MB compressed) and the Scanner worker. At the first HEIC file: libheif (1.5 MB). At the first reading: Tesseract and its languages (about 7 MB, kept by the browser). The files are copied to `public/scan/` and `public/ocr/` before `dev` and `build`, as for OCR.
 
-## Parcours
+## Flow
 
-Celui du Mac, adapté à une page web :
+The flow of the Mac, adapted to a web page:
 
-1. **Démarrage** : zone de dépôt, « Choisir des photos », et sur téléphone « Prendre une photo » (l'appareil photo s'ouvre).
-2. **Planche** : une ligne par document (nom modifiable, raison de la suggestion, pages) ; ⚠︎ sur les pages à vérifier, avec les raisons ; filtre « ⚠︎ N pages à vérifier » ; glisser une page vers un autre document ou en fin de ligne pour en créer un ; supprimer une page ou un document ; annuler et rétablir ; « Ajouter des photos ».
-3. **Correction** : la photo avec ses 4 coins et une loupe sur le coin tenu, le résultat à côté ; outils Coins et Gomme (taille réglable), Pivoter, Annuler, Rétablir, Page suivante ; réglages : rendu (Document ou Couleur), filigrane (auto, gardé, retiré), format (Auto, A4, A5, Lettre), « Rétablir la détection auto ». Des coins croisés sont refusés avec un message.
-4. **Export** : tous les documents, ou un seul depuis sa ligne ; texte cherchable (oui par défaut) ; rappel des pages encore à vérifier ; jamais la position GPS.
+1. **Start**: drop zone, "Choose photos", and on phones "Take a photo" (the camera opens).
+2. **Board**: one row per document (editable name, reason for the suggestion, pages); ⚠︎ on the pages to check, with the reasons; "⚠︎ N pages to check" filter; drag a page to another document, or to the end of the row to create a new one; delete a page or a document; undo and redo; "Add photos".
+3. **Correction**: the photo with its 4 corners and a magnifier on the corner that is held, the result next to it; Corners and Eraser tools (adjustable size), Rotate, Undo, Redo, Next page; settings: rendering (Document or Color), watermark (auto, kept, removed), size (Auto, A4, A5, Letter), "Restore automatic detection". Crossed corners are refused with a message.
+4. **Export**: all the documents, or a single one from its row; searchable text (on by default); a reminder of the pages still to check; never the GPS position.
 
-## Lecture (lot B)
+## Reading (milestone B)
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Ordre | Une page dessinée est lue : d'abord son sens (4 lectures à 1 200 px), puis ses lignes sur la page finale ; une page à la fois, après le dessin | Le texte gommé n'entre jamais dans le PDF : on lit ce qui est dessiné |
-| Sens | Le meilleur score (confiance × caractères) devient le sens automatique, tant que le visiteur n'en choisit pas ; 0 si rien ne se lit | Comme le Mac. 17 pages sur 17 justes sur le lot |
-| Suggestions | `suggest.ts`, portage de `DocumentSuggester` : regroupement par repères de page, date la plus récente avant la prise de vue, titre, nom `AAAA-MM-JJ_Titre` ; la raison s'affiche à côté du nombre de pages | Appliquées quand toutes les pages sont lues, jamais après un changement de la planche (déplacement, suppression, nom) |
-| Repères | En plus des règles du Mac : espaces facultatifs (« Pagina 2 din3 »), et « x/n » en fin de ligne | Tesseract colle le repère aux mots de sa ligne et perd des espaces |
-| Date de prise de vue | EXIF du JPEG, et élément EXIF du HEIC lu dans le fichier | La date de référence de la règle des dates |
-| Texte cherchable | Case cochée par défaut ; les lignes passent en texte invisible sur l'image, au bon endroit dans la page | Comme l'outil OCR |
+| Order | A page is read once it is drawn: first its direction (4 readings at 1,200 px), then its lines on the final page; one page at a time, after the drawing | Erased text never goes into the PDF: we read what is drawn |
+| Direction | The best score (confidence × characters) becomes the automatic direction, as long as the visitor does not choose one; 0 if nothing can be read | Like the Mac. 17 pages out of 17 correct on the batch |
+| Suggestions | `suggest.ts`, port of `DocumentSuggester`: grouping by page markers, latest date before the capture, title, name `YYYY-MM-DD_Title`; the reason shows next to the number of pages | Applied when all the pages are read, never after a change on the board (move, deletion, name) |
+| Markers | In addition to the Mac rules: optional spaces ("Pagina 2 din3"), and "x/n" at the end of a line | Tesseract sticks the marker to the words of its line and loses spaces |
+| Capture date | EXIF of the JPEG, and EXIF item of the HEIC read from the file | The reference date for the date rule |
+| Searchable text | Box checked by default; the lines become invisible text on the image, at the right place in the page | Like the OCR tool |
 
-## Limites connues
+## Known limits
 
-- Un téléphone traite une page en plusieurs secondes : la planche se remplit page après page.
-- Pas de reprise de session : recharger la page perd le lot. L'écran demande confirmation avant de quitter avec des documents non téléchargés.
-- Depuis le 5 octobre 2026, les deux questions du Scanner (pages encore à vérifier, document à supprimer) passent par le dialogue de la planche (`ConfirmDialog`) et l'enregistrement par son enregistreur (`Saver`), reçus en props comme le moteur : la webview de l'appli de bureau n'affiche pas `confirm()` et annule les liens de téléchargement ([spec de la coque](2026-10-05-desktop-shell-design.md)).
+- A phone takes several seconds per page: the board fills page after page.
+- No session resume: reloading the page loses the batch. The screen asks for confirmation before leaving with documents that are not downloaded.
+- Since 5 October 2026, the two questions of the Scanner (pages still to check, document to delete) go through the board's dialog (`ConfirmDialog`), and saving goes through its saver (`Saver`). Both are received as props, like the engine: the webview of the desktop app does not show `confirm()` and cancels download links ([shell spec](2026-10-05-desktop-shell-design.md)).
 
 ## Tests
 
-- Moteur, dans Node (`tests/scan/`) : chaque brique sur des images faites par le test ; le pipeline sur les 17 photos de `fixtures-private` quand elles sont là (sauté sinon), contre les critères de la spec Mac : pages fausses toutes signalées, au plus 2 bonnes signalées à tort, 17 pages à l'endroit, filigrane juste sur 16, 10 regroupements sur 11, 9 dates sur 11, moins de 500 Ko par page.
-- Navigateur : import d'une photo faite par le test, planche, correction d'un coin, export, PDF relu par pdf.js.
+- Engine, in Node (`tests/scan/`): each building block on images made by the test; the pipeline on the 17 photos of `fixtures-private` when they are there (skipped otherwise), against the criteria of the Mac spec: all wrong pages flagged, at most 2 good pages flagged by mistake, 17 pages upright, watermark correct on 16, 10 groupings out of 11, 9 dates out of 11, less than 500 KB per page.
+- Browser: import of a photo made by the test, board, correction of a corner, export, PDF read back by pdf.js.

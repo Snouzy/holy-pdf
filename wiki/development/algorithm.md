@@ -1,158 +1,158 @@
-# Algorithme du scanner
+# Scanner algorithm
 
-_Référence indépendante du langage. Mise au point le 29 septembre 2026 avec le prototype Python/OpenCV (`tools/prototype/scan.py`), sur un lot réel de 17 photos. A servi de modèle à l'implémentation Swift (retirée le 5 octobre 2026, tag `mac-final`) et sert à celle du Scanner du site._
+_Language-independent reference. Worked out on 29 September 2026 with the Python/OpenCV prototype (`tools/prototype/scan.py`), on a real batch of 17 photos. It served as the model for the Swift implementation (removed on 5 October 2026, tag `mac-final`) and serves as the model for the site's Scanner._
 
-## Étapes d'une page
+## Steps for one page
 
 ```
-photo → chargement → détection → redressement → mise à l'endroit → nettoyage → gomme → JPEG + OCR
+photo → loading → detection → perspective correction → turning upright → cleaning → eraser → JPEG + OCR
 ```
 
-Toutes les positions sont en coordonnées normalisées de page (0 à 1, origine en haut à gauche).
+All positions are in normalized page coordinates (0 to 1, origin at the top left).
 
-## 1. Chargement
+## 1. Loading
 
-- orientation EXIF appliquée ;
-- réduction à 4096 px sur le grand côté ;
-- date de prise de vue lue dans l'EXIF (`DateTimeOriginal`).
+- EXIF orientation applied;
+- reduced to 4,096 px on the long side;
+- capture date read from the EXIF (`DateTimeOriginal`).
 
-## 2. Détection
+## 2. Detection
 
-1. Détecteur de documents de la plateforme (Vision `VNDetectDocumentSegmentationRequest` sur Apple) : un quadrilatère approché. Une observation de confiance inférieure à 0,5 compte comme un échec. Sans résultat : le quadrilatère est la photo entière, page à vérifier.
-2. Affinage de chaque bord, sur l'image en niveaux de gris réduite au quart puis floutée (noyau binomial 1-4-6-4-1) :
+1. Document detector of the platform (Vision `VNDetectDocumentSegmentationRequest` on Apple): an approximate quadrilateral. An observation with a confidence below 0.5 counts as a failure. With no result, the quadrilateral is the whole photo, and the page is to be checked.
+2. Refinement of each edge, on the grayscale image reduced to a quarter and then blurred (binomial kernel 1-4-6-4-1):
 
-| Paramètre | Valeur |
+| Parameter | Value |
 |---|---|
-| Échantillons par bord | 80, de 6 % à 94 % de la longueur |
-| Profil | le long de la normale extérieure, ±3 % du petit côté de l'image réduite |
-| Chute | `I(s) − I(s+3)` ; hors image, `I = 0` |
-| Échantillon gardé si | chute maximale > 12 (sur 255) |
-| Position retenue | la plus extérieure dont la chute dépasse 60 % du maximum |
-| Droite | moindres carrés totaux, 4 passes, rejet au-delà de max(1,5 ; 2,5 × médiane des résidus) |
-| Coins | intersections des droites voisines |
+| Samples per edge | 80, from 6% to 94% of the length |
+| Profile | along the outward normal, ±3% of the short side of the reduced image |
+| Drop | `I(s) − I(s+3)`; outside the image, `I = 0` |
+| Sample kept if | maximum drop > 12 (out of 255) |
+| Position kept | the outermost one whose drop exceeds 60% of the maximum |
+| Line | total least squares, 4 passes, rejection beyond max(1.5, 2.5 × median of the residuals) |
+| Corners | intersections of the neighboring lines |
 
-La position « la plus extérieure » et non « la chute maximale » : sur une facture, l'en-tête en gras juste sous le bord chutait plus fort que le bord du papier, et le haut du document était rogné.
+The "outermost" position, and not the "maximum drop": on an invoice, the bold header just under the edge dropped more than the edge of the paper, and the top of the document was cropped.
 
-3. Page à vérifier si : rapport des côtés à plus de 6 % de √2 et de la Lettre US (11/8,5), bord gardant moins de 70 % d'échantillons valides, ou coin affiné à plus de 1 % de la diagonale du coin détecté.
+3. Page to check if: the ratio of the sides is more than 6% from √2 and from US Letter (11/8.5), an edge keeps less than 70% valid samples, or a refined corner is more than 1% of the diagonal away from the detected corner.
 
-## 3. Redressement
+## 3. Perspective correction
 
-- Correction de perspective vers un rectangle.
-- Taille : largeur = moyenne des bords haut et bas, hauteur = moyenne des bords gauche et droit. Si le rapport est à moins de 6 % de √2, il est calé sur √2, avec un grand côté de 2339 px (A4 à 200 dpi). Sinon, le petit côté fait 1654 px. Le grand côté ne dépasse jamais 7016 px : au-delà, les deux côtés sont réduits dans le même rapport.
+- Perspective correction to a rectangle.
+- Size: width = mean of the top and bottom edges, height = mean of the left and right edges. If the ratio is less than 6% from √2, it is set to √2, with a long side of 2,339 px (A4 at 200 dpi). If not, the short side is 1,654 px. The long side is never more than 7,016 px: above that, the two sides are reduced in the same ratio.
 
-## 4. Mise à l'endroit
+## 4. Turning upright
 
-OCR rapide sur une version réduite (1200 px), dans les 4 sens. Score d'un sens : somme de confiance × nombre de caractères. Le meilleur sens l'emporte, 0 sans texte. Rotation par quarts de tour dans le sens horaire.
+Fast OCR on a reduced version (1,200 px), in the 4 orientations. Score of an orientation: sum of confidence × number of characters. The best orientation wins, 0 without text. Rotation by quarter turns, clockwise.
 
-## 5. Nettoyage
+## 5. Cleaning
 
-Calculs sur les valeurs sRGB encodées (gamma), entre 0 et 1.
+Calculations on the encoded sRGB values (gamma), between 0 and 1.
 
-**Mode Document :**
+**Document mode:**
 
-| Étape | Paramètre |
+| Step | Parameter |
 |---|---|
-| Estimation du papier, fine | dilatation, disque de rayon 7 px |
-| Si filigrane gardé : fermeture | dilatation puis érosion, rayon 45 px, appliquées à l'estimation fine |
-| Si filigrane gardé : masque d'ombre | `m = clamp((0,92 · L − g) / (0,1 · L))`, flou σ 10, où `g` = gris de la fermeture et `L` = papier éclairé local (dilatation de rayon 200 px, calculée au quart de résolution, flou σ 40) |
-| Si filigrane gardé : mélange | `m · fine + (1 − m) · fermeture` |
-| Lissage | médiane 21 px dans le prototype ; flou gaussien sur Apple (Core Image n'a pas de grande médiane) |
-| Division | page ÷ estimation |
-| Niveaux | noir 0,12, blanc 0,86, puis puissance 1,35 |
-| Netteté | 1,5 × image − 0,5 × flou σ 1,2 |
-| Marge | 24 px blancs sur le pourtour |
+| Paper estimate, fine | dilation, disk of radius 7 px |
+| If watermark kept: closing | dilation then erosion, radius 45 px, applied to the fine estimate |
+| If watermark kept: shadow mask | `m = clamp((0.92 · L − g) / (0.1 · L))`, blur σ 10, where `g` = gray of the closing and `L` = local lit paper (dilation of radius 200 px, calculated at quarter resolution, blur σ 40) |
+| If watermark kept: blend | `m · fine + (1 − m) · closing` |
+| Smoothing | 21 px median in the prototype; Gaussian blur on Apple (Core Image has no large median) |
+| Division | page ÷ estimate |
+| Levels | black 0.12, white 0.86, then power 1.35 |
+| Sharpness | 1.5 × image − 0.5 × blur σ 1.2 |
+| Margin | 24 white px around the edge |
 
-Pourquoi le mélange : la fermeture remplit les traits larges du filigrane, qui sinon ressortent évidés. Mais dans une ombre, elle remplit aussi la traînée étroite entre deux zones d'ombre, qui reste alors grise. Le masque rend l'estimation fine aux zones d'ombre.
+Why the blend: the closing fills the wide strokes of the watermark, which otherwise come out hollow. But in a shadow, it also fills the narrow streak between two shadow areas, which then stays gray. The mask gives the fine estimate back to the shadow areas.
 
-**Mode Couleur** (fond de sécurité, photo) : étirement de chaque canal entre ses centiles 0,5 et 99.
+**Color mode** (security background, photo): each channel is stretched between its 0.5 and 99 percentiles.
 
-**Filigrane gardé ou non :** gardé si plus de 2,4 % des pixels de l'intérieur de page (hors marges de 10 %, calcul au quart de résolution) ont une fermeture qui dépasse l'estimation fine de plus de 0,08, hors ombre (masque d'ombre < 0,5).
+**Watermark kept or not:** kept if more than 2.4% of the pixels inside the page (excluding 10% margins, calculated at quarter resolution) have a closing that is more than 0.08 above the fine estimate, outside shadow (shadow mask < 0.5).
 
-## 6. Gomme
+## 6. Eraser
 
-Zones blanches peintes après le nettoyage : polygones, ou traits de pinceau (rayon en fraction de la largeur de page).
+White areas painted after the cleaning: polygons, or brush strokes (radius as a fraction of the page width).
 
-## 7. Sortie
+## 7. Output
 
-- JPEG qualité 80 sur l'échelle de libjpeg (celle d'OpenCV), sans métadonnées. ImageIO a sa propre échelle : 0,8 y donne les tables de libjpeg 94, 0,53 celles de libjpeg 80 à 81 (estimation d'ImageMagick) ;
-- PDF : une page par image, JPEG embarqué sans recompression, texte OCR invisible sous l'image ;
-- format de page : A4 pour √2, sinon taille des pixels à 200 dpi ; A5 ou Lettre au choix.
+- JPEG quality 80 on the libjpeg scale (the OpenCV scale), without metadata. ImageIO has its own scale: 0.8 gives the libjpeg 94 tables there, 0.53 gives the libjpeg 80 to 81 tables (ImageMagick estimate);
+- PDF: one page per image, JPEG embedded without recompression, invisible OCR text under the image;
+- page size: A4 for √2, otherwise the pixel size at 200 dpi; A5 or Letter as an option.
 
-## Suggestions de documents
+## Document suggestions
 
-- **Regroupement** : une page rejoint la précédente si leurs marqueurs se suivent (`x/n`, `Pagina x din n`, `Page x of n`, `Page x sur n` dans le haut 10 % ou le bas 12 %, ou un nombre seul centré en bas).
-- **Titre** : la ligne la plus haute (hauteur de boîte) dans les 40 % du haut de la première page, parmi les lignes d'au plus 4 mots, d'au moins 3 lettres et de confiance OCR au moins 0,5, sans les lignes qui reviennent dans au moins max(2, ⌈n/3⌉) des n documents du lot. Les logos reviennent de l'OCR en mots de confiance 0,3 ; sur une page de travers, la boîte d'une longue ligne de texte est plus haute que celle du titre ; deux documents de même type partagent leur titre.
-- **Date** : la plus récente qui ne dépasse pas la date de prise de vue de la première photo, en ignorant avant 1990 et les lignes de validité (texte replié sans accents ni casse contenant `valabil`, `valable`, `valid until`, `valid till`, `valid through`, `valid to` ou `expir` ; le seul `valid` attraperait aussi « validat » ou « invalid ») : une fin de validité peut précéder la photo, mais ce n'est jamais le jour d'émission.
-- **Nom** : `AAAA-MM-JJ_Titre`, titre en ASCII, 6 mots au plus.
+- **Grouping**: a page joins the previous one if their markers follow each other (`x/n`, `Pagina x din n`, `Page x of n`, `Page x sur n` in the top 10% or the bottom 12%, or a lone number centered at the bottom).
+- **Title**: the tallest line (box height) in the top 40% of the first page, among the lines of at most 4 words, at least 3 letters and an OCR confidence of at least 0.5, without the lines that come back in at least max(2, ⌈n/3⌉) of the n documents of the batch. Logos come back from the OCR as words with confidence 0.3; on a skewed page, the box of a long line of text is taller than the box of the title; two documents of the same type share their title.
+- **Date**: the most recent one that is not after the capture date of the first photo, ignoring dates before 1990 and validity lines (text folded without accents or case that contains `valabil`, `valable`, `valid until`, `valid till`, `valid through`, `valid to` or `expir`; `valid` alone would also catch "validat" or "invalid"): an end of validity can come before the photo, but it is never the issue date.
+- **Name**: `YYYY-MM-DD_Title`, title in ASCII, 6 words at most.
 
-## Mesures
+## Measurements
 
-### Prototype Python, 29/09/2026, lot privé de 17 photos
+### Python prototype, 29 September 2026, private batch of 17 photos
 
-| Mesure | Valeur |
+| Measurement | Value |
 |---|---|
-| Pages aux coins auto faux | 9 (feuille qui recouvre un coin, coin plié) |
-| Pages couchées | 7 |
-| Pages avec filigrane | 4 |
-| Pages en mode Couleur | 1 (certificat à fond de sécurité) |
-| Poids moyen d'une page PDF | ≈ 390 Ko |
+| Pages with wrong auto corners | 9 (sheet that covers a corner, folded corner) |
+| Pages lying on their side | 7 |
+| Pages with a watermark | 4 |
+| Pages in Color mode | 1 (certificate with a security background) |
+| Mean size of a PDF page | ≈ 390 KB |
 
-### Implémentation Swift, lot privé de 17 photos
+### Swift implementation, private batch of 17 photos
 
-_Mesuré le 30/09/2026, MacBook Pro M1 Pro (10 cœurs), macOS 26.4, build release, machine en usage (charge moyenne de 5 à 22, indiquée à côté des temps)._
+_Measured on 30 September 2026, MacBook Pro M1 Pro (10 cores), macOS 26.4, release build, machine in use (load average from 5 to 22, given next to the times)._
 
-| Critère de la spec | Attendu | Mesuré |
+| Spec criterion | Expected | Measured |
 |---|---|---|
-| Pages aux coins faux signalées | toutes (9 au prototype) | 10 / 10. Une page est fausse si un coin auto est à plus de 1,5 % de la diagonale du coin corrigé : les fausses sont entre 6,8 et 13,3 %, les justes à 0,2 % au plus |
-| Bonnes pages signalées à tort | ≤ 2 | 1 (photo 01) |
-| Pages mises à l'endroit | 17 / 17 | 17 / 17 |
-| Filigrane détecté juste | 16 / 16 (hors mode Couleur) | 16 / 16 |
-| Documents regroupés juste | ≥ 10 / 11 | 10 / 11 |
-| Dates justes | ≥ 9 / 11 | 9 / 11 (8 / 11 avant d'ignorer les lignes de validité) |
-| Temps par page | < 1 s | 0,61, 0,79 et 0,77 s sur les 3 pages du test (minimum de 3 passages, charge 5 à 8). Sur les 17 pages en série : 0,79 s en moyenne, 0,96 s au pire (meilleure de 2 passes). Une passe isolée monte à 1,47 s sous la charge. À une charge moyenne de 16 à 22 (navigateur), une passe unique mesure 1,3 à 3,0 s |
-| Lot entier | < 20 s | 9,7 à 12,4 s ; 10,0 s à la dernière mesure (charge 5 à 8) ; 14,6 et 18,2 s à une charge de 16 à 22 |
-| Poids moyen par page | < 500 Ko | 412 Ko (JPEG du prototype : 402 Ko) ; deux PDF dépassent 500 Ko par page : le certificat en mode Couleur (592 Ko) et les 3 premières pages du contrat (518 Ko) |
-| Écart moyen au prototype (niveaux de gris) | < 10 | min 0,5 / max 8,1 (photo 06, mode Couleur) ; les 16 pages en mode Document sont à 4,8 au plus |
+| Pages with wrong corners flagged | all (9 in the prototype) | 10 / 10. A page is wrong if an auto corner is more than 1.5% of the diagonal away from the corrected corner: the wrong ones are between 6.8 and 13.3%, the correct ones at 0.2% at most |
+| Good pages flagged by mistake | ≤ 2 | 1 (photo 01) |
+| Pages turned upright | 17 / 17 | 17 / 17 |
+| Watermark detected correctly | 16 / 16 (excluding Color mode) | 16 / 16 |
+| Documents grouped correctly | ≥ 10 / 11 | 10 / 11 |
+| Correct dates | ≥ 9 / 11 | 9 / 11 (8 / 11 before validity lines were ignored) |
+| Time per page | < 1 s | 0.61, 0.79 and 0.77 s on the 3 pages of the test (minimum of 3 runs, load 5 to 8). On the 17 pages in series: 0.79 s on average, 0.96 s at worst (best of 2 passes). An isolated pass goes up to 1.47 s under load. At a load average of 16 to 22 (browser), a single pass measures 1.3 to 3.0 s |
+| Whole batch | < 20 s | 9.7 to 12.4 s; 10.0 s at the last measurement (load 5 to 8); 14.6 and 18.2 s at a load of 16 to 22 |
+| Mean size per page | < 500 KB | 412 KB (prototype JPEG: 402 KB); two PDFs are above 500 KB per page: the certificate in Color mode (592 KB) and the first 3 pages of the contract (518 KB) |
+| Mean difference from the prototype (gray levels) | < 10 | min 0.5 / max 8.1 (photo 06, Color mode); the 16 pages in Document mode are at 4.8 at most |
 
-Seuils retenus : `weakEdgeRatio` 0,7 (inchangé), `maxCornerShift` 0,01 (au lieu de 0,02), `minCoverage` 0,024 (au lieu de 0,015), `fillThreshold` 0,08 (inchangé), lissage : flou gaussien σ 5 (inchangé), qualité JPEG ImageIO 0,53 (au lieu de 0,8).
+Thresholds kept: `weakEdgeRatio` 0.7 (unchanged), `maxCornerShift` 0.01 (instead of 0.02), `minCoverage` 0.024 (instead of 0.015), `fillThreshold` 0.08 (unchanged), smoothing: Gaussian blur σ 5 (unchanged), ImageIO JPEG quality 0.53 (instead of 0.8).
 
-- `maxCornerShift` : à 0,02, les photos 06 et 14 (un coin sous une autre feuille) n'étaient pas signalées. L'affinage y déplace un coin de 1,1 % et 1,5 % de la diagonale. Sur les bonnes pages, il le déplace de 0,7 % au plus, sauf la photo 01 (1,3 % : Vision se trompait, l'affinage corrige). 0,01 signale les 10 pages fausses. `weakEdgeRatio` ne suffisait pas : à 0,85, il signalait une bonne page (photo 17, 0,79) et laissait passer la photo 13.
-- `minCoverage` : le seuil de 0,015 séparait déjà les pages, mais la photo 02, sans filigrane, montait à 0,0144 avec les coins automatiques. 0,024 est le milieu de l'écart mesuré avec les coins corrigés (0,0121 / 0,0360).
-- Qualité JPEG : 0,8 dans ImageIO donne les tables de libjpeg 94, et 608 Ko par page. 0,53 donne celles de libjpeg 80 à 81 (le prototype : 80), et 412 Ko par page. L'écart au prototype ne bouge pas (+0,1 au plus).
+- `maxCornerShift`: at 0.02, photos 06 and 14 (a corner under another sheet) were not flagged. On them, the refinement moves a corner by 1.1% and 1.5% of the diagonal. On the good pages, it moves it by 0.7% at most, except photo 01 (1.3%: Vision was wrong, the refinement corrects it). 0.01 flags the 10 wrong pages. `weakEdgeRatio` was not sufficient: at 0.85, it flagged a good page (photo 17, 0.79) and let photo 13 through.
+- `minCoverage`: the threshold of 0.015 already separated the pages, but photo 02, without a watermark, went up to 0.0144 with the automatic corners. 0.024 is the middle of the gap measured with the corrected corners (0.0121 / 0.0360).
+- JPEG quality: 0.8 in ImageIO gives the libjpeg 94 tables, and 608 KB per page. 0.53 gives the libjpeg 80 to 81 tables (the prototype: 80), and 412 KB per page. The difference from the prototype does not move (+0.1 at most).
 
-| Photo | Document | Coins auto | Filigrane | Part remplie (coins corrigés / auto) | Écart au prototype |
+| Photo | Document | Auto corners | Watermark | Filled share (corrected / auto corners) | Difference from the prototype |
 |---|---|---|---|---|---|
-| photo 01 | acte, p. 1 | justes, signalée | non | 0,0036 / 0,0035 | 2,4 |
-| photo 02 | acte, p. 2 | faux, signalée | non | 0,0121 / 0,0144 | 0,8 |
-| photo 03 | rapport, p. 1 | faux, signalée | oui | 0,0412 / 0,0543 | 3,0 |
-| photo 04 | rapport, p. 2 | faux, signalée | oui | 0,0360 / 0,0419 | 2,7 |
-| photo 05 | rapport, p. 3 | faux, signalée | oui | 0,0361 / 0,0420 | 2,7 |
-| photo 06 | certificat (fond de sécurité) | faux, signalée | mode Couleur | — | 8,1 |
-| photo 07 | certificat | faux, signalée | non | 0,0067 / 0,0058 | 1,8 |
-| photo 08 | certificat | faux, signalée | non | 0,0059 / 0,0042 | 1,6 |
-| photo 09 | attestation | justes | oui | 0,0519 / 0,0521 | 2,7 |
-| photo 10 | déclaration | justes | non | 0,0012 / 0,0024 | 3,4 |
-| photo 11 | contrat, p. 1 | justes | non | 0,0019 / 0,0023 | 3,2 |
-| photo 12 | contrat, p. 2 | faux, signalée | non | 0,0014 / 0,0017 | 4,8 |
-| photo 13 | contrat, p. 3 | faux en Swift, signalée | non | 0,0000 / 0,0000 | 4,7 |
-| photo 14 | contrat, p. 4 | faux, signalée | non | 0,0107 / 0,0085 | 4,5 |
-| photo 15 | déclaration | justes | non | 0,0000 / 0,0000 | 0,5 |
-| photo 16 | facture | justes | non | 0,0030 / 0,0029 | 4,1 |
-| photo 17 | facture | justes | non | 0,0019 / 0,0016 | 3,6 |
+| photo 01 | deed, p. 1 | correct, flagged | no | 0.0036 / 0.0035 | 2.4 |
+| photo 02 | deed, p. 2 | wrong, flagged | no | 0.0121 / 0.0144 | 0.8 |
+| photo 03 | report, p. 1 | wrong, flagged | yes | 0.0412 / 0.0543 | 3.0 |
+| photo 04 | report, p. 2 | wrong, flagged | yes | 0.0360 / 0.0419 | 2.7 |
+| photo 05 | report, p. 3 | wrong, flagged | yes | 0.0361 / 0.0420 | 2.7 |
+| photo 06 | certificate (security background) | wrong, flagged | Color mode | — | 8.1 |
+| photo 07 | certificate | wrong, flagged | no | 0.0067 / 0.0058 | 1.8 |
+| photo 08 | certificate | wrong, flagged | no | 0.0059 / 0.0042 | 1.6 |
+| photo 09 | attestation | correct | yes | 0.0519 / 0.0521 | 2.7 |
+| photo 10 | declaration | correct | no | 0.0012 / 0.0024 | 3.4 |
+| photo 11 | contract, p. 1 | correct | no | 0.0019 / 0.0023 | 3.2 |
+| photo 12 | contract, p. 2 | wrong, flagged | no | 0.0014 / 0.0017 | 4.8 |
+| photo 13 | contract, p. 3 | wrong in Swift, flagged | no | 0.0000 / 0.0000 | 4.7 |
+| photo 14 | contract, p. 4 | wrong, flagged | no | 0.0107 / 0.0085 | 4.5 |
+| photo 15 | declaration | correct | no | 0.0000 / 0.0000 | 0.5 |
+| photo 16 | invoice | correct | no | 0.0030 / 0.0029 | 4.1 |
+| photo 17 | invoice | correct | no | 0.0019 / 0.0016 | 3.6 |
 
-Temps d'une page, par étape (moyenne en série) : OCR précis 36 %, mise à l'endroit (4 OCR rapides) 20 %, chargement HEIC 18 %, filigrane 11 %, détection et affinage 10 %, nettoyage 5 %, JPEG 1 %. L'affinage des bords ne domine pas : le passer à Accelerate ne ferait presque rien gagner.
+Time for one page, per step (mean in series): accurate OCR 36%, turning upright (4 fast OCR passes) 20%, HEIC loading 18%, watermark 11%, detection and refinement 10%, cleaning 5%, JPEG 1%. The edge refinement does not dominate: moving it to Accelerate would gain almost nothing.
 
-Déterminisme : deux lots en parallèle et un lot en série donnent des `report.json` identiques sur chaque champ (sens, raisons, coins, filigrane, regroupement, noms, octets). Le lot à 13 PDF vu une fois pendant le développement ne se reproduit pas.
+Determinism: two batches in parallel and one batch in series give identical `report.json` files on each field (orientation, reasons, corners, watermark, grouping, names, bytes). The batch with 13 PDFs, seen once during development, does not occur again.
 
-OCR roumain : Vision lit juste, à confiance 1, les titres en capitales avec leurs diacritiques (Î, Ă, Ș, Ț) et les ș, ț des en-têtes. Dans le corps du texte, ă sort parfois en ä ou å, i en ı. Le logo de certification IQNET des en-têtes sort en « IQNET », « IONET », « LIQNET » ou « :IQNET », toujours à confiance 0,3, comme un logo de facture lu en mot au hasard. Les marqueurs « Pagina x din 3 » et « 1/2 » sont lus juste. Les numéros seuls centrés en bas sont lus à confiance 0,3 à 1, et un manque (photo 14). Les dates `jj.mm.aaaa` et `jj/mm/aaaa` sont lues juste sur les 17 pages, sauf une année (2026 lue 2125, écartée car future). La confiance de Vision ne prend que trois valeurs : 0,3, 0,5 et 1.
+Romanian OCR: Vision correctly reads, at confidence 1, the titles in capitals with their diacritics (Î, Ă, Ș, Ț) and the ș, ț of the headers. In the body text, ă sometimes comes out as ä or å, and i as ı. The IQNET certification logo of the headers comes out as "IQNET", "IONET", "LIQNET" or ":IQNET", always at confidence 0.3, like an invoice logo read as a random word. The markers "Pagina x din 3" and "1/2" are read correctly. The lone numbers centered at the bottom are read at confidence 0.3 to 1, and one is missing (photo 14). The dates `dd.mm.yyyy` and `dd/mm/yyyy` are read correctly on the 17 pages, except one year (2026 read as 2125, discarded because it is in the future). The confidence of Vision takes only three values: 0.3, 0.5 and 1.
 
-Mise à l'endroit : le score de l'OCR rapide dans le bon sens dépasse celui du sens opposé de 4 % (photo 17) à 87 % (photo 02), médiane 21 %. Les deux secours envisagés ne marchent pas. L'OCR précis sur le meilleur sens et son opposé préfère le sens renversé sur 5 pages. L'ordre des coins des observations de Vision ne dit rien non plus : Vision rend des boîtes droites pour un texte à l'envers.
+Turning upright: the fast OCR score in the correct orientation is above the score of the opposite orientation by 4% (photo 17) to 87% (photo 02), median 21%. The two fallbacks considered do not work. Accurate OCR on the best orientation and its opposite prefers the upside-down orientation on 5 pages. The corner order of the Vision observations does not tell anything either: Vision returns upright boxes for upside-down text.
 
-Écarts connus :
+Known gaps:
 
-- **Dates, 2 fausses.** Rapport (photos 03 à 05) : la règle prend une date postérieure citée dans le corps du texte, pas la date d'émission du rapport. Contrat : scindé (point suivant), ses 3 premières pages ne portent plus qu'une date citée dans le texte. L'attestation (photo 09), qui prenait sa fin de validité (« valabilă până la data »), est juste depuis que la règle ignore les lignes de validité.
-- **Regroupement, 1 faux.** Contrat scindé en 3 + 1 : Vision ne lit pas le « 4 » seul en bas de la photo 14, dont le recadrage auto est faux (7,5 % de la diagonale à un coin). Les numéros seuls sont fragiles : avec les coins auto, Vision lit 1, 2 et 3 ; avec les coins corrigés, il lit 2 et 4, et plus 1 ni 3.
-- **Coins.** 10 pages ont des coins auto faux en Swift, contre 9 au prototype : sur la photo 13, le coin sous une autre feuille est faux de 6,8 % de la diagonale, là où l'affinage du prototype le retrouvait. Sur les photos 02, 12, 13 et 14, l'affinage éloigne le coin caché de sa vraie place plus que Vision. Toutes ces pages sont signalées. La photo 01 est signalée alors que ses coins finaux sont justes.
-- **Titres**, hors critères : 7 justes sur 12 (2 avec l'ancienne règle, qui mettait aussi une adresse dans deux noms). Faux : les titres de l'acte et du contrat sont imprimés plus petits que les en-têtes au-dessus, le rapport prend le nom de la ville, la facture son numéro.
-- **Temps** : la marge est mince sur M1 Pro, et une passe isolée dépasse 1 s sous la charge.
-- **Filigrane** : la page de synthèse des tests a maintenant 4 traits, à 0,0338 (0,0253 avec 3 traits, trop près du seuil de 0,024). Le détecteur se déclenche aussi sur des barres noires pleines et épaisses. Sur les vraies pages sans filigrane, il reste sous 0,0144.
+- **Dates, 2 wrong.** Report (photos 03 to 05): the rule takes a later date cited in the body text, not the issue date of the report. Contract: split (next point), its first 3 pages now carry only a date cited in the text. The attestation (photo 09), which took its end of validity ("valabilă până la data"), is correct since the rule ignores validity lines.
+- **Grouping, 1 wrong.** Contract split into 3 + 1: Vision does not read the lone "4" at the bottom of photo 14, whose auto crop is wrong (7.5% of the diagonal at one corner). Lone numbers are fragile: with the auto corners, Vision reads 1, 2 and 3; with the corrected corners, it reads 2 and 4, and no longer 1 or 3.
+- **Corners.** 10 pages have wrong auto corners in Swift, against 9 in the prototype: on photo 13, the corner under another sheet is off by 6.8% of the diagonal, where the refinement of the prototype found it. On photos 02, 12, 13 and 14, the refinement moves the hidden corner further from its true place than Vision does. All these pages are flagged. Photo 01 is flagged although its final corners are correct.
+- **Titles**, outside the criteria: 7 correct out of 12 (2 with the old rule, which also put an address in two names). Wrong: the titles of the deed and of the contract are printed smaller than the headers above them, the report takes the name of the city, the invoice its number.
+- **Time**: the margin is thin on M1 Pro, and an isolated pass is above 1 s under load.
+- **Watermark**: the test summary page now has 4 strokes, at 0.0338 (0.0253 with 3 strokes, too close to the threshold of 0.024). The detector also triggers on thick solid black bars. On the real pages without a watermark, it stays below 0.0144.

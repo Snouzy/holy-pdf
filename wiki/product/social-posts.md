@@ -1,8 +1,8 @@
-# Posts de présentation de Holy PDF
+# Holy PDF launch posts
 
-Trois déclinaisons de l'[histoire du projet](story.md), pour une publication personnelle en français. LinkedIn garde le récit complet ; Instagram le resserre ; X propose un post court et un fil en alternative.
+Three versions of the [project story](story.md), for a personal post in French. LinkedIn keeps the full story. Instagram tightens it. X offers a short post, and a thread as an alternative.
 
-Les textes présentent le projet en cours de construction. Ajouter le lien public une fois son adresse et son accessibilité confirmées ; le domaine choisi dans le wiki ne suffit pas à attester une mise en ligne.
+The texts present the project while it is still being built. Add the public link once its address is confirmed and the site is reachable. The domain chosen in the wiki does not prove that the site is live.
 
 ## LinkedIn
 
@@ -64,13 +64,13 @@ Il y a aussi une personne qui gère tous les PDF dans votre famille ?
 
 ## X
 
-### Post court
+### Short post
 
 5 Go libres sur mon ordi. Je supprime Adobe. Puis il faut convertir la carte d'identité de ma mère en PDF. Pas envie de l'envoyer n'importe où.
 
 Alors j'ai créé Holy PDF : des outils PDF gratuits, sans compte. Les fichiers restent sur l'appareil.
 
-### Fil alternatif
+### Alternative thread
 
 #### Post 1
 
@@ -106,9 +106,9 @@ Je continue à construire Holy PDF pour ces petites démarches qui finissent tou
 
 Si vous êtes aussi la personne qui gère les PDF de la famille, quelle tâche vous fait le plus râler ?
 
-## Accroches alternatives
+## Alternative hooks
 
-- « Je gardais mon abonnement Adobe pour les PDF de la famille. » — commence par la disproportion entre l'abonnement et l'usage occasionnel.
-- « La carte d'identité de ma mère mérite mieux qu'un envoi à l'aveugle. » — commence par le besoin de confidentialité, avec un ton plus affirmé.
+- « Je gardais mon abonnement Adobe pour les PDF de la famille. » (I kept my Adobe subscription for the family's PDFs.): opens with the gap between the subscription and the occasional use.
+- « La carte d'identité de ma mère mérite mieux qu'un envoi à l'aveugle. » (My mother's ID card deserves better than being sent off blindly.): opens with the need for privacy, in a more assertive tone.
 
-L'accroche des 5 Go reste la proposition principale : elle est précise et ouvre naturellement le récit. Le gâteau au yaourt est un exemple léger, pas un document réellement traité dans l'histoire.
+The 5 GB hook stays the main proposal: it is precise and opens the story naturally. The yogurt cake is a light example, not a document actually processed in the story.

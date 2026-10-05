@@ -1,19 +1,19 @@
-# Mac — Organiser les pages
+# Mac: Organize pages
 
-_Appli Swift retirée le 5 octobre 2026 : cette spec est une archive, le code est au tag `mac-final`._
+_Swift app removed on 5 October 2026: this spec is an archive, the code is at tag `mac-final`._
 
-## Parcours
+## Flow
 
-Quatrième outil natif, Frère Classeur. Ouvrir ou déposer un PDF, afficher ses pages dans une grille adaptative. Chaque carte propose aperçu agrandi, déplacement précédent/suivant, rotation horaire et suppression. Le glisser déplace une page avant/après une carte ou en fin de grille. Pendant le glisser, une barre d'insertion montre où la page va se poser : à gauche de la carte survolée si le pointeur est sur sa moitié gauche, à droite sinon. Les zones de dépôt couvrent aussi l'espace entre les cartes. Un changement d'ordre (glisser, flèches, annulation) est animé. Les positions affichées sont celles de la copie ; le numéro de page source reste identifiable. La dernière page ne peut pas être supprimée. Annuler (⌘Z) restaure ordre, pages supprimées et rotations. L’original reste intact ; enregistrer utilise le panneau macOS et crée une copie.
+Fourth native tool, Brother Binder. Open or drop a PDF, and show its pages in an adaptive grid. Each card offers an enlarged preview, a move to previous/next, a clockwise rotation and a deletion. Dragging moves a page before/after a card or to the end of the grid. During the drag, an insertion bar shows where the page will land: to the left of the hovered card if the pointer is on its left half, to the right otherwise. The drop zones also cover the space between the cards. A change of order (drag, arrows, undo) is animated. The positions shown are those of the copy; the source page number stays identifiable. The last page cannot be deleted. Undo (⌘Z) restores the order, the deleted pages and the rotations. The original stays intact; saving uses the macOS panel and creates a copy.
 
-Un document à la fois, mots de passe locaux, erreurs explicites et abandon confirmé seulement quand le travail non enregistré serait perdu. La session survit à la fermeture de la fenêtre. Ouvrir un autre fichier ou quitter respecte les modifications non enregistrées. Les commandes ⌘O, ⌘E et ⌘Z suivent l’outil actif. Français/anglais, couleurs système, boutons avec survol, Frère Classeur dans la grille d’accueil.
+One document at a time, local passwords, explicit errors, and a confirmation to discard only when unsaved work would be lost. The session survives when the window closes. Opening another file or quitting respects unsaved changes. The ⌘O, ⌘E and ⌘Z commands follow the active tool. French/English, system colors, buttons with hover, Brother Binder in the home grid.
 
-## Moteur et performance
+## Engine and performance
 
-`PDFOrganizingDocument` dans PDFCore possède les données originales et le document de lecture, dans un acteur. L’état d’édition se limite aux index de pages et à leurs rotations ; déplacer ou tourner une carte ne redemande aucun rendu. L’export repart d’un document frais, préserve les contenus vectoriels et sélectionnables, et ne rastérise pas les pages. Les cibles de liens/signets retirées sont nettoyées, les structures incompatibles et certificats refusés explicitement. Les limites de conservation doivent être documentées et visibles avant l’export.
+`PDFOrganizingDocument` in PDFCore owns the original data and the reading document, in an actor. The editing state is limited to the page indexes and their rotations; moving or rotating a card requests no new render. The export starts again from a fresh document, keeps vector and selectable content, and does not rasterize the pages. Link/bookmark targets that were removed are cleaned up, and incompatible structures and certificates are refused explicitly. The preservation limits must be documented and visible before the export.
 
-256 Mio maximum à l’ouverture, lecture hors acteur principal ; miniatures à la demande limitées à 240 pixels, cache de 32 images. Les cartes quittant l’écran libèrent leurs images. L’aperçu agrandi ne rend qu’une page à 1 600 pixels. Ces plafonds ne constituent pas une garantie sur la mémoire interne de PDFKit. Historique de 100 actions, sans copie des pixels. Aucune dépendance ni permission réseau nouvelle. Les destinations égales à la source, à un lien symbolique ou physique sont refusées.
+256 MiB at most at opening, reading off the main actor; thumbnails on demand limited to 240 pixels, cache of 32 images. Cards that leave the screen release their images. The enlarged preview renders only one page, at 1,600 pixels. These caps are not a guarantee on the internal memory of PDFKit. History of 100 actions, with no copy of the pixels. No new dependency or network permission. A destination that is the source, or a symbolic or hard link to it, is refused.
 
-## Vérification
+## Verification
 
-Fixtures synthétiques : ordre/export, rotations, suppression, undo, fichiers protégés, conservation des textes/annotations/liens/signets, annulation et sources intactes. Mesure sur 100 pages ; contrôle du geste de glisser dans une vraie fenêtre et des extrémités. Captures clair/sombre à la taille minimale, types/compilation, tests Swift et catalogue de textes. Aucun document privé ajouté.
+Synthetic fixtures: order/export, rotations, deletion, undo, protected files, preservation of text/annotations/links/bookmarks, cancellation and intact sources. Measurement on 100 pages; check of the drag gesture in a real window and at both ends. Light/dark captures at the minimum size, types/compilation, Swift tests and string catalog. No private document added.
