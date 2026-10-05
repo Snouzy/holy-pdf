@@ -63,8 +63,11 @@ export function App() {
   }
 
   async function pick(): Promise<File[]> {
-    const accepts = tool ? tools[tool].accepts : null;
-    const filters = accepts === "pdf" ? [{ name: "PDF", extensions: ["pdf"] }] : accepts ? [{ name: "JPEG, PNG, HEIC", extensions: images }] : [{ name: "PDF, JPEG, PNG, HEIC", extensions: ["pdf", ...images] }];
+    const current = tool ? tools[tool] : null;
+    const filters = !current ? [{ name: "PDF, JPEG, PNG, HEIC", extensions: ["pdf", ...images] }]
+      : current.convertsImages ? [{ name: "PDF, JPEG, PNG", extensions: ["pdf", "jpg", "jpeg", "png"] }]
+      : current.accepts === "pdf" ? [{ name: "PDF", extensions: ["pdf"] }]
+      : [{ name: "JPEG, PNG, HEIC", extensions: images }];
     const paths = await open({ multiple: true, filters });
     return Promise.all((paths ?? []).map(async (path) => new File([await readFile(path)], path.split(/[\\/]/).pop() ?? path)));
   }

@@ -19,6 +19,29 @@ test("refuses a text file renamed to .pdf", async ({ page }) => {
   await expect(page.getByRole("alert")).toHaveText("This file format is not supported.");
 });
 
+test("offers to turn images into pages on Merge", async ({ page }) => {
+  await page.goto("/en/merge-pdf");
+  await chooseFiles(page, [await pdfFile("a.pdf", ["A1"]), { name: "red.png", mimeType: "image/png", buffer: solidPng(300, 200, [200, 30, 30]) }]);
+  const question = page.getByRole("dialog");
+  await expect(question).toContainText("red.png is an image. Shall I turn it into a PDF page before merging?");
+  await question.getByRole("button", { name: "Leave out" }).click();
+  await expectThumbnails(page, 1);
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await chooseFiles(page, [
+    { name: "blue.png", mimeType: "image/png", buffer: solidPng(200, 300, [30, 30, 200]) },
+    { name: "green.png", mimeType: "image/png", buffer: solidPng(200, 300, [30, 200, 30]) },
+  ]);
+  await expect(question).toContainText("These are 2 images. Shall I turn them into PDF pages before merging?");
+  await question.getByRole("button", { name: "Convert" }).click();
+  await expectThumbnails(page, 3);
+  await expect(page.locator(".file-tab")).toHaveCount(3);
+  const { name, bytes } = await exportWith(page, "Merge the PDFs");
+  expect(name).toBe("a-merged.pdf");
+  const pages = await readWithPdfjs(bytes);
+  expect(pages.map((p) => p.text)).toEqual(["A1", "", ""]);
+  expect(pages.slice(1).map((p) => [p.width, p.height])).toEqual([[595, 842], [595, 842]]);
+});
+
 test("opens a protected PDF with its password and writes it unprotected", async ({ page }) => {
   await page.goto("/en/merge-pdf");
   await chooseFiles(page, [await pdfFile("secret.pdf", ["S1"], "open-sesame")]);

@@ -1,3 +1,4 @@
+import type { JSX } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from "preact/hooks";
 import type { BookmarksDraft } from "../bookmarks/outline";
 import type { CropDraft } from "../crop/box";
@@ -9,7 +10,7 @@ import { boardTexts } from "../i18n/board";
 import type { Dictionary, MonkTexts } from "../i18n/fr";
 import { Icon } from "../illustrations/Icon";
 import type { SignatureDraft } from "../signature/SignatureEditor";
-import { acceptsKind, type Lang, languages, type ToolId, tools } from "../tools";
+import { acceptsKind, type Lang, languages, looksLikeImage, type ToolId, tools } from "../tools";
 import "./board.css";
 import { bubbleOf } from "./bubble";
 import { useConfirm } from "./ConfirmDialog";
@@ -73,6 +74,13 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
   const [signaturePreviewReady, setSignaturePreviewReady] = useState(false);
   const [ask, confirmDialog] = useConfirm();
   const confirm = askOutside ?? ask;
+  // Every screen of the board can be asked a question: the dialog goes with each of them.
+  const withDialog = (screen: JSX.Element) => (
+    <>
+      {screen}
+      {confirmDialog}
+    </>
+  );
   const [savedMade, setSavedMade] = useState<Made | null>(null);
   const [scannerSaved, setScannerSaved] = useState(true);
   useFileDrop(addFiles);
@@ -194,9 +202,9 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
     });
   }
 
-  async function open(docId: string, file: File, password?: string) {
+  async function open(docId: string, file: File, password?: string, asImage = false) {
     const kind = await readKind(file);
-    if (!kind.ok || !acceptsKind(tool, kind.value)) {
+    if (!kind.ok || !(asImage || acceptsKind(tool, kind.value))) {
       dispatch({ type: "docFailed", docId, error: kind.ok ? { kind: "unsupportedFormat" } : kind.error });
       return;
     }
@@ -225,10 +233,22 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
       dropEdit();
       setCrop(null);
     }
-    const added = chosen.map((file) => ({ id: crypto.randomUUID(), file }));
+    const images = tool.convertsImages ? chosen.filter(looksLikeImage) : [];
+    start(chosen.filter((file) => !images.includes(file)));
+    if (images.length > 0) void offerImages(images);
+  }
+
+  function start(list: File[], asImages = false) {
+    if (list.length === 0) return;
+    const added = list.map((file) => ({ id: crypto.randomUUID(), file }));
     for (const { id, file } of added) files.current.set(id, file);
     dispatch({ type: "docsAdded", docs: added.map(({ id, file }) => ({ id, name: file.name })) });
-    for (const { id, file } of added) void open(id, file);
+    for (const { id, file } of added) void open(id, file, undefined, asImages);
+  }
+
+  /** On Merge, images are not refused: the monk offers to make a page of each, as JPG to PDF does. */
+  async function offerImages(images: File[]) {
+    if (await confirm(t.board.imagesArrived(images.length, images[0]?.name ?? ""), { cancel: t.board.leaveImages, confirm: t.board.convertImages })) start(images, true);
   }
 
   function reopen(docId: string, password?: string) {
@@ -236,7 +256,7 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
     if (!file) return;
     if (password) locked.current.add(docId);
     dispatch({ type: "docReopening", docId });
-    void open(docId, file, password);
+    void open(docId, file, password, Boolean(tool.convertsImages) && looksLikeImage(file));
   }
 
   function remove(docId: string) {
@@ -457,17 +477,14 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
   if (tool.workspace === "scanner") {
     if (photos.length === 0) return <DropZone tool={tool} t={t} onFiles={addFiles} />;
     if (editorLoadFailed) return <p role="alert">{t.errors.engineUnavailable} <button type="button" onClick={() => void loadEditor()}>{t.retry}</button></p>;
-    return (
-      <>
-        {scannerModule ? (
-          <scannerModule.ScannerApp photos={photos} lang={lang} engine={engine} onPhotos={addFiles} Skeleton={DocumentSkeleton} saver={saver} confirm={confirm} onSavedChange={setScannerSaved} />
-        ) : <DocumentSkeleton label={t.board.opening} />}
-        {confirmDialog}
-      </>
+    return withDialog(
+      scannerModule ? (
+        <scannerModule.ScannerApp photos={photos} lang={lang} engine={engine} onPhotos={addFiles} Skeleton={DocumentSkeleton} saver={saver} confirm={confirm} onSavedChange={setScannerSaved} />
+      ) : <DocumentSkeleton label={t.board.opening} />,
     );
   }
-  if (made) return <Result tool={tool} t={t} lang={lang} made={made} saver={saver} onSaved={() => setSavedMade(made)} onBack={back} onAgain={startOver} />;
-  if (board.docs.length === 0) return <DropZone tool={tool} t={t} onFiles={addFiles} />;
+  if (made) return withDialog(<Result tool={tool} t={t} lang={lang} made={made} saver={saver} onSaved={() => setSavedMade(made)} onBack={back} onAgain={startOver} />);
+  if (board.docs.length === 0) return withDialog(<DropZone tool={tool} t={t} onFiles={addFiles} />);
 
   // The tabs and colour marks tell files apart. One ready file needs neither, and neither do images: one image is one
   // page, named under it. Sign uses a document placeholder; other tools keep opening/failed files in tabs.
@@ -496,7 +513,7 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
     ) : bookmarksModule && bookmarksProps ? <bookmarksModule.BookmarksWorkspace {...bookmarksProps} />
     : editModule && editProps ? <editModule.EditWorkspace {...editProps} />
     : cropModule && cropProps ? <cropModule.CropWorkspace {...cropProps} /> : null;
-  return (
+  return withDialog(
     <div class={["board", alone && "alone", tabs.length === 0 && "untabbed"].filter(Boolean).join(" ")}>
       <div class="workspace">
         {pageEditor ? (
@@ -547,6 +564,6 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
           : tool.id === "edit" ? editModule && editProps && <editModule.EditOptions {...editProps} />
           : tool.id === "crop" ? cropModule && cropProps && <cropModule.CropOptions {...cropProps} /> : <Options tool={tool} t={t} board={board} dispatch={dispatch} settings={settings} onSettings={(change) => setSettings((current) => ({ ...current, ...change }))} onLayer={(file) => void chooseLayer(file)} layerError={layerError} />}
       </Panel>
-    </div>
+    </div>,
   );
 }
