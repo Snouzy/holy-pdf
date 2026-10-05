@@ -1,5 +1,7 @@
 # Mac — Fusionner des PDF
 
+_Appli Swift retirée le 5 octobre 2026 : cette spec est une archive, le code est au tag `mac-final`._
+
 ## Objectif
 
 Troisième outil natif : réunir plusieurs PDF en un seul fichier, dans un ordre choisi, sans modifier les originaux. Frère Agrafe rejoint la grille de l’accueil. La session Web reste indépendante. Aucun serveur, moteur supplémentaire ou dépendance.

@@ -1,6 +1,6 @@
 # Mac — PDF en Word
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/mac`. Demandé par l'auteur le 2 octobre (« continue sur l'outil suivant »), après les petites dettes : le site a l'outil depuis le même jour ([spec du site](2026-10-02-web-pdf-to-word-design.md))._
+_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Demandé par l'auteur le 2 octobre (« continue sur l'outil suivant »), après les petites dettes : le site a l'outil depuis le même jour ([spec du site](2026-10-02-web-pdf-to-word-design.md))._
 
 ## Objectif
 

@@ -5,8 +5,8 @@ The code of Holy PDF is free software. The brand is a trademark matter. This pag
 ## What the brand is
 
 - the name **Holy PDF**, and any name that could be confused with it;
-- the logo: the halo on a yellow disc (`apps/web/public/favicon.svg`, `apps/mac/PDFToolbox/HolyPDF.icon`);
-- the monk character in a brown habit with a yellow cord, in all his moods, and the illustrations of the site and of the Mac app that feature him (`apps/web/src/illustrations/Monk.tsx`, `Scene.tsx`, `Avatar.tsx`, `apps/mac/PDFToolbox/Assets.xcassets/`), as well as the films in `apps/web/public/videos/`;
+- the logo: the halo on a yellow disc (`apps/web/public/favicon.svg`, `apps/desktop/src-tauri/icons/`);
+- the monk character in a brown habit with a yellow cord, in all his moods, and the illustrations of the site and of the desktop app that feature him (`apps/web/src/illustrations/Monk.tsx`, `Scene.tsx`, `Avatar.tsx`), as well as the films in `apps/web/public/videos/`;
 - the domain `holy-pdf.com` and the project's social accounts.
 
 Snouzylabs S.R.L., the publisher of Holy PDF, claims the name and the monk as its marks. A trademark filing is planned; until it is granted, the name is an unregistered mark.

@@ -1,6 +1,6 @@
 # Mac — Numéros de page
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/mac`. Premier des six outils commandés le 2 octobre (ensuite : Protéger et Déverrouiller, Compresser, OCR, Noircir)._
+_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Premier des six outils commandés le 2 octobre (ensuite : Protéger et Déverrouiller, Compresser, OCR, Noircir)._
 
 ## Objectif
 

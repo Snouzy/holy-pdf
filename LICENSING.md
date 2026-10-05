@@ -6,7 +6,7 @@ This page is a plain-language guide. What binds is the licence text in [LICENSE]
 
 ## 1. The code and the texts: AGPL-3.0-or-later
 
-Everything in this repository that is not a third-party component listed below is free software under the GNU Affero General Public License, version 3 or any later version: the site in `apps/web/` (its code, the texts of its pages and articles, the source files of its illustrations), the Swift engine in `Packages/Core`, the Mac app in `apps/mac`, the wiki, the tools and the tests.
+Everything in this repository that is not a third-party component listed below is free software under the GNU Affero General Public License, version 3 or any later version: the site in `apps/web/` (its code, the texts of its pages and articles, the source files of its illustrations), the desktop app in `apps/desktop/`, the wiki, the tools and the tests.
 
 In short: you may use, study, change and redistribute it, including commercially, as long as the people who receive it, or who use a modified version over a network, can get the corresponding source under the same licence.
 

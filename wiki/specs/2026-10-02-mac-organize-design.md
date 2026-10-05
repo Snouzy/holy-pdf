@@ -1,5 +1,7 @@
 # Mac — Organiser les pages
 
+_Appli Swift retirée le 5 octobre 2026 : cette spec est une archive, le code est au tag `mac-final`._
+
 ## Parcours
 
 Quatrième outil natif, Frère Classeur. Ouvrir ou déposer un PDF, afficher ses pages dans une grille adaptative. Chaque carte propose aperçu agrandi, déplacement précédent/suivant, rotation horaire et suppression. Le glisser déplace une page avant/après une carte ou en fin de grille. Pendant le glisser, une barre d'insertion montre où la page va se poser : à gauche de la carte survolée si le pointeur est sur sa moitié gauche, à droite sinon. Les zones de dépôt couvrent aussi l'espace entre les cartes. Un changement d'ordre (glisser, flèches, annulation) est animé. Les positions affichées sont celles de la copie ; le numéro de page source reste identifiable. La dernière page ne peut pas être supprimée. Annuler (⌘Z) restaure ordre, pages supprimées et rotations. L’original reste intact ; enregistrer utilise le panneau macOS et crée une copie.

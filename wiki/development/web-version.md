@@ -4,7 +4,7 @@ _Décidé le 29 septembre 2026. Construit dans `apps/web/` : les outils Organise
 
 ## Principe
 
-Tout le traitement se fait dans le navigateur. Aucun fichier ne part sur un serveur : c'est la même promesse que l'appli Mac.
+Tout le traitement se fait dans le navigateur. Aucun fichier ne part sur un serveur : c'est la même promesse que l'appli de bureau.
 
 ## Site
 
@@ -310,7 +310,6 @@ La FAQ de l'accueil a ses propres textes, plus courts que ceux de la page FAQ. U
 - **Identifiant d'un article** : le chargeur `glob` prend le champ `slug` du frontmatter comme identifiant. La collection `articles` impose `generateId` pour garder `<langue>/<fichier>`, qui apparie les deux langues d'un article.
 - **Ancres d'une page de contenu** : Markdown dérive l'id d'un titre de son texte. Une ancre visée par un lien (`#mac`, `#iphone`) s'écrit en HTML dans le `.md` : `<h2 id="mac">`.
 - **Titre d'une page de contenu sur téléphone** : dans l'en-tête en flex, la largeur minimale du `h1` est celle de son mot le plus long. `overflow-wrap: break-word` ne la réduit pas : Firefox, à 320 px et polices de repli, débordait de 16 px sur « Confidentialité ». Le titre prend `overflow-wrap: anywhere`, et la césure seulement sous 30 rem.
-- **Les dessins de l'appli Mac viennent du site.** `tests/unit/macAssets.test.ts` exporte des moines, la scène du Scanner et quatre couleurs de `tokens.css` dans `apps/mac/PDFToolbox/Assets.xcassets/Generated/`, et échoue quand ce dossier n'est plus à jour. Après un changement d'un moine, d'une scène ou d'une couleur : `UPDATE_MAC_ASSETS=1 pnpm test`, et commiter le dossier avec le changement.
 - **Taille** : le build complet d'OpenCV.js pèse environ 10 Mo, sans les modèles d'OCR. Faire un build réduit aux fonctions utiles. Charger le moteur à la première photo déposée, pas à l'ouverture de la page. L'OCR sert aussi à trouver l'orientation, il ne peut donc pas attendre l'export.
 - **Threads WebAssembly** : ils demandent `SharedArrayBuffer`, donc les en-têtes COOP et COEP. Les outils Organiser n'en ont pas besoin. Les mettre seulement sur les pages du scanner : sous COEP, chaque ressource externe (police, analytics) doit envoyer un en-tête CORP ou CORS.
 - **Conservation du document** : Compresser enregistre le document source, sans recopier ses pages. La copie dans un document neuf perdait signets, destinations, formulaires, balises, pièces jointes et métadonnées. Cet enregistrement décompacte les structures internes ; qpdf les recompacte ensuite avec `--object-streams=generate --compress-streams=y` lorsque le profil le permet. Le retour à l'original sous 1 % de gain reste appliqué au résultat final.

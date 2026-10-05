@@ -1,6 +1,6 @@
 # Mac — Images en PDF et PDF en images
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/mac`. Demandé par l'auteur le 2 octobre pour finir la phase 1 de la [feuille de route](../product/roadmap.md), avant l'accueil par catégories._
+_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Demandé par l'auteur le 2 octobre pour finir la phase 1 de la [feuille de route](../product/roadmap.md), avant l'accueil par catégories._
 
 ## Objectif
 

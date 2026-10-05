@@ -1,6 +1,6 @@
 # Mac — Accueil par catégories, avec recherche
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/mac`. Demandé par l'auteur le 2 octobre, après [Images en PDF et PDF en images](2026-10-02-mac-images-design.md) : l'accueil avait quinze cartes à plat._
+_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Demandé par l'auteur le 2 octobre, après [Images en PDF et PDF en images](2026-10-02-mac-images-design.md) : l'accueil avait quinze cartes à plat._
 
 ## Objectif
 

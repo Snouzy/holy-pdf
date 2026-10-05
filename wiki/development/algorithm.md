@@ -1,6 +1,6 @@
 # Algorithme du scanner
 
-_Référence indépendante du langage. Mise au point le 29 septembre 2026 avec le prototype Python/OpenCV (`tools/prototype/scan.py`), sur un lot réel de 17 photos. Sert de modèle à l'implémentation Swift et à la future version Web._
+_Référence indépendante du langage. Mise au point le 29 septembre 2026 avec le prototype Python/OpenCV (`tools/prototype/scan.py`), sur un lot réel de 17 photos. A servi de modèle à l'implémentation Swift (retirée le 5 octobre 2026, tag `mac-final`) et sert à celle du Scanner du site._
 
 ## Étapes d'une page
 
