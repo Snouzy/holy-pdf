@@ -692,7 +692,7 @@ Rust via rustup est nécessaire ; rien ne tourne en CI. Le serveur de développe
 
 1. ⌘O ouvre le dialogue natif, filtré sur les PDF depuis un outil PDF ; les fichiers choisis arrivent dans la planche. Depuis le monastère, « 3 fichiers prêts » s'affiche et les cartes qui ne les acceptent pas sont grisées.
 2. Un PDF lâché sur le monastère ou sur un outil s'ouvre ; le voile « Lâchez, je m'en occupe. » s'affiche pendant le survol.
-3. Compresser un PDF, « Voir » : la copie s'ouvre dans Aperçu sans dialogue ; changer le niveau, relancer, « Voir » montre la nouvelle copie. « Enregistrer… » : le dialogue natif propose le nom de la copie dans le dernier dossier ; « Enregistré » et le nom s'affichent, « Ouvrir » lance le lecteur du système, « Afficher dans le Finder » sélectionne le fichier.
+3. Compresser un PDF, « Voir » : l'aperçu s'ouvre dans la page, sans dialogue ; changer le niveau, relancer, « Voir » montre la nouvelle copie. Sur Diviser, l'aperçu enchaîne les fichiers produits ; sur PDF en JPG, les images. « Enregistrer… » : le dialogue natif propose le nom de la copie dans le dernier dossier ; « Enregistré » et le nom s'affichent, « Ouvrir » lance le lecteur du système, « Afficher dans le Finder » sélectionne le fichier.
 4. Scanner : deux photos, « Tout enregistrer… » avec une page à vérifier pose la question « Enregistrer quand même ? » ; Supprimer un document pose la sienne.
 5. Passer le système en sombre : l'appli suit sans redémarrer.
 6. Déplacer et redimensionner la fenêtre, quitter, relancer : elle revient au même endroit.

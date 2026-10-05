@@ -68,18 +68,20 @@ test("adds a PDF from the panel, above the verb; a phone keeps the bar for the v
   await expect(page.locator(".go .add")).toBeHidden();
 });
 
-test("views the result in a new browser tab, then downloads it", async ({ page }) => {
+test("views the result in the page, then downloads it", async ({ page }) => {
   await page.goto("/en/merge-pdf");
-  await chooseFiles(page, [await pdfFile("a.pdf", ["A1"])]);
-  await expectThumbnails(page, 1);
+  await chooseFiles(page, [await pdfFile("a.pdf", ["A1", "A2"]), await pdfFile("b.pdf", ["B1"])]);
+  await expectThumbnails(page, 3);
   await page.getByRole("button", { name: "Merge the PDFs", exact: true }).click();
-  // Headless browsers have no PDF viewer: record the address the page opens.
-  await page.evaluate(() => Object.assign(window, { open: (url: string) => Reflect.set(window, "viewed", url) }));
   await page.getByRole("button", { name: "View", exact: true }).click();
-  const viewed = String(await page.evaluate(() => Reflect.get(window, "viewed")));
-  expect(viewed).toMatch(/^blob:/);
-  const start = await page.evaluate(async (url) => new TextDecoder().decode((await (await fetch(url)).arrayBuffer()).slice(0, 5)), viewed);
-  expect(start).toBe("%PDF-");
+  const preview = page.getByRole("dialog", { name: "Preview" });
+  await expect(preview).toContainText("Page 1 of 3");
+  await expect(preview.locator("img")).toBeVisible();
+  await page.keyboard.press("ArrowRight");
+  await page.keyboard.press("ArrowRight");
+  await expect(preview).toContainText("Page 3 of 3");
+  await page.keyboard.press("Escape");
+  await expect(preview).toBeHidden();
   const downloading = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download the PDF" }).click();
   expect((await downloading).suggestedFilename()).toBe("a-merged.pdf");
@@ -97,7 +99,13 @@ test("puts each tool's own options in the panel", async ({ page }) => {
   await page.getByRole("button", { name: "Split after this page, Page 1" }).click();
   await page.getByRole("button", { name: "Split the PDF", exact: true }).click();
   await expect(page.getByRole("button", { name: "Download the 2 PDFs" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "View", exact: true })).toHaveCount(0);
+  // The preview walks the files of the zip, one after the other.
+  await page.getByRole("button", { name: "View", exact: true }).click();
+  const preview = page.getByRole("dialog", { name: "Preview" });
+  await expect(preview).toContainText("Page 1 of 2");
+  await expect(preview.locator(".preview-title")).toHaveText(/\.pdf, page 1$/);
+  await page.keyboard.press("Escape");
+  await expect(preview).toBeHidden();
   await expect(page.getByText("They come in a .zip folder: open it to see the files.")).toBeVisible();
   await page.goto("/en/rotate-pdf");
   await chooseFiles(page, [await pdfFile("a.pdf", ["A1"])]);

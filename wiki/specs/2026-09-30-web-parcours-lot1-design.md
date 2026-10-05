@@ -98,7 +98,7 @@ La page de résultat remplace la planche. Le focus passe à son titre.
 - Une carte blanche. À gauche, le moine en humeur `joy`, 200 px, dans son rond, avec la bulle « Alléluia, c'est fait 🙌 ». À droite :
   - un titre 2 qui dit ce qui a changé, avec le surligneur sur le chiffre ;
   - une preuve : les barres avant et après pour Compresser, les vignettes des images pour PDF en JPG, et « nom-du-fichier.pdf · 12 pages · 2,4 Mo » pour les autres outils ;
-  - le bouton principal **Télécharger**, puis **Voir** quand le résultat est un seul PDF ;
+  - le bouton principal **Télécharger**, puis **Voir** sur chaque résultat sauf Word : l'aperçu dans la page, fichier par fichier (voir « Aperçu d'une page » dans la [spec du socle](2026-09-29-web-organiser-design.md)) ;
   - le nom du fichier produit, en gris.
 - Sous la carte, un lien qui vide la planche et rouvre la zone de dépôt : « Compresser un autre PDF », etc.
 
@@ -163,7 +163,7 @@ Un document contenant une signature numérique est rendu exactement tel quel : t
 - Titre : « Votre PDF est <surligné>75 % plus léger</surligné> » ; avec plusieurs PDF : « Vos PDF sont 62 % plus légers » ; sans gain : « Ce PDF était déjà bien pressé ».
 - Preuve : deux barres, « Avant 12,4 Mo » en gris et « Après 3,1 Mo » en vert, à l'échelle.
 - Nom : `rapport-annuel-compresse.pdf`. Plusieurs PDF : `rapport-annuel-compresse.zip`, chaque PDF gardant son nom suivi de `-compresse`.
-- Voir : seulement avec un seul PDF.
+- Voir : l'aperçu du PDF produit dans la page, comme sur les autres résultats.
 
 ## PDF en JPG
 

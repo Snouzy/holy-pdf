@@ -1,4 +1,3 @@
-import { join, tempDir } from "@tauri-apps/api/path";
 import { save } from "@tauri-apps/plugin-dialog";
 import { writeFile } from "@tauri-apps/plugin-fs";
 import { openPath, revealItemInDir } from "@tauri-apps/plugin-opener";
@@ -19,12 +18,6 @@ export const saver: Saver = {
     await writeFile(path, bytes);
     localStorage.setItem(folderKey, path.slice(0, Math.max(path.lastIndexOf("/"), path.lastIndexOf("\\"))));
     return { kind: "saved", path };
-  },
-  async preview(bytes, name) {
-    // A hidden name would fall outside the `$TEMP/**` scope: globs do not match a leading dot.
-    const path = await join(await tempDir(), name.replace(/^\.+/, ""));
-    await writeFile(path, bytes);
-    await openPath(path);
   },
   open: (path) => openPath(path),
   reveal: (path) => revealItemInDir(path),

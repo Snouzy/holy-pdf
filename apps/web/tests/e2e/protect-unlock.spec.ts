@@ -15,6 +15,12 @@ test("protects a PDF once both passwords match, and the copy opens with that pas
   await expect(verb).toBeEnabled();
   const { name, bytes } = await exportWith(page, "Protect the PDF");
   expect(name).toBe("contract-protected.pdf");
+  // The copy is encrypted: the preview opens it with the password just set.
+  await page.getByRole("button", { name: "View", exact: true }).click();
+  const preview = page.getByRole("dialog", { name: "Preview" });
+  await expect(preview).toContainText("Page 1 of 1");
+  await expect(preview.locator("img")).toBeVisible();
+  await page.keyboard.press("Escape");
   await expect(readWithPdfjs(bytes)).rejects.toThrow();
   expect((await readWithPdfjs(bytes, "s3cret")).map((p) => p.text)).toEqual(["Contract"]);
 });

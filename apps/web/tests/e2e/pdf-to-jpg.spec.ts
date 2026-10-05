@@ -11,6 +11,12 @@ test("turns each page into a JPG, in a .zip on a computer", async ({ page }) => 
   await page.getByRole("button", { name: "Convert to JPG", exact: true }).click();
   await expect(page.locator(".result h2")).toHaveText("Your 3 images are ready");
   await expect(page.locator(".result-thumbs img")).toHaveCount(3);
+  await page.getByRole("button", { name: "View", exact: true }).click();
+  const preview = page.getByRole("dialog", { name: "Preview" });
+  await expect(preview).toContainText("Page 1 of 3");
+  await expect(preview.locator("img")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(preview).toBeHidden();
   const downloading = page.waitForEvent("download");
   await page.getByRole("button", { name: "Download the 3 images" }).click();
   const download = await downloading;
