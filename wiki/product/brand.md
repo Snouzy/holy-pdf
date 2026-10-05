@@ -8,7 +8,7 @@ A strong and warm brand, like the PDF24 sheep: a character that comes in one ill
 
 ## Name: Holy PDF
 
-Chosen domain: **holy-pdf.com**. Also to buy: **holypdf.app**, as a redirect, because holypdf.com is taken. On 5 October 2026, neither domain is registered yet.
+Chosen domain: **holy-pdf.com**. Also to buy: **holypdf.app**, as a redirect, because holypdf.com is taken. On 5 October 2026, neither domain is registered yet. Update, 6 October 2026: holy-pdf.com bought on Cloudflare; holypdf.app not bought.
 
 Why this name:
 
@@ -112,6 +112,6 @@ Review of milestone 1, on 1 October 2026: the compression levels and their FR/EN
 
 ## Still to do
 
-- check the trademarks, then buy holy-pdf.com and holypdf.app. Still open on 5 October 2026: neither domain is registered, so the contact address hello@holy-pdf.com, given in the site's pages, receives no mail yet;
+- check the trademarks, then buy holy-pdf.com and holypdf.app. Still open on 5 October 2026: neither domain is registered, so the contact address hello@holy-pdf.com, given in the site's pages, receives no mail yet. Update, 6 October 2026: holy-pdf.com bought and hello@ forwarded; the trademark check and holypdf.app stay open;
 - an iPhone app icon (the icon of the removed Mac app, kept at tag `mac-final`: `apps/mac/PDFToolbox/HolyPDF.icon`);
 - for the final version of the illustrations, plan an illustrator, with the canvas mockups as the brief.

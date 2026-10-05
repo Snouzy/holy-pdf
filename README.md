@@ -6,7 +6,7 @@ Free PDF tools that run in your browser. Merge, split, compress, sign, edit, fil
 
 No upload, no account, no quota, no advertising. The code is free software under the AGPL. A desktop app for Mac and Windows is on the way.
 
-[holy-pdf.com](https://holy-pdf.com) (not online yet) · [Wiki](wiki/index.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Licensing](LICENSING.md)
+[holy-pdf.com](https://holy-pdf.com) · [Wiki](wiki/index.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Licensing](LICENSING.md)
 
 ## Why
 

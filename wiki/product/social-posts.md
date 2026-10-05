@@ -2,7 +2,7 @@
 
 Three versions of the [project story](story.md), for a personal post in French. LinkedIn keeps the full story. Instagram tightens it. X offers a short post, and a thread as an alternative.
 
-The texts present the project while it is still being built. Add the public link once its address is confirmed and the site is reachable. The domain chosen in the wiki does not prove that the site is live. On 5 October 2026, holy-pdf.com is not registered and the site is not online.
+The texts present the project while it is still being built. Add the public link once its address is confirmed and the site is reachable. The domain chosen in the wiki does not prove that the site is live. On 5 October 2026, holy-pdf.com is not registered and the site is not online. Update, 6 October 2026: the site is online at holy-pdf.com, with `noindex` until the author opens it.
 
 ## LinkedIn
 

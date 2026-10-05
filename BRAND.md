@@ -7,7 +7,7 @@ The code of Holy PDF is free software. The brand is a trademark matter. This pag
 - the name **Holy PDF**, and any name that could be confused with it;
 - the logo: the halo on a yellow disc (`apps/web/public/favicon.svg`, `apps/desktop/src-tauri/icons/`);
 - the monk character in a brown habit with a yellow cord, in all his moods, and the illustrations of the site and of the desktop app that feature him (`apps/web/src/illustrations/Monk.tsx`, `Scene.tsx`, `Avatar.tsx`), as well as the films in `apps/web/public/videos/`;
-- the domain `holy-pdf.com` (not registered yet) and the project's social accounts.
+- the domain `holy-pdf.com` and the project's social accounts.
 
 Snouzylabs S.R.L., the publisher of Holy PDF, claims the name and the monk as its marks. A trademark filing is planned; until it is granted, the name is an unregistered mark.
 
@@ -33,4 +33,4 @@ The source files of the logo and the illustrations are part of the program and s
 
 Pick your own name, replace the logo and the monk wherever a visitor sees them, and remove the name from the user-facing text (`apps/web/src/i18n/`, the content pages, the metadata, and in the desktop app `apps/desktop/app/texts.ts`, the menus and the product name in `apps/desktop/src-tauri/`). Leave the license notices untouched. The AGPL asks that your users can get your source; the brand asks that they can tell your project from this one.
 
-Permission requests: open an issue on GitHub. An email address will come with the site's launch.
+Permission requests: [hello@holy-pdf.com](mailto:hello@holy-pdf.com).

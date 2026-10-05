@@ -18,7 +18,7 @@ All processing happens in the browser. No file goes to a server: it is the same 
 
 Not Next.js: its server side (server rendering, Server Components, API routes) has no use when everything runs in the browser.
 
-_Status on 5 October 2026: the site is not online. The deploy step of `.github/workflows/web.yml` has never run, because the repository has no `SITE_URL` variable and no Cloudflare secrets. The Cloudflare Worker is named `holy-pdf-web` (`apps/web/wrangler.jsonc`)._
+_Status on 5 October 2026: the site is not online. The deploy step of `.github/workflows/web.yml` has never run, because the repository has no `SITE_URL` variable and no Cloudflare secrets. The Cloudflare Worker is named `holy-pdf-web` (`apps/web/wrangler.jsonc`). Update, 6 October 2026: holy-pdf.com was bought on Cloudflare; the site is online there, deployed by CI on each push to `main` that touches it (PR #23), with `noindex` until `INDEXABLE=true`; hello@holy-pdf.com forwards to the author's mailbox through Cloudflare Email Routing. The Worker answers on the domain as a custom domain, and `workers_dev: false` keeps no copy on workers.dev. The zone has Always Use HTTPS on; `www.holy-pdf.com` has no record yet._
 
 ## Engine
 
