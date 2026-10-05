@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { searchIndex } from "../../src/home/index";
 import { searchTools, type SearchEntry } from "../../src/home/search";
-import { dictionaries, searchTexts } from "../../src/i18n";
+import { searchTexts } from "../../src/i18n";
 import { upcomingIds } from "../../src/cast";
-import { type Lang, languages, toolIds } from "../../src/tools";
+import { languages, toolIds } from "../../src/tools";
 
 const entries: SearchEntry[] = [
   { id: "merge", ready: true, names: ["Fusionner des PDF", "Frère Agrafe"], terms: ["assembler", "combiner", "joindre"] },
@@ -85,16 +86,6 @@ describe("searchTools", () => {
   });
 });
 
-/** The index as `src/pages/[lang]/search.json.ts` builds it. */
-function builtIndex(lang: Lang): SearchEntry[] {
-  const t = dictionaries[lang];
-  const search = searchTexts[lang];
-  return [
-    ...toolIds.map((id) => ({ id, ready: true, names: [t.toolNames[id], t.toolShort[id], t.monks[id].name], terms: search.terms[id] })),
-    ...upcomingIds.map((id) => ({ id, ready: false, names: [t.upcoming[id]], terms: search.terms[id] })),
-  ];
-}
-
 describe("searchTools on the built index", () => {
   it.each([
     ["fr", "compresser pdf gratuit", "compress"],
@@ -120,7 +111,7 @@ describe("searchTools on the built index", () => {
     ["en", "convert pdf to photos", "pdf-to-jpg"],
     ["en", "jpg to pdf", "jpg-to-pdf"],
   ] as const)("%s: « %s » puts %s first", (lang, query, id) => {
-    expect(searchTools(query, builtIndex(lang))[0]?.id).toBe(id);
+    expect(searchTools(query, searchIndex(lang))[0]?.id).toBe(id);
   });
 });
 

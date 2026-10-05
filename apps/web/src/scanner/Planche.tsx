@@ -1,5 +1,6 @@
 import { DndContext, type DragEndEvent, MouseSensor, TouchSensor, useDraggable, useDroppable, useSensor, useSensors } from "@dnd-kit/core";
 import { useEffect, useState } from "preact/hooks";
+import type { Confirm } from "../board/deliver";
 import { Icon } from "../illustrations/Icon";
 import { needsCheck, useBlobUrl } from "./pages";
 import { type Doc, movePage, type Op, type Page, type Session } from "./session";
@@ -10,6 +11,7 @@ type Props = {
   onOp: (op: Op) => void; onUndo: () => void; onRedo: () => void; onCorrect: (pageId: string) => void;
   onDownload: (docs: Doc[]) => void; onOnlyToCheck: (on: boolean) => void; onPhotos: (files: File[]) => void;
   searchable: boolean; onSearchable: (on: boolean) => void; readingCount: number;
+  saving: boolean; confirm: Confirm;
 };
 
 export function Planche(props: Props) {
@@ -48,7 +50,7 @@ export function Planche(props: Props) {
           <span class="track" />{t.searchable}
         </button>
         <button type="button" class="primary" disabled={props.busy || session.documents.length === 0} onClick={() => props.onDownload(session.documents)}>
-          <Icon name="download" size={18} />{t.downloadAll}
+          <Icon name="download" size={18} />{props.saving ? t.saveAll : t.downloadAll}
         </button>
       </div>
       <DndContext sensors={sensors} onDragEnd={dropped}>
@@ -58,7 +60,7 @@ export function Planche(props: Props) {
   );
 }
 
-function Row({ doc, session, t, onlyToCheck, busy, onOp, onCorrect, onDownload }: Props & { doc: Doc }) {
+function Row({ doc, session, t, onlyToCheck, busy, onOp, onCorrect, onDownload, saving, confirm }: Props & { doc: Doc }) {
   const [name, setName] = useState(doc.name);
   useEffect(() => setName(doc.name), [doc.name]);
   const end = useDroppable({ id: `end:${doc.id}` });
@@ -82,9 +84,11 @@ function Row({ doc, session, t, onlyToCheck, busy, onOp, onCorrect, onDownload }
             }
           }} />
         <span class="planche-count">{t.pages(doc.pageIds.length)}{doc.reason ? ` · ${doc.reason}` : ""}</span>
-        <button type="button" disabled={busy} onClick={() => onDownload([doc])}><Icon name="download" size={18} />{t.download}</button>
+        <button type="button" disabled={busy} onClick={() => onDownload([doc])}><Icon name="download" size={18} />{saving ? t.save : t.download}</button>
         <button type="button" aria-label={t.removeDocument} title={t.removeDocument} onClick={() => {
-          if (confirm(t.confirmRemove(doc.name, doc.pageIds.length))) onOp({ kind: "removeDocument", docId: doc.id });
+          void confirm(t.confirmRemove(doc.name, doc.pageIds.length), { cancel: t.cancel, confirm: t.remove }).then((yes) => {
+            if (yes) onOp({ kind: "removeDocument", docId: doc.id });
+          });
         }}><Icon name="delete" size={18} /></button>
       </header>
       <ol class="planche-pages" ref={end.setNodeRef} data-over={end.isOver || undefined}>

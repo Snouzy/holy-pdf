@@ -1,4 +1,5 @@
 import type { NamedBytes } from "../engine/types";
+import { download } from "./download";
 
 export type Delivery = "one" | "share" | "zip";
 
@@ -31,3 +32,24 @@ export async function shareFiles(
     return error instanceof DOMException && error.name === "AbortError";
   }
 }
+
+export type SaveOutcome = { kind: "saved"; path: string } | { kind: "downloaded" } | { kind: "cancelled" };
+
+/** Where a result goes: the browser's download on the site, a native dialog in the desktop shell. The buttons say which. */
+export type Saver = {
+  kind: "download" | "save";
+  platform?: "mac" | "windows" | "linux";
+  save(bytes: Uint8Array<ArrayBuffer>, name: string, type: string): Promise<SaveOutcome>;
+  open?(path: string): Promise<void>;
+  reveal?(path: string): Promise<void>;
+};
+
+export type Confirm = (message: string, labels: { cancel: string; confirm: string }) => Promise<boolean>;
+
+export const downloader: Saver = {
+  kind: "download",
+  async save(bytes, name, type) {
+    download(bytes, name, type);
+    return { kind: "downloaded" };
+  },
+};

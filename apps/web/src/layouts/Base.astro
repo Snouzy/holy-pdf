@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { dictionaries } from "../i18n";
 import { fontFaces, preloadedFonts } from "../styles/fonts";
 import "../styles/tokens.css";
+import "../styles/base.css";
 import { type Lang, languages } from "../tools";
 import SiteFooter from "./SiteFooter.astro";
 import SiteNav from "./SiteNav.astro";
@@ -114,57 +115,15 @@ const url = (path: string) => new URL(path, Astro.site).href;
 </html>
 
 <style is:global>
-  *, *::before, *::after { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-text); line-height: 1.5; }
-  .scroll::-webkit-scrollbar { width: 14px; height: 14px; }
-  .scroll::-webkit-scrollbar-track { margin: 8px; background: transparent; }
-  .scroll::-webkit-scrollbar-thumb { border: 4px solid transparent; border-radius: 999px; background: color-mix(in srgb, var(--ink) 22%, transparent) padding-box; }
-  .scroll::-webkit-scrollbar-thumb:hover { background-color: color-mix(in srgb, var(--ink) 40%, transparent); }
-  @supports (-moz-appearance: none) {
-    .scroll { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--ink) 30%, transparent) transparent; }
-  }
+  /* The site's own bar and page width; what every page and the desktop app share is in styles/base.css. */
   :root { --nav-top: 5rem; --nav-height: var(--nav-top); scroll-padding-top: calc(var(--nav-height) + 1rem); }
   :root[data-scrolled] { --nav-height: 4rem; }
   body { padding-top: var(--nav-top); }
   main { max-width: 82rem; margin: 0 auto; padding: 0 1rem; }
-  a { color: var(--accent); }
-  :where(a, button, summary, label) { transition: background-color 150ms, border-color 150ms, color 150ms, box-shadow 150ms, transform 150ms; }
-  @media (hover: hover) {
-    a:hover { color: var(--accent-hover); }
-    .lift:hover { transform: translateY(-2px); }
-    /* The lifted card still covers the 2 px it left, or a pointer there would turn the hover on and off. The inset counts from inside
-       the border (up to 2 px), and the transform makes the card the containing block. */
-    .lift:hover::after { content: ""; position: absolute; inset: 0 0 -4px; }
-  }
-  .drop-overlay {
-    position: fixed; inset: 0; z-index: 20; display: none; place-items: center; pointer-events: none;
-    background: color-mix(in srgb, var(--bg) 80%, transparent); outline: 4px dashed var(--accent); outline-offset: -16px;
-  }
-  [data-dropping] .drop-overlay { display: grid; }
-  .drop-overlay p {
-    margin: 0; padding: 1rem 1.5rem; border-radius: var(--radius-panel); background: var(--surface); box-shadow: var(--shadow-panel);
-    font-family: var(--font-title); font-weight: 800; font-size: 1.75rem; color: var(--ink);
-  }
-  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
-  h1, h2, h3 { font-family: var(--font-title); font-weight: 800; color: var(--ink); }
-  h1 { font-size: clamp(2.5rem, 5vw, 4.25rem); line-height: 0.98; letter-spacing: -0.037em; margin: 1rem 0; }
-  h2 { font-size: clamp(1.625rem, 3vw, 2.5rem); line-height: 1.1; letter-spacing: -0.035em; }
-  h3 { font-size: 1.5rem; line-height: 1.1; letter-spacing: -0.02em; }
-  button { font: inherit; }
   /* Once here rather than on each of the menu's icons, which every page repeats. */
   .tool-glyph { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-  .highlight {
-    background: linear-gradient(transparent var(--highlight-from), var(--highlight) var(--highlight-from), var(--highlight) 92%, transparent 92%);
-    color: var(--on-highlight);
-    -webkit-box-decoration-break: clone;
-    box-decoration-break: clone;
-  }
   @media (max-width: 75rem) {
     :root { --nav-top: 4.5rem; }
     :root[data-scrolled] { --nav-height: 3.75rem; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; }
   }
 </style>

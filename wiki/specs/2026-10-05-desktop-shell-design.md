@@ -193,7 +193,7 @@ apps/web/src/
 ## Lots
 
 1. **La coque** : l'entrée, Preact, le monastère et son dépôt, l'écran d'outil, la barre, les menus et ⌘O, la recherche, la langue et le système, le thème, la fenêtre mémorisée, les liens externes, l'enregistreur (page de résultat et Scanner), le dialogue du Scanner, le nettoyage au démontage, `base.css`, les polices, la CSP fixe, la fumée `app`, la copie des dossiers, la mesure du poids. À la fin du lot, on ouvre un PDF par le bouton, par ⌘O ou par dépôt, on le travaille, on enregistre la copie et on l'ouvre : l'appli est utilisable.
-2. **Les fichiers** : le double-clic, « Ouvrir avec » et le second lancement, le document qui suit d'un outil à l'autre, la garde à la fermeture, le dossier de sortie pour Diviser et PDF en JPG.
+2. **Les fichiers** : le double-clic, « Ouvrir avec » et le second lancement, le document qui suit d'un outil à l'autre (le Scanner annonce alors ses pages, pas toutes les photos reçues), la garde à la fermeture, le dossier de sortie pour Diviser et PDF en JPG, et le worker du Scanner terminé au démontage (il fuit à chaque visite, sur le site comme dans la coque).
 3. **La distribution** : le lot 3 de la [spec Tauri](2026-10-05-desktop-tauri-design.md) (mise à jour, signature, vente), Aide › Licences (les textes de `licenses/` dans un panneau de l'appli), puis les vérifications sur Windows et Linux.
 
 ## Limites connues
@@ -209,7 +209,7 @@ apps/web/src/
 
 | Niveau | Quoi | Où |
 |---|---|---|
-| Site, unitaires | `files` ouvre les fichiers à chaque changement et remplace sur un outil à un fichier ; `onDocumentChange` annonce sources, résultat et `unsaved`, Scanner compris, et un résultat passé sans enregistrement reste `unsaved` ; le démontage ferme chaque document ouvert dans le moteur (compté par un moteur factice) et oublie les vignettes ; l'enregistreur par défaut télécharge et rend « téléchargé » ; `Result` dit Télécharger ou Enregistrer… selon `kind`, montre Ouvrir et Afficher seulement sur « enregistré », rien sur « annulé », et l'erreur sur sa ligne ; le Scanner enregistre par l'enregistreur reçu et pose ses questions par `confirm` ; l'index en mémoire est celui de `search.json` | `apps/web/tests/unit/` |
+| Site, unitaires | Les tests du site tournent sans DOM : la logique nouvelle est dans des fonctions pures. `documentOf` donne les sources tant que rien n'est fait, puis le résultat en fichiers, `unsaved` tant qu'il n'est pas enregistré ; `release` ferme chaque document et la couche dans un moteur factice et révoque les aperçus ; l'enregistreur par défaut télécharge et rend « téléchargé » ; `searchIndex` liste chaque outil, prêts d'abord, avec noms, mots et libellé. Le reste (props de la planche, `Result`, le Scanner et son dialogue) est couvert par les parcours e2e | `apps/web/tests/unit/document.test.ts`, `deliver.test.ts`, `searchIndex.test.ts` |
 | Site, e2e | Les parcours existants passent avec `base.css`, l'enregistreur par défaut et le dialogue du Scanner | `pnpm verify` |
 | Appli, types | `tsc --noEmit` sur `app/` et `smoke/` | `pnpm --filter @holy-pdf/desktop check` |
 | Appli, fumée | Page moteur ; puis le monastère, Compresser par sa carte, retour, sans violation ni erreur | `pnpm desktop:smoke` |
