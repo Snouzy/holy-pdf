@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "pdf-toolbox-web",
+  "name": "holy-pdf-web",
   "compatibility_date": "2026-09-29",
   "assets": {
     "directory": "./dist",
