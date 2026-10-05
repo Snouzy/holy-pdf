@@ -15,6 +15,33 @@ test("removes a file and its pages from its tab", async ({ page }) => {
   await expect(page.locator(".file-tab")).toHaveCount(0);
 });
 
+test.describe("on a touch screen", () => {
+  test.use({ hasTouch: true, viewport: { width: 390, height: 844 } });
+
+  test("turns the preview's pages with a swipe, not with a vertical drag", async ({ page, browserName }) => {
+    test.skip(browserName === "firefox", "Firefox does not build touch events from Playwright");
+    await page.goto("/en/merge-pdf");
+    await chooseFiles(page, [await pdfFile("a.pdf", ["A1", "A2"])]);
+    await expectThumbnails(page, 2);
+    await page.getByRole("button", { name: "Page 1", exact: true }).click();
+    const preview = page.getByRole("dialog", { name: "Preview" });
+    await expect(preview).toContainText("Page 1 of 2");
+    const sheet = preview.locator(".preview-sheet");
+    const drag = async (from: [number, number], to: [number, number]) => {
+      const touch = (x: number, y: number) => [{ identifier: 1, clientX: x, clientY: y }];
+      await sheet.dispatchEvent("touchstart", { touches: touch(...from), changedTouches: touch(...from) });
+      await sheet.dispatchEvent("touchmove", { touches: touch(...to), changedTouches: touch(...to) });
+      await sheet.dispatchEvent("touchend", { touches: [], changedTouches: touch(...to) });
+    };
+    await drag([300, 400], [100, 410]);
+    await expect(preview).toContainText("Page 2 of 2");
+    await drag([200, 300], [210, 600]);
+    await expect(preview).toContainText("Page 2 of 2");
+    await drag([100, 400], [300, 395]);
+    await expect(preview).toContainText("Page 1 of 2");
+  });
+});
+
 test("opens a page on click, walks it with the arrows and closes with Escape", async ({ page }) => {
   await page.goto("/en/merge-pdf");
   await chooseFiles(page, [await pdfFile("a.pdf", ["A1", "A2"])]);
