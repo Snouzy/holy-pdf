@@ -30,6 +30,7 @@ Les cinq passent en 338 ms sur le binaire compilé, où la page est servie par `
 | Verdict | Une commande Rust désérialise le rapport et sort par `app.exit` avec 0 seulement si les cinq étapes attendues sont réussies | WKWebView n'a pas de WebDriver sur Mac : le code de sortie est le seul canal qu'un script peut lire ; compter les étapes évite qu'un rapport partiel passe |
 | Garde-fous | La page se donne 90 s puis rend un verdict négatif ; Rust sort avec 2 après 120 s sans rapport | Un worker qui ne démarre pas ne lève rien côté page, et une page qui ne charge pas n'appelle jamais Rust |
 | Icônes | Générées par `tauri icon` depuis `apps/web/public/favicon.svg` rendu en PNG | L'auréole est le logo ; les icônes par défaut de Tauri ne doivent pas apparaître dans le dépôt |
+| Nom du binaire | `HolyPDF` (`[[bin]]` dans `Cargo.toml`), le paquet restant `holy-pdf` | Sans bundle, sous `tauri dev`, macOS nomme l'appli dans le Dock et la barre des menus d'après le fichier exécutable : ni le `CFBundleName` que Tauri embarque, ni `setProcessName` ne comptent (vérifié avec `lsappinfo`, 5 octobre). Cargo refuse l'espace ; l'appli construite s'appelle « Holy PDF » (`productName`) |
 | Outils | Rust via rustup, Tauri CLI, Vite et TypeScript épinglés en dépendances du paquet | `tauri dev` appelle `cargo` par le PATH : `~/.cargo/bin` doit y être (rustup l'y met par défaut) ; `pnpm install` à la racine suffit côté JS |
 
 ## Étape 1 : le site dans la coque (5 octobre 2026)
@@ -56,4 +57,4 @@ La forme de l'appli (une entrée dédiée composée avec les briques du site, à
 2. Ouvrir un PDF par double-clic (association de fichiers), déposer depuis le Finder ou l'Explorateur, enregistrer sur place par le dialogue natif, traiter un dossier entier.
 3. Régime : `dist` fait 63 Mo, dont les films de l'accueil (9,5 Mo), OpenCV (13 Mo), trois cœurs Tesseract et PDFium en double ; n'embarquer que ce que le bureau sert.
 4. Mise à jour automatique, signature Mac et Windows, vente directe ; stores ensuite.
-5. Windows : les scripts `smoke:*` nomment le binaire Unix (`src-tauri/target/debug/holy-pdf`), à adapter. Linux quand WebKitGTK aura fait tourner ces mêmes vérifications.
+5. Windows : les scripts `smoke:*` nomment le binaire Unix (`src-tauri/target/debug/HolyPDF`), à adapter. Linux quand WebKitGTK aura fait tourner ces mêmes vérifications.
