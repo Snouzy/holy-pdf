@@ -53,8 +53,8 @@ V1 succeeds when:
 | Languages | French and English | Like the Mac app. Other languages can be added without changing the structure |
 | Tool screens | One shared board, set per tool | A single component to optimize, already cached from one tool to the next |
 | Analytics | No script. Google Search Console only | No third-party script on the critical path |
-| COOP / COEP | Not in v1 | No engine uses WebAssembly threads. These headers will come back with the scanner (OpenCV with threads) |
-| Domain | The brand's domain, chosen later. Until then, the `*.workers.dev` address, with `noindex` | Do not let search engines index a temporary address |
+| COOP / COEP | Not in v1 | No engine uses WebAssembly threads. These headers will come back with the scanner (OpenCV with threads). 3 October 2026: the Scanner shipped without them, and `public/_headers` still sets neither |
+| Domain | The brand's domain, chosen later. Until then, the `*.workers.dev` address, with `noindex` | Do not let search engines index a temporary address. Replaced on 30 September 2026 ([design system spec](2026-09-30-web-design-system-design.md)): holy-pdf.com, not bought yet on 5 October 2026; until then, each build is `noindex` unless `INDEXABLE=true` |
 
 ## Structure
 
@@ -91,7 +91,7 @@ apps/web/
 - `title` and `meta description` per language;
 - `canonical` to the page itself, `hreflang` fr/en and `x-default`;
 - a `sitemap.xml` generated at build time.
-- The JSON-LD is limited to `WebApplication` and `BreadcrumbList`. No FAQ markup: since 2023, Google shows these rich results only for health sites and official sites.
+- The JSON-LD is limited to `WebApplication` and `BreadcrumbList`. No FAQ markup: since 2023, Google shows these rich results only for health sites and official sites. Replaced on 2 October 2026 ([home page spec](2026-10-02-web-landing-design.md)): each tool page also has a `FAQPage`.
 
 **Writing.** The texts are written in French and in English, then reviewed by the author. The main keyword of each page comes from the search volume research.
 
@@ -129,7 +129,7 @@ On all tool pages, the board lets the user add files, reorder (by finger, mouse 
 - **Images on Merge** (5 October 2026): an image dropped or chosen on Merge is no longer refused. The monk asks "photo.png is an image. Shall I turn it into a PDF page before merging?" ("These are 3 images…" for several; JPEG and PNG only, other formats are still refused). "Convert" opens each image as a page, through the JPG to PDF path. "Leave out" adds only the PDFs of the batch. One question per batch. The file picker and, in the desktop app, the monastery and ⌘O accept images on Merge.
 - **File chosen before the page is interactive**: it stays in the field, and the board opens it as soon as the board starts.
 - **File being opened**: a skeleton card in the grid, with its name and ✕ to remove it. A thumbnail that is not rendered yet has the same effect.
-- **Language switch**: on the tool pages, navigation happens on the client side (Astro's `ClientRouter`) and the board keeps its files. The home page stays without JavaScript.
+- **Language switch**: on the tool pages, navigation happens on the client side (Astro's `ClientRouter`) and the board keeps its files. The home page stays without JavaScript. Replaced on 30 September 2026 ([design system spec](2026-09-30-web-design-system-design.md)): the home page loads `ClientRouter` too. Since 2 October 2026, it hydrates no island.
 - **Screen readers**: the drag and drop announcements are translated and name the page ("Page 3 dropped at Page 1").
 - **Undo**: a button and `Ctrl+Z` / `⌘Z` undo the last action. No confirmation before a deletion: the board never touches the original file. Undo never removes the pages of a file opened in the meantime.
 
@@ -144,6 +144,8 @@ On all tool pages, the board lets the user add files, reorder (by finger, mouse 
 | `export(plans)` | one PDF per plan. If there are several plans (Split), a ZIP made by fflate, without compression since the PDFs are already compressed |
 
 A plan is an ordered list of `{ docId, index, rotation }`.
+
+The later specs add their requests to `engine/protocol.ts` (`compress`, `images`, `sign`, `transform`, `zip`, `close`…).
 
 The Worker starts after the `load` event and loads PDFium right away: the engine is compiled by the time the user drops a file. It handles one request at a time. If PDFium stops on an internal out-of-memory error, the client replaces the Worker and reopens the files before the next request.
 
@@ -167,7 +169,9 @@ Data flow:
 | JS before interaction, tool page | ≤ 80 KB brotli, Preact and board included | 37 KB, of which 5 KB for the router |
 | JS on the home page and the content pages | 0 KB | 0 KB |
 
-- System fonts, no web font.
+The budgets changed on 30 September 2026 with the [design system spec](2026-09-30-web-design-system-design.md) (`lighthouserc.json`): LCP ≤ 1.5 s on the home page and ≤ 1.6 s on a tool page; JavaScript ≤ 24 KB on the home page and ≤ 50 KB on a tool page.
+
+- System fonts, no web font. Replaced on 30 September 2026: Bricolage Grotesque and Figtree, hosted on the site.
 - No third-party script. CSS inlined in the page.
 - The engine (1.65 MB brotli) exists in only one copy: only the Worker references it. A reference from the page created a second copy. Its name carries a hash, and it is cached for one year (`immutable`).
 
@@ -196,6 +200,8 @@ type EngineError =
   | { kind: "engineUnavailable" }
 ```
 
+The later tools add their own kinds in `engine/types.ts` (`noImages`, `alreadySigned`, `xfaForm`…).
+
 | Case | Behavior |
 |---|---|
 | Unsupported format | Detected from the first bytes, not from the extension. Message on the file, the other files continue |
@@ -221,7 +227,7 @@ type EngineError =
 
 The test files are generated at test time: PDFs where each page carries its number in large print (to check the order), a protected PDF, a truncated PDF, images. No real document.
 
-CI runs in GitHub Actions, on each pull request.
+CI runs in GitHub Actions, on each pull request. Since 2 October 2026, it runs `pnpm verify` only (Chromium); Firefox, WebKit and Lighthouse run locally with `pnpm verify:full`.
 
 ## Preliminary checks
 

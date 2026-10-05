@@ -4,7 +4,7 @@
   addEventListener("securitypolicyviolation", (event) => errors.push(`csp ${event.violatedDirective} ${event.blockedURI}`));
   addEventListener("error", (event) => errors.push(`error ${event.message ?? event.target?.src ?? event.target?.href}`), true);
   addEventListener("unhandledrejection", (event) => errors.push(`rejection ${event.reason}`));
-  const moves = [() => document.querySelector('.tool-card[data-tool="compress"]')?.click(), () => document.querySelector(".back")?.click()];
+  const moves = [() => document.querySelector('.tool-card[data-tool="compress"]')?.click(), () => document.querySelector(".sidebar .home")?.click()];
   let index = 0;
   const report = async () => {
     const payload = JSON.stringify({ page: screen(), title: document.title, errors: errors.splice(0) });

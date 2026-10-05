@@ -15,7 +15,7 @@ export function ToolScreen({ id, files }: { id: ToolId; files: File[] | undefine
         </h1>
         <p class="intro">{t.monks[id].intro}</p>
       </div>
-      <Board toolId={id} lang={lang} monks={{ fr: dictionaries.fr.monks[id], en: dictionaries.en.monks[id] }} files={files} saver={saver} />
+      <Board toolId={id} lang={lang} monks={{ fr: dictionaries.fr.monks[id], en: dictionaries.en.monks[id] }} {...(files ? { files } : {})} saver={saver} />
     </main>
   );
 }

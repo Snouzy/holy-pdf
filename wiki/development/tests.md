@@ -26,7 +26,7 @@ Sign: `pnpm exec playwright test tests/e2e/sign.spec.ts --project chromium --pro
 
 This suite also checks that the instruction and the document position stay stable during character-by-character typing, its clearing, and selection/deselection. Mutations are observed in FR/EN at 1280 and 390 px to detect transient flips, not only the final state of the text.
 
-Protect and Unlock: `tests/engine/transform.test.ts` (encryption read back by PDFium and pdf.js, signed PDF refused) and `tests/e2e/protect-unlock.spec.ts` (matching passwords before the run, copies that open with or without a password).
+Protect and Unlock: `tests/engine/transform.test.ts` (encryption read back by PDFium and pdf.js, signed PDF refused) and `tests/e2e/protect-unlock.spec.ts` (matching passwords before the run, the preview of the protected copy, copies that open with or without a password).
 
 Page numbers: `tests/engine/numbers.test.ts` (formats, range, position read back by pdf.js under the four rotations) and `tests/e2e/page-numbers.spec.ts` (settings entered before the PDF has finished opening).
 
@@ -48,7 +48,7 @@ OCR: `tests/engine/ocr.test.ts` (invisible text where the reader sees the line, 
 
 PDF to Word: `tests/engine/word.test.ts` (styles, paragraphs, columns, pages, images, scans; opened by `textutil` on macOS) and `tests/e2e/pdf-to-word.spec.ts`.
 
-Scanner: `tests/scan/` (detection, straightening, cleanup, photo formats; bench of the 17 photos of `fixtures-private` against `edits.json` and `expected.json`, skipped without them), `tests/scanner/session.test.ts` (board and undo), `tests/engine/scanPdf.test.ts` and `tests/e2e/scanner.spec.ts` (photo made with OpenCV, A4 PDF, corner corrected then undone, page lying on its side turned upright and named after its title, searchable text). Reading: `tests/scan/suggest.test.ts` (translated Swift tests) and `tests/scan/reading.test.ts` (bench of the 17 photos with Tesseract in Node, about 7 minutes). The two benches of the 17 photos (`photos.test.ts`, `reading.test.ts`) run only with `SCAN_BENCH=1 pnpm test` and `fixtures-private`.
+Scanner: `tests/scan/` (detection, straightening, cleanup, photo formats; bench of the 17 photos of `fixtures-private` against `edits.json` and `expected.json`, skipped without them), `tests/scanner/session.test.ts` (board and undo), `tests/engine/scanPdf.test.ts` and `tests/e2e/scanner.spec.ts` (photo made with OpenCV, A4 PDF, corner corrected then undone, page lying on its side turned upright and named after its title, searchable text, the question before a document is removed). Reading: `tests/scan/suggest.test.ts` (translated Swift tests) and `tests/scan/reading.test.ts` (bench of the 17 photos with Tesseract in Node, about 7 minutes). The two benches of the 17 photos (`photos.test.ts`, `reading.test.ts`) run only with `SCAN_BENCH=1 pnpm test` and `fixtures-private`.
 
 Overlay: `tests/engine/overlay.test.ts` (pages, on top and underneath, fit under rotation, signatures) and `tests/e2e/overlay.spec.ts`.
 
@@ -80,7 +80,7 @@ From `apps/web/`:
 | End to end, 3 browsers (after `pnpm build`) | `pnpm e2e` |
 | Load budgets | `INDEXABLE=true pnpm build && pnpm lighthouse` |
 | Processing time, local only | `pnpm build && pnpm bench` |
-| Before a merge, and in CI | `pnpm verify`: types, unit tests, build, SEO, e2e Chromium (about 1 min) |
+| Before a merge, and in CI | `pnpm verify`: types, unit tests, build, SEO, e2e Chromium (about 1.5 min) |
 | Before a merge that touches the layout, fonts, budgets or engine | `pnpm verify:full`: adds Firefox, WebKit and Lighthouse (about 10 min) |
 | Site served as in production | `pnpm serve`, then `http://localhost:8787` |
 
@@ -90,7 +90,7 @@ The design system has its own tests:
 
 - **Contrast** (`tests/unit/tokens.test.ts`): each text and background pair of `tokens.css` reaches 4.5:1, in light and in dark. The PDF sheets stay white. In dark mode, each tint and the disc of the upcoming monks stand out from the panels.
 - **Fonts** (`tests/unit/fonts.test.ts`): each letter of the dictionaries and of the tool texts is in the font subset.
-- **Illustrations** (`tests/unit/illustrations.test.ts`): each monk draws only its accessory, always on top of the hands, takes its colors from the CSS variables, and the avatar clips the robe to the circle.
+- **Illustrations** (`tests/unit/illustrations.test.ts`): each monk draws only its accessory, always on top of the hands, takes its colors from the CSS variables, and the avatar clips the robe to the circle. Each tool, ready or asleep, has its own line icon.
 - **Home** (`tests/e2e/home.spec.ts`): the guarantees just under the title, above the sentence, and the video button centered under the sentence; the top sentence, whose verb changes the monk and leads to its tool; its menu by keyboard (arrows, Enter, Escape, first letters), at text size, closed by a click elsewhere, and inside the screen at 320 and 390 px; a space between two verbs, so that the chosen verb and the one under the pointer do not touch; the video, never loaded on arrival, opened by the round preview and stopped by Escape, and its bubble in the FAQ; the English video on the English page; one row per category in the compact view, which scrolls sideways and fades out while more monks remain; the first row of monks visible on a 1280 × 800 screen; the compact view kept after a reload; the promise signed by Brother Quill, then the band of the four guarantees below it; the halo of the monk of "Why monks?"; the six shortcuts of the final band, in two rows at 1280 px, three at 900 px and six at 390 px, the last one leading to JPG to PDF, and the haloed monk; the three gestures as a frieze without cards, on one line at 1280 px, stacked and without a line at 390 px; the FAQ with six questions and six answers, the last bubble opaque once on screen, the link to the FAQ page; the "Paperwork to hand in" case that leads to the guide; no extra width at 320 and 390 px, fonts blocked. `filter.spec.ts` checks that "Show them", on the card of the monks in meditation, turns on the switch.
 - **404 page** (`tests/e2e/notfound.spec.ts`): an unknown address under `/fr/` answers 404 in French and leads to a tool through the sentence. Under `/en/` and with no language, it answers in English. No extra width at 320 and 390 px.
 - **Drop on the whole page** (`dropTracker.test.ts`, `files.spec.ts`): only drags that carry files count. On a tool page, a file dropped anywhere opens.
@@ -101,10 +101,11 @@ The design system has its own tests:
 The flow and the two tools of milestone 1 have their tests:
 
 - **Flow** (`flow.test.ts`, `deliver.test.ts`, `document.test.ts`, `tests/e2e/flow.spec.ts`): set, run, result, and back with everything intact; a single file downloaded as is, several as a `.zip` on a computer and through the share sheet on a touch screen; the default saver downloads; the document that the desktop shell forwards (result or sources, saved or not) and what a board releases when it unmounts; the page header that collapses; the verb button under the thumb on a phone.
+- **Board** (`tests/e2e/board.spec.ts`): a click or Enter on a page opens its preview, the arrows go through the pages, Escape closes it, and a page turned on its side fits the frame. "Add a PDF" works from the tile after the pages and from the panel above the verb, which a phone hides. "View" shows the result of Merge, and the files of Split one after the other, before the download. Also: removing a file, the options of each tool in the panel, the file tabs and the undo button. `files.spec.ts` checks that Merge asks before it turns images into pages, and reads back the A4 pages it made.
 - **Search index** (`searchIndex.test.ts`): each tool, ready ones first, with its names, its words and its label, in both languages. The same build serves `search.json` and the desktop app.
 - **Compression** (`tests/engine/compress.test.ts`, `tests/e2e/compress.spec.ts`): a PDF with a photo gets lighter and keeps text, bookmarks, internal destination, title/XMP, filled field, tags and attachment (checked by pdf.js); a shared image re-encoded only once; nested form XObjects sized for the largest placement; a protected PDF decrypted on export; fallback to the original when there is no gain.
 - **Transparent image** (`tests/engine/imageStreams.test.ts`): soft and explicit masks, rendering intents and annotation resources are preserved; an unknown layout is rendered intact; `/Matte`, color masks, unknown keys and ambiguous dictionaries are left as they are.
-- **PDF to JPG** (`tests/engine/images.test.ts`, `tests/e2e/pdf-to-jpg.spec.ts`): one image per page at 150 or 300 dpi, 16 million pixels at most; each photo once, without the small images; the "?" help by keyboard.
+- **PDF to JPG** (`tests/engine/images.test.ts`, `tests/e2e/pdf-to-jpg.spec.ts`): one image per page at 150 or 300 dpi, 16 million pixels at most; each photo once, without the small images; the preview of the images; the "?" help by keyboard.
 - **Bar and footer** (`tests/e2e/nav.spec.ts`): Merge, Sign and Compress in the bar; the state on scroll without a layout shift; only one menu open at a time; Escape and focus; the drawer on a phone, with the page behind it `inert`; cleanup after a `ClientRouter` navigation; the theme and the focus ring of the footer; the icons centered in their buttons.
 - **Panel on scroll** (`tests/e2e/sidebar-layout.spec.ts`): panel and action always visible while reading the instructions, the FAQ and the related tools, at 1,024 and 1,280 px; content fully on the left, and a click on the right edge of the FAQ without interception; last choice fully reachable above the action at 1,024 × 600; element order and visible button at 390 px. Checked in the three browsers. Private diagnostic screenshots are in `fixtures-private/sidebar-review/`.
 - **Tool page** (`tests/e2e/toolpage.spec.ts`): a single monk; the button label for each tool; the button at full width on a phone.
@@ -158,15 +159,15 @@ Repeat for Firefox/WebKit. The versions are recorded in the report. The SSIM sco
 `pnpm desktop:smoke` (or `pnpm --filter @holy-pdf/desktop smoke`) compiles two binaries of the Tauri shell and runs them with `--smoke` (see the [spec](../specs/2026-10-05-desktop-tauri-design.md)):
 
 - `smoke:engine` loads the engine test page (`apps/desktop/smoke/`): the process exits with 0 if PDFium, qpdf and the workers run in the webview, served by `tauri://`.
-- `smoke:app` builds the desktop entry (`apps/desktop/app/`) and embeds it. Then the probe injected by the shell reports three times (the monastery, Compress opened from its card, the return by the chevron) under the app's CSP, and records CSP violations, script errors and load errors. The exit code is 0 if the three reports are clean, 1 otherwise, 2 if the chain did not finish within 120 s, 3 if the window was closed or the app quit before the verdict.
+- `smoke:app` builds the desktop entry (`apps/desktop/app/`) and embeds it. Then the probe injected by the shell reports three times (the monastery, Compress opened from its card, the return through the sidebar's Monastery entry) under the app's CSP, and records CSP violations, script errors, unhandled rejections and load errors. The exit code is 0 if the three reports are clean, 1 otherwise, 2 if the chain did not finish within 120 s, 3 if the window was closed or the app quit before the verdict.
 
 Rust via rustup is necessary. Nothing runs in CI. The site's development server does not need to run. `pnpm --filter @holy-pdf/desktop check` checks the types of the entry and of the engine page against the site sources.
 
 By hand, in the app (`pnpm desktop:dev`):
 
-1. ⌘O opens the native dialog, filtered on PDFs from a PDF tool. The chosen files arrive on the board. From the monastery, "3 files ready" appears and the cards that do not accept them are grayed out.
-2. A PDF dropped on the monastery or on a tool opens. The veil "Let go, I'll take care of them." appears during the hover.
-3. Compress a PDF, then "View": the preview opens in the page, without a dialog. Change the level, run again: "View" shows the new copy. On Split, the preview steps through the files produced; on PDF to JPG, through the images. "Save…": the native dialog suggests the name of the copy in the last folder. "Saved" and the name appear, "Open" launches the system viewer, "Show in Finder" selects the file.
+1. ⌘O opens the native dialog, filtered on PDFs from a PDF tool, and on PDFs, JPEGs and PNGs from Merge. The chosen files arrive on the board. From the monastery, "3 files ready" appears and the cards that do not accept them are grayed out.
+2. A PDF dropped on the monastery or on a tool opens. The veil "Let go, I'll take care of them." appears during the hover. On Merge, a dropped PNG asks "… is an image. Shall I turn it into a PDF page before merging?", and "Convert" adds it as a page.
+3. Compress a PDF, then "View": the preview opens in the page, without a save dialog. Change the level, run again: "View" shows the new copy. On Split, the preview steps through the files produced; on PDF to JPG, through the images. "Save…": the native dialog suggests the name of the copy in the last folder. "Saved" and the name appear, "Open" launches the system viewer, "Show in Finder" selects the file.
 4. Scanner: with two photos, "Save all…" with a page to check asks "Save anyway?". Removing a document asks its own question.
 5. Switch the system to dark: the app follows without a restart.
 6. Move and resize the window, quit, relaunch: it comes back at the same place.
@@ -174,3 +175,4 @@ By hand, in the app (`pnpm desktop:dev`):
 8. ⌘Q quits. ⌘W closes the window and quits (the guard comes in milestone 2).
 9. ⌘Z in the search field undoes the typing. ⌘Z on the board undoes the edit. Never both. ⌘F and ⌘K activate the search, ⌘[ goes back to the monastery, Enter opens the best monk.
 10. The sidebar lists the tools by theme, with the open tool highlighted. A click changes the tool, and "Monastery" goes back to the home. Shrinking the window below 1,280 px hides the sidebar and brings back the chevron.
+11. On Merge, a click on a page opens it in a preview: the arrow keys go through the pages, and Escape closes it. "Add a PDF", above the verb, adds a file without a scroll to the end of the pages.

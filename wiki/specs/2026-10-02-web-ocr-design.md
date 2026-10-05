@@ -9,14 +9,14 @@ Brother Reader (`/fr/ocr-pdf`, `/en/ocr-pdf`) reads the text of the scanned page
 | Subject | Decision | Reason |
 |---|---|---|
 | Reading | Tesseract.js 7.0.0, LSTM engine only, French and English (`fra+eng`), `4.0.0_best_int` data | Probe of 2 October: about 3 s per dense A4 page in all three browsers. English adds 0.1 to 0.3 s |
-| Hosting | `scripts/copy-ocr.mjs` copies the worker, the three LSTM cores and the two languages into `public/ocr/` (ignored by git) before `dev` and `build` | No file comes from another server. The browser picks its core by itself (relaxed SIMD, SIMD or plain): all three must be served |
+| Hosting | `scripts/copy-ocr.mjs` copies the worker, the three LSTM cores and the language data (French and English, and Romanian for the Scanner) into `public/ocr/` (ignored by git) before `dev` and `build` | No file comes from another server. The browser picks its core by itself (relaxed SIMD, SIMD or plain): all three must be served |
 | Weight | Nothing when the page loads. On first use: the library (19 KB, a separate chunk), one core (3.9 MB, 1.5 MB compressed) and the languages (3.7 MB). Tesseract keeps the languages in IndexedDB | OCR costs only the people who use it |
 | Pages read | The pages with fewer than 50 characters of text (`textCounts` request of the engine) | As on Mac: a scan often carries a stamp or a number |
 | Image read | The page rendered by the engine, long side at 2,400 px (about 200 dpi on A4), as JPEG | The same as on Mac. A sharper image changes almost nothing and takes longer to read |
 | Writing | `writeTextLayer` (engine): each line read becomes a Helvetica text object in invisible mode, stretched over the box of the line, placed in the axes of the page as the PDF reader shows the page | Exact under all four rotations. The page content is not touched |
 | Letters | What the WinAnsi encoding of the standard fonts can write is kept (Latin accents, `’ – € œ`). Another letter loses its accent ("ș" becomes "s") or disappears | No embedded font: the copy barely grows |
 | Nothing to read | "Every page already has its text" (`textAlready`); "No text could be read" (`noTextRead`); no copy | An identical copy makes no sense |
-| A single PDF | `multipleFiles: false` | Reading takes long. The Mac tool does the same |
+| A single PDF | `multipleFiles: false` | Reading takes long. The Mac tool did the same |
 | Titles | « OCR d'un PDF » / "OCR a PDF" | "make a PDF searchable" made the search "make pdf smaller" return nothing: "make" became a known word |
 | Monk | "Brother Reader" (« Frère Lecteur »), the magnifying glass, the focused look | The name on the Mac. The focused look sets it apart from Brother Lens |
 

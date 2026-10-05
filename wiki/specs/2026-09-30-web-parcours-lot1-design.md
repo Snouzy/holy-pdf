@@ -64,11 +64,12 @@ The spec succeeds when:
 - **On the left, the files.**
   - Page-by-page tools: the file tabs, the Undo button and the page grid, as today.
   - Compress and PDF to JPG: a gray dotted area with one card per file: first page, name, size and page count, and a × that removes the file. The "+ Add a PDF" pill is at the top right of the area. The sentence "You can also drag more PDFs into this area." is at the bottom.
-- **On the right, the panel**, 460 px, on the surface, from top to bottom:
+- **On the right, the panel**, 460 px (440 px, 27.5 rem, from 1,024 px wide since the sticky panel of 1 October 2026), on the surface, from top to bottom:
   1. the tool's monk (84 px, on the tint of its category) and its bubble, with its name and a sentence that says what to do;
   2. the tool's options, if it has any;
-  3. at the bottom, the **verb button**, full width, 60 px high, with an arrow;
-  4. under the button, the padlock and "Your files stay on this device.".
+  3. since 5 October 2026, on Merge, Rotate and JPG to PDF: "+ Add a PDF" ("+ Add images" on JPG to PDF) just above the verb button, except during the work and under 900 px;
+  4. at the bottom, the **verb button**, full width, 60 px high, with an arrow;
+  5. under the button, the padlock and "Your files stay on this device.".
 
 **Sticky panel (decision of 1 October 2026).** On a computer, the panel stays visible on the right while the board, the explanations, the FAQ and the other tools scroll. This whole part of the page keeps the panel's column free: the content stays on the left and never goes under the panel. The footer stays outside this grid. On a short screen, the settings scroll in their own area. The button and the privacy line have a reserved space that does not hide the choices.
 
@@ -107,6 +108,7 @@ The result page replaces the board. Focus moves to its title.
 - If the device has a touch screen (`pointer: coarse`) and `navigator.canShare({ files })` accepts the files, the button says "Save the 3 images" (or "the 3 PDFs") and opens the share sheet. Under it: "In Photos, or in Files.". A share sheet closed without a choice does nothing.
 - Otherwise, the button says "Download the 3 images" and downloads a `.zip`. Under it: "They come in a .zip folder: open it to see the images.".
 - A single output file downloads as it is, without a `.zip`.
+- In the desktop app (5 October 2026), the button says "Save…": a native dialog saves the file, or the `.zip` when there are several. Then "Open" and "Show in Finder" appear ([shell spec](2026-10-05-desktop-shell-design.md)).
 
 **Going back.** Any edit after the result (a file added, a page moved) drops the output file. "Change the settings" keeps the state and puts focus back on the verb button.
 
@@ -222,12 +224,12 @@ apps/web/src/
   engine/
     compress.ts        re-encoding of the images, saving of the source document
     images.ts          pages as JPEG, image extraction
-    output.ts          shared output, files or zip (`zipParts` leaves `build.ts`)
+    output.ts          shared output, files or zip (`zipFiles`, before `zipParts` in `build.ts`)
   illustrations/Scene.tsx   "compress" scene (thick stack to thin sheet) and "pdf-to-jpg" scene (sheet to photos)
   content/tools/{fr,en}/compress.md, pdf-to-jpg.md
 ```
 
-`tools.ts` gets a field `workspace: "pages" | "files"`: the page grid, or the file cards. `output` gets `compressed` and `images`. `cast.ts` moves `compress` and `pdf-to-jpg` from the upcoming tools to the ready tools: the home page shows 9 cards and "And 10 monks in meditation".
+`tools.ts` gets a field `workspace: "pages" | "files"`: the page grid, or the file cards. The later tools add their own workspaces (`signature`, `edit`, `scanner`…). `output` gets `compressed` and `images`. `cast.ts` moves `compress` and `pdf-to-jpg` from the upcoming tools to the ready tools: the home page shows 9 cards and "And 10 monks in meditation".
 
 ## Pages and SEO
 
@@ -256,7 +258,7 @@ Brother Press: "Brother Press squeezes your PDF files without touching the text:
 
 Brother Illuminator: "Brother Illuminator turns your pages into JPG images." Bubble: "Every page, or just the pictures?" Working: "Illuminating…"
 
-In `i18n`, `MonkTexts.question` becomes `hint` (the sentence from the table of the 7 tools), and gets `verb`, `result` (a function of the number) and `again`. The back button has two shared texts: "Change the settings" (Compress, PDF to JPG) and "Back to the pages" (page-by-page tools). The two dictionaries keep the same type. All these texts are "to review".
+In `i18n`, `MonkTexts.question` becomes `hint` (the sentence from the table of the 7 tools), and gets `verb`, `result` (a function of the number; now a list of titles by number, read by `titleFor`) and `again`. The back button has two shared texts: "Change the settings" (Compress, PDF to JPG) and "Back to the pages" (page-by-page tools). The two dictionaries keep the same type. All these texts are "to review".
 
 ## Error handling
 
@@ -351,12 +353,12 @@ Decisions made during the work:
 - Preliminary check 1: the old medians of 29%, then 31%, included a structure removal by page copy. They do not validate the 30% threshold. Redo the measurement on the 11 PDFs and keep the source document, with a median on PDFs 1 to 5 (reports with photos, JPEG scan). Separate the raw candidate from the file actually delivered when the tool keeps the original. Table and details: [Web version](../development/web-version.md#compression-measurements).
 - JPG to PDF has neither file tabs nor color marks, since an image is a page. The caption under each image gives the file name. On hover, a tooltip gives the name and the size.
 - The result bubble says "Hallelujah, it's done". The file tabs fit on a single row that scrolls sideways (thin bar, fade on the right while some tabs are hidden), with the Undo button always visible.
-- The header is sticky. Its menus show one line icon per tool, and not the small monks. The footer follows the structure of the design system: three promises, the brand, five columns of links. Its pages that were not written yet pointed to `#`. The social network icons come from Simple Icons (CC0), written into the page. Details in the [design system spec](2026-09-30-web-design-system-design.md#common-layout).
+- The header is sticky. Its menus show one line icon per tool, and not the small monks. Since 5 October 2026, Lucide draws these icons (`ToolIcon`). The footer follows the structure of the design system: three promises, the brand, five columns of links. Its pages that were not written yet pointed to `#`. The social network icons come from Simple Icons (CC0), written into the page. Details in the [design system spec](2026-09-30-web-design-system-design.md#common-layout).
 - An empty tool page centers one single action: the monk above the "Choose…" button. It replaces the drop titles (`t.drop.*`). The visible breadcrumb goes away. It stays in the JSON-LD.
 
 ## Planned next steps
 
-- review of the texts and the SEO pages of the 2 tools;
-- milestone 2: write on the pages (Sign, Watermark, Page numbers, Redact);
-- milestone 3: Protect and Unlock. PDFium exposes `EPDF_SetEncryption`: no extra library;
-- milestone 4: OCR and Scanner.
+- review of the texts and the SEO pages of the 2 tools: still open on 5 October 2026 ("Texts to review" in [Brand identity](../product/brand.md));
+- ~~milestone 2: write on the pages (Sign, Watermark, Page numbers, Redact)~~: shipped on 2 October 2026;
+- ~~milestone 3: Protect and Unlock. PDFium exposes `EPDF_SetEncryption`: no extra library~~: shipped on 2 October 2026;
+- ~~milestone 4: OCR and Scanner~~: OCR shipped on 2 October 2026, Scanner on 3 October.

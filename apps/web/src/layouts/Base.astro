@@ -14,7 +14,7 @@ type Props = {
   description: string;
   paths: Record<Lang, string>;
   jsonLd?: object[];
-  /** The router keeps the board across a language switch, and carries the files of the home drop zone to a tool page. */
+  /** The router keeps the board across a language switch. */
   clientRouter?: boolean;
 };
 
@@ -120,7 +120,6 @@ const url = (path: string) => new URL(path, Astro.site).href;
   :root[data-scrolled] { --nav-height: 4rem; }
   body { padding-top: var(--nav-top); }
   main { max-width: 82rem; margin: 0 auto; padding: 0 1rem; }
-  /* Once here rather than on each of the menu's icons, which every page repeats. */
   @media (max-width: 75rem) {
     :root { --nav-top: 4.5rem; }
     :root[data-scrolled] { --nav-height: 3.75rem; }

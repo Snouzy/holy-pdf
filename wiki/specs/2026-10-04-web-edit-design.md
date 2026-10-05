@@ -1,6 +1,6 @@
 # Web: Edit a PDF
 
-_Written on 4 October 2026. Scope chosen on 4 October: add only, additions written into the page. The Mac app does not have this tool._
+_Written on 4 October 2026. Status: shipped in `apps/web/` on 4 October 2026, with the second version, the zoom, the forms, the stamps, the shortcuts and the text box. Scope chosen on 4 October: add only, additions written into the page. The Mac app did not have this tool when this spec was written. It got step A the same day ([Mac spec](2026-10-04-mac-edit-design.md)); the Swift app was removed on 5 October 2026._
 
 Brother Scribe (`/fr/modifier-pdf`, `/en/edit-pdf`) adds text, images, shapes, freehand strokes and highlighting to the pages of a PDF, then saves the copy.
 
@@ -43,10 +43,10 @@ The spec succeeds when:
 
 ## Known limits
 
-- No editing or deletion of the original content.
-- No free rotation of an addition, no zoom.
+- ~~No editing or deletion of the original content.~~ Lifted by the second version (4 October 2026).
+- No free rotation of an addition, ~~no zoom~~. The zoom came on 4 October 2026; an added image turns by quarter turns only.
 - Text is limited to the Latin alphabets of WinAnsi: no "ș", no emoji, no non-Latin alphabet.
-- The same image placed twice is stored twice.
+- ~~The same image placed twice is stored twice.~~ Stored once since the second version (4 October 2026).
 
 ## Tests
 
@@ -159,3 +159,4 @@ _Requested on 4 October: a user must have no reason to prefer Acrobat. Five work
 - Engine (`tests/engine/editImages.test.ts`): added image as is, turned, flipped, turned after a mirror, on an upright page and on a rotated page; image placed twice stored once; original image turned and flipped, cropped in place (JPEG rewritten as pixels), cropped without a change to its other occurrence, cropped then scaled.
 - Model (`tests/unit/editModel.test.ts`): edits of original objects in the history, selection key, quadrilaterals per line, crop as fractions.
 - Browser (`tests/e2e/edit.spec.ts`): an original text corrected and read back; an object deleted; a note placed; a link placed; a rotated image.
+- Added later on 4 October: forms (`tests/engine/forms.test.ts`: fields drawn in the render, listed, filled, added, a turned page and a taken name refused); stamps (`edit.test.ts`, `editMetrics.test.ts`, `editModel.test.ts`); in the browser, the text box, the zoom, the tool keys, the circle with Shift, the page-sized picture, the stamp, the form filled, a field name refused, fields added.

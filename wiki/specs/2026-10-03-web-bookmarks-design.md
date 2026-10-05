@@ -13,14 +13,14 @@ Brother Ribbon (`/fr/signets-pdf`, `/en/pdf-bookmarks`) reads the bookmarks of a
 | New bookmark | `XYZ` at the top-left corner of the page as the reader sees it, zoom left empty. It goes after the bookmarks of its page and of the pages before it, at the deeper level of its two neighbors | As on Mac |
 | Bookmark without a page | Left out and counted if it leads to an address, to another file or to nothing, or if its title is empty. Its children take its place | As on Mac. A loop in the outline stops at the bookmark already seen |
 | Reading | `bookmarks` request of the worker, loaded with the editor. The screen waits for both | The outline on screen is always the one of the open document |
-| Screen | The preview and its arrows on the left. The title, "Add a bookmark to page N" and the list in the panel. Each row: editable title, "p. N" that shows the page, two level arrows, trash | On Mac, the levels go through a context menu. A site shows them |
-| Removal | The children of the removed bookmark move up one level, in its place | On Mac, they go under the previous bookmark: removing "Part I" put "Chapter 2" under "Chapter 1" |
+| Screen | The preview and its arrows on the left. The title, "Add a bookmark to page N" and the list in the panel. Each row: editable title, "p. N" that shows the page, two level arrows, trash | On Mac, the levels went through a context menu. A site shows them |
+| Removal | The children of the removed bookmark move up one level, in its place | On Mac, they went under the previous bookmark: removing "Part I" put "Chapter 2" under "Chapter 1" |
 | Save | Offered from the first change, refused while a title is empty (red border) | As on Mac |
 | Signed PDF | Refused (`alreadySigned`) | Any rewrite invalidates the signature |
 | Protected PDF | Opened with its password. The copy keeps this password | PDFium rewrites the original encryption |
 | Monk | "Brother Ribbon" (« Frère Signet »), the book, joyful pose, Organize category | The name and the pose from the Mac |
 | Search | `signets`, `sommaire`, `chapitres`, `plan du document`, `marque-page`… Without « table des matières » | Search would then match it for « tableur » (spreadsheet) |
-| Shared preview | `signature/pagePreview.ts`: the loading of the page preview, shared by Redact and Bookmarks | One code path for waiting, failure and retry |
+| Shared preview | `signature/pagePreview.ts`: the loading of the page preview, shared by Redact and Bookmarks, and by Crop since 4 October | One code path for waiting, failure and retry |
 
 ## Known limits
 
