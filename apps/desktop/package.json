@@ -4,16 +4,25 @@
   "license": "SEE LICENSE IN LICENSING.md",
   "type": "module",
   "scripts": {
-    "dev": "tauri dev",
-    "build": "tauri build",
-    "smoke": "pnpm smoke:engine && pnpm smoke:site",
+    "assets": "node ../web/scripts/copy-ocr.mjs && node ../web/scripts/copy-scan.mjs",
+    "check": "tsc --noEmit",
+    "app:dev": "vite",
+    "app:build": "tsc --noEmit && vite build",
+    "dev": "pnpm assets && tauri dev",
+    "build": "pnpm assets && tauri build",
+    "smoke": "pnpm smoke:engine && pnpm smoke:app",
     "smoke:engine": "tauri build --debug --no-bundle --config src-tauri/tauri.smoke.conf.json && src-tauri/target/debug/HolyPDF --smoke",
-    "smoke:site": "tauri build --debug --no-bundle && src-tauri/target/debug/HolyPDF --smoke fr fr/compresser-pdf fr/faq en"
+    "smoke:app": "pnpm assets && tauri build --debug --no-bundle && src-tauri/target/debug/HolyPDF --smoke app"
   },
   "dependencies": {
-    "@tauri-apps/api": "2.12.1"
+    "@tauri-apps/api": "2.12.1",
+    "@tauri-apps/plugin-dialog": "^2.8.1",
+    "@tauri-apps/plugin-fs": "^2.6.0",
+    "@tauri-apps/plugin-opener": "^2.7.0",
+    "preact": "10.29.8"
   },
   "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
     "@tauri-apps/cli": "2.12.1",
     "@types/emscripten": "1.41.6",
     "typescript": "6.0.3",

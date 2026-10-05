@@ -19,9 +19,6 @@ name = "HolyPDF"
 path = "src/main.rs"
 
 [build-dependencies]
-base64 = "0.22"
-serde_json = "1.0"
-sha2 = "0.10"
 tauri-build = { version = "2.7.1", features = [] }
 
 [dependencies]
@@ -29,3 +26,7 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 sys-locale = "0.3"
 tauri = { version = "2.12.1", features = [] }
+tauri-plugin-dialog = "2.8.1"
+tauri-plugin-fs = "2.6.0"
+tauri-plugin-opener = "2.7.0"
+tauri-plugin-window-state = "2.5.0"
