@@ -40,6 +40,8 @@ export type Saver = {
   kind: "download" | "save";
   platform?: "mac" | "windows" | "linux";
   save(bytes: Uint8Array<ArrayBuffer>, name: string, type: string): Promise<SaveOutcome>;
+  /** « Voir » before saving: a new tab on the site, the system's viewer in the desktop shell. */
+  preview?(bytes: Uint8Array<ArrayBuffer>, name: string, type: string): Promise<void>;
   open?(path: string): Promise<void>;
   reveal?(path: string): Promise<void>;
 };
@@ -51,5 +53,10 @@ export const downloader: Saver = {
   async save(bytes, name, type) {
     download(bytes, name, type);
     return { kind: "downloaded" };
+  },
+  async preview(bytes, _name, type) {
+    const url = URL.createObjectURL(new Blob([bytes], { type }));
+    window.open(url, "_blank");
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
   },
 };
