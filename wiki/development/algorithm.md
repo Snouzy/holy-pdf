@@ -18,7 +18,7 @@ All positions are in normalized page coordinates (0 to 1, origin at the top left
 
 ## 2. Detection
 
-1. Document detector of the platform (Vision `VNDetectDocumentSegmentationRequest` on Apple): an approximate quadrilateral. An observation with a confidence below 0.5 counts as a failure. With no result, the quadrilateral is the whole photo, and the page is to be checked.
+1. Document detector of the platform (Vision `VNDetectDocumentSegmentationRequest` on Apple; on the site, the largest four-sided outline found with OpenCV, `apps/web/src/scan/detect.ts`): an approximate quadrilateral. On Apple, an observation with a confidence below 0.5 counts as a failure. On the site, no four-sided outline between 20% and 95% of the photo counts as a failure. With no result, the quadrilateral is the whole photo, and the page is to be checked.
 2. Refinement of each edge, on the grayscale image reduced to a quarter and then blurred (binomial kernel 1-4-6-4-1):
 
 | Parameter | Value |
@@ -56,7 +56,7 @@ Calculations on the encoded sRGB values (gamma), between 0 and 1.
 | If watermark kept: closing | dilation then erosion, radius 45 px, applied to the fine estimate |
 | If watermark kept: shadow mask | `m = clamp((0.92 · L − g) / (0.1 · L))`, blur σ 10, where `g` = gray of the closing and `L` = local lit paper (dilation of radius 200 px, calculated at quarter resolution, blur σ 40) |
 | If watermark kept: blend | `m · fine + (1 − m) · closing` |
-| Smoothing | 21 px median in the prototype; Gaussian blur on Apple (Core Image has no large median) |
+| Smoothing | 21 px median in the prototype; Gaussian blur on Apple (Core Image has no large median) and on the site |
 | Division | page ÷ estimate |
 | Levels | black 0.12, white 0.86, then power 1.35 |
 | Sharpness | 1.5 × image − 0.5 × blur σ 1.2 |
@@ -74,7 +74,7 @@ White areas painted after the cleaning: polygons, or brush strokes (radius as a 
 
 ## 7. Output
 
-- JPEG quality 80 on the libjpeg scale (the OpenCV scale), without metadata. ImageIO has its own scale: 0.8 gives the libjpeg 94 tables there, 0.53 gives the libjpeg 80 to 81 tables (ImageMagick estimate);
+- JPEG quality 80 on the libjpeg scale (the OpenCV scale), without metadata. ImageIO has its own scale: 0.8 gives the libjpeg 94 tables there, 0.53 gives the libjpeg 80 to 81 tables (ImageMagick estimate). In Chromium and Firefox, quality 0.8 is libjpeg 80. Safari encodes through ImageIO: not measured;
 - PDF: one page per image, JPEG embedded without recompression, invisible OCR text under the image;
 - page size: A4 for √2, otherwise the pixel size at 200 dpi; A5 or Letter as an option.
 

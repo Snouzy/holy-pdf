@@ -1,6 +1,6 @@
 # Web: Crop a PDF
 
-_Written on 4 October 2026. Requested on 4 October, after the comparison with iLovePDF. The Mac app does not have this tool._
+_Written and shipped on 4 October 2026. Requested on 4 October, after the comparison with iLovePDF. The Mac app, removed on 5 October 2026, never had this tool._
 
 Brother Framer (`/fr/rogner-pdf`, `/en/crop-pdf`) keeps the chosen area of one page, or of all pages, and saves the copy.
 

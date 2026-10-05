@@ -16,13 +16,13 @@
   },
   "dependencies": {
     "@tauri-apps/api": "2.12.1",
-    "@tauri-apps/plugin-dialog": "^2.8.1",
-    "@tauri-apps/plugin-fs": "^2.6.0",
-    "@tauri-apps/plugin-opener": "^2.7.0",
+    "@tauri-apps/plugin-dialog": "2.8.1",
+    "@tauri-apps/plugin-fs": "2.6.0",
+    "@tauri-apps/plugin-opener": "2.7.0",
     "preact": "10.29.8"
   },
   "devDependencies": {
-    "@preact/preset-vite": "^2.10.6",
+    "@preact/preset-vite": "2.10.6",
     "@tauri-apps/cli": "2.12.1",
     "@types/emscripten": "1.41.6",
     "typescript": "6.0.3",

@@ -1,6 +1,6 @@
 # Web version: Holy PDF design system, design
 
-_Written on 30 September 2026. Status: shipped in `apps/web/`. Added during the work and described here: the light and dark switch, the "abbey" tone and the brown habit, the centered page top, the compact view and the drop on the whole page._
+_Written on 30 September 2026. Status: shipped in `apps/web/`. Added during the work and described here: the light and dark switch, the "abbey" tone and the brown habit, the centered page top, the compact view and the drop on the whole page. Replaced since: the top of the home page, its drop zone and the sections after the monastery, by the [home page redesign](2026-10-02-web-landing-design.md) (2 October 2026); Split in the top bar, by Sign (3 October); the hand-drawn tool icons, by Lucide (PR #15, 5 October)._
 
 ## Context
 
@@ -46,11 +46,11 @@ The spec succeeds when:
 | Rejected | SVG sprite (`<symbol>`, `<use>`) | The most complex option, for a small weight gain on 19 monks |
 | Fonts | Hosted on the site: Bricolage Grotesque (weight 800 only) and Figtree variable, taken from `@fontsource/bricolage-grotesque` and `@fontsource-variable/figtree`, then reduced to the letters of French and English by `scripts/subset-fonts.py` (fontTools) into `src/fonts/` | No request to Google Fonts. The subset takes the fonts from 42 to 25 KB, which keeps the home page LCP under 1.5 s |
 | Home page | D2 layout: the 7 ready tools in large cards, the 12 upcoming ones in small avatars | Put forward what works. The author's choice |
-| Home page drop zone | It guides to the tools that accept the files, then opens the tool page with the files | The author's choice. Cost: an island and `ClientRouter` navigation on the home page |
-| File handoff | In memory, in a shared module, during a `ClientRouter` navigation | The simplest. If the page reloads, the files are lost and the usual drop zone shows |
+| Home page drop zone | It guides to the tools that accept the files, then opens the tool page with the files. Removed on 2 October 2026 by the [home page redesign](2026-10-02-web-landing-design.md): a file dropped on the home page is no longer handled | The author's choice. Cost: an island and `ClientRouter` navigation on the home page |
+| File handoff | In memory, in a shared module, during a `ClientRouter` navigation. Removed with the drop zone on 2 October 2026 | The simplest. If the page reloads, the files are lost and the usual drop zone shows |
 | Dark mode | Automatic, from the device, and a moon or sun button in the header to choose | The author's choice. The choice stays in the browser. Without JavaScript, the site stays light |
 | Tools menu | Native `<details>` | Zero JavaScript, works with the keyboard |
-| Search | None | 19 tools fit on one page |
+| Search | None at first. Replaced on 1 October 2026 by the search field of the filter column (see Home page) | 19 tools fit on one page |
 | Accent font in headings | None | Tried, refused by the author. The yellow highlighter stays the only accent |
 | Emojis | One per heading, at the end, next to the last word, system emoji | Sets the tone with no file to load |
 | Domain | `SITE_URL=https://holy-pdf.com` when the domain is connected. Until then, `noindex` | The variable already exists. Do not get a temporary address indexed |
@@ -68,13 +68,13 @@ apps/web/src/
     Scene.tsx           the PDF sheet of each tool
     Avatar.tsx          the monk who comes out of the circle
     Icon.tsx            interface icons
-  cast.ts               the cast: one monk per ready tool, the 12 upcoming tools
+  cast.ts               the cast: one monk per ready tool, the upcoming tools (12 then, 1 on 5 October 2026)
   home/
-    HomeDrop.tsx        island of the home page drop zone
-    orient.ts           which tools for which files (pure function)
+    HomeDrop.tsx        island of the home page drop zone (deleted on 2 October 2026)
+    orient.ts           which tools for which files, pure function (deleted on 2 October 2026)
   board/
-    handoff.ts          handoff of the files from the home page to the board
-    MonkBubble.tsx      the monk and his bubble, in the action bar
+    handoff.ts          handoff of the files from the home page to the board (deleted on 2 October 2026)
+    MonkBubble.tsx      the monk and his bubble, in the panel since the three-step flow
   layouts/Base.astro    head and script (tokens, fonts, theme), the site bar and the page width
   styles/base.css       the rules that every page and the desktop app share (body, links, headings, drop veil, highlighter)
   layouts/SiteNav.astro, SiteFooter.astro    the top bar and its menus, the footer
@@ -156,13 +156,13 @@ Each control responds to the pointer. One rule per kind of control:
 
 | Kind | Examples | On hover |
 |---|---|---|
-| Primary, filled | the verb button, "Choose PDF files", "Download", the home page's "Choose files", "Remove" in the confirmation | background `--accent-hover` and a larger shadow: `0 12px 28px`, `--accent` at 38% |
+| Primary, filled | the verb button, "Choose PDF files", "Download", "Remove" in the confirmation | background `--accent-hover` and a larger shadow: `0 12px 28px`, `--accent` at 38% |
 | Secondary, bordered or on the surface | "+ Add a PDF" (box, file cards and panel), "Change the settings", Undo, the secondary buttons of the result, the theme, the language, "Menu" and the entries of the bar's menus, "Compact view", the small icon buttons (rotate, cut, "?"), the home page categories (except the chosen one), "See all the monks" | background `--accent-tint`, border and text or icon `--accent`; the home page search field takes the border only |
 | Switch | "Show the monks in meditation" | label `--accent` |
 | Pressed toggle | the placed scissors of Split, active "Compact view" | background and border `--accent-hover`, no shadow |
 | Destructive, icon | the × of a file card and of a file tab, "Delete page" | background `--stamp-tint`, border and icon `--stamp` |
 | Choice card, tile, toggle | the Compress levels, the PDF to JPG modes and qualities | border `color-mix(in srgb, var(--accent) 55%, var(--line))`, background `color-mix(in srgb, var(--accent) 4%, var(--surface))`; the checked choice keeps its look |
-| Link card | the cards of the ready tools and the card of the monks in meditation, on the home page (an upcoming tool card is not a link and does not change), "The other monks", the monks offered by the drop zone, the tools of the 404 page | `translateY(-2px)` and `--shadow-panel`; the tool card, cut by its dog-ear corner, takes the shadow as `filter: drop-shadow()`. The shared `.lift` class lifts the card, and its `::after` covers the 2 px that the card leaves: a pointer at the bottom edge does not make the hover flicker |
+| Link card | the cards of the ready tools and the card of the monks in meditation, on the home page (an upcoming tool card is not a link and does not change), "The other monks", the tools of the 404 page | `translateY(-2px)` and `--shadow-panel`; the tool card, cut by its dog-ear corner, takes the shadow as `filter: drop-shadow()`. The shared `.lift` class lifts the card, and its `::after` covers the 2 px that the card leaves: a pointer at the bottom edge does not make the hover flicker |
 | Text link | the links of the bar, of the footer and of the compact view, "Merge other PDFs" under the result, "How to, frequent questions" under the workshop | color `--accent` and underline; a link already underlined in `--accent` (in the text, "Choose other files") turns `--accent-hover` |
 | Page thumbnail | the pages of the board | 2 px `--accent` outline around the sheet; the `grab` cursor stays, and a click opens the page preview. The preview of a file card reacts to nothing, so it does not change |
 | FAQ question | `summary` of a tool page FAQ | color `--accent`; the "+" sign of a closed question turns `--accent-tint` |
@@ -171,7 +171,7 @@ Each control responds to the pointer. One rule per kind of control:
 - **Footer**: it is dark in both themes, and `--accent` reaches only 2.4:1 there in light. It keeps the same rule with its own ink: background `--on-footer` at 12%, border and text `--on-footer`; its links turn `--on-footer`, underlined.
 - All hover styles are inside `@media (hover: hover)`: a touch screen does not keep a stuck hover.
 - 150 ms transitions on `background-color, border-color, color, box-shadow, transform`, in one shared rule of `styles/base.css` on `a, button, summary, label`. The global `prefers-reduced-motion` rule turns them off.
-- A disabled control does not change (`:not(:disabled)`). The focus ring does not change. The logo of the bar and of the footer does not change.
+- A disabled control does not change (`:not(:disabled)`). The focus ring does not change. The logo of the footer does not change. The logo of the bar does since 3 October 2026: its name turns `--accent` and the monk tilts (−8°, ×1.06; not with reduced motion).
 
 ## Illustrations
 
@@ -181,7 +181,7 @@ The reference drawing is the mockup of 30 September 2026, not published. The sit
 
 | Prop | Values |
 |---|---|
-| `accessory` | `stapler`, `scissors`, `sheet`, `eraser`, `loupe`, `arrows`, `frame`, `quill`, `stamp`, `lock`, `book`, `none` |
+| `accessory` | `stapler`, `scissors`, `sheet`, `eraser`, `loupe`, `arrows`, `frame`, `quill`, `stamp`, `lock`, `book`, `phone`, `none` |
 | `mood` | `happy` (content), `focus` (focused), `joy` (delighted), `oops`, `sleep` (waiting) |
 | `size` | width in px. The height is 1.1 × the width |
 | `layer` | `all` (default) or `prop`: only the accessory and the right hand |
@@ -191,7 +191,7 @@ The SVG has `aria-hidden="true"`: the text around it carries the meaning.
 
 ### `Scene`
 
-`kind`: `merge`, `split`, `organize`, `delete`, `extract`, `rotate`, `images`, the scenes of the 7 ready tools. The upcoming tools have no scene on the site. The accents take the color of the card's category; the featured sheet takes the light highlighter.
+`kind`: `merge`, `split`, `organize`, `delete`, `extract`, `rotate`, `images`, the scenes of the 7 ready tools. Each tool added since brings its scene (`SceneKind`, 27 kinds on 5 October 2026). The upcoming tools have no scene on the site. The accents take the color of the card's category; the featured sheet takes the light highlighter.
 
 ### `Avatar`
 
@@ -199,7 +199,7 @@ The monk in a tinted circle; the head and the accessory come out of the circle. 
 
 ### `Icon`
 
-Line interface icons: file drop, rotate (a circular arrow), delete (a bin), padlock, close, check mark, view (an eye), download, plus and minus (the sign of the FAQ questions).
+Line interface icons: file drop, rotate (a circular arrow), delete (a bin), padlock, close, check mark, view (an eye), download, plus and minus (the sign of the FAQ questions). Later screens added others (`IconName` in `Icon.tsx`). The tool icons are not here: they are in `ToolIcon.tsx`, drawn with Lucide since 5 October 2026.
 
 ### Favicon
 
@@ -207,7 +207,7 @@ The head of the monk with a halo, on a yellow disc, in `favicon.svg`.
 
 ## The monk cast
 
-`cast.ts` gives each ready tool its monk and its scene:
+`cast.ts` gives each ready tool its monk and its scene. The tables below are the cast of 30 September. On 5 October 2026, `cast.ts` holds 27 ready tools and one upcoming tool, Web page to PDF; the spec of each tool gives its monk.
 
 | Tool | Accessory | Card mood | Scene | Category | Emoji |
 |---|---|---|---|---|---|
@@ -234,12 +234,14 @@ The names of the monks and of the upcoming tools are in `i18n` (see Contents).
 
 The navigation bar separates from the content with a 1 px `--line` bottom border on scroll and when a menu is open, with no drop shadow (preference of 1 October 2026). The border stays transparent at rest and follows the light and dark colors of the theme.
 
-- **Top bar**: fixed at the top of the page. It is transparent at the very top, and on the surface with a thin bottom border from 24 px of scroll (5 rem then 4 rem high; 4.5 then 3.75 rem at 75 rem and below). It holds Merge PDF, Split PDF, Compress PDF, "Convert PDF ▾", "All tools ▾", the theme button and the language. Each menu shows a line icon per tool, on the tint of its category, and gray for the upcoming tools ("Soon"). At 75 rem and below, the entries fold behind a "Menu" button, in a drawer; the page behind is `inert`. The "Tools" menu with avatars no longer exists.
+- **Top bar**: fixed at the top of the page. It is transparent at the very top, and on the surface with a thin bottom border from 24 px of scroll (5 rem then 4 rem high; 4.5 then 3.75 rem at 75 rem and below). It holds Merge PDF, Sign PDF (in the place of Split PDF since 3 October 2026), Compress PDF, "Convert PDF ▾", "All tools ▾", the theme button and the language. Each menu shows a line icon per tool (`ToolIcon`, Lucide since 5 October 2026), on the tint of its category, and gray for the upcoming tools ("Soon"). At 75 rem and below, the entries fold behind a "Menu" button, in a drawer; the page behind is `inert`. The "Tools" menu with avatars no longer exists.
 - **Footer**: three promises, the brand and a sentence, five columns of links (Product, Popular tools, Resources, Legal, Holy PDF; each link leads to its page, see [Footer pages](2026-10-02-web-pages-design.md); only the social network icons still point to `#`), then the language, the theme, the social networks (X, Instagram, LinkedIn, TikTok; Simple Icons icons, CC0, written into the page) and © 2026.
 - Mockups: pages v12 (NV1 to NV4) and v13 (IC1) of the canvas.
 - **Page background**: the "background" color. The content sits on "surface" sheets or panels.
 
 ## Home page
+
+> Since 2 October 2026, the top of the page, the drop zone and the sections after the monastery follow the [home page redesign](2026-10-02-web-landing-design.md): points 1, 3 and 4, "The drop zone that guides" and `handoff.ts` below are history. The monastery (point 2) stays; its counts are those of 1 and 2 October. On 5 October 2026, 27 tools are ready and one is in meditation, and the "And N monks in meditation" box is a button that turns the switch on.
 
 From top to bottom (mockup D2, page top from the "IT-C Rouge" mockup):
 
@@ -268,9 +270,11 @@ From top to bottom (mockup D2, page top from the "IT-C Rouge" mockup):
 
 ### Drop on the whole page
 
-A file dragged from the desktop can be dropped anywhere in the window, on the home page as on a tool page. `useFileDrop` listens on `window`, for a single island per page: `HomeDrop` on the home page, the board on a tool page. `dropTracker` counts the `dragenter` and `dragleave` events (they repeat for each element crossed) and reacts only to a drag that carries files: a dragged text or link stays with the browser. During the hover, the island sets `data-dropping` on `<html>` and `Base.astro` shows a veil over the whole window: "Let go, I'll take care of them." The veil is outside the islands: an ancestor with `clip-path` or `filter` would clip it. On drop, the browser does not open the file; the island receives it as a choice.
+A file dragged from the desktop can be dropped anywhere in the window of a tool page (and of the home page until 2 October 2026). `useFileDrop` listens on `window`, for a single island per page: the board on a tool page (and `HomeDrop` on the home page until 2 October 2026). `dropTracker` counts the `dragenter` and `dragleave` events (they repeat for each element crossed) and reacts only to a drag that carries files: a dragged text or link stays with the browser. During the hover, the island sets `data-dropping` on `<html>` and `Base.astro` shows a veil over the whole window: "Let go, I'll take care of them." The veil is outside the islands: an ancestor with `clip-path` or `filter` would clip it. On drop, the browser does not open the file; the island receives it as a choice.
 
 ### `handoff.ts`
+
+Deleted on 2 October 2026 with the drop zone.
 
 - `offer(tool, files)` keeps the files in memory, with the target tool.
 - `take(tool)` returns the files if they target this tool, then empties the memory. A second call returns an empty list.
@@ -294,7 +298,7 @@ Same logic, same state, new styling:
 - **Empty**: a white dashed card. The tool's monk (his mood comes from `cast`) stands in a 150 px disc on the tint of his category, set on the top edge of the card. Below, a large "Choose PDF files", "Choose a PDF file" or "Choose images" button, with the upload icon, then "or drop them here" (hidden on a touch screen). The trust line is under the card, and "How to do it" in three cards further down. The whole page still receives dropped files. Mockup: page v13 of the canvas (TP1, TP3 on the left).
 - **Files**: folder tabs. Each file takes one of the six colors, repeated at the top of its pages. A tab shows the name, the pages and the size; while the file opens, a shimmering line; on error, a red tab, a padlock and an error message in stamp red on the surface background (on the file's tint, it would fall under 4.5:1). Each tab has a × that removes the file and all its pages, after confirmation ("All the pages of … will be removed from the preview.", Keep or Remove); a file with no pages yet goes at once. Cmd/Ctrl+Z does not bring them back, because the engine has closed the file. The full name of a truncated file or page shows on hover. To the right of the tab row, an "Undo" icon button (Ctrl or ⌘ + Z) undoes the last edit. The tabs are a color legend, not folders: on Merge, the pages of all the files sort together. With a single ready file, there is no tab and no color mark: the legend only serves to tell several files apart. The tab comes back while the file opens or after an error, for the message and the password.
 - **Pages**: dog-eared sheets with the file color at the top and the number below. Selected: 3 px primary outline and announced state. Dragged: lifted, tilted 4°, "lifted page" shadow. Loading: shimmer. The page buttons (rotate, delete, select, cut) become icon buttons with an accessible label. The grid ends with a dashed "+ Add a PDF" box ("Add images" on JPG to PDF, "Choose another file" on a single-file tool), which opens the picker.
-- **Action bar**: at the bottom of the board on desktop, fixed at the bottom of the screen on mobile. `MonkBubble` shows the tool's monk (84 px, 50 px head on mobile) and a bubble; next to it, **View** (the output PDF opens in a new browser tab) and **Download**, the primary button. Split has only Download, because it outputs a zip. Rotate a PDF keeps "Rotate all", its main gesture. No "Undo" (it is above the grid). On the multi-file tools (Merge, JPG to PDF), "Add a PDF" or "Add images" is also in the panel, just above the verb button. This is not the case during export, and not under 900 px, where the bar under the thumb keeps the verb alone. The reason: on a long document, the grid box is out of view and the user had to scroll to the very bottom to add a file (the author's request, 5 October 2026, in the desktop app). The single-file tools keep their "Choose another file" box in the grid only: next to the verb, it would replace all the work in one click.
+- **Action bar**: at the bottom of the board on desktop, fixed at the bottom of the screen on mobile. `MonkBubble` shows the tool's monk (84 px, 50 px head on mobile) and a bubble; next to it, **View** (the output PDF opens in a new browser tab) and **Download**, the primary button. Split has only Download, because it outputs a zip. Rotate a PDF keeps "Rotate all", its main gesture. No "Undo" (it is above the grid). On the multi-file page tools (Merge, Rotate, JPG to PDF), "Add a PDF" or "Add images" is also in the panel, just above the verb button. This is not the case during export, and not under 900 px, where the bar under the thumb keeps the verb alone. The reason: on a long document, the grid box is out of view and the user had to scroll to the very bottom to add a file (the author's request, 5 October 2026, in the desktop app). The single-file tools keep their "Choose another file" box in the grid only: next to the verb, it would replace all the work in one click.
 
 | Board state | Mood | Bubble |
 |---|---|---|
@@ -386,7 +390,7 @@ CI keeps its current thresholds (performance ≥ 0.95, SEO and best practices at
 | Home page JavaScript (compressed) | ≤ 22 KB |
 | Tool page JavaScript (compressed) | ≤ 45 KB |
 | Fonts, all pages | ≤ 80 KB, both preloaded (26 KB after subsetting) |
-| Home page HTML (compressed) | ≤ 28 KB, since 2 October 2026 (cards of Protect and Unlock, and room for the tools of the same milestone; the author's choice). Before: 26 KB on 1 October, 25 KB at first |
+| Home page HTML (compressed) | ≤ 40 KB, since 3 October 2026: 36 KB for the rebuilt home page, then 40 KB to make room for its video (the author's choice; see [web version](../development/web-version.md)). Before: 28 KB on 2 October (cards of Protect and Unlock, and room for the tools of the same milestone; the author's choice), 26 KB on 1 October, 25 KB at first |
 | CLS | ≤ 0.01 on the home page |
 
 These budgets are in brotli, which is what Cloudflare serves. The Lighthouse CI thresholds are 24 KB of JavaScript for the home page and 50 KB for a tool page. Its server (`compression` 1.8) also serves brotli, at quality 4, and it counts the headers, about 390 B per response: its figures are about 13% under `gzip -9`, which therefore does not measure the budget. The home page budget went from 15 to 20 KB while the plan was written (Astro's router weighs 6 KB on its own, Preact and the islands runtime 9 KB), then to 22 KB when the drop zone took the whole page: only 18 bytes of margin were left.
@@ -399,10 +403,10 @@ On the home page, one more script request on load, even of 200 bytes, adds a sim
 
 ## Tests
 
+The tests of the home page drop zone (`orient`, `handoff` and its five end-to-end flows) went with it on 2 October 2026.
+
 **Unit (Vitest):**
 
-- `orient`: single PDF, several PDFs, single image, several images, mix, unreadable file, no file.
-- `handoff`: `take` returns the files once, nothing for another tool, nothing on the second call.
 - Contrasts: ratio computation for each text and background pair, in light and in dark.
 - `searchTools`: a synonym, and which one; accents and capitals; a word being typed; one typo from 4 letters, two from 7, two swapped letters; typos as a last resort; all words required; an empty query or a query of stop words returns everything, as does a last word that starts a stop word and finds nothing (« pd »); nothing for a tool that does not exist; the direction of a conversion; the monk's name; a ready tool before an upcoming tool. The word lists: at least five per tool, ready or upcoming, in each language.
 
@@ -410,17 +414,12 @@ On the home page, one more script request on load, even of 200 bytes, adds a sim
 
 **End to end (Playwright, Chromium, Firefox, WebKit):**
 
-- home page: drop two PDFs, choose Merge, find both files on the board;
-- home page: choose a file before the island loads;
-- home page: drop an image, see only JPG to PDF;
-- home page: the monk speaks above the drop zone without covering the button, at 1,440 and 390 px;
-- home page: keyboard focus follows the drop zone, to the offered tools then back to the button;
-- home page: the compact view shows the 19 monks (9 links), hides the cards and "soon", and stays chosen after a reload;
-- home page filters (`filter.spec.ts`): « Convertir » shows 2 cards, 4 with the switch, 2 of them « Bientôt · en méditation »; at 1,440 × 800, the column stays on screen 900 px further down; without the word lists (request blocked), « pivoter » still finds « Pivoter », and the next letter reloads them; « Sécurité » shows its 2 upcoming monks, switch off; four cards per row at 1,440 px; « redure » leaves only « Compresser », and the status says « « réduire » → Compresser »; the best result comes first; « excel » shows the sleeping monk, and « Voir tous les moines » brings back the 9 cards; the compact view follows the filters; search still works after a visit to a tool page; at 390 px, the categories fit on one row of pills, and the page does not scroll sideways from 320 to 1,024 px;
+- home page: the compact view shows the 28 monks (27 links), hides the cards, and stays chosen after a reload;
+- home page filters (`filter.spec.ts`): « Convertir » shows 4 cards, 5 with the switch, 1 of them « Bientôt · en méditation »; at 1,440 × 800, the column stays on screen 900 px further down; without the word lists (request blocked), « pivoter » still finds « Pivoter », and the next letter reloads them; "Security" (English page) shows its 2 ready monks, with none in meditation; four cards per row at 1,440 px; « redure » leaves only « Compresser », and the status says « « réduire » → Compresser »; the best result comes first; « excel » shows the sleeping monk, and « Voir tous les moines » brings back the 27 cards; the « Et un moine en méditation » card turns the switch on; the compact view follows the filters; search still works after a visit to a tool page; at 390 px, the categories fit on one row of pills, and the page does not scroll sideways from 320 to 1,024 px;
 - phone: a file name with no space or hyphen does not make the page overflow while it opens (the bubble breaks it);
 - tab in error: its message is on the surface background, in light and in dark;
-- board: no tab and no color mark for a single ready file; the × of a tab asks for confirmation, then removes the file and its pages; the Undo button undoes the last edit; the full name shows on hover; the "Add a PDF" box adds a file, View opens the result preview in the page (a PDF, the files of a ZIP, the images), Download downloads it, and each tool has only its own actions; a click or Enter on a thumbnail opens the page preview, the arrows and the buttons page through it (even when the button that had the focus turns gray), Escape closes it, and a rotated page fits in its frame;
-- drop on the whole page: a file dropped on the footer of a tool page opens, the veil appears then disappears; a file dropped outside the home page zone is guided, and the veil there covers the whole window;
+- board: no tab and no color mark for a single ready file; the × of a tab asks for confirmation, then removes the file and its pages; the Undo button undoes the last edit; the full name shows on hover; the "Add a PDF" box adds a file, and so does "Add a PDF" in the panel, hidden on a phone; View opens the result preview in the page (a PDF, the files of a ZIP, the images), Download downloads it, and each tool has only its own actions; a click or Enter on a thumbnail opens the page preview, the arrows and the buttons page through it (even when the button that had the focus turns gray), Escape closes it, and a rotated page fits in its frame;
+- drop on the whole page: a file dropped on the footer of a tool page opens, the veil appears then disappears;
 - "Tools" menu: open, follow a link, with the keyboard;
 - dark mode: under emulation, the page background is the dark "background" color;
 - switch: go dark, keep the choice on the next page, switch only once after a `ClientRouter` navigation, follow the device when nothing is chosen;
@@ -441,6 +440,6 @@ To do at the very start of the plan, before writing the components:
 ## Next steps
 
 - review of the new texts and approval of dark mode on the site;
-- the purchase of holy-pdf.com, then `SITE_URL` and `INDEXABLE=true` at deploy, and the renaming of the Worker;
+- the purchase of holy-pdf.com (not registered on 5 October 2026), then `SITE_URL` and `INDEXABLE=true` at deploy. PR #20 renamed the Cloudflare Worker `holy-pdf-web` on 5 October 2026;
 - the final illustrations by an illustrator, with the canvas mockups as the brief;
 - the share images (Open Graph) with the monks.

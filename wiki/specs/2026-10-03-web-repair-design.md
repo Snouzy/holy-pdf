@@ -1,6 +1,6 @@
 # Web: Repair a PDF
 
-_Written and delivered on 3 October 2026. The Mac app does not have this tool._
+_Written and delivered on 3 October 2026. The Mac app, removed on 5 October 2026, never had this tool._
 
 Brother Mender (`/fr/reparer-pdf`, `/en/repair-pdf`) rereads damaged PDFs and writes a clean copy, which opens everywhere.
 

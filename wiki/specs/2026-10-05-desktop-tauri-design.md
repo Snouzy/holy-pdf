@@ -1,6 +1,6 @@
 # Desktop: Tauri shell on the site's code
 
-_Written on 5 October 2026. Status: proof delivered in `apps/desktop`, then the built site loaded in the shell the same day (step 1); the desktop features come next._
+_Written on 5 October 2026. Status: proof delivered in `apps/desktop` (PR #2), then the built site loaded in the shell the same day (step 1, PR #3). That evening, the dedicated entry of the [app shell spec](2026-10-05-desktop-shell-design.md) replaced step 1; its milestone 1 shipped on 5 October (PR #7, PR #8). Left: the double-click, updates, signing and sales, and the Windows and Linux checks (see "What comes next")._
 
 ## Context
 
@@ -25,7 +25,7 @@ All five pass in 338 ms on the compiled binary, where `tauri://localhost` serves
 | Topic | Decision | Reason |
 |---|---|---|
 | Shell | Tauri 2, `apps/desktop`, identifier `com.snouzylabs.holypdf` | About ten MB, system webview, one codebase for Mac, Windows and Linux; see the [roadmap](../product/roadmap.md) |
-| Shared code | Imported from `apps/web/src` by relative path, as long as there is no separate `engine` package | The pnpm workspace resolves the dependencies from `apps/web`; a shared package will come with Turborepo, after the `Packages/` vs `packages/` case question is settled |
+| Shared code | Imported from `apps/web/src` by relative path, as long as there is no separate `engine` package | The pnpm workspace resolves the dependencies from `apps/web`; a shared package will come with Turborepo. The `Packages/` vs `packages/` case question that held it back went away with the Swift app (PR #17) |
 | Proof | A test page, not the app, loaded from `dist-smoke` | It isolates the engine question from the interface question, and runs again with one command: `pnpm --filter @holy-pdf/desktop smoke` |
 | Verdict | A Rust command deserializes the report and exits through `app.exit` with 0 only if the five expected steps passed | WKWebView has no WebDriver on Mac: the exit code is the only channel a script can read; counting the steps prevents a partial report from passing |
 | Safeguards | The page gives itself 90 s, then returns a negative verdict; Rust exits with 2 after 120 s with no report | A worker that does not start throws nothing on the page side, and a page that does not load never calls Rust |
@@ -35,7 +35,7 @@ All five pass in 338 ms on the compiled binary, where `tauri://localhost` serves
 
 ## Step 1: the site in the shell (5 October 2026)
 
-> Superseded the same evening: the shell now loads a dedicated entry composed with the site's building blocks, and `--smoke app` replaces the page-by-page probe ([app shell spec](2026-10-05-desktop-shell-design.md)). What follows stays true for the CSP, the drop and the harness; it is no longer true for `frontendDist`, `devUrl` and the page list.
+> Superseded the same evening (PR #8): the shell now loads a dedicated entry composed with the site's building blocks, and `--smoke app` replaces the page-by-page probe ([app shell spec](2026-10-05-desktop-shell-design.md)). What follows stays true for the reasons of the fixed policy (`dangerousDisableAssetCspModification`, `connect-src ipc:`, no policy for the workers) and for the exit codes of the harness. It is no longer true for `frontendDist`, `devUrl`, the window opened on `fr` or `en`, the default menus, the script hashes of `build.rs` (the policy is now a fixed string in `tauri.conf.json`: the entry has no inline script), `smoke/probe.js` and the page list.
 
 `frontendDist` points to `apps/web/dist`, which `beforeBuildCommand` rebuilds (`pnpm --filter @holy-pdf/web build`, 2.7 s). `pnpm desktop:dev` opens the site's development server (`devUrl`, port 4321), which must already run. There is no `beforeDevCommand`, because a second `astro dev` in the same folder would share the Vite cache of the first one and break it. `pnpm desktop:build` produces the app; the debug binary weighs 59 MB, with all of `dist` embedded.
 
@@ -55,8 +55,8 @@ Rust builds the window (`WebviewWindowBuilder`), not `tauri.conf.json`: `dist` h
 
 The form of the app (a dedicated entry composed with the site's building blocks, instead of the whole site) is decided in [Desktop: the app shell](2026-10-05-desktop-shell-design.md), which takes points 1 to 3 below into its milestones. In order, each with its line here:
 
-1. Save a result: the site does it through an `<a download>` link, which wry cancels on Mac as long as the shell has no `on_download` handler; so today no tool can save its copy in the shell. Add this handler with the native dialog. External links (GitHub, stores, legal notice): they replace the site in the window, with no way back; open them in the browser (`on_navigation` and `tauri-plugin-opener`). "View" on the result goes through `window.open`, which WKWebView ignores: open the file with the system viewer.
-2. Open a PDF by double-click (file association), drop from Finder or Explorer, save in place through the native dialog, process a whole folder.
-3. Diet: `dist` is 63 MB, including the home page videos (9.5 MB), OpenCV (13 MB), three Tesseract cores and PDFium twice; embed only what the desktop app serves.
-4. Automatic updates, Mac and Windows signing, direct sales; stores after that.
-5. Windows: the `smoke:*` scripts name the Unix binary (`src-tauri/target/debug/HolyPDF`); adapt them. Linux when WebKitGTK has run these same checks.
+1. Save a result: the site does it through an `<a download>` link, which wry cancels on Mac as long as the shell has no `on_download` handler; so today no tool can save its copy in the shell. Add this handler with the native dialog. External links (GitHub, stores, legal notice): they replace the site in the window, with no way back; open them in the browser (`on_navigation` and `tauri-plugin-opener`). "View" on the result goes through `window.open`, which WKWebView ignores: open the file with the system viewer. Done in milestone 1 of the app shell (PR #7, PR #8), with the native save dialog of the `dialog` plugin instead of an `on_download` handler. "View" took another way: PR #9 opened a temporary copy in the system viewer, then PR #12 replaced it with a preview in the page.
+2. Open a PDF by double-click (file association), drop from Finder or Explorer, save in place through the native dialog, process a whole folder. The drop is done in milestone 1 (the shell turns off Tauri's drop handler). The double-click is milestone 2 of the app shell. Save in place and a whole folder are outside that spec.
+3. Diet: `dist` is 63 MB, including the home page videos (9.5 MB), OpenCV (13 MB), three Tesseract cores and PDFium twice; embed only what the desktop app serves. Done in milestone 1: the app embeds 41 MB, with no videos and no pages (measured on 5 October).
+4. Automatic updates, Mac and Windows signing, direct sales; stores after that. Milestone 3 of the [app shell spec](2026-10-05-desktop-shell-design.md), not started.
+5. Windows: the `smoke:*` scripts name the Unix binary (`src-tauri/target/debug/HolyPDF`); adapt them. Linux when WebKitGTK has run these same checks. Still open.

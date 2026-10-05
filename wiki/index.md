@@ -4,10 +4,10 @@ You can open it in Obsidian: **Open folder as vault**, then choose the `wiki/` f
 
 ## Product
 
-- [Roadmap](product/roadmap.md): all the planned tools, their feasibility and the phases.
+- [Roadmap](product/roadmap.md): all the planned tools, their feasibility, their status and the phases.
 - [Brand identity](product/brand.md): Holy PDF, with the name, one monk per tool and the Blue Ink palette.
 - [The story of Holy PDF](product/story.md): the lack of space, the family's PDFs and the birth of the project.
-- [Launch posts](product/social-posts.md): the LinkedIn, Instagram and X versions.
+- [Launch posts](product/social-posts.md): the LinkedIn, Instagram and X versions, in French.
 
 ## Development
 
@@ -16,13 +16,13 @@ You can open it in Obsidian: **Open folder as vault**, then choose the `wiki/` f
 - [Tests](development/tests.md): commands, levels, manual checks.
 - [Web version](development/web-version.md): Astro site, engine in the browser, known pitfalls.
 - [Compression benchmark](development/compression-benchmark-2026-10-01.md): comparison of PDFium, qpdf, Cantoo and MuPDF, browser measurements and limits.
-- [Site keywords](development/web-keywords.md): the address of each tool in French and in English, the search candidates, volumes to check.
+- [Site keywords](development/web-keywords.md): the addresses of the first seven tools in French and in English, the search candidates, volumes to check.
 
 ## Specs
 
-_The "Mac: …" specs describe the Swift app, removed on 5 October 2026; its code is at the tag `mac-final`. They stay as an archive of the decisions._
+_The "Mac: …" specs, the Scanner Mac v1 spec and the Mac app design system spec describe the Swift app, removed on 5 October 2026; its code is at the tag `mac-final`. They stay as an archive of the decisions._
 
-- [Mac: Edit a PDF (step A: additions in the page)](specs/2026-10-04-mac-edit-design.md): additions written into the page, every letter, images cropped, rotated and flipped; B (annotations, links) and C (original content) follow.
+- [Mac: Edit a PDF (step A: additions in the page)](specs/2026-10-04-mac-edit-design.md): additions written into the page, every letter, images cropped, rotated and flipped; B (annotations, links) and C (original content) were to follow.
 - [Mac: Watermark](specs/2026-10-02-mac-watermark-design.md): text or image in the content of the pages, opacity, angle, range, with no added engine.
 
 - [Mac: Page numbers](specs/2026-10-02-mac-page-numbers-design.md): format, position, first number, range; the building blocks shared by the tools that save a copy.
@@ -62,7 +62,7 @@ _The "Mac: …" specs describe the Swift app, removed on 5 October 2026; its cod
 - [Web: Overlay two PDFs](specs/2026-10-03-web-overlay-design.md): the pages of one PDF over or under the pages of another.
 - [Web: Add bookmarks](specs/2026-10-03-web-bookmarks-design.md): read, add, rename, arrange and remove the bookmarks of a PDF.
 - [Web: Repair a PDF](specs/2026-10-03-web-repair-design.md): qpdf reads a damaged PDF again, with PDFium as a fallback.
-- [Web: Edit a PDF](specs/2026-10-04-web-edit-design.md): text, images, shapes, pencil and highlighter added into the page.
+- [Web: Edit a PDF](specs/2026-10-04-web-edit-design.md): text, images, shapes, pencil and highlighter added into the page; then, on 4 October, edits of the original content, stamps, forms and their fields.
 - [Web: Crop a PDF](specs/2026-10-04-web-crop-design.md): the drawn area becomes the box of the page, on one page or on all of them.
 - [Web: Scanner](specs/2026-10-02-web-scanner-design.md): photos of documents into clean PDFs, the Mac engine ported to OpenCV.js.
 - [Web: PDF to Word](specs/2026-10-02-web-pdf-to-word-design.md): text, styles and images in a .docx written by hand.

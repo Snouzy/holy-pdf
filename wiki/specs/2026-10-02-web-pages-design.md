@@ -119,13 +119,13 @@ The template loads no Preact island and no script beyond those of `Base.astro`.
 
 - Each page: `BreadcrumbList` (Holy PDF › the page).
 - Each article: `BreadcrumbList` (Holy PDF › Blog or Guides › the article) and `BlogPosting` (`headline`, `description`, `datePublished`, `dateModified`, `author` of type `Person`, `inLanguage`, `url`).
-- No `FAQPage`: the general FAQ does not have one, and neither do the tool pages.
+- No `FAQPage`: the general FAQ does not have one, and neither do the tool pages. Replaced the same day by the [home page spec](2026-10-02-web-landing-design.md): each tool page and the FAQ page carry a `FAQPage` (`src/faq.ts`).
 
 The pages go into the sitemap. They do not go into the tool search of the home page.
 
 ## Footer
 
-`SiteFooter.astro` keeps `later` for the social network icons only. The other links call `pagePath`; "Mac app (soon)" and "iPhone app (soon)" lead to `pagePath("apps", lang)` followed by `#mac` and `#iphone`.
+`SiteFooter.astro` keeps `later` for the social network icons only. The other links call `pagePath`; "Mac app (soon)" and "iPhone app (soon)" lead to `pagePath("apps", lang)` followed by `#mac` and `#iphone`. Since 5 October 2026, "Mac app (soon)" reads "Desktop app (soon)", and a "Source code" link leads to the GitHub repository.
 
 ## Content
 
@@ -135,7 +135,7 @@ The legal texts are a serious base, not the opinion of a lawyer: they stay in "T
 
 ### Legal
 
-- **Legal notice**: publisher Snouzylabs S.R.L., publication director Mathias BRADICEANU; contact `hello@holy-pdf.com`; host Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, United States; intellectual property: the texts, the code and the illustration files under AGPL-3.0-or-later, the name, the logo and the monk reserved ([BRAND.md](../../BRAND.md)); credits: Bricolage Grotesque and Figtree (SIL Open Font License), Simple Icons (CC0), PDFium and qpdf, with a link to `/licenses/`.
+- **Legal notice**: publisher Snouzylabs S.R.L., publication director Mathias BRADICEANU; contact `hello@holy-pdf.com`; host Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, United States; intellectual property: the texts, the code and the illustration files under AGPL-3.0-or-later, the name, the logo and the monk reserved ([BRAND.md](../../BRAND.md)); credits: Bricolage Grotesque and Figtree (SIL Open Font License), Simple Icons (CC0), PDFium and qpdf, with a link to `/licenses/`. On 5 October 2026, the credits also name @embedpdf/pdfium, Tesseract, OpenCV, libheif, Caveat, Feather and Lucide, each with a link to its licence file.
 - **Privacy**: data controller Snouzylabs S.R.L., represented by Mathias BRADICEANU; the files are processed in the browser and the site never receives them; no account, no analytics tool; Cloudflare processes the technical data of the requests (IP address, browser, requested page) to serve the site and protect it, and transfers this data to the United States under the Data Privacy Framework, to which it is certified; the e-mails received serve only to reply, then they are deleted; rights of access, rectification, erasure and objection; complaint to the CNIL.
 - **Terms of use**: free service, without an account, provided "as is", with no guarantee of availability; the user keeps their rights on their documents and stays responsible for them (lawful use, rights on the content); Sign puts a signature image, which is neither an advanced electronic signature nor a qualified signature in the sense of the eIDAS regulation, because there is no certificate; keep your originals; the monks, the texts and the code belong to the project, the third-party components follow their license; the terms can change, with the date at the top; French law.
 - **Cookies**: no cookie; a table of the two `localStorage` keys (`theme`: the chosen theme; `view`: the compact view of the home page), which stay on the device and are never sent; how to clear them from the browser.
@@ -148,9 +148,9 @@ The legal texts are a serious base, not the opinion of a lawyer: they stay in "T
 
 ### Product
 
-- **What's new**: a dated log, from the newest to the oldest, taken from the git history: the Organize tools, then Compress and PDF to JPG, then Sign (entry added at the rebase, see Risks). Each entry links to its tools.
-- **FAQ**: seven general questions (free, account, files sent, browsers, phone, file size, app), plus the value of the signature at the rebase; then the list of tools, built from `toolList`.
-- **Apps**: `#mac` presents the Mac scanner from its [spec](2026-09-29-scanner-mac-v1-design.md) (photos of documents become clean, straightened PDFs, one PDF per document); `#iphone` says that it will come later. Both are "Soon", and invite visitors to write to be told.
+- **What's new**: a dated log, from the newest to the oldest, taken from the git history: the Organize tools, then Compress and PDF to JPG, then Sign (entry added at the rebase, see Risks). Each entry links to its tools. On 5 October 2026, the log runs to that day: the code published under the AGPL.
+- **FAQ**: seven general questions (free, account, files sent, browsers, phone, file size, app), plus the value of the signature at the rebase; then the list of tools, built from `toolList`. Since 5 October 2026, "Is the code open?" makes nine.
+- **Apps**: `#mac` presents the Mac scanner from its [spec](2026-09-29-scanner-mac-v1-design.md) (photos of documents become clean, straightened PDFs, one PDF per document); `#iphone` says that it will come later. Both are "Soon", and invite visitors to write to be told. Replaced on 5 October 2026: `#mac` presents the desktop app for Mac and Windows, then Linux, built on the site's code; `#iphone` says that the iPhone app comes after it.
 
 ### Resources
 
@@ -188,5 +188,5 @@ In the same commit as the code:
 ## Risks
 
 - **Cloudflare cookies**: the static site sets none, but a bot protection option can add `__cf_bm`. Check the `Set-Cookie` headers after the first deployment, and correct the Cookies page if needed.
-- **Sign**: online since 2 October 2026. The pages mention it: its What's new entry, its FAQ question, the Signature section of the Terms, the Press fact, and the credits of qpdf and of the third-party files.
+- **Sign**: shipped in the site on 2 October 2026. The pages mention it: its What's new entry, its FAQ question, the Signature section of the Terms, the Press fact, and the credits of qpdf and of the third-party files.
 - **E-mail address**: it receives nothing until the domain is bought. The site is not online until then.

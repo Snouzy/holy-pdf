@@ -4,7 +4,9 @@ _Created on 29 September 2026. Reference: the PDF24 Tools catalog, taken from th
 
 The final goal is an app that covers this whole catalog, on Mac, iPhone and the Web. Each phase delivers usable tools. A tool starts only with its spec, in `wiki/specs/`.
 
-**Web, 1 October 2026:** Sign is implemented after the Organize / Compress / PDF to JPG milestone. [Its spec](../specs/2026-10-01-web-sign-design.md) covers freehand drawing, handwritten text and PNG/JPG/JPEG import, without a certificate (additions from acceptance testing until 2 October). The next tools of this milestone are Watermark, Page numbers, then Redact.
+**Web, 1 October 2026:** Sign is implemented after the Organize / Compress / PDF to JPG milestone. [Its spec](../specs/2026-10-01-web-sign-design.md) covers freehand drawing, handwritten text and PNG/JPG/JPEG import, without a certificate (additions from acceptance testing until 2 October). The next tools of this milestone are Watermark, Page numbers, then Redact. Update: all three shipped on the site on 2 October 2026.
+
+**Update, 5 October 2026:** the Swift Mac app is removed (tag `mac-final`). In the tables below, the marks A to C and the "on Mac" notes are the record of that app and of its Apple frameworks. Today the tools come from the site (27 tools, listed in `apps/web/src/tools.ts`) and from the desktop app, which runs the same tools. The current state of both is in the cross-cutting workstreams, under the phases.
 
 ## Feasibility
 
@@ -20,7 +22,7 @@ The final goal is an app that covers this whole catalog, on Mac, iPhone and the 
 
 | Tool | Feasibility | Note |
 |---|---|---|
-| Create a PDF with a camera (**Scanner**) | A | Phase 0, shipped on Mac on 1 October 2026. On the site (3 October 2026): the same engine ported to OpenCV.js, board, correction and export; reading and suggestions in milestone B; see the [web spec](../specs/2026-10-02-web-scanner-design.md) |
+| Create a PDF with a camera (**Scanner**) | A | Phase 0, shipped on Mac on 1 October 2026. On the site (3 October 2026): the same engine ported to OpenCV.js, board, correction and export; reading and suggestions (milestone B) the same day; see the [web spec](../specs/2026-10-02-web-scanner-design.md) |
 | Images to PDF | A | Implemented on Mac (2 October 2026): one A4 page per image, in the order set; see the [spec](../specs/2026-10-02-mac-images-design.md). On the site: JPG to PDF |
 | Web page to PDF | A | On Mac: `WKWebView.createPDF`. On the site: it would need a server; not for now (decision of 4 October 2026) |
 | Generate a QR code | A | Removed on 4 October 2026: a traffic bait with no link to PDFs |
@@ -33,17 +35,17 @@ The final goal is an app that covers this whole catalog, on Mac, iPhone and the 
 
 | Tool | Feasibility | Note |
 |---|---|---|
-| Merge PDF | A | Implemented on Mac (1 October 2026); see the [spec](../specs/2026-10-01-mac-merge-design.md) |
-| Assemble documents | A | Merge of PDFs and images |
-| Split PDF | A | Implemented on Mac (2 October 2026): scissors between the pages or « pages par fichier » (pages per file); see the [spec](../specs/2026-10-02-mac-split-extract-design.md) |
-| Reorder pages | A | Implemented on Mac in Organize (2 October 2026), native grid, drag and undo; see the [spec](../specs/2026-10-02-mac-organize-design.md) |
-| Delete pages | A | Available in Organize on Mac, with undo, and at least one page always kept |
-| Extract pages | A | Implemented on Mac (2 October 2026): the checked pages in a new PDF; same spec as Split |
-| Rotate PDF | A | Available per page in Organize on Mac, without rasterization |
+| Merge PDF | A | Implemented on Mac (1 October 2026); see the [spec](../specs/2026-10-01-mac-merge-design.md). On the site since 30 September 2026 |
+| Assemble documents | A | Merge of PDFs and images. On the site since 5 October 2026: Merge offers to turn JPEG and PNG images into pages (PR #13) |
+| Split PDF | A | Implemented on Mac (2 October 2026): scissors between the pages or « pages par fichier » (pages per file); see the [spec](../specs/2026-10-02-mac-split-extract-design.md). On the site since 30 September 2026 |
+| Reorder pages | A | Implemented on Mac in Organize (2 October 2026), native grid, drag and undo; see the [spec](../specs/2026-10-02-mac-organize-design.md). On the site (Organize) since 30 September 2026 |
+| Delete pages | A | Was available in Organize on Mac, with undo, and at least one page always kept. On the site since 30 September 2026 |
+| Extract pages | A | Implemented on Mac (2 October 2026): the checked pages in a new PDF; same spec as Split. On the site since 30 September 2026 |
+| Rotate PDF | A | Was available per page in Organize on Mac, without rasterization. On the site since 30 September 2026 |
 | Pages per sheet | A | Implemented on the site (2 October 2026): 2 to 16 pages per A4 sheet; see the [spec](../specs/2026-10-02-web-pages-per-sheet-design.md). Implemented on Mac the same day; see the [spec](../specs/2026-10-02-mac-sheets-design.md) |
 | Split pages in half | A | Implemented on the site (2 October 2026): left and right, or top and bottom; see the [spec](../specs/2026-10-02-web-split-in-half-design.md). Implemented on Mac the same day, bookmarks and links kept; see the [spec](../specs/2026-10-02-mac-sheets-design.md) |
 | Add bookmarks | A | Implemented on Mac (2 October 2026): add, rename, remove, change level; see the [spec](../specs/2026-10-02-mac-bookmarks-design.md). On the site (3 October 2026): the same rules, destination view kept as is; see the [web spec](../specs/2026-10-03-web-bookmarks-design.md) |
-| Extract images | B | Reading of the image objects of the PDF (`CGPDFScanner`) |
+| Extract images | B | Reading of the image objects of the PDF (`CGPDFScanner`). On the site: the "Extract images" choice of PDF to JPG |
 
 ### Edit
 
@@ -118,7 +120,7 @@ Electronic invoicing becomes mandatory for companies in France, in steps, from S
 
 | Phase | Content | Why in this order |
 |---|---|---|
-| 0 | **Scanner**: engine, command-line tool, Mac app | Shipped on 1 October 2026 (PR #2 and #7). Swift app removed on 5 October (tag `mac-final`). The Scanner continues on the site and in the desktop app |
+| 0 | **Scanner**: engine, command-line tool, Mac app | Shipped on 1 October 2026 (PR #2 and #7 of the private `Snouzy/pdf-toolbox` repository). Swift app removed on 5 October (tag `mac-final`). The Scanner continues on the site and in the desktop app |
 | 1 | **Grid home** (categories, search, favorites, recents) + **Organize**: merge, split, reorder, delete, extract, rotate, images ↔ PDF | All in A, reuses the board and `PDFCore`, covers the most frequent uses. Shipped on Mac on 2 October 2026, except favorites and recents; see the [home spec](../specs/2026-10-02-mac-home-design.md) |
 | 2 | **Edit**: watermark, page numbers, sign, redact, overlay, pages per sheet, split in half, bookmarks | In A and B, once `PDFCore` can redraw pages |
 | 3 | **Optimize and secure**: compress, OCR of an existing PDF, pixelize, flatten, protect, unlock, repair | Reuses OCR and rendering |
@@ -126,29 +128,32 @@ Electronic invoicing becomes mandatory for companies in France, in steps, from S
 | 5 | **Invoices**: creation, then electronic invoice | First workstream in C: dependency decision, standards |
 | 6 | **Office conversions and standards**: Office ↔ PDF, PDF/A, linearization | The most costly, the least differentiating |
 
+Status on 5 October 2026: phases 1 to 3 are on the site and in the desktop app, except the favorites and recents of phase 1. Of phase 4, only forms are done, in Edit: the QR code is removed, search is rejected and web page to PDF waits (decisions of 4 October 2026). Phases 5 and 6 have not started. Edit and Crop, outside the phases, are on the site since 4 October.
+
 Cross-cutting workstreams, to plan in parallel:
 
-- **Brand identity**: see [Brand identity](brand.md). To do before phase 1, because the grid home lives on its illustrations. Applied to the site and to the Mac app;
+- **Brand identity**: see [Brand identity](brand.md). To do before phase 1, because the grid home lives on its illustrations. Applied to the site, to the desktop app through the site's parts, and to the Mac app until its removal on 5 October 2026;
 - **iPhone app**: after phase 0, with the camera for the Scanner;
-- **Web version**: static Astro site, tools in Preact, engine rewritten from `wiki/development/algorithm.md` and run in the browser, A and B tools through PDFium in WebAssembly. Shipped: the 7 Organize tools, then Compress and PDF to JPG (30 September 2026), all with the three-step flow; navigation bar, footer and centered tool page (1 October 2026). See [Web version](../development/web-version.md);
+- **Web version**: static Astro site, tools in Preact, engine rewritten from `wiki/development/algorithm.md` and run in the browser, A and B tools through PDFium in WebAssembly. Shipped: the 7 Organize tools, then Compress and PDF to JPG (1 October 2026), all with the three-step flow; navigation bar, footer and centered tool page (1 October 2026). See [Web version](../development/web-version.md). On 5 October 2026 the site has 27 tools. Shipped that day, on the site and in the desktop app (PRs of `Snouzy/holy-pdf`): "Add a PDF" in the panel above the verb on the tools that take several files (PR #10), a page preview on a click on a thumbnail (PR #11), "View" on every result before it is saved, zips and images included, not Word (PR #12), images turned into pages on Merge (PR #13), the tool icons drawn with Lucide (PR #15), the question dialog's buttons styled (PR #16). The site is not online: holy-pdf.com is not registered, and the deploy step of `.github/workflows/web.yml` has never run (the repository has no `SITE_URL` variable and no Cloudflare secrets);
+- **Desktop app**: Tauri 2 on the site's code (`apps/desktop/`), the only desktop target since the Swift app was removed. Shipped on 5 October 2026: milestone 1 of the [app shell spec](../specs/2026-10-05-desktop-shell-design.md), site side (PR #7) then the app's own entry (PR #8), with the monastery, the tool screen, the title bar, native open and save; « Voir » brought back (PR #9, then replaced by the in-page preview of PR #12); a sidebar of tools from 80 rem (PR #14). Still to do: milestone 2 (double-click and "Open With", the document that follows from one tool to the next, the guard on close and on a tool change, the output folder for Split and PDF to JPG, the Scanner worker ended on unmount) and milestone 3 (updates, signing and sales, Help › Licenses, the checks on Windows and Linux). The app is not distributed yet;
 - **Commercial layer**: decided on 4 October 2026, see below.
 
 ## Decisions of 4 October 2026
 
 - Not for now: anything that needs a server or an AI model (web page to PDF, Office to PDF, summary, translation).
 - No: search in PDFs. Removed: the QR code.
-- Done next, in Edit on the site: stamps, form filling and field creation.
+- Done next, in Edit on the site: stamps, form filling and field creation. Done on 4 October 2026.
 
 ### Business model and open source
 
 - **The site stays free, with no account, no quota, no ads.** It is the promise of the founding story, not a pricing choice: the marginal cost of an operation is zero, since everything runs on the user's device.
-- **The whole repository becomes public under AGPL-3.0-or-later**, with two additional terms (section 7): distribution through the app stores, and no trademark rights. They were written before any outside contribution, while the rights holder is still the only contributor. No CLA: DCO on contributions. The illustration files are under AGPL like the code. The name, the logo and the monk stay reserved trademarks ([BRAND.md](../../BRAND.md)). A fork takes a new name. Trademark filing in the name of the company, for the name and the monk (figurative mark), classes 9 and 42, at the INPI or the EUIPO.
-- **The desktop app is built with Tauri 2 on the code of the site** (`apps/desktop/`), Mac and Windows first, Linux once WebKitGTK has run the engine. Proof made on 5 October 2026: the engine of the site (PDFium, qpdf, workers) runs in the Tauri webview, served by its protocol. The same day, the shell loads the built site, in the system language; see the [spec](../specs/2026-10-05-desktop-tauri-design.md). The site in a window is only a step: the app must look like a native app of its system, the Swift app on Mac, a Windows app on Windows, with nothing of the site around it ([app shell spec](../specs/2026-10-05-desktop-shell-design.md)). It sells what the site cannot do: open PDFs by double-click, process a whole folder, save in place, work offline. One-time purchase, updates included, direct sale through an official merchant before the stores. Its code is in the same public repository.
+- **The whole repository becomes public under AGPL-3.0-or-later**, with two additional terms (section 7): distribution through the app stores, and no trademark rights. They were written before any outside contribution, while the rights holder is still the only contributor. No CLA: DCO on contributions. The illustration files are under AGPL like the code. The name, the logo and the monk stay reserved trademarks ([BRAND.md](../../BRAND.md)). A fork takes a new name. Trademark filing in the name of the company, for the name and the monk (figurative mark), classes 9 and 42, at the INPI or the EUIPO. Update, 5 October 2026: the repository is public, as `Snouzy/holy-pdf`.
+- **The desktop app is built with Tauri 2 on the code of the site** (`apps/desktop/`), Mac and Windows first, Linux once WebKitGTK has run the engine. Proof made on 5 October 2026: the engine of the site (PDFium, qpdf, workers) runs in the Tauri webview, served by its protocol. The same day, the shell loads the built site, in the system language; see the [spec](../specs/2026-10-05-desktop-tauri-design.md). The site in a window is only a step: the app must look like a native app of its system, the Swift app on Mac, a Windows app on Windows, with nothing of the site around it ([app shell spec](../specs/2026-10-05-desktop-shell-design.md)). It sells what the site cannot do: open PDFs by double-click, process a whole folder, save in place, work offline. One-time purchase, updates included, direct sale through an official merchant before the stores. Its code is in the same public repository. Update, 5 October 2026: milestone 1 of the app shell shipped the same day, and the app no longer loads the whole site; see the Desktop app workstream above.
 - **The Swift Mac app is frozen**: fixes only. With two engines, every feature had to be built twice. Its code stays for possible macOS extensions (Quick Actions, Share) and for the camera of the iPhone Scanner, if Tauri is not enough.
 - **The Swift Mac app is removed (5 October 2026)**, at the request of the author: `apps/mac` and `Packages/Core` leave the repository. The `mac-final` tag keeps their last state. Work on these extensions would start again from there.
-- **Organizations**: a « Pour les organisations » (For organizations) page on the site brings in the requests. The offer (intranet bundle in the client's colors, signed and updated build, support, GDPR file) is coded only at the first request, in a second private repository that depends on the public one.
+- **Organizations**: a « Pour les organisations » (For organizations) page on the site brings in the requests. The offer (intranet bundle in the client's colors, signed and updated build, support, GDPR file) is coded only at the first request, in a second private repository that depends on the public one. On 5 October 2026, the site has no such page yet.
 - Rejected: ads, donations, quotas on the site, subscriptions for individuals.
-- **Fresh history for the public repository.** The review of 5 October 2026 found, in three commits of September, the description of the private batch of photos (names, types of records, dates). Cleaning the current version is not enough: the public repository starts from a first commit that takes the cleaned tree. The private repository keeps the full history, as an archive.
+- **Fresh history for the public repository.** The review of 5 October 2026 found, in three commits of September, the description of the private batch of photos (names, types of records, dates). Cleaning the current version is not enough: the public repository starts from a first commit that takes the cleaned tree. The private repository keeps the full history, as an archive. Done on 5 October 2026: `Snouzy/holy-pdf` has none of the old commits, its tree came in with PR #1, and the private `Snouzy/pdf-toolbox` keeps the old history.
 - **The plans leave the repository.** `wiki/plans/` held execution logs written for agents, with the paths of the author's machine. The specs stay the documentation. The plans live in `tasks/`, untracked.
 - **Publisher and rights holder: Snouzylabs S.R.L.** (decision of 5 October 2026), the company that also publishes workout.cool. The code is under "Copyright (C) 2026 Snouzylabs S.R.L. and the Holy PDF contributors". The brand and the videos belong to the company, and the legal notice names it as the publisher. Registered office and registration number still to add.
-- **Tree layout (5 October 2026).** The site moves from `Web/` to `apps/web`, with a pnpm workspace at the root (`pnpm dev`, `pnpm verify`): the `apps/*` convention of JS monorepos, which the Tauri desktop app will join in `apps/desktop`. Turborepo and the extraction of a shared package (the engine) wait for this second package. The case conflict between `Packages/` (Swift) and a future `packages/` (JS) went away with the removal of the Swift app, on 5 October.
+- **Tree layout (5 October 2026).** The site moves from `Web/` to `apps/web`, with a pnpm workspace at the root (`pnpm dev`, `pnpm verify`): the `apps/*` convention of JS monorepos, which the Tauri desktop app will join in `apps/desktop`. Turborepo and the extraction of a shared package (the engine) wait for this second package. The case conflict between `Packages/` (Swift) and a future `packages/` (JS) went away with the removal of the Swift app, on 5 October. Update, 5 October 2026: `apps/desktop` is in the workspace (`@holy-pdf/desktop`, `pnpm desktop:dev`). It imports the site's code from `apps/web/src` by relative paths: no Turborepo and no shared package yet.

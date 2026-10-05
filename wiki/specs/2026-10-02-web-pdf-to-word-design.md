@@ -1,6 +1,6 @@
 # Web: PDF to Word
 
-_Written and shipped on 2 October 2026, in the milestone that finished the site catalog. The Mac app has had the tool since the same day ([Mac spec](2026-10-02-mac-pdf-to-word-design.md))._
+_Written and shipped on 2 October 2026, in the milestone that finished the site catalog. The Mac app had the tool from the same day until its removal on 5 October 2026 ([Mac spec](2026-10-02-mac-pdf-to-word-design.md))._
 
 Brother Copyist (`/fr/pdf-en-word`, `/en/pdf-to-word`) copies the text and the images of one or more PDFs into an editable Word document (.docx).
 
@@ -15,7 +15,7 @@ Brother Copyist (`/fr/pdf-en-word`, `/en/pdf-to-word`) copies the text and the i
 | Style | Font, size, bold, italic per run. The size is the `Tf` size multiplied by the scale of the character matrix. Bold and italic are read in the font name (`Helvetica-Bold`, `Times-Italic`), then in its weight and its flags | The standard fonts declare no useful weight or flags (probe of 2 October). The PostScript name becomes a family that Word knows (`TimesNewRomanPSMT` → Times New Roman) |
 | Images | Rendered by `FPDFImageObj_GetRenderedBitmap` (mask included, laid on white); an upright image without a mask keeps its own pixels, which are finer; JPEG 0.85, longest side 2,400 px; inserted before the first paragraph that starts lower than the image in the same band | The PDFium render makes one pixel per point: too blurry for a photo |
 | Scan read by OCR | An image that covers more than 80% of a page that has text is left out | Its text is already in the document. A page without text keeps its image, so that the document is not empty |
-| Page | One Word page per PDF page, all at the size of the first one, 72-point margins; an image wider than the text is reduced to the text width | One section per page would complicate the document for a rare gain |
+| Page | One Word page per PDF page, all at the size of the first one, 72-point margins (since 4 October, at most a quarter of the page's width and height, so that an image on a small page keeps a width); an image wider than the text is reduced to the text width | One section per page would complicate the document for a rare gain |
 | File | `name-word.docx`, type `application/vnd.openxmlformats-officedocument.wordprocessingml.document`; the result screen says "Word document" | The suffix follows the suffix of the other tools |
 | Monk | "Brother Copyist" (« Frère Copiste »), the quill, the happy look | The one who copies; the happy look sets this monk apart from Brother Quill, who looks diligent |
 

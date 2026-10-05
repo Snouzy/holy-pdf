@@ -1,6 +1,6 @@
 # Web: Add a watermark
 
-_Written and shipped on 2 October 2026. First version, text only; the Mac app also does images and mouse placement ([Mac spec](2026-10-02-mac-watermark-design.md))._
+_Written and shipped on 2 October 2026. First version, text only; the Mac app also did images and mouse placement, until its removal on 5 October 2026 ([Mac spec](2026-10-02-mac-watermark-design.md))._
 
 ## What the tool does
 

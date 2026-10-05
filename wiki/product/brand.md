@@ -1,6 +1,6 @@
 # Brand identity
 
-_Created 29 September 2026. Updated 30 September 2026: name and visual direction chosen. The spec that applies them to the site is still to write._
+_Created 29 September 2026. Updated 30 September 2026: name and visual direction chosen. The spec that applies them to the site is still to write. Update, 5 October 2026: that spec is the [web design system](../specs/2026-09-30-web-design-system-design.md), shipped in `apps/web/`._
 
 ## Intent
 
@@ -8,7 +8,7 @@ A strong and warm brand, like the PDF24 sheep: a character that comes in one ill
 
 ## Name: Holy PDF
 
-Chosen domain: **holy-pdf.com**. Also to buy: **holypdf.app**, as a redirect, because holypdf.com is taken.
+Chosen domain: **holy-pdf.com**. Also to buy: **holypdf.app**, as a redirect, because holypdf.com is taken. On 5 October 2026, neither domain is registered yet.
 
 Why this name:
 
@@ -50,9 +50,9 @@ Reference: the mockup of 30 September 2026, "Design system" page (foundations, c
 - **Paper**: sheets with a folded corner, yellow highlighter on headings, stamps.
 - **"Blue Ink" palette**: background `#EEF1F6`, ink `#141A2E`, primary `#2346D8`, highlighter `#FFE45C`, stamp `#C8321B`. Category colors: Organize `#2346D8`, Convert `#0B7A5E`, Edit `#B4418E`, Optimize `#A35900`, Security `#5B6272`. Stamp, Convert and Optimize are dark so that they pass the AA contrast.
 - **Typography**: Bricolage Grotesque 800 for headings, Figtree for text.
-- **Headings**: no accent font (tried, refused). One emoji per heading, at the end, right after the last word: 🙏 home, 🤲 ready tools, 🕯️ upcoming, 🤫 privacy, one emoji per tool.
+- **Headings**: no accent font (tried, refused). One emoji per heading, at the end, right after the last word: 🙏 home, 🤲 ready tools, 🤫 privacy, one emoji per tool.
 - **Avatars**: the head and the accessory come out of the circle.
-- **Dark mode**: proposed on the canvas, still to approve.
+- **Dark mode**: proposed on the canvas, still to approve. Update, 5 October 2026: built on the site (it follows the device, and a moon or sun button in the top bar switches it); the desktop app follows the system only. Approval still open (design system spec, Next steps).
 
 ## The monks
 
@@ -60,7 +60,7 @@ A monk in a brown homespun habit, yellow rope, five moods: happy, focused, joyfu
 
 | Tool | Monk | Accessory |
 |---|---|---|
-| Scanner (Mac and site) | Brother Snap | phone |
+| Scanner | Brother Snap | phone |
 | Merge | Brother Staple | stapler |
 | Split | Brother Scissors | scissors |
 | Organize pages | Brother Binder | sheet |
@@ -90,12 +90,12 @@ A monk in a brown homespun habit, yellow rope, five moods: happy, focused, joyfu
 
 ## Texts to review
 
-Written with the design system, not reviewed yet. Shared texts in `apps/web/src/i18n/fr.ts` and `apps/web/src/i18n/en.ts`; Sign controls in `apps/web/src/signature/text.ts`, loaded with the editor:
+Written with the design system, not reviewed yet. Shared texts in `apps/web/src/i18n/`: `fr.ts` and `en.ts` for the board and the search, `frSite.ts` and `enSite.ts` for the monks, the home page, the menus and the footer; Sign controls in `apps/web/src/signature/text.ts`, loaded with the editor:
 
 - `monks`: name, introduction, card line ("abbey" tone), instruction (`hint`), in-progress verb, verb button, result title and "start over" of each monk;
-- `home` and `homeDrop`: the home page, its bubble and its drop zone. The H1 (« Outils PDF gratuits en ligne, dans votre navigateur ») targets search; its search volumes are in the design system spec;
+- `home`: the home page and its sentence to fill (`home.pick`); since its redesign, the page has no drop zone. The H1 (« Outils PDF gratuits en ligne, dans votre navigateur ») targets search; its search volumes are in the design system spec;
 - `home.compact`, `home.categoryCount`, `toolShort`: the compact view;
-- the single trust sentence ("No file leaves your device, from import to download."): `home.lead`, `footer.tagline`, `drop.trust`, `toolPage.privacy` and the pages `compress.md` / `pdf-to-jpg.md`; `home.proofs`: the strip of the four proofs (100% local, 0 uploads, no account, GDPR), with no certification logo that the site does not hold;
+- the single trust sentence ("No file leaves your device, from import to download."): `footer.tagline`, `drop.trust`, `toolPage.privacy` and the pages `compress.md` / `pdf-to-jpg.md`; `home.privacy.items`: the strip of the four proofs (100% local, 0 uploads, no account, GDPR), with no certification logo that the site does not hold;
 - `toolPage` (title, sentence, trust line), `drop` ("Choose PDF files", "or drop them here", trust line, `release`), `nav` and `footer` (top bar, menus, footer), `flow` (including "Hallelujah, it's done"), `menu.darkMode`, `board.addPdf`, `board.addImages`, `board.undo`, `board.undoHint`, `board.removeConfirm`, `board.keep`, `board.removeConfirmed`, `bubble`, `upcoming`, `categories`.
 - `frSearch` and `enSearch` (at the bottom of `fr.ts` and `en.ts`): the filter column of the home page, its switch, the "Soon · in meditation" label, the status line, the no-result message, and the words that search understands for each tool;
 - `toJpg`, `compress`, `errors.noImages` and the pages `compress.md` and `pdf-to-jpg.md` in both languages: the tools of milestone 1. Their search volumes, checked on 30 September 2026, are not copied into the wiki.
@@ -112,7 +112,6 @@ Review of milestone 1, on 1 October 2026: the compression levels and their FR/EN
 
 ## Still to do
 
-- check the trademarks, then buy holy-pdf.com and holypdf.app;
-- apply the design system to the website: see the [spec](../specs/2026-09-30-web-design-system-design.md);
+- check the trademarks, then buy holy-pdf.com and holypdf.app. Still open on 5 October 2026: neither domain is registered, so the contact address hello@holy-pdf.com, given in the site's pages, receives no mail yet;
 - an iPhone app icon (the icon of the removed Mac app, kept at tag `mac-final`: `apps/mac/PDFToolbox/HolyPDF.icon`);
 - for the final version of the illustrations, plan an illustrator, with the canvas mockups as the brief.

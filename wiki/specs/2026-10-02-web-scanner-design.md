@@ -47,8 +47,10 @@ The flow of the Mac, adapted to a web page:
 - A phone takes several seconds per page: the board fills page after page.
 - No session resume: reloading the page loses the batch. The screen asks for confirmation before leaving with documents that are not downloaded.
 - Since 5 October 2026, the two questions of the Scanner (pages still to check, document to delete) go through the board's dialog (`ConfirmDialog`), and saving goes through its saver (`Saver`). Both are received as props, like the engine: the webview of the desktop app does not show `confirm()` and cancels download links ([shell spec](2026-10-05-desktop-shell-design.md)).
+- The Scanner worker is not terminated when the Scanner closes: each visit leaves one, on the site and in the desktop app. The fix is in milestone 2 of the shell spec, not shipped on 5 October 2026.
 
 ## Tests
 
 - Engine, in Node (`tests/scan/`): each building block on images made by the test; the pipeline on the 17 photos of `fixtures-private` when they are there (skipped otherwise), against the criteria of the Mac spec: all wrong pages flagged, at most 2 good pages flagged by mistake, 17 pages upright, watermark correct on 16, 10 groupings out of 11, 9 dates out of 11, less than 500 KB per page.
-- Browser: import of a photo made by the test, board, correction of a corner, export, PDF read back by pdf.js.
+- Board state, in Node (`tests/scanner/session.test.ts`): one document per import, removals, moves and renames, each undone.
+- Browser (`tests/e2e/scanner.spec.ts`): import of a photo made by the test, board, correction of a corner, export, PDF read back by pdf.js; a sideways page read, turned upright and named; the question before a document is removed.

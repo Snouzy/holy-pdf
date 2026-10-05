@@ -13,11 +13,11 @@ Brother Folio (`/fr/numeroter-pdf`, `/en/page-numbers-pdf`) writes a number on t
 
 ## Engine
 
-An operation `numbers` of the `transform` request (`engine/numbers.ts`). The number is real text in Helvetica, the standard PDFium font, added to the page content: it stays selectable, and so does the original text. Its axes follow the page as the reader sees it (`pageFrame`, shared with Sign): the number is upright and in the right corner on a rotated or cropped page. The end of the range is clamped to the last page.
+An operation `numbers` of the `transform` request (`numberPages` in `engine/pageText.ts`). The number is real text in Helvetica, the standard PDFium font, added to the page content: it stays selectable, and so does the original text. Its axes follow the page as the reader sees it (`pageFrame`, shared with Sign): the number is upright and in the right corner on a rotated or cropped page. The end of the range is clamped to the last page.
 
 ## Limits
 
-- No live preview: you see the result after the numbering, in the downloaded PDF.
+- No live preview: you see the result after the numbering, with "View" on the result page (since 5 October 2026) or in the downloaded PDF.
 - One file at a time, so that the range is set on the pages of the open document.
 
 ## Tests
