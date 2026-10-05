@@ -250,7 +250,7 @@ Le [guide technique](../development/technical-guide.md) s'applique, transposé e
 - un état est une union discriminée, jamais une combinaison de booléens. Les erreurs sont typées ;
 - `engine/` ne contient aucune phrase pour l'utilisateur ;
 - toute chaîne visible passe par `i18n/`, en français et en anglais, dès la première vue ;
-- une dépendance n'entre que si cette spec la justifie. Liste de la v1 : `astro`, `@astrojs/preact`, `@astrojs/sitemap`, `preact`, `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`, `@embedpdf/pdfium`, `fflate`. Outils de développement : `typescript`, `@astrojs/check`, `vitest`, `@playwright/test`, `pdfjs-dist`, `@lhci/cli`, `wrangler`, `@types/node`, `@types/emscripten` ;
+- une dépendance n'entre que si cette spec la justifie. Liste de la v1 : `astro`, `@astrojs/preact`, `@astrojs/sitemap`, `preact`, `@dnd-kit/core`, `@dnd-kit/sortable`, `@dnd-kit/utilities`, `@embedpdf/pdfium`, `fflate`. Outils de développement : `typescript`, `@astrojs/check`, `vitest`, `@playwright/test`, `pdfjs-dist`, `@lhci/cli`, `wrangler`, `@types/node`, `@types/emscripten` ; Ajouté le 5 octobre 2026 : `lucide-preact`, les icônes au trait des outils (menu, carte endormie, barre latérale de l'appli), même trait que nos icônes Feather, un demi-Ko par icône, rendues côté serveur sur le site, licence ISC dans `public/licenses/lucide.txt`.
 - mesurer avant d'optimiser ;
 - commentaires en anglais, seulement pour le pourquoi.
 

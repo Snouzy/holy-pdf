@@ -26,14 +26,14 @@ export function Sidebar({ tool, onOpen, onHome }: Props) {
               <li key={id}>
                 <button type="button" data-tool={id} class={id === tool ? "current" : undefined} aria-current={id === tool ? "page" : undefined} onClick={() => onOpen(id)}>
                   <ToolIcon id={id} size={18} />
-                  {t.toolShort[id]}
+                  <span class="label">{t.toolShort[id]}</span>
                 </button>
               </li>
             ))}
             {sleeping.map((id) => (
               <li key={id} class="asleep">
                 <ToolIcon id={id} size={18} />
-                <span>{t.upcoming[id]}</span>
+                <span class="label">{t.upcoming[id]}</span>
                 <small>{a.soon}</small>
               </li>
             ))}

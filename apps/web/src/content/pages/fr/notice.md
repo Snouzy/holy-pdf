@@ -41,3 +41,4 @@ Les fichiers que vous traitez avec Holy PDF restent les vôtres. Le site ne les 
 - **Caveat**, la police manuscrite de Signer : The Caveat Project Authors, [SIL Open Font License 1.1](/fonts/signature/OFL-Caveat.txt).
 - **Simple Icons**, les icônes des réseaux sociaux : licence CC0 1.0.
 - **Feather Icons**, l'icône des ciseaux : Cole Bemis, [licence MIT](/licenses/feather.txt).
+- **Lucide**, les icônes des outils : Lucide Icons and Contributors, [licence ISC](/licenses/lucide.txt).

@@ -102,7 +102,11 @@ describe("Icon", () => {
 describe("ToolIcon", () => {
   it("gives every tool, ready or asleep, its own line icon, as decoration", () => {
     const drawings = [...toolIds, ...upcomingIds].map((id) => render(h(ToolIcon, { id })));
-    for (const svg of drawings) expect(svg).toMatch(/^<svg[^>]*aria-hidden="true"[^>]*><path d="M/);
+    for (const svg of drawings) {
+      expect(svg).toMatch(/^<svg[^>]*aria-hidden="true"[^>]*>/);
+      expect(svg).toMatch(/stroke="currentColor"/);
+      expect(svg).toMatch(/<(path|rect|circle|line|polyline|polygon)\b/);
+    }
     expect(new Set(drawings).size).toBe(drawings.length);
   });
 });

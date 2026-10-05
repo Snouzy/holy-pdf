@@ -41,3 +41,4 @@ The files you work on with Holy PDF remain yours. The site never receives them.
 - **Caveat**, the handwriting font of Sign: The Caveat Project Authors, [SIL Open Font License 1.1](/fonts/signature/OFL-Caveat.txt).
 - **Simple Icons**, the social network icons: CC0 1.0 licence.
 - **Feather Icons**, the scissors icon: Cole Bemis, [MIT licence](/licenses/feather.txt).
+- **Lucide**, the tool icons: Lucide Icons and Contributors, [ISC licence](/licenses/lucide.txt).

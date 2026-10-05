@@ -37,9 +37,9 @@ input, textarea, [contenteditable] { -webkit-user-select: text; user-select: tex
 .sidebar button.current { background: var(--accent-tint); color: var(--accent); }
 .sidebar .home { font-weight: 700; }
 .sidebar .asleep { color: var(--muted); cursor: default; }
-.sidebar .asleep small { margin-left: auto; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.sidebar .asleep small { flex-shrink: 0; margin-left: auto; font-size: 0.625rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
 .sidebar svg { flex-shrink: 0; }
-.tool-glyph { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sidebar .label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .monastery { max-width: 82rem; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
 .monastery h1 { margin: 0 0 0.25rem; font-size: clamp(2.25rem, 4vw, 3rem); }

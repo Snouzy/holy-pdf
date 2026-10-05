@@ -30,7 +30,7 @@ The site ships these components, each under its own licence, with their notices 
 | Tesseract | OCR | Apache-2.0 |
 | libheif and libde265, through libheif-js | HEIC photos | LGPL-3.0-or-later |
 | Bricolage Grotesque, Figtree, Caveat | Fonts | SIL Open Font License 1.1 |
-| Feather Icons, Simple Icons | Icons | MIT, CC0-1.0 |
+| Feather Icons, Lucide, Simple Icons | Icons | MIT, ISC, CC0-1.0 |
 
 These are free licences that can accompany AGPL code. The additional permission above does not extend to them. One point is still open and tracked in the wiki: a generated notice for the libraries embedded inside `pdfium.wasm` (FreeType, libjpeg-turbo, OpenJPEG, Little-CMS, zlib) and for the JavaScript dependencies bundled with the site.
 
