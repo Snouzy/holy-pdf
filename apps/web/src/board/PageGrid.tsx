@@ -12,6 +12,7 @@ import {
 } from "@dnd-kit/core";
 import { rectSortingStrategy, SortableContext, sortableKeyboardCoordinates, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "preact/hooks";
 import { a4 } from "../engine/imagePage";
 import type { PageSize } from "../engine/types";
 import type { Dictionary } from "../i18n/fr";
@@ -21,6 +22,7 @@ import { FilePicker } from "./FilePicker";
 import { fileColor } from "./FileList";
 import type { Action, Board, PageRef } from "./state";
 import { formatSize } from "./size";
+import { PagePreview } from "./PagePreview";
 import { useThumbnail } from "./thumbnails";
 
 /** CSS pixels. Thumbnails render at twice this size, for sharp screens. */
@@ -42,6 +44,7 @@ export function PageGrid({ board, tool, t, lang, sizes, dispatch, onFiles }: Pro
     useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
+  const [previewed, setPreviewed] = useState<number | null>(null);
   const names = new Map(board.docs.map((doc) => [doc.id, doc.name]));
   const pageSizes = new Map(board.docs.flatMap((doc) => (doc.status.kind === "ready" ? [[doc.id, doc.status.sizes] as const] : [])));
   const colors = new Map(board.docs.map((doc, index) => [doc.id, fileColor(index)]));
@@ -97,6 +100,7 @@ export function PageGrid({ board, tool, t, lang, sizes, dispatch, onFiles }: Pro
                 last={position === board.pages.length - 1}
                 dispatch={dispatch}
                 color={colors.get(page.docId) ?? 1}
+                onOpen={() => setPreviewed(position)}
               />
           ))}
           {board.docs
@@ -113,6 +117,14 @@ export function PageGrid({ board, tool, t, lang, sizes, dispatch, onFiles }: Pro
           </li>
         </ol>
       </SortableContext>
+      <PagePreview
+        pages={board.pages}
+        sizeOf={(page) => pageSizes.get(page.docId)?.[page.index] ?? a4}
+        labelOf={(page) => labelOf(page.id)}
+        index={previewed}
+        onIndex={setPreviewed}
+        t={t}
+      />
     </DndContext>
   );
 }
@@ -130,12 +142,14 @@ type CellProps = {
   last: boolean;
   dispatch: (action: Action) => void;
   color: number;
+  onOpen: () => void;
 };
 
-function PageCell({ page, size, label, tip, position, tool, t, selected, cut, last, dispatch, color }: CellProps) {
+function PageCell({ page, size, label, tip, position, tool, t, selected, cut, last, dispatch, color, onOpen }: CellProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: page.id });
   // dnd-kit types `role` as string; Preact wants an ARIA role. Its value is always "button".
   const { role: _role, ...handle } = attributes;
+  const { onKeyDown, ...drag } = listeners ?? {};
   const renderWidth = Math.round(cellSize * 2 * Math.min(1, size.width / size.height));
   const [thumbRef, url] = useThumbnail(page.docId, page.index, renderWidth, position);
 
@@ -146,7 +160,16 @@ function PageCell({ page, size, label, tip, position, tool, t, selected, cut, la
       data-file={color}
       style={{ transform: CSS.Transform.toString(transform), transition }}
     >
-      <div class="thumb" ref={thumbRef} role="button" {...handle} {...listeners} aria-label={label}>
+      <div
+        class="thumb"
+        ref={thumbRef}
+        role="button"
+        {...handle}
+        {...drag}
+        aria-label={label}
+        onClick={onOpen}
+        onKeyDown={(event) => (event.key === "Enter" && !isDragging ? onOpen() : onKeyDown?.(event))}
+      >
         {url && (
           <span class="page-sheet" style={{ transform: `rotate(${page.rotation}deg)` }}>
             <img src={url} alt="" decoding="async" />

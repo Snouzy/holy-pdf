@@ -15,6 +15,41 @@ test("removes a file and its pages from its tab", async ({ page }) => {
   await expect(page.locator(".file-tab")).toHaveCount(0);
 });
 
+test("opens a page on click, walks it with the arrows and closes with Escape", async ({ page }) => {
+  await page.goto("/en/merge-pdf");
+  await chooseFiles(page, [await pdfFile("a.pdf", ["A1", "A2"])]);
+  await expectThumbnails(page, 2);
+  await page.getByRole("button", { name: "Page 1", exact: true }).click();
+  const preview = page.getByRole("dialog", { name: "Preview" });
+  await expect(preview).toContainText("Page 1 of 2");
+  await expect(preview.locator("img")).toBeVisible();
+  await page.keyboard.press("ArrowRight");
+  await expect(preview).toContainText("Page 2 of 2");
+  await expect(preview.getByRole("button", { name: "Next page" })).toBeDisabled();
+  await page.keyboard.press("Escape");
+  await expect(preview).toBeHidden();
+  await page.getByRole("button", { name: "Page 2", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  await expect(preview).toContainText("Page 2 of 2");
+  await page.getByRole("button", { name: "Previous page" }).click();
+  await expect(preview).toContainText("Page 1 of 2");
+  await page.getByRole("button", { name: "Next page" }).click();
+  await expect(preview).toContainText("Page 2 of 2");
+  // Chromium moves the focus to the body when the button it gave it to turns disabled: the arrows must still work.
+  await page.keyboard.press("ArrowLeft");
+  await expect(preview).toContainText("Page 1 of 2");
+  await page.keyboard.press("Escape");
+  await expect(preview).toBeHidden();
+  await page.getByRole("button", { name: "Rotate 90°, Page 1" }).click();
+  await page.getByRole("button", { name: "Page 1", exact: true }).click();
+  await expect(preview.locator("img")).toBeVisible();
+  // A sideways page lays out taller than its frame: what is drawn must still fit inside it.
+  const frame = await preview.locator(".preview-frame").boundingBox();
+  const drawn = await preview.locator("img").boundingBox();
+  expect(frame && drawn && drawn.x >= frame.x - 1 && drawn.y >= frame.y - 1 && drawn.x + drawn.width <= frame.x + frame.width + 1 && drawn.y + drawn.height <= frame.y + frame.height + 1).toBe(true);
+  expect(drawn && drawn.width > drawn.height).toBe(true);
+});
+
 test("adds a PDF from the tile after the pages", async ({ page }) => {
   await page.goto("/en/merge-pdf");
   await chooseFiles(page, [await pdfFile("a.pdf", ["A1"])]);
