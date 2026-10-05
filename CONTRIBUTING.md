@@ -5,7 +5,7 @@ Thank you for looking. This page says how the project works so that your time is
 ## Where things are
 
 - `apps/web/`: the site (Astro + Preact) and its engine (PDFium and qpdf in WebAssembly, in a Web Worker). This is where development happens.
-- `apps/desktop/`: the desktop shell (Tauri 2). It wraps the site; today it holds the engine smoke test. Needs a Rust toolchain (`rustup`): `pnpm --filter @holy-pdf/desktop smoke`.
+- `apps/desktop/`: the desktop shell (Tauri 2). It opens the built site in the system webview and adds nothing of its own yet. Needs a Rust toolchain (`rustup`): `pnpm desktop:dev` while `pnpm dev` runs, `pnpm desktop:build` for a binary, `pnpm desktop:smoke` for the checks.
 - `Packages/Core` and `apps/mac`: the Swift engine and the native Mac app. **Frozen since 4 October 2026**: fixes are welcome, new features are not. The desktop app replaces it.
 - `wiki/`: the documentation, in French. Every tool starts with a spec in `wiki/specs/` (what it does, each decision and its reason) before any code. Code changes update their wiki page in the same commit.
 
@@ -25,7 +25,7 @@ pnpm verify       # types, unit tests, build, SEO checks, Chromium end-to-end
 pnpm verify:full  # adds Firefox, WebKit and Lighthouse
 ```
 
-The root scripts forward to the workspace packages (`apps/web` for the site, `desktop:smoke` to `apps/desktop`); `pnpm --filter @holy-pdf/web <script>` runs any other script of the site. The desktop shell needs Rust: install it with rustup, which puts `~/.cargo/bin` on your PATH.
+The root scripts forward to the workspace packages (`apps/web` for the site, `desktop:*` to `apps/desktop`); `pnpm --filter @holy-pdf/web <script>` runs any other script of the site. The desktop shell needs Rust: install it with rustup, which puts `~/.cargo/bin` on your PATH.
 
 Node 22.12 or later (CI runs 24, see `.github/workflows/web.yml`) and pnpm. End-to-end tests run against `dist`, so run `pnpm build` before them when you test by hand.
 
