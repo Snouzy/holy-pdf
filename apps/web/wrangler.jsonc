@@ -2,6 +2,8 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "holy-pdf-web",
   "compatibility_date": "2026-09-29",
+  "workers_dev": false,
+  "routes": [{ "pattern": "holy-pdf.com", "custom_domain": true }],
   "assets": {
     "directory": "./dist",
     "html_handling": "drop-trailing-slash",
