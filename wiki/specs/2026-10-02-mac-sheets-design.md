@@ -32,7 +32,7 @@ The spec succeeds when:
 | Writing | The sheets and the pixelized copy are written to a temporary file, which is read back without loading it in memory | Probe: 142 pages at 300 dpi give 312 MB; the memory peak goes from 930 to 520 MB |
 | Progress and cancellation | Saving goes through `saveCopy(to:reporting:)` of the shared session: the screen says "Page 3 of 142…" and offers "Cancel". A copy that is finished after the cancellation is not written | The three tools can last minutes. The text reading and PDF to images reuse the same building block, which replaces their two copies of the same code |
 | Preview | Split in half draws the cut as a dotted line on the page. Pages per sheet shows the sheet and its numbered cells | The direction of the cut and the order of the cells are visible before saving |
-| Monks | Brother Mosaic (sheet), Brother Trimmer (scissors), Brother Glass (frame): the site's names and props, with a different face when a monk on the home screen already has the same pose | On the site, each tool has its own page; on the Mac home screen, two cards side by side must not look the same |
+| Monks | Brother Mosaic (sheet), Brother Trimmer (scissors), Brother Glass (frame): the site's names and accessories, with a different face when a monk on the home screen already has the same pose | On the site, each tool has its own page; on the Mac home screen, two cards side by side must not look the same |
 
 ## Flow
 
