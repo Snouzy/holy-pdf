@@ -26,7 +26,7 @@ export function FilePicker({ tool, label, icon, onFiles, camera = false, class: 
         ref={input}
         class="visually-hidden"
         type="file"
-        accept={accepted[tool.accepts]}
+        accept={tool.convertsImages ? `${accepted.pdf},${accepted.image}` : accepted[tool.accepts]}
         capture={camera ? "environment" : undefined}
         multiple={tool.multipleFiles}
         onChange={(event) => {

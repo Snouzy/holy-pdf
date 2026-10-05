@@ -11,6 +11,8 @@ export type Tool = {
   slug: Record<Lang, string>;
   /** `photo`: images from a camera, HEIC included, read by the Scanner itself. */
   accepts: "pdf" | "image" | "photo";
+  /** Images arrive too, each turned into a page once the user agrees. */
+  convertsImages?: true;
   multipleFiles: boolean;
   output: "one" | "split" | "selection" | "images" | "compressed" | "signed" | "transformed";
   related: ToolId[];
@@ -21,7 +23,7 @@ export const tools: Record<ToolId, Tool> = {
   merge: {
     id: "merge", slug: { fr: "fusionner-pdf", en: "merge-pdf" },
     workspace: "pages",
-    accepts: "pdf", multipleFiles: true, output: "one", related: ["split", "organize", "jpg-to-pdf"],
+    accepts: "pdf", convertsImages: true, multipleFiles: true, output: "one", related: ["split", "organize", "jpg-to-pdf"],
   },
   split: {
     id: "split", slug: { fr: "diviser-pdf", en: "split-pdf" },
@@ -136,6 +138,9 @@ export const tools: Record<ToolId, Tool> = {
 };
 
 export const toolList: Tool[] = toolIds.map((id) => tools[id]);
+
+/** What Merge offers to turn into pages: the two image kinds the engine opens. HEIC and the rest stay refused. */
+export const looksLikeImage = (file: File): boolean => /^image\/(jpeg|png)$/.test(file.type) || /\.(jpe?g|png)$/i.test(file.name);
 
 export function acceptsKind(tool: Tool, kind: FileKind): boolean {
   return tool.accepts === "pdf" ? kind === "pdf" : kind !== "pdf";
