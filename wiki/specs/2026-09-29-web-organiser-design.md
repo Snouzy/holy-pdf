@@ -90,7 +90,7 @@ apps/web/
 
 - `title` and `meta description` per language;
 - `canonical` to the page itself, `hreflang` fr/en and `x-default`;
-- a `sitemap.xml` generated at build time.
+- a `sitemap.xml` generated at build time. Since 6 October 2026, `robots.txt` is generated too (`src/pages/robots.txt.ts`) and names the sitemap at the address of `SITE_URL`.
 - The JSON-LD is limited to `WebApplication` and `BreadcrumbList`. No FAQ markup: since 2023, Google shows these rich results only for health sites and official sites. Replaced on 2 October 2026 ([home page spec](2026-10-02-web-landing-design.md)): each tool page also has a `FAQPage`.
 
 **Writing.** The texts are written in French and in English, then reviewed by the author. The main keyword of each page comes from the search volume research.
@@ -222,7 +222,7 @@ The later tools add their own kinds in `engine/types.ts` (`noImages`, `alreadySi
 | Unit | Vitest | the board state, the tool settings, the export plans, the file names, format detection |
 | Engine | Vitest on Node | merge, rotation, order, extraction, images to PDF, read back with pdf.js, which is used only in the tests so that the engine is not checked against itself |
 | End to end | Playwright: Chromium, WebKit, Firefox | for each tool: drop, act, download, check the PDF. And no network request other than the site's files during processing |
-| SEO | Vitest on the built HTML | `title`, `description`, `canonical`, `hreflang` pair and `H1` on each page, all pages in the sitemap |
+| SEO | Vitest on the built HTML | `title`, `description`, `canonical`, `hreflang` pair and `H1` on each page, all pages in the sitemap, `robots.txt` naming it (since 6 October 2026) |
 | Performance | Lighthouse CI (in CI), Playwright benchmark (local only) | the budgets and the targets of the Performance section |
 
 The test files are generated at test time: PDFs where each page carries its number in large print (to check the order), a protected PDF, a truncated PDF, images. No real document.
