@@ -1,5 +1,6 @@
-import { describe, expect, it } from "vitest";
-import { deliveryOf, shareFiles } from "../../src/board/deliver";
+import { describe, expect, it, vi } from "vitest";
+import { deliveryOf, downloader, shareFiles } from "../../src/board/deliver";
+import { download } from "../../src/board/download";
 
 const shares = (answer: boolean) => {
   const asked: ShareData[] = [];
@@ -47,5 +48,16 @@ describe("shareFiles", () => {
   it("reports a share sheet that could not open, so the caller zips", async () => {
     expect(await shareFiles(files, "image/jpeg", () => Promise.reject(new DOMException("no", "NotAllowedError")))).toBe(false);
     expect(await shareFiles(files, "image/jpeg", () => Promise.reject(new TypeError("no files")))).toBe(false);
+  });
+});
+
+vi.mock("../../src/board/download", () => ({ download: vi.fn() }));
+
+describe("downloader", () => {
+  it("downloads the bytes and says so", async () => {
+    const bytes = new Uint8Array([1, 2, 3]);
+    await expect(downloader.save(bytes, "a.pdf", "application/pdf")).resolves.toEqual({ kind: "downloaded" });
+    expect(download).toHaveBeenCalledWith(bytes, "a.pdf", "application/pdf");
+    expect(downloader.kind).toBe("download");
   });
 });

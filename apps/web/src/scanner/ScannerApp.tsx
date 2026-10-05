@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { Worker as Reader } from "tesseract.js";
+import type { Confirm, Saver } from "../board/deliver";
 import type { DocumentSkeleton } from "../board/DocumentSkeleton";
 import type { Engine } from "../engine/client";
 import { heicCaptureDay, jpegCaptureDay } from "../engine/exif";
@@ -19,16 +20,20 @@ type Props = {
   photos: File[]; lang: Lang; onPhotos: (files: File[]) => void;
   /** Passed by Board, not imported: a module shared with Board's chunk becomes one more request before LCP on every tool page. */
   engine: Pick<Engine, "scanPdf" | "zip">; Skeleton: typeof DocumentSkeleton;
+  saver: Saver; confirm: Confirm; onSavedChange?: (saved: boolean) => void;
 };
 type State = { session: Session; history: History };
 
-export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton }: Props) {
+export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton, saver, confirm, onSavedChange }: Props) {
   const t = scannerTexts[lang];
+  const saving = saver.kind === "save";
   const [state, setState] = useState<State>({ session: emptySession, history: emptyHistory });
   const [view, setView] = useState<{ kind: "board" } | { kind: "correct"; pageId: string }>({ kind: "board" });
   const [onlyToCheck, setOnlyToCheck] = useState(false);
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(true);
+  const [failure, setFailure] = useState<string | null>(null);
+  useEffect(() => onSavedChange?.(saved), [saved]);
   const [inFlight, setInFlight] = useState<ReadonlySet<string>>(new Set());
   const [reading, setReading] = useState<string | null>(null);
   const [searchable, setSearchable] = useState(true);
@@ -176,11 +181,12 @@ export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton }: Props) 
   }
 
   async function download(docs: Doc[]) {
+    const toCheck = docs.flatMap((doc) => doc.pageIds.map((id) => live.current.state.session.pages[id]!)).filter(needsCheck).length;
+    if (toCheck > 0 && !(await confirm(t.stillToCheck(toCheck, saving), { cancel: t.cancel, confirm: saving ? t.saveConfirm : t.download }))) return;
+    // Read again: the reading, a redraw or Cmd+Z may have changed the pages while the question was open.
     const { session } = live.current.state;
-    const pages = docs.flatMap((doc) => doc.pageIds.map((id) => session.pages[id]!));
-    const toCheck = pages.filter(needsCheck).length;
-    if (toCheck > 0 && !confirm(t.stillToCheck(toCheck))) return;
     setBusy(true);
+    setFailure(null);
     try {
       const files: NamedBytes[] = [];
       for (const doc of docs) {
@@ -196,8 +202,10 @@ export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton }: Props) 
       if (files.length === 0) return;
       const zipped = files.length > 1 ? await engine.zip(files) : null;
       if (zipped && !zipped.ok) return;
-      save(zipped ? new Blob([zipped.value], { type: "application/zip" }) : new Blob([files[0]!.bytes], { type: "application/pdf" }), zipped ? "scan.zip" : files[0]!.name);
-      if (docs.length === session.documents.length) setSaved(true);
+      const outcome = await saver.save(zipped ? zipped.value : files[0]!.bytes, zipped ? "scan.zip" : files[0]!.name, zipped ? "application/zip" : "application/pdf");
+      if (outcome.kind !== "cancelled" && docs.length === session.documents.length) setSaved(true);
+    } catch (problem) {
+      setFailure(problem instanceof Error ? problem.message : String(problem));
     } finally {
       setBusy(false);
     }
@@ -220,19 +228,11 @@ export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton }: Props) 
   }
   return (
     <div class="scanner">
+    {failure && <p class="hint" role="alert">{t.saveFailed} {failure}</p>}
     <Planche session={session} t={t} onlyToCheck={onlyToCheck} searchable={searchable} onSearchable={setSearchable}
       readingCount={reading ? Object.values(session.pages).filter((page) => page.status.kind === "ready" && page.text === undefined).length : 0} canUndo={history.undo.length > 0} canRedo={history.redo.length > 0} busy={busy}
       onOp={act} onUndo={() => setState(undo)} onRedo={() => setState(redo)} onCorrect={(pageId) => setView({ kind: "correct", pageId })}
-      onDownload={(docs) => void download(docs)} onOnlyToCheck={setOnlyToCheck} onPhotos={onPhotos} />
+      onDownload={(docs) => void download(docs)} onOnlyToCheck={setOnlyToCheck} onPhotos={onPhotos} saving={saving} confirm={confirm} />
     </div>
   );
-}
-
-function save(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const link = Object.assign(document.createElement("a"), { href: url, download: name });
-  document.body.append(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }

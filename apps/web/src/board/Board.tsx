@@ -12,6 +12,9 @@ import type { SignatureDraft } from "../signature/SignatureEditor";
 import { acceptsKind, type Lang, languages, type ToolId, tools } from "../tools";
 import "./board.css";
 import { bubbleOf } from "./bubble";
+import { useConfirm } from "./ConfirmDialog";
+import { type Confirm, downloader, type Saver } from "./deliver";
+import { type BoardDocument, documentOf, release } from "./document";
 import { DropZone } from "./DropZone";
 import { DocumentSkeleton } from "./DocumentSkeleton";
 import { engine } from "./engine";
@@ -28,9 +31,14 @@ import { emptyBoard, reduce } from "./state";
 import { forgetThumbnails } from "./thumbnails";
 import { useFileDrop } from "./useFileDrop";
 
-type Props = { toolId: ToolId; lang: Lang; monks: Record<Lang, MonkTexts> };
+type Props = {
+  toolId: ToolId; lang: Lang; monks: Record<Lang, MonkTexts>;
+  /** Given by the desktop shell; the site mounts the board without them. `files` opens on each new array: hand one over
+   *  only for new files, and keep the same reference otherwise, or the files come back on every render. */
+  files?: File[]; saver?: Saver; confirm?: Confirm; onDocumentChange?: (document: BoardDocument) => void;
+};
 
-export default function Board({ toolId, lang: firstLang, monks }: Props) {
+export default function Board({ toolId, lang: firstLang, monks, files: incoming, saver = downloader, confirm: askOutside, onDocumentChange }: Props) {
   const tool = tools[toolId];
   const [lang, setLang] = useState(firstLang);
   const t = useMemo(() => {
@@ -62,7 +70,26 @@ export default function Board({ toolId, lang: firstLang, monks }: Props) {
   const [scannerModule, setScannerModule] = useState<typeof import("../scanner/ScannerApp") | null>(null);
   const [photos, setPhotos] = useState<File[]>([]);
   const [signaturePreviewReady, setSignaturePreviewReady] = useState(false);
+  const [ask, confirmDialog] = useConfirm();
+  const confirm = askOutside ?? ask;
+  const [savedMade, setSavedMade] = useState<Made | null>(null);
+  const [scannerSaved, setScannerSaved] = useState(true);
   useFileDrop(addFiles);
+
+  useEffect(() => {
+    if (incoming && incoming.length > 0) addFiles(incoming);
+  }, [incoming]);
+
+  const made = flow.step === "result" ? flow.made : null;
+  useEffect(() => {
+    if (!onDocumentChange) return;
+    if (tool.workspace === "scanner") onDocumentChange({ files: photos, unsaved: photos.length > 0 && !scannerSaved });
+    else onDocumentChange(documentOf([...files.current.values()], made, savedMade));
+  }, [board.docs, made, savedMade, photos, scannerSaved]);
+
+  const held = useRef({ board, settings, editDraft });
+  held.current = { board, settings, editDraft };
+  useEffect(() => () => release(engine, { docs: held.current.board.docs, layer: held.current.settings.layer, previews: Object.values(held.current.editDraft?.previews ?? {}) }), []);
 
   // Loaded with the first file, not with the page: dnd-kit and preact/compat are half of the board's script, and every
   // module the page loads before its first paint counts in Lighthouse's LCP.
@@ -428,9 +455,16 @@ export default function Board({ toolId, lang: firstLang, monks }: Props) {
   if (tool.workspace === "scanner") {
     if (photos.length === 0) return <DropZone tool={tool} t={t} onFiles={addFiles} />;
     if (editorLoadFailed) return <p role="alert">{t.errors.engineUnavailable} <button type="button" onClick={() => void loadEditor()}>{t.retry}</button></p>;
-    return scannerModule ? <scannerModule.ScannerApp photos={photos} lang={lang} engine={engine} onPhotos={addFiles} Skeleton={DocumentSkeleton} /> : <DocumentSkeleton label={t.board.opening} />;
+    return (
+      <>
+        {scannerModule ? (
+          <scannerModule.ScannerApp photos={photos} lang={lang} engine={engine} onPhotos={addFiles} Skeleton={DocumentSkeleton} saver={saver} confirm={confirm} onSavedChange={setScannerSaved} />
+        ) : <DocumentSkeleton label={t.board.opening} />}
+        {confirmDialog}
+      </>
+    );
   }
-  if (flow.step === "result") return <Result tool={tool} t={t} lang={lang} made={flow.made} onBack={back} onAgain={startOver} />;
+  if (made) return <Result tool={tool} t={t} lang={lang} made={made} saver={saver} onSaved={() => setSavedMade(made)} onBack={back} onAgain={startOver} />;
   if (board.docs.length === 0) return <DropZone tool={tool} t={t} onFiles={addFiles} />;
 
   // The tabs and colour marks tell files apart. One ready file needs neither, and neither do images: one image is one

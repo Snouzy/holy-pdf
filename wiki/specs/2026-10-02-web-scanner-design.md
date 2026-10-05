@@ -46,6 +46,7 @@ Celui du Mac, adapté à une page web :
 
 - Un téléphone traite une page en plusieurs secondes : la planche se remplit page après page.
 - Pas de reprise de session : recharger la page perd le lot. L'écran demande confirmation avant de quitter avec des documents non téléchargés.
+- Depuis le 5 octobre 2026, les deux questions du Scanner (pages encore à vérifier, document à supprimer) passent par le dialogue de la planche (`ConfirmDialog`) et l'enregistrement par son enregistreur (`Saver`), reçus en props comme le moteur : la webview de l'appli de bureau n'affiche pas `confirm()` et annule les liens de téléchargement ([spec de la coque](2026-10-05-desktop-shell-design.md)).
 
 ## Tests
 

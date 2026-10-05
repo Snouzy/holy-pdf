@@ -75,7 +75,8 @@ apps/web/src/
   board/
     handoff.ts          passage des fichiers de l'accueil à la planche
     MonkBubble.tsx      le moine et sa bulle, dans la barre d'action
-  layouts/Base.astro    head et script (tokens, polices, thème)
+  layouts/Base.astro    head et script (tokens, polices, thème), la barre du site et la largeur des pages
+  styles/base.css       les règles que chaque page et l'appli de bureau partagent (corps, liens, titres, voile de dépôt, surligneur)
   layouts/SiteNav.astro, SiteFooter.astro    la barre du haut et ses menus, le pied de page
   illustrations/ToolIcon.tsx    les icônes au trait des outils
   pages/[lang]/index.astro, [tool].astro, 404.astro
@@ -169,7 +170,7 @@ Chaque contrôle répond au pointeur. Une seule règle par sorte de contrôle :
 - **Jetons** : `--accent-tint` vaut `color-mix(in srgb, var(--accent) 10%, var(--surface))`, `--stamp-tint` vaut `color-mix(in srgb, var(--stamp) 10%, var(--surface))`. Déclarés une fois sur `:root`, ils suivent le thème. Contrastes mesurés dans le navigateur : `--accent` sur `--accent-tint` 6,1 : 1 en clair, 5,6 : 1 en sombre ; `--stamp` sur `--stamp-tint` 4,6 : 1 en clair, 5,0 : 1 en sombre. À 12 %, le tampon descendait à 4,45 : 1 en clair.
 - **Pied de page** : il est sombre dans les deux thèmes, et `--accent` n'y atteint que 2,4 : 1 en clair. Il garde la même règle avec sa propre encre : fond `--on-footer` à 12 %, bordure et texte `--on-footer` ; ses liens passent en `--on-footer`, soulignés.
 - Tous les styles de survol sont dans `@media (hover: hover)` : un écran tactile ne garde pas un survol collé.
-- Transitions de 150 ms sur `background-color, border-color, color, box-shadow, transform`, en une règle commune de `Base.astro` sur `a, button, summary, label`. La règle globale de `prefers-reduced-motion` les coupe.
+- Transitions de 150 ms sur `background-color, border-color, color, box-shadow, transform`, en une règle commune de `styles/base.css` sur `a, button, summary, label`. La règle globale de `prefers-reduced-motion` les coupe.
 - Un contrôle désactivé ne change pas (`:not(:disabled)`). L'anneau de focus ne change pas. Le logo de la barre et du pied de page ne change pas.
 
 ## Illustrations

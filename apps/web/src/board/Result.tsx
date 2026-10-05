@@ -6,41 +6,60 @@ import { titleFor } from "../i18n/titles";
 import { Icon } from "../illustrations/Icon";
 import { Monk } from "../illustrations/Monk";
 import type { Lang, Tool } from "../tools";
-import { deliveryOf, shareFiles, thisDevice } from "./deliver";
-import { download } from "./download";
+import { deliveryOf, type SaveOutcome, type Saver, shareFiles, thisDevice } from "./deliver";
 import { engine } from "./engine";
 import { docxType, type Made } from "./flow";
 import { formatSize } from "./size";
 
-type Props = { tool: Tool; t: Dictionary; lang: Lang; made: Made; onBack: () => void; onAgain: () => void };
+type Props = { tool: Tool; t: Dictionary; lang: Lang; made: Made; saver: Saver; onSaved: () => void; onBack: () => void; onAgain: () => void };
 
-export function Result({ tool, t, lang, made, onBack, onAgain }: Props) {
+export function Result({ tool, t, lang, made, saver, onSaved, onBack, onAgain }: Props) {
   const heading = useRef<HTMLHeadingElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<EngineError | null>(null);
+  const [outcome, setOutcome] = useState<SaveOutcome | null>(null);
+  const [failure, setFailure] = useState<string | null>(null);
   useLayoutEffect(() => heading.current?.focus(), []);
   const monk = cast[tool.id];
   const kind = made.type === "image/jpeg" ? "images" : made.type === docxType ? "word" : "pdf";
   const [single] = made.files;
-  const delivery = deliveryOf(made.files.length, made.type, thisDevice());
+  const saving = saver.kind === "save";
+  const delivery = saving ? (made.files.length === 1 ? "one" : "zip") : deliveryOf(made.files.length, made.type, thisDevice());
+  const savedPath = outcome?.kind === "saved" ? outcome.path : null;
   // The dictionary keeps each monk's own literal type: read them all as MonkTexts to give `result` its two arguments.
   const texts: MonkTexts = t.monks[tool.id];
   const title = titleFor(texts.result, made.count, made.files.length);
-  const label =
-    delivery === "one" ? t.flow.downloadOne[kind] : delivery === "share" ? t.flow.saveMany[kind](made.files.length) : t.flow.downloadMany[kind](made.files.length);
+  const label = saving ? t.flow.save
+    : delivery === "one" ? t.flow.downloadOne[kind] : delivery === "share" ? t.flow.saveMany[kind](made.files.length) : t.flow.downloadMany[kind](made.files.length);
 
   async function deliver() {
     setBusy(true);
     setError(null);
+    setFailure(null);
     try {
-      if (delivery === "one" && single) return download(single.bytes, single.name, made.type);
-      if (delivery === "share" && (await shareFiles(made.files, made.type))) return;
-      const zip = await engine.zip(made.files);
-      if (zip.ok) download(zip.value, made.zipName, "application/zip");
-      else setError(zip.error);
+      if (delivery === "share" && (await shareFiles(made.files, made.type))) return onSaved();
+      const target = delivery === "one" && single ? { bytes: single.bytes, name: single.name, type: made.type } : await zipped();
+      if (!target) return;
+      const result = await saver.save(target.bytes, target.name, target.type);
+      if (result.kind === "cancelled") return;
+      setOutcome(result);
+      onSaved();
+    } catch (problem) {
+      setFailure(reasonOf(problem));
     } finally {
       setBusy(false);
     }
+  }
+
+  function show(action: ((path: string) => Promise<void>) | undefined, path: string) {
+    action?.(path).catch((problem: unknown) => setFailure(reasonOf(problem)));
+  }
+
+  async function zipped() {
+    const zip = await engine.zip(made.files);
+    if (zip.ok) return { bytes: zip.value, name: made.zipName, type: "application/zip" };
+    setError(zip.error);
+    return null;
   }
 
   function view() {
@@ -79,17 +98,34 @@ export function Result({ tool, t, lang, made, onBack, onAgain }: Props) {
               <Icon name="download" size={22} />
               {label}
             </button>
-            {delivery === "one" && made.type === "application/pdf" && (
+            {!saving && delivery === "one" && made.type === "application/pdf" && (
               <button type="button" onClick={view}>
                 <Icon name="view" size={18} />
                 {t.flow.view}
               </button>
             )}
+            {savedPath && saver.open && (
+              <button type="button" onClick={() => show(saver.open, savedPath)}>
+                <Icon name="view" size={18} />
+                {t.flow.open}
+              </button>
+            )}
+            {savedPath && saver.reveal && (
+              <button type="button" onClick={() => show(saver.reveal, savedPath)}>
+                {t.flow.reveal[saver.platform ?? "linux"]}
+              </button>
+            )}
           </div>
-          {error ? (
+          {failure ? (
+            <p class="hint" role="alert">
+              {t.flow.saveFailed} {failure}
+            </p>
+          ) : error ? (
             <p class="hint" role="alert">
               {t.errors[error.kind]}
             </p>
+          ) : savedPath ? (
+            <p class="hint">{t.flow.saved} · {savedPath.split(/[\\/]/).pop()}</p>
           ) : (
             delivery !== "one" && <p class="hint">{delivery === "share" ? t.flow.shareHint : t.flow.zipHint[kind]}</p>
           )}
@@ -102,6 +138,8 @@ export function Result({ tool, t, lang, made, onBack, onAgain }: Props) {
     </section>
   );
 }
+
+const reasonOf = (problem: unknown) => (problem instanceof Error ? problem.message : String(problem));
 
 /** What shows that the work was done: the images made, the weight before and after, or the file made. */
 function Proof({ t, lang, made }: { t: Dictionary; lang: Lang; made: Made }) {

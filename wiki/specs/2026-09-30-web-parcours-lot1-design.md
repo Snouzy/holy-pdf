@@ -213,9 +213,11 @@ apps/web/src/
     Board.tsx          le temps courant (régler, lancer, récupérer), la livraison
     flow.ts            réducteur pur des trois temps, testé seul
     Panel.tsx          remplace ActionBar : moine, options de l'outil, bouton verbe et sa progression
-    Result.tsx         page de résultat : titre, preuve, Télécharger ou Enregistrer, Voir
+    Result.tsx         page de résultat : titre, preuve, Télécharger ou Enregistrer, Voir ; Ouvrir et Afficher quand l'enregistreur rend un chemin
     FileCards.tsx      cartes de fichiers (ordinateur) et lignes (téléphone), outils sans grille
-    deliver.ts         partage ou téléchargement, choix de la livraison
+    deliver.ts         partage ou téléchargement, choix de la livraison ; l'enregistreur (Saver) que la coque de bureau remplace, et ses trois issues
+    ConfirmDialog.tsx  une question à deux réponses, pour la planche et le Scanner (plus de confirm() : la webview de bureau ne l'affiche pas)
+    document.ts        le document que la coque fait suivre (résultat ou sources, enregistré ou non) ; ce qu'une planche libère en se démontant
     Options.tsx        cartes de choix, tuiles, bascule, aide « ? », et les options de chaque outil
   engine/
     compress.ts        réencodage des images, enregistrement du document source

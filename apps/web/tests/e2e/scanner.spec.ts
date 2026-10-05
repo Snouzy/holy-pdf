@@ -48,3 +48,19 @@ test("reads a sideways page: turns it upright, names its document after it, and 
   expect([read?.width, read?.height]).toEqual([595, 842]);
   expect(read?.text).toMatch(/CERTIFICAT/);
 });
+
+test("asks before removing a document, and keeps it on « Annuler »", async ({ page }) => {
+  test.slow();
+  await page.goto("/fr/scanner");
+  await chooseFiles(page, [await deskPhotoFile("bureau.jpg")]);
+  await expect(page.locator(".planche-open img")).toBeVisible({ timeout: 60_000 });
+  const dialog = page.locator("dialog.confirm[open]");
+  await page.getByRole("button", { name: "Supprimer le document" }).click();
+  await expect(dialog).toContainText("et ses 1 page(s)");
+  await dialog.getByRole("button", { name: "Annuler" }).click();
+  await expect(dialog).toBeHidden();
+  await expect(page.locator(".planche-open img")).toBeVisible();
+  await page.getByRole("button", { name: "Supprimer le document" }).click();
+  await dialog.getByRole("button", { name: "Supprimer" }).click();
+  await expect(page.getByRole("button", { name: "Supprimer le document" })).toHaveCount(0);
+});

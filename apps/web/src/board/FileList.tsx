@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useMemo, useRef, useState } from "preact/hooks";
 import type { EngineError } from "../engine/types";
 import type { Dictionary } from "../i18n/fr";
 import { Icon } from "../illustrations/Icon";
 import type { Lang } from "../tools";
+import { ConfirmDialog } from "./ConfirmDialog";
 import { formatSize } from "./size";
 import type { Doc } from "./state";
 
@@ -67,24 +68,15 @@ export function FileList({ docs, sizes, lang, t, ...actions }: Props) {
 }
 
 export function RemoveDialog({ asking, t, onClose, onRemove }: { asking: Doc | null; t: Dictionary; onClose: () => void; onRemove: (docId: string) => void }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
-    if (asking) dialog.current?.showModal();
-  }, [asking]);
+  const question = useMemo(() => asking && { message: t.board.removeConfirm(asking.name), cancel: t.board.keep, confirm: t.board.removeConfirmed }, [asking]);
   return (
-    <dialog ref={dialog} class="confirm" onClose={onClose}>
-      {asking && (
-        <form method="dialog">
-          <p>{t.board.removeConfirm(asking.name)}</p>
-          <div class="confirm-actions">
-            <button type="submit">{t.board.keep}</button>
-            <button type="submit" class="primary" onClick={() => onRemove(asking.id)}>
-              {t.board.removeConfirmed}
-            </button>
-          </div>
-        </form>
-      )}
-    </dialog>
+    <ConfirmDialog
+      question={question}
+      onAnswer={(yes) => {
+        if (yes && asking) onRemove(asking.id);
+        onClose();
+      }}
+    />
   );
 }
 

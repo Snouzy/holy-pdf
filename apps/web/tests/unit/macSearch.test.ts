@@ -6,7 +6,7 @@ import { dictionaries, searchTexts } from "../../src/i18n";
 import { languages, toolIds } from "../../src/tools";
 
 // The home of the Mac app searches like the site: « alléger » finds Compress on both. This test writes the site's
-// search index (the names and the words of each tool, as `src/pages/[lang]/search.json.ts` builds it) into the app,
+// search index (the names and the words of each tool, as `src/home/index.ts` builds it) into the app,
 // and fails when the app's copy no longer matches the site.
 const update = "run UPDATE_MAC_ASSETS=1 pnpm test";
 const copy = join(import.meta.dirname, "../../../../apps/mac/PDFToolbox/App/SearchTerms.json");
