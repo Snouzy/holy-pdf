@@ -20,6 +20,7 @@ import { DocumentSkeleton } from "./DocumentSkeleton";
 import { engine } from "./engine";
 import { FileCards } from "./FileCards";
 import { Failure, FileList } from "./FileList";
+import { FilePicker } from "./FilePicker";
 import { baseName, distinct, outputName, partName } from "./fileName";
 import { advance, countOf, docxType, keepsOriginal, type Made, saved, setup, totalSize } from "./flow";
 import { defaultSettings, markColors, Options, optionsReady, type Settings } from "./Options";
@@ -539,7 +540,7 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
           </>
         )}
       </div>
-      <Panel tool={tool} t={t} bubble={bubbleOf(board, flow)} flow={flow} ready={canProduce(board, tool) && optionsReady(tool, settings) && (tool.id !== "sign" || Boolean(signature?.placements.length && !signature.processing && signaturePreviewReady)) && (tool.id !== "redact" || zones.length > 0) && (tool.id !== "bookmarks" || Boolean(bookmarksModule && bookmarks && bookmarksModule.canSave(bookmarks))) && (tool.id !== "edit" || Boolean(editModule && editDraft && editModule.canSave(editDraft))) && (tool.id !== "crop" || cropProps !== null)} verb={verb} onGo={() => void produce()} beforeAction={signatureModule && signatureProps && <signatureModule.SignatureAddAction {...signatureProps} />}>
+      <Panel tool={tool} t={t} bubble={bubbleOf(board, flow)} flow={flow} ready={canProduce(board, tool) && optionsReady(tool, settings) && (tool.id !== "sign" || Boolean(signature?.placements.length && !signature.processing && signaturePreviewReady)) && (tool.id !== "redact" || zones.length > 0) && (tool.id !== "bookmarks" || Boolean(bookmarksModule && bookmarks && bookmarksModule.canSave(bookmarks))) && (tool.id !== "edit" || Boolean(editModule && editDraft && editModule.canSave(editDraft))) && (tool.id !== "crop" || cropProps !== null)} verb={verb} onGo={() => void produce()} beforeAction={signatureModule && signatureProps ? <signatureModule.SignatureAddAction {...signatureProps} /> : tool.workspace === "pages" && tool.multipleFiles && flow.step !== "working" && <FilePicker tool={tool} label={tool.accepts === "image" ? t.board.addImages : t.board.addPdf} icon="plus" onFiles={addFiles} class="add" />}>
         {tool.id === "sign" ? signatureModule && signatureProps && <signatureModule.SignatureOptions {...signatureProps} />
           : tool.id === "bookmarks" ? bookmarksModule && bookmarksProps && <bookmarksModule.BookmarksOptions {...bookmarksProps} />
           : tool.id === "edit" ? editModule && editProps && <editModule.EditOptions {...editProps} />
