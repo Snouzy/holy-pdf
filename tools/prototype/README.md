@@ -1,8 +1,8 @@
-# Prototype Python
+# Python prototype
 
-Implémentation de référence du scanner, écrite le 29/09/2026 avec OpenCV pendant la mise au point. Elle n'est pas utilisée par l'appli : elle sert à comparer et à porter l'algorithme (voir `wiki/development/algorithm.md`).
+Reference implementation of the scanner, written on 29 September 2026 with OpenCV during the tuning work. The app does not use it: it serves to compare and port the algorithm (see `wiki/development/algorithm.md`).
 
-Le script attend, à côté de lui : `src/<nom>.jpg` (photos déjà tournées à l'endroit), `quads.txt` (coins Vision), `overrides.json` (coins corrigés à la main) et `pages.json` (réglages par page). Les fichiers du lot réel sont dans `fixtures-private/prototype/`, hors du dépôt. Ces entrées et les sorties du script (`out/`, `check/`) sont privées : `.gitignore` les exclut, avec `.venv/`.
+The script expects, next to it: `src/<nom>.jpg` (photos already rotated upright), `quads.txt` (Vision corners), `overrides.json` (corners corrected by hand) and `pages.json` (per-page settings). The files of the real batch are in `fixtures-private/prototype/`, outside the repository. These inputs and the script outputs (`out/`, `check/`) are private: `.gitignore` excludes them, along with `.venv/`.
 
     uv venv .venv && uv pip install --python .venv/bin/python opencv-python-headless numpy
     .venv/bin/python scan.py

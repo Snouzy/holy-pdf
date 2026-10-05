@@ -1,65 +1,65 @@
-# Mac — PDF en Word
+# Mac: PDF to Word
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Demandé par l'auteur le 2 octobre (« continue sur l'outil suivant »), après les petites dettes : le site a l'outil depuis le même jour ([spec du site](2026-10-02-web-pdf-to-word-design.md))._
+_Written 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`. Requested by the author on 2 October ("continue with the next tool"), after the small debts: the site has had the tool since the same day ([site spec](2026-10-02-web-pdf-to-word-design.md))._
 
-## Objectif
+## Goal
 
-Recopier le texte et les images d'un PDF dans un document Word (.docx) modifiable, dans Holy PDF pour Mac, avec les règles du site. Aucune bibliothèque, aucun service : PDFKit, Core Graphics, et un fichier .docx écrit à la main. La feuille de route classait l'outil en C (« bibliothèque ou service ») ; la voie du site montre qu'on s'en passe.
+Copy the text and the images of a PDF into an editable Word document (.docx), in Holy PDF for Mac, with the rules of the site. No library, no service: PDFKit, Core Graphics, and a .docx file written by hand. The roadmap put the tool in class C ("library or service"); the approach of the site shows that we can do without one.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- le texte arrive paragraphe par paragraphe, avec sa taille, sa police, son gras et son italique ;
-- une image arrive à sa place entre les paragraphes ;
-- chaque page du PDF donne une page de Word ;
-- Word, Pages et TextEdit ouvrent le document ;
-- le fichier d'origine n'est jamais modifié, et un PDF signé est accepté ;
-- les tests du paquet, de l'appli et des textes passent, sans avertissement du compilateur.
+- the text arrives paragraph by paragraph, with its size, its font, its bold and its italic;
+- an image arrives in its place between the paragraphs;
+- each page of the PDF gives one Word page;
+- Word, Pages and TextEdit open the document;
+- the original file is never modified, and a signed PDF is accepted;
+- the package, app and string tests pass, with no compiler warning.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Lignes | PDFKit : `selectionsByLine()` donne les lignes dans l'ordre de lecture, colonnes comprises, et `attributedString` la taille de chaque lettre | Sonde du 2 octobre : deux colonnes lues l'une après l'autre, 265 lignes en 0,1 s |
-| Polices | PDFKit appelle « Helvetica » toute police que le Mac n'a pas. `PageScan` relit donc le contenu de la page avec Core Graphics (`CGPDFScanner`) : le nom de la police de chaque morceau de texte et le point où il commence | Sonde : sur l'article arXiv, PDFKit ne voit aucun gras ; le contenu nomme `NimbusRomNo9L-Medi`. Lecture d'une page : moins de 2 ms |
-| Changement de police dans une ligne | La ligne prend la police du morceau le plus à gauche. À chaque morceau d'une autre police, une sélection à son point de départ, grande comme une demi-lettre de la ligne, donne le rang de sa première lettre (PDFKit choisit une lettre quand son milieu est dans la boîte : relecture du 3 octobre, une boîte de 2 points ne trouvait rien) | `characterBounds(at:)` et `characterIndex(at:)` comptent les lettres sans les sauts de ligne de `string` : leurs rangs dérivent d'un à chaque ligne (sonde). Les sélections, elles, sont justes |
-| Gras, italique, famille | Lus dans le nom de la police (`-Bold`, `-Italic`, `-Medi` et `CMBX`, `CMTI` pour LaTeX), puis dans sa graisse et ses drapeaux. Le nom PostScript devient une famille que Word connaît (`TimesNewRomanPSMT` → Times New Roman) | La règle du site, plus les polices de LaTeX |
-| Paragraphes | Les règles du site : un paragraphe s'arrête à un écart de plus de 1,6 fois la taille du texte, à un retour vers le haut, à un changement de taille, à une puce ou un numéro, ou après une phrase finie sur une ligne courte | Même résultat des deux côtés |
-| Morceaux d'une même ligne | PDFKit coupe une ligne à un grand blanc : les morceaux qui se suivent sur une même ligne de base sont réunis, avec une espace | Sinon chaque colonne d'un tableau deviendrait un paragraphe |
-| Images | `PageScan` donne le cadre de chaque image. La page est dessinée une fois à 200 ppp et chaque image y est découpée, en JPEG 0,85 | Découper le dessin de la page donne l'image telle qu'elle est vue : masque, rotation et couleurs compris, sans décoder chaque format d'image du PDF. Le site, lui, demande l'image à PDFium |
-| Images dans le contenu, images rognées | Une image écrite dans le contenu même (`BI … EI`) est gardée. Une image rognée par un rectangle (`re` puis `W`) garde ce que le rectangle laisse voir | Relecture du 3 octobre : sans le rognage, l'image recopiait le texte de la colonne voisine |
-| Page mal formée | Un point envoyé hors de toute page par une matrice est laissé de côté ; une forme qui se dessine elle-même est lue une fois, et une page ne lit pas plus de 2 000 formes | Relecture du 3 octobre : un PDF forgé faisait planter l'appli, un autre la bloquait |
-| Petites images, scans | Moins de 16 points de côté : laissée de côté. Une image qui couvre plus de 80 % d'une page qui a du texte aussi : c'est un scan déjà lu. Une page sans texte garde son image | Les règles du site |
-| Document | `Docx` écrit les parties XML du site, dans une archive ZIP écrite à la main : texte compressé (Compression), JPEG rangés tels quels, somme de contrôle de zlib | Aucune dépendance. `unzip` vérifie l'archive dans les tests, et macOS relit le texte et les styles |
-| Page | Une page Word par page du PDF, toutes à la taille de la première, marges de 72 points, ou d'un quart de la page si elle est petite ; une image plus large que le texte est réduite | Comme le site, sauf la marge d'une petite page : sur le site, une page de moins de 144 points donne une largeur négative |
-| Enregistrement | « Convertir en Word… » ouvre le panneau, propose `nom-word.docx`, puis la conversion dit la page en cours et s'annule | Le suffixe du site. 142 pages demandent 11 s |
-| PDF signé | Accepté : aucune copie du PDF n'est écrite | Comme PDF en images |
-| Moine | « Frère Copiste » (Brother Copyist), la plume, en joie : le nom et l'accessoire du site ; l'air content du site est déjà celui de Frère Plume sur l'accueil du Mac | Même personnage que sur le site |
+| Lines | PDFKit: `selectionsByLine()` gives the lines in reading order, columns included, and `attributedString` gives the size of each letter | Probe of 2 October: two columns read one after the other, 265 lines in 0.1 s |
+| Fonts | PDFKit calls "Helvetica" any font that the Mac does not have. So `PageScan` reads the page content again with Core Graphics (`CGPDFScanner`): the font name of each text run and the point where it starts | Probe: on the arXiv paper, PDFKit sees no bold; the content names `NimbusRomNo9L-Medi`. Read of one page: less than 2 ms |
+| Font change within a line | The line takes the font of the leftmost run. For each run in another font, a selection at its start point, the size of half a letter of the line, gives the index of its first letter (PDFKit picks a letter when its middle is in the box: review of 3 October, a 2-point box found nothing) | `characterBounds(at:)` and `characterIndex(at:)` count the letters without the line breaks of `string`: their indexes drift by one at each line (probe). The selections, in contrast, are correct |
+| Bold, italic, family | Read from the font name (`-Bold`, `-Italic`, `-Medi`, and `CMBX`, `CMTI` for LaTeX), then from its weight and its flags. The PostScript name becomes a family that Word knows (`TimesNewRomanPSMT` → Times New Roman) | The rule of the site, plus the LaTeX fonts |
+| Paragraphs | The rules of the site: a paragraph stops at a gap of more than 1.6 times the text size, at a move back up, at a size change, at a bullet or a number, or after a finished sentence on a short line | Same result on both sides |
+| Runs on the same line | PDFKit cuts a line at a large blank: runs that follow each other on the same baseline are joined, with a space | If not, each column of a table would become a paragraph |
+| Images | `PageScan` gives the frame of each image. The page is drawn once at 200 dpi and each image is cut out of it, as JPEG at 0.85 | A cut from the page drawing gives the image as it is seen: mask, rotation and colors included, with no need to decode each image format of the PDF. The site, in contrast, asks PDFium for the image |
+| Inline images, clipped images | An image written in the content itself (`BI … EI`) is kept. An image clipped by a rectangle (`re` then `W`) keeps what the rectangle shows | Review of 3 October: without the clip, the image copied the text of the next column |
+| Malformed page | A point that a matrix sends outside any page is skipped; a form that draws itself is read once, and a page reads no more than 2,000 forms | Review of 3 October: a crafted PDF crashed the app, another one froze it |
+| Small images, scans | Less than 16 points on a side: skipped. An image that covers more than 80% of a page that also has text: it is a scan that was already read. A page without text keeps its image | The rules of the site |
+| Document | `Docx` writes the XML parts of the site, in a ZIP archive written by hand: text compressed (Compression), JPEGs stored as they are, zlib checksum | No dependency. `unzip` checks the archive in the tests, and macOS reads the text and the styles back |
+| Page | One Word page for each PDF page, all at the size of the first one, margins of 72 points, or a quarter of the page if the page is small; an image wider than the text is reduced | Like the site, except the margin of a small page: on the site, a page of less than 144 points gives a negative width |
+| Saving | "Convert to Word…" opens the panel and suggests `nom-word.docx`, then the conversion shows the current page and can be cancelled | The suffix of the site. 142 pages take 11 s |
+| Signed PDF | Accepted: no copy of the PDF is written | Like PDF to images |
+| Monk | "Brother Copyist" (« Frère Copiste » in French), the quill, joyful: the name and the accessory of the site; the happy look of the site is already Brother Quill's on the Mac home screen | Same character as on the site |
 
-## Parcours
+## Flow
 
-1. Ouvrir ou déposer un PDF. Un fichier protégé demande son mot de passe.
-2. « Convertir en Word… », choisir où enregistrer.
-3. « Votre PDF est en Word » : le nom du fichier, et « Afficher dans le Finder ».
+1. Open or drop a PDF. A protected file asks for its password.
+2. "Convert to Word…", choose where to save.
+3. "Your PDF is in Word": the file name, and "Show in Finder".
 
-## Limites connues
+## Known limits
 
-- Les tableaux deviennent des lignes de texte ; les colonnes sont recopiées l'une après l'autre. L'écran le dit.
-- L'alignement, l'interligne, les couleurs du texte, les dessins vectoriels et les liens ne sont pas repris.
-- Ce que la page écrit par-dessus une image reste sur l'image recopiée. Un rognage qui n'est pas un rectangle est ignoré.
-- Deux écarts avec le site : une image dessinée deux fois au même endroit n'est gardée qu'une fois, et le cadre d'une image est coupé au bord de la page avant les règles des 16 points et des 80 %.
-- Un changement de police au milieu d'un morceau de texte que le PDF écrit d'un seul trait n'est pas vu ; une ligne qui n'est pas horizontale garde la police que PDFKit lui donne. Un mot coupé en fin de ligne garde son trait d'union (« resi-dents »), comme sur le site.
-- Les familles que Word n'a pas (Helvetica World, les polices de LaTeX) sont remplacées par Word à l'ouverture.
-- Un scan sans OCR ne donne que son image ; l'outil OCR peut le lire d'abord.
-- Tout le document est préparé en mémoire avant d'être écrit : un scan de 300 pages demande quelques centaines de Mo. Au-delà de 65 000 images ou de 3 Go, la conversion s'arrête avec un message.
-- TextEdit ne montre pas les images d'un .docx : Word, Pages et le coup d'œil du Finder les montrent.
+- Tables become lines of text; the columns are copied one after the other. The screen says so.
+- Alignment, line spacing, text colors, vector drawings and links are not carried over.
+- What the page writes over an image stays on the copied image. A clip that is not a rectangle is ignored.
+- Two differences from the site: an image drawn twice at the same place is kept only once, and the frame of an image is cut at the page edge before the 16-point and 80% rules.
+- A font change in the middle of a text run that the PDF writes in one go is not seen; a line that is not horizontal keeps the font that PDFKit gives it. A word split at the end of a line keeps its hyphen ("resi-dents"), as on the site.
+- Word replaces the families that it does not have (Helvetica World, the LaTeX fonts) when it opens the file.
+- A scan without OCR gives only its image; the OCR tool can read it first.
+- The whole document is prepared in memory before it is written: a 300-page scan needs a few hundred MB. Above 65,000 images or 3 GB, the conversion stops with a message.
+- TextEdit does not show the images of a .docx: Word, Pages and Quick Look in the Finder show them.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Document | Paragraphes, tailles, gras, italique et familles relus par macOS ; saut de page ; image à sa taille, réduite à la largeur du texte, relue par `unzip` ; page plus étroite que les marges ; caractères refusés par XML ; texte compressé | `DocxTests` |
-| Moteur | Police, taille, gras et italique par passage, changement de police au milieu d'une ligne à l'écart des mots ordinaires, police changée sans déplacer la plume, police rendue par « Q », polices héritées du parent de la page ; noms de polices (Medium, Medi, LaTeX) ; page qui trompe la lecture (matrice énorme, forme qui se dessine elle-même) ; image dans le contenu, image rognée ; paragraphes (ligne courte après une phrase, écart, puce, changement de taille, texte en drapeau) ; deux colonnes ; une page par page, pages pivotées ; image à sa place, petite image laissée ; scan gardé seul, laissé derrière son texte lu ; PDF signé lu, mot de passe ; progression et annulation | `PDFWordTests` |
-| Outil | Document enregistré et relu, original intact, dossier qui refuse l'écriture | `WordSessionTests` |
-| Écrans | Départ, prêt en clair, en sombre et en anglais, document enregistré | `WordSnapshots` |
-| Fichiers réels | Six PDF de `fixtures-private/pdfs` : article arXiv (15 pages, 0,4 s, titres en gras), formulaire W-9, publication 17 de l'IRS (142 pages, 12 s, 5 978 passages en gras), fiche NASA avec photos, page pivotée, photos scannées ; les six relus par macOS | Sonde du 2 octobre, non gardée |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
+| Document | Paragraphs, sizes, bold, italic and families read back by macOS; page break; image at its size, reduced to the text width, read back by `unzip`; page narrower than the margins; characters that XML refuses; compressed text | `DocxTests` |
+| Engine | Font, size, bold and italic per run, font change in the middle of a line at an ordinary word gap, font changed without a move of the pen, font restored by "Q", fonts inherited from the parent of the page; font names (Medium, Medi, LaTeX); page that misleads the read (huge matrix, form that draws itself); inline image, clipped image; paragraphs (short line after a sentence, gap, bullet, size change, ragged-right text); two columns; one page for each page, rotated pages; image in its place, small image skipped; scan kept alone, skipped behind its read text; signed PDF read, password; progress and cancel | `PDFWordTests` |
+| Tool | Document saved and read back, original intact, folder that refuses the write | `WordSessionTests` |
+| Screens | Start, ready in light, in dark and in English, document saved | `WordSnapshots` |
+| Real files | Six PDFs from `fixtures-private/pdfs`: arXiv paper (15 pages, 0.4 s, bold headings), W-9 form, IRS Publication 17 (142 pages, 12 s, 5,978 bold runs), NASA fact sheet with photos, rotated page, scanned photos; macOS reads all six back | Probe of 2 October, not kept |
+| Strings | All translated, never the informal « tu » | `check-strings.py` |

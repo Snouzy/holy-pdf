@@ -1,64 +1,64 @@
-# Mac — Noircir
+# Mac: Redact
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Dernier des six outils commandés le 2 octobre (avant : [Numéros de page](2026-10-02-mac-page-numbers-design.md), [Protéger et Déverrouiller](2026-10-02-mac-protect-unlock-design.md), [Compresser](2026-10-02-mac-compress-design.md), [OCR](2026-10-02-mac-ocr-design.md))._
+_Written on 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`. Last of the six tools ordered on 2 October (before: [Page numbers](2026-10-02-mac-page-numbers-design.md), [Protect and Unlock](2026-10-02-mac-protect-unlock-design.md), [Compress](2026-10-02-mac-compress-design.md), [OCR](2026-10-02-mac-ocr-design.md))._
 
-## Objectif
+## Goal
 
-Cacher pour de bon une partie d'un PDF dans Holy PDF pour Mac : l'utilisateur couvre de noir ce qui doit disparaître, puis enregistre une copie où ce contenu n'existe plus. PDFKit seulement, sans nouveau moteur.
+Hide part of a PDF for good in Holy PDF for Mac: the user covers in black what must disappear, then saves a copy where this content no longer exists. PDFKit only, with no new engine.
 
-Choix de l'auteur (2 octobre) : une page qui porte une zone noire devient une image à 200 ppp. Écarté : des rectangles dessinés par-dessus un texte qui reste dans le fichier.
+Author's choice (2 October): a page that carries a black area becomes an image at 200 dpi. Rejected: rectangles drawn on top of a text that stays in the file.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- rien de ce que portait une page noircie ne reste dans le fichier : ni son texte, ni la valeur d'un champ couvert, ni une note, ni l'adresse d'un lien ;
-- la page noircie garde l'aspect et la taille que voit le lecteur, la zone en noir ;
-- les autres pages ne changent pas, et les signets et les liens qui menaient à la page noircie y mènent encore ;
-- le fichier d'origine n'est jamais modifié ;
-- les tests du paquet, de l'appli et des textes passent, sans avertissement du compilateur.
+- nothing that a redacted page carried stays in the file: not its text, not the value of a covered field, not a note, not the address of a link;
+- the redacted page keeps the look and the size that the reader sees, with the area in black;
+- the other pages do not change, and the bookmarks and the links that led to the redacted page still lead to it;
+- the original file is never modified;
+- the package, app and text tests pass, with no compiler warning.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Moteur | `PDFRedaction.redacted` rend chaque page marquée telle que le lecteur la voit, à 200 ppp, zones peintes en noir sur des pixels entiers et sans lissage, puis la remplace par une page faite de cette image en JPEG (qualité 0,8, écrite par `PDFWriter` du Scanner) | Ce qui n'est pas dans l'image n'est plus dans le fichier. Sonde du 2 octobre : aucun des quatre secrets d'une page d'essai ne reste, même dans les flux décompressés |
-| Annotations | Les annotations de la page noircie partent avec elle : champs, notes, liens | Une note ou un champ peut porter le secret |
-| Ce qui déborde sur les autres pages | La bulle d'une note posée sur une autre page est retirée : PDFKit y recopie le texte de la note. Un champ de formulaire qu'une zone couvre est retiré aussi des autres pages où il apparaît : sa valeur y resterait, visible ou cachée | Deux fuites prouvées par la relecture du 2 octobre. PDFKit ne sait pas vider un champ pour de bon : la valeur par défaut et l'apparence gardent le texte. Un champ qu'aucune zone ne couvre reste sur les autres pages : l'image de la page le montre de toute façon |
-| Mémoire | Chaque page noircie attend l'écriture en JPEG, pas en pixels | Mesuré le 2 octobre, hors des suites (dans le processus de test, les autres tests faussent la mesure) : 168 Mo pour 32 petites pages avant, moins de 60 Mo après |
-| Signets et liens | Ceux qui visaient la page sont dirigés vers son image, au même endroit vu par le lecteur et au même zoom | Le document reste navigable |
-| Grandes pages | Le plus grand côté de l'image est plafonné à 6 000 pixels | Une affiche à 200 ppp demanderait des gigaoctets |
-| Zones | Rectangles noirs, normalisés à la page telle que le lecteur la voit. Tracés au glisser ; une croix sur chaque zone la retire ; un bouton retire celles de la page. « Annuler » (bouton et ⌘Z, depuis le 2 octobre au soir) reprend un changement à la fois, sur n'importe quelle page | Le geste le plus direct. L'historique garde cent pas, comme le Filigrane |
-| Suivi de la souris | Une vue AppKit sous les zones, pas un geste SwiftUI | Un test peut alors conduire le glisser ; un geste SwiftUI ne répond pas aux événements d'un test |
-| Modifications | Les zones comptent comme des modifications non enregistrées : ouvrir un autre PDF ou quitter demande confirmation. Sans zone, il n'y a rien à perdre et rien n'est demandé | Le tracé de plusieurs pages se perd vite |
-| Après l'enregistrement | Les zones restent à l'écran ; l'écran invite à regarder la copie avant de la partager | L'utilisateur peut en ajouter et enregistrer de nouveau |
-| Moine | « Frère Encrier », la gomme du site, l'air appliqué | Le moine qui passe l'encre noire |
+| Engine | `PDFRedaction.redacted` renders each marked page as the reader sees it, at 200 dpi, with the areas painted black on whole pixels and without smoothing, then replaces it with a page made of this image in JPEG (quality 0.8, written by the Scanner's `PDFWriter`) | What is not in the image is no longer in the file. Probe of 2 October: none of the four secrets of a test page stays, even in the decompressed streams |
+| Annotations | The annotations of the redacted page go with it: fields, notes, links | A note or a field can carry the secret |
+| What spills onto the other pages | The popup of a note placed on another page is removed: PDFKit copies the text of the note into it. A form field that an area covers is also removed from the other pages where it appears: its value would stay there, visible or hidden | Two leaks proven by the review of 2 October. PDFKit cannot empty a field for good: the default value and the appearance keep the text. A field that no area covers stays on the other pages: the image of the page shows it anyway |
+| Memory | Each redacted page waits to be written as JPEG, not as pixels | Measured on 2 October, outside the suites (in the test process, the other tests distort the measurement): 168 MB for 32 small pages before, less than 60 MB after |
+| Bookmarks and links | Those that pointed to the page are sent to its image, at the same place as the reader sees it and at the same zoom | The document stays navigable |
+| Large pages | The longest side of the image is capped at 6,000 pixels | A poster at 200 dpi would need gigabytes |
+| Areas | Black rectangles, normalized to the page as the reader sees it. Drawn by dragging; a cross on each area removes it; a button removes those of the page. "Undo" (button and ⌘Z, since the evening of 2 October) takes back one change at a time, on any page | The most direct gesture. The history keeps a hundred steps, like the Watermark |
+| Mouse tracking | An AppKit view under the areas, not a SwiftUI gesture | A test can then drive the drag; a SwiftUI gesture does not respond to the events of a test |
+| Changes | The areas count as unsaved changes: opening another PDF or quitting asks for confirmation. With no area, there is nothing to lose and nothing is asked | Areas drawn on several pages are quickly lost |
+| After saving | The areas stay on screen; the screen asks the user to look at the copy before sharing it | The user can add more areas and save again |
+| Monk | "Brother Inkpot", the site's eraser, a focused look | The monk who applies the black ink |
 
-## Ce qui change dans les briques communes
+## What changes in the shared building blocks
 
-- `CopyToolView` et `PagePreviewPane` reçoivent `onPage` : une vue posée sur la page, à sa taille, où l'outil laisse l'utilisateur travailler sur la page.
+- `CopyToolView` and `PagePreviewPane` receive `onPage`: a view placed on the page, at its size, where the tool lets the user work on the page.
 
-## Parcours
+## Flow
 
-1. Ouvrir ou déposer un PDF. Un fichier protégé demande son mot de passe.
-2. Faire glisser sur la page pour couvrir ce qui doit disparaître ; changer de page et recommencer.
-3. « Enregistrer la copie noircie… » propose `nom-noirci.pdf`.
+1. Open or drop a PDF. A protected file asks for its password.
+2. Drag on the page to cover what must disappear; go to another page and do it again.
+3. "Save the redacted copy…" suggests `name-redacted.pdf`.
 
-## Limites connues
+## Known limits
 
-- « Annuler » ne se rétablit pas : pas de « Rétablir ».
-- Toute la page noircie devient une image : son autre texte n'est plus sélectionnable ni cherchable (l'outil OCR peut le relire), et ses champs de formulaire disparaissent.
-- Une page noircie pèse environ 0,9 Mo en format lettre : 14 pages noircies font passer un PDF de 1 à 13 Mo.
-- Le titre du document, ses signets et ses métadonnées (dont le bloc XMP) ne sont pas relus : un secret écrit dans un signet ou dans le titre y reste. L'écran le dit.
-- Un champ de formulaire couvert par une zone disparaît aussi des autres pages où il apparaît.
-- Un texte qui déborde de la zone reste lisible : c'est l'image qui fait foi, l'aperçu montre ce qui sera couvert.
-- Les limites de PDFKit à l'écriture s'appliquent aux autres pages (spec du Filigrane, spec de Protéger pour les étiquettes de pages).
-- La copie d'un PDF protégé s'ouvre sans mot de passe, et l'écran le dit.
+- "Undo" cannot be reversed: there is no "Redo".
+- The whole redacted page becomes an image: its other text can no longer be selected or searched (the OCR tool can read it again), and its form fields disappear.
+- A redacted page weighs about 0.9 MB in Letter size: 14 redacted pages take a PDF from 1 to 13 MB.
+- The title of the document, its bookmarks and its metadata (including the XMP block) are not checked: a secret written in a bookmark or in the title stays there. The screen says so.
+- A form field that an area covers also disappears from the other pages where it appears.
+- A text that goes past the area stays readable: the image is what counts, and the preview shows what will be covered.
+- The limits of PDFKit when it writes apply to the other pages (Watermark spec, Protect spec for page labels).
+- The copy of a protected PDF opens without a password, and the screen says so.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Moteur | Les cinq secrets d'une page (texte, champ, note dont la bulle est sur une autre page, lien, champ partagé avec une autre page) absents des octets et des flux décompressés de la copie, écrits en clair, en UTF-16 ou en hexadécimal ; un champ non couvert gardé sur l'autre page ; un signet replacé après rotation, zoom gardé ; signet et lien suivis jusqu'à l'image ; zone noire et reste de la page gardé ; image de 833 × 1 111 pixels pour 300 × 400 points, en JPEG, sans masque ; aspect et taille gardés sous les quatre rotations ; autres pages inchangées ; zones vides ou hors page, PDF signé refusés, PDF protégé ouvert | `PDFRedactionTests` |
-| Outil | Zones par page, coupées au bord de la page, retirées une à une ou par page ; copie noircie enregistrée, original intact, zones gardées ; un autre PDF efface les zones | `RedactSessionTests` |
-| Écrans | Départ, zones en clair, en sombre et en anglais, copie enregistrée ; un glisser trace une zone à l'endroit attendu, un clic n'en trace pas | `RedactSnapshots` |
-| Fichiers réels | Six PDF de `fixtures-private/pdfs` : texte des pages noircies disparu, tailles gardées, signets gardés ; 14 pages en 0,7 s | Sonde du 2 octobre, non gardée |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
+| Engine | The five secrets of a page (text, field, note whose popup is on another page, link, field shared with another page) absent from the bytes and from the decompressed streams of the copy, written in plain text, in UTF-16 or in hexadecimal; a field that is not covered kept on the other page; a bookmark put back in place after rotation, zoom kept; bookmark and link followed up to the image; black area and rest of the page kept; image of 833 × 1,111 pixels for 300 × 400 points, in JPEG, without a mask; look and size kept under the four rotations; other pages unchanged; empty areas or areas outside the page refused, signed PDF refused, protected PDF opened | `PDFRedactionTests` |
+| Tool | Areas per page, clipped at the edge of the page, removed one by one or per page; redacted copy saved, original intact, areas kept; another PDF clears the areas | `RedactSessionTests` |
+| Screens | Start, areas in light mode, in dark mode and in English, copy saved; a drag draws an area at the expected place, a click does not draw one | `RedactSnapshots` |
+| Real files | Six PDFs from `fixtures-private/pdfs`: text of the redacted pages gone, sizes kept, bookmarks kept; 14 pages in 0.7 s | Probe of 2 October, not kept |
+| Texts | All translated, never the informal « tu » | `check-strings.py` |

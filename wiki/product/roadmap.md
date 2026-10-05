@@ -1,154 +1,154 @@
-# Feuille de route — tous les outils
+# Roadmap: all tools
 
-_Créée le 29 septembre 2026. Référence : le catalogue de PDF24 Tools, relevé sur les captures du 29/09._
+_Created on 29 September 2026. Reference: the PDF24 Tools catalog, taken from the screenshots of 29 September._
 
-L'objectif final est une appli qui couvre tout ce catalogue, sur Mac, iPhone et Web. Chaque phase livre des outils utilisables. Un outil ne commence qu'avec sa spec, dans `wiki/specs/`.
+The final goal is an app that covers this whole catalog, on Mac, iPhone and the Web. Each phase delivers usable tools. A tool starts only with its spec, in `wiki/specs/`.
 
-**Web, 1er octobre 2026 :** Signer est implémenté après le lot Organiser / Compresser / PDF en JPG. [Sa spec](../specs/2026-10-01-web-sign-design.md) couvre la main levée, le texte manuscrit et l'import PNG/JPG/JPEG, sans certificat (ajouts de recette jusqu’au 2 octobre). Les prochains outils de ce lot sont Filigrane, Numéros de page puis Noircir.
+**Web, 1 October 2026:** Sign is implemented after the Organize / Compress / PDF to JPG milestone. [Its spec](../specs/2026-10-01-web-sign-design.md) covers freehand drawing, handwritten text and PNG/JPG/JPEG import, without a certificate (additions from acceptance testing until 2 October). The next tools of this milestone are Watermark, Page numbers, then Redact.
 
-## Faisabilité
+## Feasibility
 
-| Repère | Signification |
+| Mark | Meaning |
 |---|---|
-| **A** | Faisable avec les frameworks Apple (PDFKit, Core Graphics, Vision, WebKit), sans dépendance |
-| **B** | Faisable avec les frameworks Apple, mais demande du code bas niveau ou un compromis à valider |
-| **C** | Demande une bibliothèque tierce ou un service : décision de dépendance à prendre dans la spec de l'outil |
+| **A** | Feasible with the Apple frameworks (PDFKit, Core Graphics, Vision, WebKit), with no dependency |
+| **B** | Feasible with the Apple frameworks, but needs low-level code or a compromise to validate |
+| **C** | Needs a third-party library or a service: a dependency decision to make in the tool's spec |
 
-## Le catalogue
+## The catalog
 
-### Créer
+### Create
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| Créer un PDF avec une caméra (**Scanner**) | A | Phase 0, livré sur Mac le 1er octobre 2026. Sur le site (3 octobre 2026) : même moteur porté sur OpenCV.js, planche, correction et export ; lecture et suggestions au lot B ; voir la [spec web](../specs/2026-10-02-web-scanner-design.md) |
-| Images en PDF | A | Implémenté sur Mac (2 octobre 2026) : une page A4 par image, dans l'ordre réglé ; voir la [spec](../specs/2026-10-02-mac-images-design.md). Sur le site : JPG en PDF |
-| Page web en PDF | A | Sur Mac : `WKWebView.createPDF`. Sur le site : il faudrait un serveur ; pas pour le moment (décision du 4 octobre 2026) |
-| Générer un code QR | A | Retiré le 4 octobre 2026 : un produit d'appel sans rapport avec les PDF |
-| Écrire un PDF | A | Éditeur de texte, puis mise en page PDF |
-| Créer un formulaire PDF remplissable | B | Sur le site, dans Modifier (décision du 4 octobre 2026) : les champs existants se remplissent en place depuis le 4 octobre (texte, case, bouton radio, listes), et l'outil Champ en crée (texte, case à cocher, liste déroulante ; pas de boutons radio : PDFium ne donne pas de valeur d'export propre à un bouton neuf). Sur Mac : annotations de widget PDFKit |
-| Créer PDF (depuis Word, Excel, PowerPoint…) | C | Rendu Office : LibreOffice ou service. Pas pour le moment (décision du 4 octobre 2026) |
-| Créer une demande d'emploi PDF | A | Assemblage de documents, cas d'usage de Fusionner |
+| Create a PDF with a camera (**Scanner**) | A | Phase 0, shipped on Mac on 1 October 2026. On the site (3 October 2026): the same engine ported to OpenCV.js, board, correction and export; reading and suggestions in milestone B; see the [web spec](../specs/2026-10-02-web-scanner-design.md) |
+| Images to PDF | A | Implemented on Mac (2 October 2026): one A4 page per image, in the order set; see the [spec](../specs/2026-10-02-mac-images-design.md). On the site: JPG to PDF |
+| Web page to PDF | A | On Mac: `WKWebView.createPDF`. On the site: it would need a server; not for now (decision of 4 October 2026) |
+| Generate a QR code | A | Removed on 4 October 2026: a traffic bait with no link to PDFs |
+| Write a PDF | A | Text editor, then PDF layout |
+| Create a fillable PDF form | B | On the site, in Edit (decision of 4 October 2026): existing fields are filled in place since 4 October (text, checkbox, radio button, lists), and the Field tool creates fields (text, checkbox, dropdown list; no radio buttons: PDFium gives no proper export value for a new button). On Mac: PDFKit widget annotations |
+| Create PDF (from Word, Excel, PowerPoint…) | C | Office rendering: LibreOffice or a service. Not for now (decision of 4 October 2026) |
+| Create a PDF job application | A | Document assembly, a use case of Merge |
 
-### Organiser
+### Organize
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| Fusionner PDF | A | Implémenté sur Mac (1er octobre 2026) ; voir la [spec](../specs/2026-10-01-mac-merge-design.md) |
-| Assembler des documents | A | Fusion de PDF et d'images |
-| Diviser PDF | A | Implémenté sur Mac (2 octobre 2026) : ciseaux entre les pages ou « pages par fichier » ; voir la [spec](../specs/2026-10-02-mac-split-extract-design.md) |
-| Réorganiser les pages | A | Implémenté sur Mac dans Organiser (2 octobre 2026), grille native, glisser et annulation ; voir la [spec](../specs/2026-10-02-mac-organize-design.md) |
-| Supprimer les pages | A | Disponible dans Organiser sur Mac, avec annulation et conservation d’au moins une page |
-| Extraire les pages | A | Implémenté sur Mac (2 octobre 2026) : les pages cochées dans un nouveau PDF ; même spec que Diviser |
-| Rotation PDF | A | Disponible par page dans Organiser sur Mac, sans rastérisation |
-| Pages par feuille | A | Implémenté sur le site (2 octobre 2026) : 2 à 16 pages par feuille A4 ; voir la [spec](../specs/2026-10-02-web-pages-per-sheet-design.md). Implémenté sur Mac le même jour ; voir la [spec](../specs/2026-10-02-mac-sheets-design.md) |
-| Couper les pages en deux | A | Implémenté sur le site (2 octobre 2026) : gauche et droite, ou haut et bas ; voir la [spec](../specs/2026-10-02-web-split-in-half-design.md). Implémenté sur Mac le même jour, signets et liens gardés ; voir la [spec](../specs/2026-10-02-mac-sheets-design.md) |
-| Ajouter des signets | A | Implémenté sur Mac (2 octobre 2026) : poser, renommer, retirer, changer de niveau ; voir la [spec](../specs/2026-10-02-mac-bookmarks-design.md). Sur le site (3 octobre 2026) : mêmes règles, vue d'arrivée gardée telle quelle ; voir la [spec web](../specs/2026-10-03-web-bookmarks-design.md) |
-| Extraire les images | B | Lecture des objets image du PDF (`CGPDFScanner`) |
+| Merge PDF | A | Implemented on Mac (1 October 2026); see the [spec](../specs/2026-10-01-mac-merge-design.md) |
+| Assemble documents | A | Merge of PDFs and images |
+| Split PDF | A | Implemented on Mac (2 October 2026): scissors between the pages or « pages par fichier » (pages per file); see the [spec](../specs/2026-10-02-mac-split-extract-design.md) |
+| Reorder pages | A | Implemented on Mac in Organize (2 October 2026), native grid, drag and undo; see the [spec](../specs/2026-10-02-mac-organize-design.md) |
+| Delete pages | A | Available in Organize on Mac, with undo, and at least one page always kept |
+| Extract pages | A | Implemented on Mac (2 October 2026): the checked pages in a new PDF; same spec as Split |
+| Rotate PDF | A | Available per page in Organize on Mac, without rasterization |
+| Pages per sheet | A | Implemented on the site (2 October 2026): 2 to 16 pages per A4 sheet; see the [spec](../specs/2026-10-02-web-pages-per-sheet-design.md). Implemented on Mac the same day; see the [spec](../specs/2026-10-02-mac-sheets-design.md) |
+| Split pages in half | A | Implemented on the site (2 October 2026): left and right, or top and bottom; see the [spec](../specs/2026-10-02-web-split-in-half-design.md). Implemented on Mac the same day, bookmarks and links kept; see the [spec](../specs/2026-10-02-mac-sheets-design.md) |
+| Add bookmarks | A | Implemented on Mac (2 October 2026): add, rename, remove, change level; see the [spec](../specs/2026-10-02-mac-bookmarks-design.md). On the site (3 October 2026): the same rules, destination view kept as is; see the [web spec](../specs/2026-10-03-web-bookmarks-design.md) |
+| Extract images | B | Reading of the image objects of the PDF (`CGPDFScanner`) |
 
-### Modifier
+### Edit
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| Ajouter un filigrane | A | Implémenté sur Mac (2 octobre 2026) : texte ou image, opacité, angle, plage de pages ; voir la [spec](../specs/2026-10-02-mac-watermark-design.md). Sur le site (2 octobre 2026) : texte seul, centré ; voir la [spec](../specs/2026-10-02-web-watermark-design.md) |
-| Ajouter des numéros de pages | A | Implémenté sur Mac (2 octobre 2026) : format, position, premier numéro, taille, plage ; voir la [spec](../specs/2026-10-02-mac-page-numbers-design.md). Sur le site (2 octobre 2026) : mêmes réglages, texte dans le contenu de la page ; voir la [spec](../specs/2026-10-02-web-page-numbers-design.md) |
-| Superposition PDF | A | Implémenté sur Mac (2 octobre 2026) : les pages d'un PDF sur ou sous celles d'un autre ; voir la [spec](../specs/2026-10-02-mac-overlay-design.md). Sur le site (3 octobre 2026) : même règle, plusieurs PDF qui reçoivent ; voir la [spec web](../specs/2026-10-03-web-overlay-design.md) |
-| Signer PDF | A | Implémenté sur Mac (1er octobre 2026) : signature dessinée ou importée. Sur le site : dessinée, saisie ou importée. La signature électronique qualifiée (eIDAS) est hors portée |
-| Noircir un PDF | B | Implémenté sur Mac (2 octobre 2026) : la page qui porte une zone noire devient une image à 200 ppp, son contenu quitte le fichier ; voir la [spec](../specs/2026-10-02-mac-redact-design.md). Sur le site (2 octobre 2026) : même règle, moteur PDFium ; voir la [spec web](../specs/2026-10-02-web-redact-design.md) |
-| Rogner PDF | A | Implémenté sur le site (4 octobre 2026) : la zone tracée devient la CropBox, sur une page ou sur toutes ; voir la [spec](../specs/2026-10-04-web-crop-design.md). Ajouté après la comparaison avec iLovePDF |
-| Modifier PDF | B | Implémenté sur le site (4 octobre 2026) en deux versions : ajouts (texte, zones de texte, images, formes, crayon, surligneur), puis le document lui-même (texte d'origine corrigé, objets déplacés et supprimés, annotations, liens, images tournées et recadrées), zoom et raccourcis ; voir la [spec](../specs/2026-10-04-web-edit-design.md). Sur Mac le même jour, étape A ; voir la [spec Mac](../specs/2026-10-04-mac-edit-design.md). Tampons, remplissage des formulaires et création de champs le 4 octobre aussi |
+| Add a watermark | A | Implemented on Mac (2 October 2026): text or image, opacity, angle, page range; see the [spec](../specs/2026-10-02-mac-watermark-design.md). On the site (2 October 2026): text only, centered; see the [spec](../specs/2026-10-02-web-watermark-design.md) |
+| Add page numbers | A | Implemented on Mac (2 October 2026): format, position, first number, size, range; see the [spec](../specs/2026-10-02-mac-page-numbers-design.md). On the site (2 October 2026): the same settings, text in the content of the page; see the [spec](../specs/2026-10-02-web-page-numbers-design.md) |
+| PDF overlay | A | Implemented on Mac (2 October 2026): the pages of one PDF over or under those of another; see the [spec](../specs/2026-10-02-mac-overlay-design.md). On the site (3 October 2026): the same rule, several receiving PDFs; see the [web spec](../specs/2026-10-03-web-overlay-design.md) |
+| Sign PDF | A | Implemented on Mac (1 October 2026): drawn or imported signature. On the site: drawn, typed or imported. The qualified electronic signature (eIDAS) is out of scope |
+| Redact a PDF | B | Implemented on Mac (2 October 2026): a page that carries a black area becomes an image at 200 dpi, and its content leaves the file; see the [spec](../specs/2026-10-02-mac-redact-design.md). On the site (2 October 2026): the same rule, PDFium engine; see the [web spec](../specs/2026-10-02-web-redact-design.md) |
+| Crop PDF | A | Implemented on the site (4 October 2026): the drawn area becomes the CropBox, on one page or on all pages; see the [spec](../specs/2026-10-04-web-crop-design.md). Added after the comparison with iLovePDF |
+| Edit PDF | B | Implemented on the site (4 October 2026) in two versions: additions (text, text boxes, images, shapes, pencil, highlighter), then the document itself (original text corrected, objects moved and deleted, annotations, links, images rotated and cropped), zoom and shortcuts; see the [spec](../specs/2026-10-04-web-edit-design.md). On Mac the same day, step A; see the [Mac spec](../specs/2026-10-04-mac-edit-design.md). Stamps, form filling and field creation also on 4 October |
 
-### Optimiser et réparer
+### Optimize and repair
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| Compresser PDF | A | Implémenté sur Mac (2 octobre 2026) : trois niveaux, options d'écriture PDFKit et filtre Quartz, la copie la plus légère gagne ; voir la [spec](../specs/2026-10-02-mac-compress-design.md). Sur le site depuis le 30 septembre |
-| OCR PDF | A | Implémenté sur Mac (2 octobre 2026) : la lecture Vision du Scanner en texte invisible sur les pages sans texte ; voir la [spec](../specs/2026-10-02-mac-ocr-design.md). Sur le site (2 octobre 2026) : Tesseract.js hébergé par le site, français et anglais ; voir la [spec web](../specs/2026-10-02-web-ocr-design.md) |
-| Pixelliser un PDF | A | Implémenté sur le site (2 octobre 2026) : pages en JPEG à 150 ou 300 ppp ; voir la [spec](../specs/2026-10-02-web-pixelize-design.md). Implémenté sur Mac le même jour ; voir la [spec](../specs/2026-10-02-mac-sheets-design.md) |
-| Aplatir le PDF | B | Implémenté sur le site (2 octobre 2026) : champs et annotations dans le contenu ; voir la [spec](../specs/2026-10-02-web-flatten-design.md). Implémenté sur Mac le même jour, liens gardés ; voir la [spec](../specs/2026-10-02-mac-flatten-design.md) |
-| Réparer PDF | B | Implémenté sur le site (3 octobre 2026) : qpdf relit un fichier coupé ou sans table, PDFium en secours ; voir la [spec](../specs/2026-10-03-web-repair-design.md) |
-| Optimiser PDF pour le Web | C | Linéarisation : pas dans les frameworks Apple (qpdf) |
-| PDF en PDF/A | C | Conformité ISO : polices, profils ICC, validation |
+| Compress PDF | A | Implemented on Mac (2 October 2026): three levels, PDFKit write options and Quartz filter, the lightest copy wins; see the [spec](../specs/2026-10-02-mac-compress-design.md). On the site since 30 September |
+| OCR PDF | A | Implemented on Mac (2 October 2026): the Vision reading of the Scanner as invisible text on the pages without text; see the [spec](../specs/2026-10-02-mac-ocr-design.md). On the site (2 October 2026): Tesseract.js hosted by the site, French and English; see the [web spec](../specs/2026-10-02-web-ocr-design.md) |
+| Pixelize a PDF | A | Implemented on the site (2 October 2026): pages as JPEG at 150 or 300 dpi; see the [spec](../specs/2026-10-02-web-pixelize-design.md). Implemented on Mac the same day; see the [spec](../specs/2026-10-02-mac-sheets-design.md) |
+| Flatten the PDF | B | Implemented on the site (2 October 2026): fields and annotations into the content; see the [spec](../specs/2026-10-02-web-flatten-design.md). Implemented on Mac the same day, links kept; see the [spec](../specs/2026-10-02-mac-flatten-design.md) |
+| Repair PDF | B | Implemented on the site (3 October 2026): qpdf reads a truncated file, or a file without a cross-reference table, again, with PDFium as fallback; see the [spec](../specs/2026-10-03-web-repair-design.md) |
+| Optimize PDF for the Web | C | Linearization: not in the Apple frameworks (qpdf) |
+| PDF to PDF/A | C | ISO conformance: fonts, ICC profiles, validation |
 
-### Sécurité et confidentialité
+### Security and privacy
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| Protéger PDF | A | Implémenté sur Mac (2 octobre 2026) : mot de passe en AES-128, le plus fort que PDFKit écrive ; voir la [spec](../specs/2026-10-02-mac-protect-unlock-design.md). Sur le site (2 octobre 2026) : chiffrement PDFium, voir la [spec](../specs/2026-10-02-web-protect-unlock-design.md) |
-| Déverrouiller PDF | A | Implémenté sur Mac et sur le site (2 octobre 2026), avec le mot de passe connu seulement : copie sans chiffrement, limites d'impression et de copie levées |
+| Protect PDF | A | Implemented on Mac (2 October 2026): password with AES-128, the strongest that PDFKit writes; see the [spec](../specs/2026-10-02-mac-protect-unlock-design.md). On the site (2 October 2026): PDFium encryption, see the [spec](../specs/2026-10-02-web-protect-unlock-design.md) |
+| Unlock PDF | A | Implemented on Mac and on the site (2 October 2026), only with the known password: a copy without encryption, with the print and copy limits lifted |
 
-### Convertir
+### Convert
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| PDF en images | A | Implémenté sur Mac (2 octobre 2026) : un JPG par page, 150 ou 300 ppp ; même spec. Sur le site : PDF en JPG, avec l'extraction des photos |
-| Convertir des images | A | ImageIO |
-| Convertisseur PDF vers Word, Excel, PowerPoint | C | Reconstruction de mise en page : bibliothèque ou service. PDF en Word implémenté sur le site (2 octobre 2026) : texte, styles et images, sans tableaux ; voir la [spec](../specs/2026-10-02-web-pdf-to-word-design.md) PDF en Word implémenté sur Mac le même jour, sans bibliothèque ; voir la [spec](../specs/2026-10-02-mac-pdf-to-word-design.md) |
+| PDF to images | A | Implemented on Mac (2 October 2026): one JPG per page, 150 or 300 dpi; same spec. On the site: PDF to JPG, with the extraction of photos |
+| Convert images | A | ImageIO |
+| PDF to Word, Excel, PowerPoint converter | C | Layout reconstruction: a library or a service. PDF to Word implemented on the site (2 October 2026): text, styles and images, without tables; see the [spec](../specs/2026-10-02-web-pdf-to-word-design.md). PDF to Word implemented on Mac the same day, without a library; see the [spec](../specs/2026-10-02-mac-pdf-to-word-design.md) |
 
-### Afficher et vérifier
+### View and check
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| Voir PDF | A | `PDFView` |
-| Rechercher dans des PDF | A | Non (décision du 4 octobre 2026) |
-| Comparer PDF | B | Écart de texte + écart visuel page à page |
-| Vérifier PDF/A | C | Validateur (veraPDF ou équivalent) |
-| Préférences de la visionneuse | A | |
+| View PDF | A | `PDFView` |
+| Search in PDFs | A | No (decision of 4 October 2026) |
+| Compare PDF | B | Text diff + visual diff page by page |
+| Check PDF/A | C | Validator (veraPDF or equivalent) |
+| Viewer preferences | A | |
 
-### Factures
+### Invoices
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| Créer une facture | A | Modèle et mise en page |
-| Créer visuellement une facture | A | Éditeur de modèle |
-| Créer une facture électronique | C | Factur-X / ZUGFeRD : PDF/A-3 + XML embarqué |
-| Facture PDF en facture électronique | C | Idem |
-| Facture électronique XML en PDF | B | Lecture du XML et mise en page |
-| Valider une facture électronique | C | Validation des schémas et des règles métier |
+| Create an invoice | A | Template and layout |
+| Create an invoice visually | A | Template editor |
+| Create an electronic invoice | C | Factur-X / ZUGFeRD: PDF/A-3 + embedded XML |
+| PDF invoice to electronic invoice | C | Same |
+| XML electronic invoice to PDF | B | Reading of the XML and layout |
+| Validate an electronic invoice | C | Validation of the schemas and of the business rules |
 
-La facture électronique devient obligatoire en France pour les entreprises, par étapes, à partir de septembre 2026. C'est un argument commercial fort, mais aussi le chantier le plus normé du catalogue.
+Electronic invoicing becomes mandatory for companies in France, in steps, from September 2026. It is a strong commercial argument, but also the most standardized workstream of the catalog.
 
-### Bureau
+### Desktop
 
-| Outil | Faisabilité | Note |
+| Tool | Feasibility | Note |
 |---|---|---|
-| Lecteur PDF | A | Voir PDF en appli par défaut |
-| Imprimante PDF / Creator | — | macOS l'offre déjà (« Enregistrer au format PDF » dans chaque dialogue d'impression). À reconsidérer seulement pour Windows |
+| PDF reader | A | View PDF as the default app |
+| PDF printer / Creator | — | macOS already offers it ("Save as PDF" in each print dialog). To reconsider only for Windows |
 
 ## Phases
 
-| Phase | Contenu | Pourquoi dans cet ordre |
+| Phase | Content | Why in this order |
 |---|---|---|
-| 0 | **Scanner** : moteur, outil en ligne de commande, appli Mac | Livrée le 1er octobre 2026 (PR #2 et #7). Appli Swift retirée le 5 octobre (tag `mac-final`) ; le Scanner continue sur le site et dans l'appli de bureau |
-| 1 | **Accueil en grille** (catégories, recherche, favoris, récents) + **Organiser** : fusionner, diviser, réorganiser, supprimer, extraire, rotation, images ↔ PDF | Tout en A, réutilise la planche et `PDFCore`, couvre les usages les plus fréquents. Livrée sur Mac le 2 octobre 2026, sauf favoris et récents ; voir la [spec de l'accueil](../specs/2026-10-02-mac-home-design.md) |
-| 2 | **Modifier** : filigrane, numéros de pages, signer, noircir, superposition, pages par feuille, couper en deux, signets | En A et B, une fois `PDFCore` capable de redessiner des pages |
-| 3 | **Optimiser et sécuriser** : compresser, OCR d'un PDF existant, pixelliser, aplatir, protéger, déverrouiller, réparer | Réutilise l'OCR et le rendu |
-| 4 | **Créer et voir** : page web, QR code, écrire un PDF, formulaires, lecteur, recherche, comparaison | |
-| 5 | **Factures** : création, puis facture électronique | Premier chantier en C : décision de dépendance, normes |
-| 6 | **Conversions Office et normes** : Office ↔ PDF, PDF/A, linéarisation | Le plus coûteux, le moins différenciant |
+| 0 | **Scanner**: engine, command-line tool, Mac app | Shipped on 1 October 2026 (PR #2 and #7). Swift app removed on 5 October (tag `mac-final`). The Scanner continues on the site and in the desktop app |
+| 1 | **Grid home** (categories, search, favorites, recents) + **Organize**: merge, split, reorder, delete, extract, rotate, images ↔ PDF | All in A, reuses the board and `PDFCore`, covers the most frequent uses. Shipped on Mac on 2 October 2026, except favorites and recents; see the [home spec](../specs/2026-10-02-mac-home-design.md) |
+| 2 | **Edit**: watermark, page numbers, sign, redact, overlay, pages per sheet, split in half, bookmarks | In A and B, once `PDFCore` can redraw pages |
+| 3 | **Optimize and secure**: compress, OCR of an existing PDF, pixelize, flatten, protect, unlock, repair | Reuses OCR and rendering |
+| 4 | **Create and view**: web page, QR code, write a PDF, forms, reader, search, comparison | |
+| 5 | **Invoices**: creation, then electronic invoice | First workstream in C: dependency decision, standards |
+| 6 | **Office conversions and standards**: Office ↔ PDF, PDF/A, linearization | The most costly, the least differentiating |
 
-Chantiers transverses, à planifier en parallèle :
+Cross-cutting workstreams, to plan in parallel:
 
-- **Identité de marque** : voir [Identité de marque](brand.md). À faire avant la phase 1, parce que l'accueil en grille vit de ses illustrations. Appliquée au site et à l'appli Mac ;
-- **Appli iPhone** : après la phase 0, avec la caméra pour le Scanner ;
-- **Version Web** : site Astro statique, outils en Preact, moteur réécrit selon `wiki/development/algorithm.md` et exécuté dans le navigateur, outils A et B via PDFium en WebAssembly. Livrés : les 7 outils Organiser, puis Compresser et PDF en JPG (30 septembre 2026), tous avec le parcours en trois temps ; barre de navigation, pied de page et page outil centrée (1er octobre 2026). Voir [Version Web](../development/web-version.md) ;
-- **Couche commerciale** : décidée le 4 octobre 2026, voir ci-dessous.
+- **Brand identity**: see [Brand identity](brand.md). To do before phase 1, because the grid home lives on its illustrations. Applied to the site and to the Mac app;
+- **iPhone app**: after phase 0, with the camera for the Scanner;
+- **Web version**: static Astro site, tools in Preact, engine rewritten from `wiki/development/algorithm.md` and run in the browser, A and B tools through PDFium in WebAssembly. Shipped: the 7 Organize tools, then Compress and PDF to JPG (30 September 2026), all with the three-step flow; navigation bar, footer and centered tool page (1 October 2026). See [Web version](../development/web-version.md);
+- **Commercial layer**: decided on 4 October 2026, see below.
 
-## Décisions du 4 octobre 2026
+## Decisions of 4 October 2026
 
-- Pas pour le moment : tout ce qui demande un serveur ou un modèle d'IA (page web en PDF, Office en PDF, résumé, traduction).
-- Non : rechercher dans des PDF. Retiré : le code QR.
-- Fait ensuite, dans Modifier sur le site : les tampons, le remplissage des formulaires et la création de champs.
+- Not for now: anything that needs a server or an AI model (web page to PDF, Office to PDF, summary, translation).
+- No: search in PDFs. Removed: the QR code.
+- Done next, in Edit on the site: stamps, form filling and field creation.
 
-### Modèle économique et code ouvert
+### Business model and open source
 
-- **Le site reste gratuit, sans compte, sans quota, sans publicité.** C'est la promesse du récit fondateur, pas un choix de prix : le coût marginal d'une opération est nul puisque tout tourne chez l'utilisateur.
-- **Le dépôt entier devient public sous AGPL-3.0-or-later**, avec deux termes additionnels (section 7) : la distribution par les app stores, et aucun droit de marque. Écrits avant toute contribution externe, tant que le titulaire est seul. Pas de CLA : DCO sur les contributions. Les fichiers des illustrations sont sous AGPL comme le code ; le nom, le logo et le moine restent des marques réservées ([BRAND.md](../../BRAND.md)) ; un fork se renomme. Dépôt de la marque au nom de la société, nom et moine (marque figurative), classes 9 et 42, à l'INPI ou à l'EUIPO.
-- **Le bureau se fait en Tauri 2 sur le code du site** (`apps/desktop/`), Mac et Windows d'abord, Linux quand WebKitGTK aura fait tourner le moteur. Preuve faite le 5 octobre 2026 : le moteur du site (PDFium, qpdf, workers) tourne dans la webview de Tauri, servi par son protocole ; le même jour, la coque charge le site construit, dans la langue du système ; voir la [spec](../specs/2026-10-05-desktop-tauri-design.md). Le site dans une fenêtre n'est qu'une étape : l'appli doit ressembler à une appli native de son système, l'appli Swift sur Mac, une appli Windows sur Windows, sans rien du site autour ([spec de la coque applicative](../specs/2026-10-05-desktop-shell-design.md)). Il vend ce que le site ne peut pas : ouvrir les PDF par double-clic, traiter un dossier entier, enregistrer sur place, fonctionner hors ligne. Achat unique, mises à jour comprises, vente directe via un marchand officiel avant les stores. Son code est dans le même dépôt public.
-- **L'appli Mac en Swift est gelée** : corrections seulement. Deux moteurs doublaient chaque fonction. Son code reste pour d'éventuelles extensions macOS (Actions rapides, Partager) et pour la caméra du Scanner iPhone, si Tauri ne suffit pas.
-- **L'appli Mac en Swift est retirée (5 octobre 2026)**, à la demande de l'auteur : `apps/mac` et `Packages/Core` sortent du dépôt. Le tag `mac-final` garde leur dernier état ; c'est de là qu'on repartirait pour ces extensions.
-- **Les organisations** : une page « Pour les organisations » sur le site provoque les demandes ; l'offre (bundle intranet aux couleurs du client, build signé et mis à jour, support, dossier RGPD) ne se code qu'à la première demande, dans un second dépôt privé qui dépend du public.
-- Écartés : la publicité, les dons, les quotas sur le site, l'abonnement pour les particuliers.
-- **Historique neuf pour le dépôt public.** La relecture du 5 octobre 2026 a trouvé, dans trois commits de septembre, la description du lot privé de photos (noms, types d'actes, dates). Nettoyer la version courante ne suffit pas : le dépôt public part d'un premier commit qui reprend l'arbre nettoyé ; le dépôt privé garde l'historique complet, en archive.
-- **Les plans quittent le dépôt.** `wiki/plans/` était des journaux d'exécution écrits pour des agents, avec les chemins de la machine de l'auteur. Les specs restent la documentation ; les plans vivent dans `tasks/`, non suivi.
-- **Éditeur et titulaire des droits : Snouzylabs S.R.L.** (décision du 5 octobre 2026), la société qui édite aussi workout.cool. Le code est sous « Copyright (C) 2026 Snouzylabs S.R.L. and the Holy PDF contributors », la marque et les vidéos lui appartiennent, et les mentions légales la nomment comme éditeur ; siège et immatriculation à ajouter.
-- **Arborescence (5 octobre 2026).** Le site passe de `Web/` à `apps/web`, avec un workspace pnpm à la racine (`pnpm dev`, `pnpm verify`) : la convention `apps/*` des monorepos JS, que l'appli de bureau Tauri rejoindra dans `apps/desktop`. Turborepo et l'extraction d'un paquet partagé (le moteur) attendent ce second paquet. La contrainte de casse entre `Packages/` (Swift) et un futur `packages/` (JS) a disparu avec le retrait de l'appli Swift, le 5 octobre.
+- **The site stays free, with no account, no quota, no ads.** It is the promise of the founding story, not a pricing choice: the marginal cost of an operation is zero, since everything runs on the user's device.
+- **The whole repository becomes public under AGPL-3.0-or-later**, with two additional terms (section 7): distribution through the app stores, and no trademark rights. They were written before any outside contribution, while the rights holder is still the only contributor. No CLA: DCO on contributions. The illustration files are under AGPL like the code. The name, the logo and the monk stay reserved trademarks ([BRAND.md](../../BRAND.md)). A fork takes a new name. Trademark filing in the name of the company, for the name and the monk (figurative mark), classes 9 and 42, at the INPI or the EUIPO.
+- **The desktop app is built with Tauri 2 on the code of the site** (`apps/desktop/`), Mac and Windows first, Linux once WebKitGTK has run the engine. Proof made on 5 October 2026: the engine of the site (PDFium, qpdf, workers) runs in the Tauri webview, served by its protocol. The same day, the shell loads the built site, in the system language; see the [spec](../specs/2026-10-05-desktop-tauri-design.md). The site in a window is only a step: the app must look like a native app of its system, the Swift app on Mac, a Windows app on Windows, with nothing of the site around it ([app shell spec](../specs/2026-10-05-desktop-shell-design.md)). It sells what the site cannot do: open PDFs by double-click, process a whole folder, save in place, work offline. One-time purchase, updates included, direct sale through an official merchant before the stores. Its code is in the same public repository.
+- **The Swift Mac app is frozen**: fixes only. With two engines, every feature had to be built twice. Its code stays for possible macOS extensions (Quick Actions, Share) and for the camera of the iPhone Scanner, if Tauri is not enough.
+- **The Swift Mac app is removed (5 October 2026)**, at the request of the author: `apps/mac` and `Packages/Core` leave the repository. The `mac-final` tag keeps their last state. Work on these extensions would start again from there.
+- **Organizations**: a « Pour les organisations » (For organizations) page on the site brings in the requests. The offer (intranet bundle in the client's colors, signed and updated build, support, GDPR file) is coded only at the first request, in a second private repository that depends on the public one.
+- Rejected: ads, donations, quotas on the site, subscriptions for individuals.
+- **Fresh history for the public repository.** The review of 5 October 2026 found, in three commits of September, the description of the private batch of photos (names, types of records, dates). Cleaning the current version is not enough: the public repository starts from a first commit that takes the cleaned tree. The private repository keeps the full history, as an archive.
+- **The plans leave the repository.** `wiki/plans/` held execution logs written for agents, with the paths of the author's machine. The specs stay the documentation. The plans live in `tasks/`, untracked.
+- **Publisher and rights holder: Snouzylabs S.R.L.** (decision of 5 October 2026), the company that also publishes workout.cool. The code is under "Copyright (C) 2026 Snouzylabs S.R.L. and the Holy PDF contributors". The brand and the videos belong to the company, and the legal notice names it as the publisher. Registered office and registration number still to add.
+- **Tree layout (5 October 2026).** The site moves from `Web/` to `apps/web`, with a pnpm workspace at the root (`pnpm dev`, `pnpm verify`): the `apps/*` convention of JS monorepos, which the Tauri desktop app will join in `apps/desktop`. Turborepo and the extraction of a shared package (the engine) wait for this second package. The case conflict between `Packages/` (Swift) and a future `packages/` (JS) went away with the removal of the Swift app, on 5 October.

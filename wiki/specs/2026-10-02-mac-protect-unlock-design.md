@@ -1,74 +1,74 @@
-# Mac — Protéger et Déverrouiller
+# Mac: Protect and Unlock
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Deuxième des six outils commandés le 2 octobre (avant : [Numéros de page](2026-10-02-mac-page-numbers-design.md) ; ensuite : Compresser, OCR, Noircir)._
+_Written 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`. Second of the six tools ordered on 2 October (before: [Page numbers](2026-10-02-mac-page-numbers-design.md); after: Compress, OCR, Redact)._
 
-## Objectif
+## Goal
 
-Deux outils dans Holy PDF pour Mac. **Protéger** enregistre une copie qui ne s'ouvre qu'avec un mot de passe. **Déverrouiller** enregistre une copie sans mot de passe d'un PDF dont on connaît le mot de passe. PDFKit seulement, sans nouveau moteur.
+Two tools in Holy PDF for Mac. **Protect** saves a copy that opens only with a password. **Unlock** saves a copy without a password of a PDF whose password you know. PDFKit only, no new engine.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- la copie protégée demande le mot de passe choisi, et aucun autre ne l'ouvre ;
-- la copie déverrouillée n'est plus chiffrée du tout (plus de dictionnaire `/Encrypt`) ;
-- le texte, les liens, les champs de formulaire et les signets restent ;
-- le fichier d'origine n'est jamais modifié ;
-- les tests du paquet, de l'appli et des textes passent, sans avertissement du compilateur.
+- the protected copy asks for the chosen password, and no other password opens it;
+- the unlocked copy is not encrypted at all any more (no `/Encrypt` dictionary);
+- the text, the links, the form fields and the bookmarks stay;
+- the original file is never modified;
+- the package, app and string tests pass, with no compiler warning.
 
-## Ce que PDFKit sait faire (sondes du 2 octobre)
+## What PDFKit can do (probes of 2 October)
 
-| Question | Réponse mesurée |
+| Question | Measured answer |
 |---|---|
-| Quel chiffrement ? | AES-128 (`/V 4 /R 4 /AESV2`), PDF 1.6. La longueur de clé 256 est refusée : l'écriture échoue |
-| Un mot de passe utilisateur seul suffit-il ? | Non : sans mot de passe propriétaire, la copie n'est pas chiffrée. Les deux options sont passées, avec la même valeur |
-| Quels caractères ? | ASCII imprimable seulement. Avec « é », « € » ou un idéogramme, l'écriture échoue. Quartz n'utilise que les 32 premiers octets : 40 « a » s'ouvrent avec 32 « a » |
-| Protéger un PDF déjà protégé ? | Oui : le nouveau mot de passe remplace l'ancien |
-| Réécrire un PDF ouvert avec son mot de passe le déchiffre-t-il ? | Non. Sans option, la copie garde son mot de passe ; avec deux mots de passe vides, elle s'ouvre sans rien demander mais reste chiffrée |
-| Comment obtenir une copie sans chiffrement ? | Déplacer les pages dans un document neuf, comme Organiser : plus de `/Encrypt`, formulaires, liens, signets et titre gardés |
-| Durée | 0,1 à 0,2 s pour 1 à 2 Mo. Les deux gros fichiers connus restent lents (voir Limites) |
+| Which encryption? | AES-128 (`/V 4 /R 4 /AESV2`), PDF 1.6. A key length of 256 is refused: the write fails |
+| Is a user password alone enough? | No: without an owner password, the copy is not encrypted. Both options are passed, with the same value |
+| Which characters? | Printable ASCII only. With "é", "€" or an ideogram, the write fails. Quartz uses only the first 32 bytes: 40 "a" open with 32 "a" |
+| Protect a PDF that is already protected? | Yes: the new password replaces the old one |
+| Does a rewrite of a PDF opened with its password decrypt it? | No. Without an option, the copy keeps its password; with two empty passwords, it opens without a prompt but stays encrypted |
+| How to get a copy without encryption? | Move the pages into a new document, like Organize: no `/Encrypt` any more, forms, links, bookmarks and title kept |
+| Duration | 0.1 to 0.2 s for 1 to 2 MB. The two known large files stay slow (see Known limits) |
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Protéger | `PDFProtection.protected` : PDFKit réécrit le document entier avec le mot de passe en utilisateur et en propriétaire | Tout le document est gardé. Un seul mot de passe : celui qui ouvre a tous les droits, pas de fausse promesse sur l'impression ou la copie |
-| Mot de passe accepté | 1 à 32 caractères ASCII imprimables, vérifié avant d'écrire ; tapé deux fois | Ce que Quartz sait écrire. L'écran le dit dès la saisie plutôt qu'à l'enregistrement |
-| Vérification | Après l'écriture, le moteur rouvre la copie avec le mot de passe ; sinon il échoue | Une copie que son mot de passe n'ouvre pas est pire qu'aucune copie |
-| Champs vidés | Les deux champs se vident après un enregistrement réussi et à l'ouverture d'un autre PDF. Un enregistrement refusé ou annulé les garde | Un mot de passe resté dans les champs verrouillerait le PDF suivant sans que l'utilisateur l'ait tapé |
-| Déverrouiller | `PDFProtection.unlocked` : le moteur d'Organiser, toutes les pages gardées dans l'ordre | La seule voie PDFKit vers une copie vraiment sans chiffrement |
-| Mot de passe connu seulement | Un PDF qui demande un mot de passe ne s'ouvre qu'avec lui : l'outil ne devine rien. Un PDF qui s'ouvre sans mot de passe mais limite l'impression ou la copie est déverrouillé aussi | La règle de la feuille de route. Pour les limites sans mot de passe : Organiser, Extraire et les autres outils en écrivent déjà une copie libre ; refuser ici serait incohérent. À resserrer sur décision de l'auteur |
-| Un PDF sans mot de passe | L'écran dit qu'il n'y a rien à déverrouiller ; le bouton est inactif | Pas de copie inutile |
-| Écran | La session et l'écran communs (`PDFCopySession`, `CopyToolView`), une `ProtectionSession` à deux modes et une `ProtectionView` | Les deux outils ne diffèrent que par leur panneau |
-| Moines | « Frère Cadenas » et « Frère Passe-partout », dans leurs poses du site, exportés du dessin du site | Le site donne le même accessoire aux deux outils : l'humeur les distingue |
+| Protect | `PDFProtection.protected`: PDFKit rewrites the whole document with the password as the user password and as the owner password | The whole document is kept. One single password: the person who opens the file has all rights, no false promise on printing or copying |
+| Accepted password | 1 to 32 printable ASCII characters, checked before the write; typed twice | What Quartz can write. The screen says so during typing, not at save time |
+| Check | After the write, the engine opens the copy again with the password; if that does not work, the engine fails | A copy that its password does not open is worse than no copy |
+| Fields cleared | The two fields are cleared after a successful save and when another PDF opens. A refused or cancelled save keeps them | A password left in the fields would lock the next PDF without the user typing it |
+| Unlock | `PDFProtection.unlocked`: the Organize engine, all pages kept in their order | The only PDFKit path to a copy that is really without encryption |
+| Known password only | A PDF that asks for a password opens only with that password: the tool guesses nothing. A PDF that opens without a password but limits printing or copying is unlocked too | The rule of the roadmap. For limits without a password: Organize, Extract and the other tools already write a free copy; a refusal here would be inconsistent. To tighten if the author decides so |
+| A PDF without a password | The screen says that there is nothing to unlock; the button is inactive | No useless copy |
+| Screen | The shared session and screen (`PDFCopySession`, `CopyToolView`), a `ProtectionSession` with two modes and a `ProtectionView` | The two tools differ only by their panel |
+| Monks | "Brother Padlock" and "Brother Passkey" (« Frère Cadenas » and « Frère Passe-partout » in French), in their poses from the site, exported from the site drawing | The site gives the same accessory to the two tools: the mood tells them apart |
 
-## Ce qui change dans les briques communes
+## What changes in the shared building blocks
 
-- `PDFCopySession.Maker` devient asynchrone : Déverrouiller passe par l'acteur d'Organiser.
-- `PDFCopySession.onSaved` et `onClosed` préviennent l'outil après un enregistrement réussi et quand le document se ferme : Protéger vide alors ses champs.
-- `PDFCopySession.inspect` laisse l'outil regarder le document à l'ouverture : il le refuse, ou rend des notes que l'écran affiche (`notices`).
-- `CopyToolView` reçoit `canSave` (bouton et ⌘E inactifs) et `passwordNote` : la phrase « La copie enregistrée ne demandera pas de mot de passe » n'apparaît plus dans ces deux outils, qui disent eux-mêmes ce que devient le mot de passe.
+- `PDFCopySession.Maker` becomes asynchronous: Unlock goes through the actor of Organize.
+- `PDFCopySession.onSaved` and `onClosed` tell the tool after a successful save and when the document closes: Protect then clears its fields.
+- `PDFCopySession.inspect` lets the tool look at the document on opening: the tool refuses it, or returns notes that the screen shows (`notices`).
+- `CopyToolView` gets `canSave` (button and ⌘E inactive) and `passwordNote`: the sentence "The saved copy will not require a password" no longer appears in these two tools, which say themselves what happens to the password.
 
-## Parcours
+## Flow
 
-**Protéger.** Ouvrir ou déposer un PDF ; taper le mot de passe deux fois ; « Enregistrer une copie protégée… » propose `nom-protégé.pdf`. L'écran rappelle de garder le mot de passe et nomme le chiffrement.
+**Protect.** Open or drop a PDF; type the password twice; "Save a protected copy…" suggests `nom-protégé.pdf`. The screen reminds you to keep the password and names the encryption.
 
-**Déverrouiller.** Ouvrir ou déposer un PDF protégé ; taper son mot de passe ; « Enregistrer une copie déverrouillée… » propose `nom-déverrouillé.pdf`.
+**Unlock.** Open or drop a protected PDF; type its password; "Save an unlocked copy…" suggests `nom-déverrouillé.pdf`.
 
-## Limites connues
+## Known limits
 
-- AES-128, pas AES-256 : PDFKit n'écrit pas mieux. Avec un mot de passe court, la copie se force vite ; l'écran conseille un mot de passe long.
-- Pas d'accent ni d'emoji dans le mot de passe, 32 caractères au plus.
-- Protéger réécrit le document entier : les lenteurs et les fichiers gonflés de PDFKit décrits dans la spec du Filigrane s'appliquent (publication IRS de 142 pages : 113 s, 3 Mo → 14 Mo ; livre scanné en JBIG2 : 119 s, 17 Mo → 468 Mo).
-- Déverrouiller a les limites d'Organiser : il refuse dès l'ouverture les PDF qu'Organiser refuse (pièces jointes, calques, formulaires dynamiques), et l'écran prévient quand les balises d'accessibilité ou le profil PDF/A ne seront pas gardés.
-- PDFKit récrit le catalogue du document. Sonde du 2 octobre : les étiquettes de pages (« i, ii… ») sont perdues par les deux outils, la page « i » devient « 1 » ; la copie déverrouillée perd aussi la langue du document, le mode d'ouverture et les préférences d'affichage.
-- Un PDF signé numériquement est refusé par les deux outils : la copie perdrait la signature.
-- Pas de droits fins (interdire l'impression ou la copie) : un lecteur peut les ignorer.
+- AES-128, not AES-256: PDFKit does not write better. With a short password, the copy is quick to crack; the screen recommends a long password.
+- No accent and no emoji in the password, 32 characters at most.
+- Protect rewrites the whole document: the PDFKit slowness and bloated files described in the Watermark spec apply (IRS publication of 142 pages: 113 s, 3 MB → 14 MB; book scanned in JBIG2: 119 s, 17 MB → 468 MB).
+- Unlock has the limits of Organize: on opening, it refuses the PDFs that Organize refuses (attachments, layers, dynamic forms), and the screen warns when the accessibility tags or the PDF/A profile will not be kept.
+- PDFKit rewrites the document catalog. Probe of 2 October: the two tools lose the page labels ("i, ii…"), and page "i" becomes "1"; the unlocked copy also loses the document language, the open mode and the display preferences.
+- The two tools refuse a digitally signed PDF: the copy would lose the signature.
+- No fine-grained permissions (forbid printing or copying): a reader can ignore them.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Moteur | La copie protégée s'ouvre avec son mot de passe seulement, en AES, avec texte, titre du signet et valeur du champ lisibles ; nouveau mot de passe sur un PDF protégé ; mots de passe refusés et acceptés ; PDF signé refusé ; copie déverrouillée sans `/Encrypt`, avec texte, liens, signet et champ | `PDFProtectionTests` |
-| Outil | Le bouton attend un mot de passe tapé deux fois ; copie protégée, original intact, champs vidés ; nouveau mot de passe sur un PDF protégé ; copie déverrouillée ; rien à déverrouiller ; limites d'impression et de copie levées ; mot de passe oublié à l'ouverture d'un autre PDF ; refus et notes d'Organiser dès l'ouverture | `ProtectionSessionTests` |
-| Écrans | Départ, atelier, mots de passe différents, mot de passe refusé, copie enregistrée ; mot de passe demandé, prêt, rien à déverrouiller ; clair, sombre, anglais | `ProtectionSnapshots` |
-| Fichiers réels | Les 38 PDF de `fixtures-private/pdfs` : 35 protégés (2 illisibles et 1 au mot de passe inconnu refusés), dont 33 déverrouillés ensuite ; pages, champs, liens et signets comptés avant et après, tous gardés | Sonde du 2 octobre, non gardée |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
+| Engine | The protected copy opens only with its password, in AES, with text, bookmark title and field value readable; new password on a protected PDF; passwords refused and accepted; signed PDF refused; unlocked copy without `/Encrypt`, with text, links, bookmark and field | `PDFProtectionTests` |
+| Tool | The button waits for a password typed twice; protected copy, original intact, fields cleared; new password on a protected PDF; unlocked copy; nothing to unlock; printing and copying limits lifted; password forgotten when another PDF opens; refusals and notes of Organize on opening | `ProtectionSessionTests` |
+| Screens | Start, workshop, passwords that differ, password refused, copy saved; password asked, ready, nothing to unlock; light, dark, English | `ProtectionSnapshots` |
+| Real files | The 38 PDFs of `fixtures-private/pdfs`: 35 protected (2 unreadable ones and 1 with an unknown password refused), then 33 of them unlocked; pages, fields, links and bookmarks counted before and after, all kept | Probe of 2 October, not kept |
+| Strings | All translated, never the informal « tu » | `check-strings.py` |

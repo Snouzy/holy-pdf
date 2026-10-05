@@ -1,36 +1,36 @@
-# Web — Ajouter des signets
+# Web: Add bookmarks
 
-_Rédigé et livré le 3 octobre 2026. Suit [les signets sur Mac](2026-10-02-mac-bookmarks-design.md) : même liste à plat, mêmes règles de rang et de niveau._
+_Written and shipped on 3 October 2026. Follows [the bookmarks on Mac](2026-10-02-mac-bookmarks-design.md): same flat list, same rules for position and level._
 
-Frère Signet (`/fr/signets-pdf`, `/en/pdf-bookmarks`) lit les signets d'un PDF, en pose sur la page affichée, les renomme, les range et les retire, puis enregistre la copie.
+Brother Ribbon (`/fr/signets-pdf`, `/en/pdf-bookmarks`) reads the bookmarks of a PDF, adds some on the displayed page, renames them, arranges them and removes them, then saves the copy.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Moteur | `engine/bookmarks.ts` : `listBookmarks` lit le plan en liste à plat (titre, page, niveau, vue) ; `writeBookmarks` le vide (`EPDFBookmark_Clear`) et écrit la liste (`EPDFBookmark_AppendChild`, `EPDFBookmark_SetDest`) | Sonde du 3 octobre : pdf.js relit l'arbre écrit, titres accentués et niveaux compris |
-| Point d'arrivée | Un signet lu garde sa vue telle quelle : `XYZ` avec ses valeurs laissées vides, `Fit`, `FitH`… avec leurs paramètres. Un signet lu par une action GoTo ou une destination nommée est réécrit en destination directe. Un `FitH` ou `FitBH` sans hauteur mène au haut de la page ; une vue que PDFium ne sait pas refaire aussi | PDFium donne la vue entière, là où PDFKit ne donne qu'un point. Il ne distingue un paramètre vide d'un zéro que dans un `XYZ` complet : ailleurs le vide se lit 0, et une hauteur 0 mènerait au pied de la page |
-| Nouveau signet | `XYZ` au coin haut gauche de la page telle que le lecteur la voit, zoom laissé vide ; rangé après les signets de sa page et des pages d'avant, au niveau le plus profond de ses deux voisins | Comme sur Mac |
-| Signet sans page | Laissé de côté et compté s'il mène à une adresse, à un autre fichier ou à rien, ou si son titre est vide ; ses enfants prennent sa place | Comme sur Mac. Une boucle dans le plan s'arrête au signet déjà vu |
-| Lecture | Requête `bookmarks` du worker, chargée avec l'éditeur ; l'écran attend les deux | Le sommaire affiché est toujours celui du document ouvert |
-| Écran | L'aperçu et ses flèches à gauche ; le titre, « Ajouter un signet à la page N » et la liste dans le panneau. Chaque ligne : titre modifiable, « p. N » qui affiche la page, deux flèches de niveau, corbeille | Sur Mac, les niveaux passent par un menu contextuel ; un site les montre |
-| Retrait | Les enfants du signet retiré remontent d'un niveau, à sa place | Sur Mac, ils passent sous le signet d'avant : retirer « Partie I » rangeait « Chapitre 2 » sous « Chapitre 1 » |
-| Enregistrement | Offert dès le premier changement, refusé tant qu'un titre est vide (bordure rouge) | Comme sur Mac |
-| PDF signé | Refusé (`alreadySigned`) | Toute réécriture invalide la signature |
-| PDF protégé | Ouvert avec son mot de passe ; la copie garde ce mot de passe | PDFium réécrit le chiffrement d'origine |
-| Moine | « Frère Signet » (« Brother Ribbon »), le livre, en joie, catégorie Organiser | Le nom et la pose du Mac |
-| Recherche | `signets`, `sommaire`, `chapitres`, `plan du document`, `marque-page`… Sans « table des matières » | La recherche y répondrait à « tableur » |
-| Aperçu partagé | `signature/pagePreview.ts` : le chargement de l'aperçu de page, commun à Noircir et aux Signets | Un seul code pour l'attente, l'échec et le nouvel essai |
+| Engine | `engine/bookmarks.ts`: `listBookmarks` reads the outline as a flat list (title, page, level, view). `writeBookmarks` clears it (`EPDFBookmark_Clear`) and writes the list (`EPDFBookmark_AppendChild`, `EPDFBookmark_SetDest`) | Probe of 3 October: pdf.js reads back the written tree, accented titles and levels included |
+| Destination | A bookmark that is read keeps its view as is: `XYZ` with its values left empty, `Fit`, `FitH`… with their parameters. A bookmark read through a GoTo action or a named destination is rewritten as a direct destination. A `FitH` or `FitBH` without a height leads to the top of the page. A view that PDFium cannot rebuild does too | PDFium gives the whole view, where PDFKit gives only a point. It tells an empty parameter from a zero only in a complete `XYZ`: elsewhere an empty value reads as 0, and a height of 0 would lead to the foot of the page |
+| New bookmark | `XYZ` at the top-left corner of the page as the reader sees it, zoom left empty. It goes after the bookmarks of its page and of the pages before it, at the deeper level of its two neighbors | As on Mac |
+| Bookmark without a page | Left out and counted if it leads to an address, to another file or to nothing, or if its title is empty. Its children take its place | As on Mac. A loop in the outline stops at the bookmark already seen |
+| Reading | `bookmarks` request of the worker, loaded with the editor. The screen waits for both | The outline on screen is always the one of the open document |
+| Screen | The preview and its arrows on the left. The title, "Add a bookmark to page N" and the list in the panel. Each row: editable title, "p. N" that shows the page, two level arrows, trash | On Mac, the levels go through a context menu. A site shows them |
+| Removal | The children of the removed bookmark move up one level, in its place | On Mac, they go under the previous bookmark: removing "Part I" put "Chapter 2" under "Chapter 1" |
+| Save | Offered from the first change, refused while a title is empty (red border) | As on Mac |
+| Signed PDF | Refused (`alreadySigned`) | Any rewrite invalidates the signature |
+| Protected PDF | Opened with its password. The copy keeps this password | PDFium rewrites the original encryption |
+| Monk | "Brother Ribbon" (« Frère Signet »), the book, joyful pose, Organize category | The name and the pose from the Mac |
+| Search | `signets`, `sommaire`, `chapitres`, `plan du document`, `marque-page`… Without « table des matières » | Search would then match it for « tableur » (spreadsheet) |
+| Shared preview | `signature/pagePreview.ts`: the loading of the page preview, shared by Redact and Bookmarks | One code path for waiting, failure and retry |
 
-## Limites connues
+## Known limits
 
-- Pas de glisser-déposer pour réordonner, et pas de choix du point d'arrivée dans la page.
-- Un signet existant perd son état ouvert ou fermé, sa couleur et son style gras ou italique : les lecteurs montrent fermés les signets qui ont des enfants.
-- Dans un sommaire qui ne suit pas l'ordre des pages, un nouveau signet se range après le dernier signet d'une page antérieure.
-- Un seul PDF à la fois.
+- No drag and drop to reorder, and no choice of the destination point in the page.
+- An existing bookmark loses its open or closed state, its color and its bold or italic style: viewers show bookmarks that have children as closed.
+- In an outline that does not follow the page order, a new bookmark goes after the last bookmark of an earlier page.
+- Only one PDF at a time.
 
 ## Tests
 
-- Moteur (`tests/engine/bookmarks.test.ts`) : lecture dans l'ordre avec niveaux, signets laissés de côté et comptés, enfants à leur place, action GoTo et destination nommée ; `XYZ` incomplet et `FitH` sans hauteur ; boucle arrêtée ; vues gardées à la réécriture, titre avec ses espaces ; trois niveaux en alphabets variés ; remplacement et retrait de tous les signets ; haut de page pour les quatre rotations sur un cadre qui ne part pas de zéro ; niveau ramené ; page ou titre impossibles refusés ; PDF signé refusé, PDF protégé qui le reste. Relecture par pdf.js.
-- Liste (`tests/unit/bookmarksOutline.test.ts`) : rang et niveau d'un nouveau signet, niveaux ramenés, enfants d'un signet retiré remontés, enregistrement offert.
-- Navigateur (`tests/e2e/bookmarks.spec.ts`) : deux signets ajoutés, titre par défaut, l'un rangé sous l'autre ; signets du PDF listés, « p. 2 », titre vide refusé, signet retiré.
+- Engine (`tests/engine/bookmarks.test.ts`): reading in order with levels, bookmarks left out and counted, children in their place, GoTo action and named destination; incomplete `XYZ` and `FitH` without a height; loop stopped; views kept on rewrite, title with its spaces; three levels in various alphabets; replacement and removal of all bookmarks; top of page for the four rotations on a box that does not start at zero; level clamped; impossible page or title refused; signed PDF refused, protected PDF that stays protected. Read back by pdf.js.
+- List (`tests/unit/bookmarksOutline.test.ts`): position and level of a new bookmark, levels clamped, children of a removed bookmark moved up, save offered.
+- Browser (`tests/e2e/bookmarks.spec.ts`): two bookmarks added, default title, one placed under the other; the bookmarks of the PDF listed, "p. 2", empty title refused, bookmark removed.

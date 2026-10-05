@@ -1,1 +1,1 @@
-Les consignes pour les agents sont dans [CLAUDE.md](CLAUDE.md).
+The instructions for agents are in [CLAUDE.md](CLAUDE.md).

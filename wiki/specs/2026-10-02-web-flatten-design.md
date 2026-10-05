@@ -1,18 +1,18 @@
-# Web — Aplatir un PDF
+# Web: Flatten a PDF
 
-_Rédigé et livré le 2 octobre 2026._
+_Written and shipped on 2 October 2026._
 
-Frère Rouleau (`/fr/aplatir-pdf`, `/en/flatten-pdf`) fait passer les champs de formulaire remplis et les annotations dans le contenu des pages d'un ou plusieurs PDF : ils restent visibles et ne se modifient plus. Pas de réglage.
+Brother Roller (`/fr/aplatir-pdf`, `/en/flatten-pdf`) moves the filled form fields and the annotations of one or more PDFs into the page content: they stay visible and can no longer be changed. No settings.
 
-## Moteur
+## Engine
 
-Opération `flatten` de la requête `transform` (`engine/flatten.ts`) : `FPDFPage_Flatten` sur chaque page d'une copie, avec l'apparence affichée à l'écran (et non celle d'impression). Le texte des pages reste du texte. Un PDF signé numériquement est refusé, comme pour les autres opérations.
+Operation `flatten` of the `transform` request (`engine/flatten.ts`): `FPDFPage_Flatten` on each page of a copy, with the appearance shown on screen (not the print appearance). The page text stays text. A digitally signed PDF is refused, as for the other operations.
 
-## Limite
+## Limit
 
-Un champ sans apparence enregistrée (`/AP`) n'a rien à dessiner : il disparaît sans laisser de trace dans la page.
+A field with no stored appearance (`/AP`) has nothing to draw: it disappears and leaves no trace in the page.
 
 ## Tests
 
-- Moteur (`tests/engine/flatten.test.ts`) : un champ rempli devient du texte de la page, relu par pdf.js, et l'annotation disparaît.
-- Navigateur (`tests/e2e/flatten.spec.ts`) : copie `<nom>-flattened.pdf` dont le texte reste lisible.
+- Engine (`tests/engine/flatten.test.ts`): a filled field becomes page text, read back by pdf.js, and the annotation disappears.
+- Browser (`tests/e2e/flatten.spec.ts`): copy `<name>-flattened.pdf` whose text stays readable.

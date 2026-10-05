@@ -1,61 +1,61 @@
-# Mac — Numéros de page
+# Mac: Page numbers
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Premier des six outils commandés le 2 octobre (ensuite : Protéger et Déverrouiller, Compresser, OCR, Noircir)._
+_Written on 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`. First of the six tools ordered on 2 October (next: Protect and Unlock, Compress, OCR, Redact)._
 
-## Objectif
+## Goal
 
-Écrire un numéro sur les pages d'un PDF dans Holy PDF pour Mac, puis enregistrer une copie. PDFKit, Core Graphics et Core Text, sans nouveau moteur.
+Write a number on the pages of a PDF in Holy PDF for Mac, then save a copy. PDFKit, Core Graphics and Core Text, with no new engine.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- le numéro apparaît à la position choisie, telle que le lecteur voit la page, y compris sur une page pivotée ou recadrée ;
-- il fait partie du contenu de la page, pas d'une annotation ;
-- le texte d'origine, les liens, les champs de formulaire et les signets restent ;
-- le fichier d'origine n'est jamais modifié ;
-- les tests du paquet, de l'appli et des textes passent, sans avertissement du compilateur.
+- the number appears at the chosen position, as the reader sees the page, also on a rotated or cropped page;
+- it is part of the page content, not an annotation;
+- the original text, links, form fields and bookmarks stay;
+- the original file is never modified;
+- the package, app and string tests pass, with no compiler warning.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Technique | Celle du Filigrane : PDFKit dessine la page, puis le numéro, et écrit les deux dans le contenu | Éprouvée le 2 octobre. La brique `PageOverlay` est maintenant commune au Filigrane et aux numéros |
-| Réglages | Format (« 1 », « 1 / 12 », « Page 1 »), position (six : haut ou bas, gauche, centre ou droite), premier numéro, taille de 6 à 36 points, toutes les pages ou une plage | Les réglages annoncés à l'utilisateur. « Toutes sauf la couverture » se fait avec la plage. Le premier numéro et la plage se saisissent au clavier ou par les flèches : reprendre à 237 ne demande pas 236 clics |
-| Numérotation | La première page de la plage porte le premier numéro. Dans « 1 / 12 », le total est le dernier numéro écrit | Une plage de la page 2 à la page 12 donne « 1 / 11 » à « 11 / 11 » |
-| Aspect | Police système, noir, à 24 points du bord | Lisible et neutre. Pas de choix de police ni de couleur dans ce lot |
-| Aperçu | Le numéro est dessiné sur l'aperçu de la page par la même fonction que l'export | Ce qu'on voit est ce qu'on enregistre |
-| Réglages gardés | Les réglages restent d'un PDF au suivant ; la plage est ramenée aux pages du document ouvert | On numérote souvent plusieurs documents de la même façon |
-| Moine | « Frère Folio » (« Brother Folio »), accessoire feuille, l'air appliqué pour ne pas doubler Frère Classeur, exporté du dessin du site | Le folio est le numéro de page des imprimeurs |
+| Technique | The Watermark technique: PDFKit draws the page, then the number, and writes both into the content | Proven on 2 October. The `PageOverlay` building block is now shared by Watermark and page numbers |
+| Settings | Format ("1", "1 / 12", "Page 1"), position (six: top or bottom, left, center or right), first number, size from 6 to 36 points, all pages or a range | The settings announced to the user. "All except the cover" is done with the range. The first number and the range are typed on the keyboard or set with the arrows: resuming at 237 does not take 236 clicks |
+| Numbering | The first page of the range gets the first number. In "1 / 12", the total is the last number written | A range from page 2 to page 12 gives "1 / 11" to "11 / 11" |
+| Look | System font, black, 24 points from the edge | Readable and neutral. No font or color choice in this milestone |
+| Preview | The same function as the export draws the number on the page preview | What you see is what you save |
+| Kept settings | The settings stay from one PDF to the next; the range is clamped to the pages of the open document | People often number several documents the same way |
+| Monk | "Brother Folio" (« Frère Folio » in French), sheet accessory, a focused look so that he does not duplicate Brother Binder, exported from the site's drawing | Folio is the printers' word for a page number |
 
-## Briques communes aux six outils
+## Building blocks shared by the six tools
 
-Ces six outils font tous la même chose autour de leur réglage : ouvrir un PDF, demander son mot de passe, montrer ses pages, enregistrer une copie. Deux briques neuves le font une fois pour toutes ; les outils existants ne changent pas.
+These six tools all do the same thing around their setting: open a PDF, ask for its password, show its pages, save a copy. Two new building blocks do this once for all; the existing tools do not change.
 
-- **`PDFOpenedDocument`** (`PDFCore`) : le PDF ouvert, ses pages telles que le lecteur les voit, et l'aperçu d'une page, sur lequel l'outil peut dessiner. Il refuse un PDF signé numériquement.
-- **`PDFCopySession`** (appli) : l'ouverture, le mot de passe, la page à l'écran et son aperçu, puis l'enregistrement de la copie par le panneau macOS. La session est occupée pendant que le panneau est ouvert. Elle refuse d'écrire sur le fichier d'origine. L'outil lui donne la fonction qui fabrique la copie. Pour une copie qui prend des minutes, `saveCopy(to:reporting:)` montre l'étape en cours (`step`) et s'annule sans rien écrire ([spec des feuilles](2026-10-02-mac-sheets-design.md)). `survey` lit dans le document qui s'ouvre ce dont l'outil a besoin, et le garde dans `findings` ([spec des signets](2026-10-02-mac-bookmarks-design.md)). `underlay` dessine sous la page de l'aperçu, comme `overlay` dessine dessus ([spec de la superposition](2026-10-02-mac-overlay-design.md)). `showCopy` montre dans l'aperçu la copie qu'un outil s'apprête à enregistrer, à la place du document (Compresser). `CopyToolView(undo:)` branche « Annuler » du menu Édition (Noircir).
-- **`CopyToolView`** (appli) : l'écran. La page et le changement de page à gauche ; à droite, le nom du fichier, les réglages de l'outil, puis le bouton d'enregistrement et son résultat. Il porte aussi l'écran de départ avec le moine, le mot de passe, le dépôt d'un fichier, la confirmation avant d'abandonner des réglages, et les menus ⌘O et ⌘E.
+- **`PDFOpenedDocument`** (`PDFCore`): the open PDF, its pages as the reader sees them, and the preview of a page, on which the tool can draw. It refuses a digitally signed PDF.
+- **`PDFCopySession`** (app): opening, the password, the page on screen and its preview, then saving the copy through the macOS panel. The session is busy while the panel is open. It refuses to write over the original file. The tool gives it the function that makes the copy. For a copy that takes minutes, `saveCopy(to:reporting:)` shows the current step (`step`) and cancels without writing anything ([pages-per-sheet spec](2026-10-02-mac-sheets-design.md)). `survey` reads what the tool needs from the document being opened, and keeps it in `findings` ([bookmarks spec](2026-10-02-mac-bookmarks-design.md)). `underlay` draws under the page of the preview, as `overlay` draws on top ([overlay spec](2026-10-02-mac-overlay-design.md)). `showCopy` shows in the preview the copy that a tool is about to save, instead of the document (Compress). `CopyToolView(undo:)` connects "Undo" in the Edit menu (Redact).
+- **`CopyToolView`** (app): the screen. The page and the page switcher on the left; on the right, the file name, the tool settings, then the save button and its result. It also holds the start screen with the monk, the password, the file drop, the confirmation before discarding settings, and the ⌘O and ⌘E menus.
 
-Un outil se réduit alors à sa fonction dans `PDFCore`, à ses réglages et à son panneau.
+A tool then comes down to its function in `PDFCore`, its settings and its panel.
 
-## Parcours
+## Flow
 
-1. Ouvrir ou déposer un PDF. Un fichier protégé demande son mot de passe.
-2. Régler le format, la position, le premier numéro, la taille et les pages. L'aperçu se met à jour, et on change de page pour vérifier.
-3. « Enregistrer une copie numérotée… » propose `nom-numéroté.pdf`.
+1. Open or drop a PDF. A protected file asks for its password.
+2. Set the format, the position, the first number, the size and the pages. The preview updates, and you can change the page to check.
+3. "Save a numbered copy…" suggests `nom-numéroté.pdf`.
 
-## Limites connues
+## Known limits
 
-- Celles de PDFKit, décrites dans la spec du Filigrane : écriture lente et fichiers plus lourds sur certains PDF.
-- Le numéro peut recouvrir un contenu qui se trouve déjà à cet endroit : l'aperçu le montre avant l'enregistrement.
-- La copie d'un PDF protégé s'ouvre sans mot de passe, et l'écran le dit.
-- Pas d'annulation des réglages (⌘Z) dans cet outil : chaque réglage se remet à la main.
+- Those of PDFKit, described in the Watermark spec: slow writes and heavier files on some PDFs.
+- The number can cover content that is already at that place: the preview shows it before saving.
+- The copy of a protected PDF opens without a password, and the screen says so.
+- No undo of settings (⌘Z) in this tool: you reset each setting by hand.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Moteur | Le texte de chaque format, le premier numéro et la plage ; le numéro dans le contenu des pages de la plage seulement ; annotations et signets gardés ; la position sous les quatre rotations et avec un recadrage ; réglages hors du document et PDF signé refusés ; copie d'un PDF protégé | `PDFPageNumberingTests` |
-| Document ouvert | Tailles des pages, aperçu, dessin par-dessus, mot de passe, refus | `PDFOpenedDocumentTests` |
-| Session commune | Ouverture, mot de passe, aperçu de la page à l'écran, dessin de l'outil, copie et refus de l'original, échec d'une copie, attente pendant le panneau, nouveau document | `PDFCopySessionTests` |
-| Outil | Réglages par défaut, bornes, copie numérotée, plage ramenée à un document plus court, numéro sur l'aperçu | `PageNumberSessionTests` |
-| Écrans | Départ et atelier, en clair, en sombre et en anglais | `PageNumberSnapshots` |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
+| Engine | The text of each format, the first number and the range; the number in the content of the range pages only; annotations and bookmarks kept; the position under the four rotations and with a crop; settings outside the document and signed PDF refused; copy of a protected PDF | `PDFPageNumberingTests` |
+| Open document | Page sizes, preview, drawing on top, password, refusal | `PDFOpenedDocumentTests` |
+| Shared session | Opening, password, preview of the page on screen, tool drawing, copy and refusal of the original, failed copy, wait during the panel, new document | `PDFCopySessionTests` |
+| Tool | Default settings, bounds, numbered copy, range clamped to a shorter document, number on the preview | `PageNumberSessionTests` |
+| Screens | Start and workshop, in light, in dark and in English | `PageNumberSnapshots` |
+| Strings | All translated, never the informal « tu » | `check-strings.py` |

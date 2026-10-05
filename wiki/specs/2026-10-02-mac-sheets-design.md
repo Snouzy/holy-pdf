@@ -1,66 +1,66 @@
-# Mac — Pages par feuille, Couper les pages en deux, Pixelliser
+# Mac: Pages per sheet, Split pages in half, Pixelize
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Demandé par l'auteur le 2 octobre, après [Aplatir](2026-10-02-mac-flatten-design.md) : le site a les trois outils depuis le même jour ([pages par feuille](2026-10-02-web-pages-per-sheet-design.md), [couper en deux](2026-10-02-web-split-in-half-design.md), [pixelliser](2026-10-02-web-pixelize-design.md))._
+_Written on 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`. Requested by the author on 2 October, after [Flatten](2026-10-02-mac-flatten-design.md): the site has had the three tools since the same day ([pages per sheet](2026-10-02-web-pages-per-sheet-design.md), [split in half](2026-10-02-web-split-in-half-design.md), [pixelize](2026-10-02-web-pixelize-design.md))._
 
-## Objectif
+## Goal
 
-Trois outils d'un seul réglage dans Holy PDF pour Mac, avec les règles du site et PDFKit seulement :
+Three tools with a single setting each in Holy PDF for Mac, with the site's rules and PDFKit only:
 
-- **Pages par feuille** range 2, 4, 6, 9 ou 16 pages sur chaque feuille A4, dans l'ordre de lecture ;
-- **Couper les pages en deux** fait de chaque page deux pages qui se suivent : gauche puis droite, ou haut puis bas ;
-- **Pixelliser** change chaque page en image, à 150 ou 300 points par pouce : le texte ne se sélectionne plus.
+- **Pages per sheet** arranges 2, 4, 6, 9 or 16 pages on each A4 sheet, in reading order;
+- **Split pages in half** makes each page into two pages that follow each other: left then right, or top then bottom;
+- **Pixelize** turns each page into an image, at 150 or 300 dots per inch: the text can no longer be selected.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- les feuilles sont en A4, à l'italienne pour 2 et 6 pages, et le texte des pages y reste du texte ;
-- la coupe suit la page telle que le lecteur la voit, même pivotée, et un lien reste sur la moitié qui le montre ;
-- la copie pixellisée n'a plus de texte, et chaque page garde sa taille affichée ;
-- un long travail s'annule sans rien écrire, et dit la page en cours quand le moteur la connaît (feuilles, pixelliser) ;
-- le fichier d'origine n'est jamais modifié ;
-- les tests du paquet, de l'appli et des textes passent, sans avertissement du compilateur.
+- the sheets are A4, in landscape for 2 and 6 pages, and the text of the pages stays text on them;
+- the cut follows the page as the reader sees it, even when rotated, and a link stays on the half that shows it;
+- the pixelized copy has no text left, and each page keeps its displayed size;
+- a long job can be cancelled without writing anything, and it shows the current page when the engine knows it (sheets, pixelize);
+- the original file is never modified;
+- the package, app and text tests pass, with no compiler warning.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Feuilles | `PDFSheets.arranged` dessine chaque page dans sa case, à travers un contexte PDF : la page est ajustée et centrée, jamais rognée | Sonde du 2 octobre : le texte reste du texte, 15 pages en 0,2 s, taille inchangée |
-| Sens de la feuille | À l'italienne pour 2 et 6 (2 × 1, 3 × 2), à la française pour 4, 9 et 16 | La règle du site : une page en portrait garde une case en portrait |
-| Coupe | `PDFPageHalves.halved` copie chaque page et donne à chaque copie la moitié de la zone visible, calculée dans le repère du lecteur puis ramenée dans celui de la page | Le document reste le même : les signets restent, le texte reste du texte. Le site, lui, bâtit un document neuf et perd annotations et champs |
-| Liens et champs coupés | Une annotation reste sur la moitié qu'elle touche ; à cheval sur la coupe, elle reste sur les deux. La bulle d'un commentaire suit son commentaire, où qu'elle soit posée | Sans ce tri, chaque lien existerait deux fois, dont une fois hors de la page |
-| PDF signé | Refusé par Couper en deux (la copie garde le champ de signature, qui ne serait plus valide). Accepté par Pages par feuille et Pixelliser : le document neuf n'a aucun champ de signature | Même raison que sur le site pour les deux derniers |
-| Pixelliser | `PDFPixelizing.pixelized` reprend le rendu de PDF en images (150 ppp, ou 300 ppp), et pose chaque JPEG sur une page neuve de la taille affichée, sans rotation | Un seul rendu à maintenir. À 300 ppp, la qualité JPEG est celle de PDF en images (0,92) et non le 0,85 du site : 5 % de poids en plus sur la sonde |
-| Écriture | Les feuilles et la copie pixellisée s'écrivent dans un fichier temporaire, relu sans le charger en mémoire | Sonde : 142 pages à 300 ppp donnent 312 Mo ; la pointe de mémoire passe de 930 à 520 Mo |
-| Progression et annulation | L'enregistrement passe par `saveCopy(to:reporting:)` de la session commune : l'écran dit « Page 3 sur 142… » et offre « Annuler ». Une copie finie après l'annulation n'est pas écrite | Les trois outils peuvent durer des minutes. La lecture de texte et PDF en images reprennent la même brique, qui remplace leurs deux copies du même code |
-| Aperçu | Couper en deux trace la coupe en pointillés sur la page. Pages par feuille montre la feuille et ses cases numérotées | Le sens de la coupe et l'ordre des cases se voient avant d'enregistrer |
-| Moines | Frère Mosaïque (feuille), Frère Massicot (ciseaux), Frère Vitrail (cadre) : les noms et les accessoires du site, avec un autre visage quand un moine de l'accueil a déjà la même pose | Sur le site, chaque outil a sa page ; sur l'accueil du Mac, deux cartes voisines ne doivent pas se confondre |
+| Sheets | `PDFSheets.arranged` draws each page in its cell, through a PDF context: the page is fitted and centered, never cropped | Probe of 2 October: the text stays text, 15 pages in 0.2 s, size unchanged |
+| Sheet orientation | Landscape for 2 and 6 (2 × 1, 3 × 2), portrait for 4, 9 and 16 | The site's rule: a page in portrait keeps a cell in portrait |
+| Cut | `PDFPageHalves.halved` copies each page and gives each copy half of the visible area, computed in the reader's coordinate space, then brought back into the page's coordinate space | The document stays the same: the bookmarks stay, the text stays text. The site, by contrast, builds a new document and loses annotations and fields |
+| Cut links and fields | An annotation stays on the half that it touches; if it crosses the cut, it stays on both. The popup of a comment follows its comment, wherever the popup is placed | Without this sorting, each link would exist twice, once outside the page |
+| Signed PDF | Refused by Split in half (the copy keeps the signature field, which would no longer be valid). Accepted by Pages per sheet and Pixelize: the new document has no signature field | Same reason as on the site for the last two |
+| Pixelize | `PDFPixelizing.pixelized` reuses the rendering of PDF to images (150 dpi, or 300 dpi), and puts each JPEG on a new page of the displayed size, without rotation | Only one renderer to maintain. At 300 dpi, the JPEG quality is the one of PDF to images (0.92) and not the site's 0.85: 5% more weight on the probe |
+| Writing | The sheets and the pixelized copy are written to a temporary file, which is read back without loading it in memory | Probe: 142 pages at 300 dpi give 312 MB; the memory peak goes from 930 to 520 MB |
+| Progress and cancellation | Saving goes through `saveCopy(to:reporting:)` of the shared session: the screen says "Page 3 of 142…" and offers "Cancel". A copy that is finished after the cancellation is not written | The three tools can last minutes. The text reading and PDF to images reuse the same building block, which replaces their two copies of the same code |
+| Preview | Split in half draws the cut as a dotted line on the page. Pages per sheet shows the sheet and its numbered cells | The direction of the cut and the order of the cells are visible before saving |
+| Monks | Brother Mosaic (sheet), Brother Trimmer (scissors), Brother Glass (frame): the site's names and props, with a different face when a monk on the home screen already has the same pose | On the site, each tool has its own page; on the Mac home screen, two cards side by side must not look the same |
 
-## Parcours
+## Flow
 
-1. Ouvrir ou déposer un PDF. Un fichier protégé demande son mot de passe.
-2. Choisir : le nombre de pages par feuille, le sens de la coupe, ou la résolution.
-3. Enregistrer : `nom-par-feuille.pdf`, `nom-coupe.pdf` ou `nom-pixellise.pdf`. Changer le réglage après coup efface la mention « enregistré ».
+1. Open or drop a PDF. A protected file asks for its password.
+2. Choose: the number of pages per sheet, the direction of the cut, or the resolution.
+3. Save: `name-per-sheet.pdf`, `name-halves.pdf` or `name-pixelized.pdf`. A change to the setting after saving clears the "saved" message.
 
-## Limites connues
+## Known limits
 
-- Feuille A4 seulement, sans marge ni filet entre les cases.
-- Sur les feuilles, les liens et les signets ne suivent pas ; les champs et les annotations y sont dessinés, plus modifiables.
-- Couper en deux : un signet ou un lien qui visait une page mène à sa première moitié.
-- Couper en deux ne dit pas la page en cours : presque tout le temps passe dans l'écriture de PDFKit, qui ne rend pas compte. « Annuler » reste offert.
-- Chaque moitié garde le contenu entier de la page, masqué par son cadre : un autre lecteur peut encore y trouver le texte de l'autre moitié. Le site fait de même.
-- Sur les feuilles, le texte qu'un cadre masquait (page rognée, moitié d'une page coupée) est dessiné hors de vue, mais se trouve et se sélectionne encore : PDFKit ne retire pas ce qui dépasse d'un cadre. Relecture du 2 octobre.
-- Pixelliser n'est pas une protection : un logiciel de reconnaissance de texte relit une image. L'écran le dit.
-- Une image ne dépasse pas 6 000 pixels de côté : au-delà, la résolution baisse.
-- Une annulation qui tombe pendant l'écriture du fichier (moins d'une seconde) arrive trop tard : la copie est écrite.
-- Les limites de PDFKit s'appliquent (spec du Filigrane). Mesuré le 2 octobre : la publication IRS de 142 pages met 92 s pour les feuilles et 197 s pour la coupe ; le livre scanné en JBIG2 passe de 17 à 468 Mo par les deux outils. Les fichiers courants prennent moins de 2 s.
-- La copie d'un PDF protégé s'ouvre sans mot de passe, et l'écran le dit.
+- A4 sheet only, with no margin and no rule between the cells.
+- On the sheets, the links and the bookmarks do not follow; the fields and the annotations are drawn on them, and can no longer be edited.
+- Split in half: a bookmark or a link that pointed to a page leads to its first half.
+- Split in half does not show the current page: nearly all the time goes into the writing by PDFKit, which does not report progress. "Cancel" stays available.
+- Each half keeps the whole content of the page, hidden by its box: another reader can still find the text of the other half in it. The site does the same.
+- On the sheets, text that a box hid (cropped page, half of a split page) is drawn out of view, but it can still be found and selected: PDFKit does not remove what goes past a box. Review of 2 October.
+- Pixelize is not a protection: text recognition software can read an image again. The screen says so.
+- An image is not more than 6,000 pixels on a side: above that, the resolution drops.
+- A cancellation that comes while the file is written (less than one second) arrives too late: the copy is written.
+- The limits of PDFKit apply (Watermark spec). Measured on 2 October: the 142-page IRS publication takes 92 s for the sheets and 197 s for the cut; the book scanned in JBIG2 goes from 17 to 468 MB through both tools. Common files take less than 2 s.
+- The copy of a protected PDF opens without a password, and the screen says so.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Moteur | Feuilles : nombre et sens pour les cinq choix, ordre de lecture relu aux pixels, texte gardé, page pivotée, progression, annulation, PDF signé accepté. Coupe : taille et mots de chaque moitié pour les deux sens, pages pivotées comparées aux pixels, lien sur la bonne moitié, bulle d'un commentaire gardée avec lui, signet gardé, trait de coupe, PDF signé refusé. Pixelliser : aucun texte, tailles gardées, 150 ppp, même aspect, PDF signé accepté | `PDFSheetsTests`, `PDFPageHalvesTests`, `PDFPixelizingTests` |
-| Session commune | Étapes affichées puis copie écrite ; original jamais remplacé ; copie annulée jamais écrite | `PDFCopySessionTests` |
-| Outils | Copie enregistrée, original intact, réglage changé qui efface « enregistré », coupe montrée sur l'aperçu | `SheetsSessionTests`, `HalvesSessionTests`, `PixelizeSessionTests` |
-| Écrans | Pour chaque outil : départ, prêt en clair, en sombre et en anglais, copie enregistrée ; six pages par feuille ; coupe haut et bas | `SheetToolsSnapshots` |
-| Fichiers réels | Cinq PDF de `fixtures-private/pdfs` : feuilles de 2 et de 9, moitiés, copie pixellisée à 300 ppp, avec durées, tailles et pointe de mémoire | Sonde du 2 octobre, non gardée |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
+| Engine | Sheets: number and orientation for the five choices, reading order checked on the pixels, text kept, rotated page, progress, cancellation, signed PDF accepted. Cut: size and words of each half for both directions, rotated pages compared on the pixels, link on the right half, popup of a comment kept with it, bookmark kept, cut line, signed PDF refused. Pixelize: no text, sizes kept, 150 dpi, same look, signed PDF accepted | `PDFSheetsTests`, `PDFPageHalvesTests`, `PDFPixelizingTests` |
+| Shared session | Steps shown, then copy written; original never replaced; cancelled copy never written | `PDFCopySessionTests` |
+| Tools | Copy saved, original intact, a changed setting clears "saved", cut shown on the preview | `SheetsSessionTests`, `HalvesSessionTests`, `PixelizeSessionTests` |
+| Screens | For each tool: start, ready in light mode, in dark mode and in English, copy saved; six pages per sheet; top and bottom cut | `SheetToolsSnapshots` |
+| Real files | Five PDFs from `fixtures-private/pdfs`: sheets of 2 and of 9, halves, copy pixelized at 300 dpi, with durations, sizes and memory peak | Probe of 2 October, not kept |
+| Texts | All translated, never the informal « tu » | `check-strings.py` |

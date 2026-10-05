@@ -1,118 +1,118 @@
-# Identité de marque
+# Brand identity
 
-_Créée le 29 septembre 2026. Mise à jour le 30 septembre 2026 : nom et direction visuelle choisis. Spec d'application au site à écrire._
+_Created 29 September 2026. Updated 30 September 2026: name and visual direction chosen. The spec that applies them to the site is still to write._
 
-## Intention
+## Intent
 
-Une marque forte et chaleureuse, comme le mouton de PDF24 : un personnage qu'on décline en une illustration par outil, et qui rend une appli utilitaire mémorable.
+A strong and warm brand, like the PDF24 sheep: a character that comes in one illustration per tool, and that makes a utility app memorable.
 
-## Nom : Holy PDF
+## Name: Holy PDF
 
-Domaine retenu : **holy-pdf.com**. À acheter aussi : **holypdf.app**, en redirection, parce que holypdf.com est pris.
+Chosen domain: **holy-pdf.com**. Also to buy: **holypdf.app**, as a redirect, because holypdf.com is taken.
 
-Pourquoi ce nom :
+Why this name:
 
-- deux mots d'anglais de base, compris et prononçables partout, comme « workout.cool » ou « Smash Baby Burger » ;
-- une exclamation (« Holy cow! ») : le ton est drôle, pas religieux ;
-- « PDF » dans le nom : on sait ce que fait le site, et la marque apparaît dans les recherches « … pdf » ;
-- l'univers des moines tient : auréole au logo, un moine par outil.
+- two basic English words, understood and easy to say everywhere, like "workout.cool" or "Smash Baby Burger";
+- an exclamation ("Holy cow!"): the tone is funny, not religious;
+- "PDF" in the name: people know what the site does, and the brand shows up in "… pdf" searches;
+- the world of the monks holds together: a halo on the logo, one monk per tool.
 
-Vérifications du 30 septembre 2026 :
+Checks of 30 September 2026:
 
-| Point | Résultat |
+| Item | Result |
 |---|---|
-| holy-pdf.com, holypdf.app, holy-pdf.fr | libres (whois et RDAP) |
-| holypdf.com | pris depuis le 17 janvier 2025, site hors ligne, aucun produit trouvé |
-| Produit PDF nommé « Holy PDF » | aucun trouvé (recherche web) |
-| Marques INPI, EUIPO, USPTO, classes 9 et 42 | **à vérifier à la main** : les API de recherche refusent les requêtes automatiques. Seule trouvée par le web : « HOLY », classe 6 (conteneurs métalliques), sans rapport |
+| holy-pdf.com, holypdf.app, holy-pdf.fr | available (whois and RDAP) |
+| holypdf.com | taken since 17 January 2025, site offline, no product found |
+| PDF product named "Holy PDF" | none found (web search) |
+| INPI, EUIPO, USPTO trademarks, classes 9 and 42 | **to check by hand**: the search APIs refuse automated requests. The only one found on the web: "HOLY", class 6 (metal containers), unrelated |
 
-Liens de vérification : [INPI](https://data.inpi.fr), [TMview](https://www.tmdn.org/tmview/) (EUIPO et offices nationaux), [USPTO](https://tmsearch.uspto.gov).
+Check links: [INPI](https://data.inpi.fr), [TMview](https://www.tmdn.org/tmview/) (EUIPO and national offices), [USPTO](https://tmsearch.uspto.gov).
 
-Noms écartés :
+Rejected names:
 
-| Nom | Raison |
+| Name | Reason |
 |---|---|
-| pdf-monk | **PDFMonk** existe dans le même marché ([pdfmonk.com](https://www.pdfmonk.com/)) |
-| Monkey PDF, PDFMonkey | déjà pris ([monkeypdf.org](https://monkeypdf.org/), [pdfmonkey.io](https://docs.pdfmonkey.io/)) |
-| Halo PDF | appli iPad « Halo PDF » qui fusionne et trie déjà des pages |
-| Vesper PDF | appli de lecture « Vesper » (EPUB, PDF), sortie en juin 2026 |
-| Abbey PDF | se prononce comme ABBYY, éditeur d'OCR et de PDF |
-| Brother PDF | Brother, fabricant d'imprimantes |
-| PDFrère | se lit « pé-dé-frère » en français |
-| Scriptorium, Copiste, Vélin, Capucin | domaines pris |
-| pdf.church | libre, mais « church PDF » désigne déjà des modèles de documents d'église |
+| pdf-monk | **PDFMonk** exists in the same market ([pdfmonk.com](https://www.pdfmonk.com/)) |
+| Monkey PDF, PDFMonkey | already taken ([monkeypdf.org](https://monkeypdf.org/), [pdfmonkey.io](https://docs.pdfmonkey.io/)) |
+| Halo PDF | iPad app "Halo PDF" that already merges and sorts pages |
+| Vesper PDF | reading app "Vesper" (EPUB, PDF), released in June 2026 |
+| Abbey PDF | sounds like ABBYY, a publisher of OCR and PDF software |
+| Brother PDF | Brother, the printer maker |
+| PDFrère | reads as « pé-dé-frère » in French |
+| Scriptorium, Copiste, Vélin, Capucin | domains taken |
+| pdf.church | available, but "church PDF" already means church document templates |
 
-## Direction visuelle
+## Visual direction
 
-Référence : la maquette du 30 septembre 2026, page « Design system » (fondations, composants, moines), non publiée ; les SVG du site (`apps/web/src/illustrations/`) en sont la version de référence.
+Reference: the mockup of 30 September 2026, "Design system" page (foundations, components, monks), not published; the SVGs of the site (`apps/web/src/illustrations/`) are its reference version.
 
-- **Style** : un moine par outil. Les outils prêts ont une grande carte avec le moine et une scène (une feuille PDF qu'il agrafe, découpe, pivote…). Les outils à venir ont un moine qui dort et un tampon « Bientôt ».
-- **Papier** : feuilles au coin corné, surligneur jaune sur les titres, tampons.
-- **Palette « Encre bleue »** : fond `#EEF1F6`, encre `#141A2E`, principal `#2346D8`, surligneur `#FFE45C`, tampon `#C8321B`. Couleurs de catégorie : Organiser `#2346D8`, Convertir `#0B7A5E`, Modifier `#B4418E`, Optimiser `#A35900`, Sécurité `#5B6272`. Tampon, Convertir et Optimiser sont foncés pour passer le contraste AA.
-- **Typographie** : Bricolage Grotesque 800 pour les titres, Figtree pour le texte.
-- **Titres** : pas de police d'accent (essayée, refusée). Un émoji par titre, à la fin, collé au dernier mot : 🙏 accueil, 🤲 outils prêts, 🕯️ à venir, 🤫 confidentialité, un émoji par outil.
-- **Avatars** : la tête et l'accessoire sortent du cercle.
-- **Mode sombre** : proposé sur le canevas, à valider.
+- **Style**: one monk per tool. Ready tools have a large card with the monk and a scene (a PDF sheet that the monk staples, cuts, rotates…). Upcoming tools have a sleeping monk and a "Soon" stamp.
+- **Paper**: sheets with a folded corner, yellow highlighter on headings, stamps.
+- **"Blue Ink" palette**: background `#EEF1F6`, ink `#141A2E`, primary `#2346D8`, highlighter `#FFE45C`, stamp `#C8321B`. Category colors: Organize `#2346D8`, Convert `#0B7A5E`, Edit `#B4418E`, Optimize `#A35900`, Security `#5B6272`. Stamp, Convert and Optimize are dark so that they pass the AA contrast.
+- **Typography**: Bricolage Grotesque 800 for headings, Figtree for text.
+- **Headings**: no accent font (tried, refused). One emoji per heading, at the end, right after the last word: 🙏 home, 🤲 ready tools, 🕯️ upcoming, 🤫 privacy, one emoji per tool.
+- **Avatars**: the head and the accessory come out of the circle.
+- **Dark mode**: proposed on the canvas, still to approve.
 
-## Les moines
+## The monks
 
-Un moine en robe de bure marron, corde jaune, cinq humeurs : content, concentré, ravi, oups, en attente. Il parle en « je », en phrases courtes, avec des clins d'œil au monastère (« Pardonnez-lui ses pages en trop », « reliées comme un missel »), et jamais sur le ton de la blague dans une erreur. L'auréole n'apparaît que dans le logo.
+A monk in a brown homespun habit, yellow rope, five moods: happy, focused, joyful, oops, asleep. The monk speaks in the first person, in short sentences, with nods to monastery life ("Forgive it its extra pages", "bound like a missal"), and never in a joking tone in an error. The halo appears only in the logo.
 
-| Outil | Moine | Accessoire |
+| Tool | Monk | Accessory |
 |---|---|---|
-| Scanner (Mac et site) | Frère Déclic | téléphone |
-| Fusionner | Frère Agrafe | agrafeuse |
-| Diviser | Frère Ciseaux | ciseaux |
-| Organiser les pages | Frère Classeur | feuille |
-| Supprimer des pages | Frère Gomme | gomme |
-| Extraire des pages | Frère Loupe | loupe |
-| Pivoter | Frère Toupie | flèche de rotation |
-| JPG en PDF | Frère Cadre | cadre photo |
-| Compresser | Frère Pressoir | livre |
-| PDF en JPG | Frère Enlumineur | cadre photo |
-| Signer | Frère Plume | plume |
-| Filigrane | Frère Tampon | tampon |
-| Numéroter | Frère Folio | feuille |
-| Protéger | Frère Cadenas | cadenas |
-| Déverrouiller | Frère Passe-partout | cadenas |
-| Aplatir | Frère Rouleau | livre |
-| Pages par feuille | Frère Mosaïque | feuille |
-| Couper en deux | Frère Massicot | ciseaux |
-| Pixelliser | Frère Vitrail | cadre photo |
-| Noircir | Frère Encrier | gomme |
-| OCR | Frère Lecteur | loupe |
-| PDF en Word | Frère Copiste | plume |
-| Superposer | Frère Calque | tampon |
-| Signets | Frère Signet | livre |
-| Réparer | Frère Ravaudeur | agrafeuse |
-| Modifier | Frère Scribe | plume |
-| Rogner | Frère Cadreur | cadre photo |
+| Scanner (Mac and site) | Brother Snap | phone |
+| Merge | Brother Staple | stapler |
+| Split | Brother Scissors | scissors |
+| Organize pages | Brother Binder | sheet |
+| Delete pages | Brother Eraser | eraser |
+| Extract pages | Brother Lens | magnifying glass |
+| Rotate | Brother Spin | rotation arrow |
+| JPG to PDF | Brother Frame | photo frame |
+| Compress | Brother Press | book |
+| PDF to JPG | Brother Illuminator | photo frame |
+| Sign | Brother Quill | quill |
+| Watermark | Brother Stamp | stamp |
+| Page numbers | Brother Folio | sheet |
+| Protect | Brother Padlock | padlock |
+| Unlock | Brother Passkey | padlock |
+| Flatten | Brother Roller | book |
+| Pages per sheet | Brother Mosaic | sheet |
+| Split in half | Brother Trimmer | scissors |
+| Pixelize | Brother Glass | photo frame |
+| Redact | Brother Inkpot | eraser |
+| OCR | Brother Reader | magnifying glass |
+| PDF to Word | Brother Copyist | quill |
+| Overlay | Brother Layer | stamp |
+| Bookmarks | Brother Ribbon | book |
+| Repair | Brother Mender | stapler |
+| Edit | Brother Scribe | quill |
+| Crop | Brother Framer | photo frame |
 
-## Textes à relire
+## Texts to review
 
-Écrits avec le design system, pas encore relus. Textes communs dans `apps/web/src/i18n/fr.ts` et `apps/web/src/i18n/en.ts` ; contrôles de Signer dans `apps/web/src/signature/text.ts`, chargé avec l'éditeur :
+Written with the design system, not reviewed yet. Shared texts in `apps/web/src/i18n/fr.ts` and `apps/web/src/i18n/en.ts`; Sign controls in `apps/web/src/signature/text.ts`, loaded with the editor:
 
-- `monks` : nom, présentation, phrase de carte (ton « abbaye »), consigne (`hint`), verbe en cours, bouton verbe, titre du résultat et « recommencer » de chaque moine ;
-- `home` et `homeDrop` : l'accueil, sa bulle et sa zone de dépôt. Le titre 1 (« Outils PDF gratuits en ligne, dans votre navigateur ») vise la recherche ; ses volumes sont dans la spec du design system ;
-- `home.compact`, `home.categoryCount`, `toolShort` : la vue compacte ;
-- la phrase de confiance unique (« Aucun fichier ne quitte votre appareil, de l'import jusqu'au téléchargement. ») : `home.lead`, `footer.tagline`, `drop.trust`, `toolPage.privacy` et les pages `compress.md` / `pdf-to-jpg.md` ; `home.proofs` : le bandeau des quatre preuves (100 % local, 0 envoi, sans compte, RGPD), sans logo de certification que le site ne détient pas ;
-- `toolPage` (titre, phrase, ligne de confiance), `drop` (« Choisir des PDF », « ou déposez-les ici », ligne de confiance, `release`), `nav` et `footer` (barre du haut, menus, pied de page), `flow` (dont « Alléluia, c'est fait »), `menu.darkMode`, `board.addPdf`, `board.addImages`, `board.undo`, `board.undoHint`, `board.removeConfirm`, `board.keep`, `board.removeConfirmed`, `bubble`, `upcoming`, `categories`.
-- `frSearch` et `enSearch` (en bas de `fr.ts` et `en.ts`) : la colonne de filtres de l'accueil, son interrupteur, l'étiquette « Bientôt · en méditation », la ligne d'état, l'absence de résultat, et les mots que la recherche comprend pour chaque outil ;
-- `toJpg`, `compress`, `errors.noImages` et les pages `compress.md` et `pdf-to-jpg.md` des deux langues : les outils du lot 1. Leurs volumes de recherche, vérifiés le 30 septembre 2026, ne sont pas repris dans le wiki.
-- les pages du pied de page et les deux premiers articles (`apps/web/src/content/pages`, `apps/web/src/content/articles`), et leurs libellés (`apps/web/src/i18n/pages.ts`).
+- `monks`: name, introduction, card line ("abbey" tone), instruction (`hint`), in-progress verb, verb button, result title and "start over" of each monk;
+- `home` and `homeDrop`: the home page, its bubble and its drop zone. The H1 (« Outils PDF gratuits en ligne, dans votre navigateur ») targets search; its search volumes are in the design system spec;
+- `home.compact`, `home.categoryCount`, `toolShort`: the compact view;
+- the single trust sentence ("No file leaves your device, from import to download."): `home.lead`, `footer.tagline`, `drop.trust`, `toolPage.privacy` and the pages `compress.md` / `pdf-to-jpg.md`; `home.proofs`: the strip of the four proofs (100% local, 0 uploads, no account, GDPR), with no certification logo that the site does not hold;
+- `toolPage` (title, sentence, trust line), `drop` ("Choose PDF files", "or drop them here", trust line, `release`), `nav` and `footer` (top bar, menus, footer), `flow` (including "Hallelujah, it's done"), `menu.darkMode`, `board.addPdf`, `board.addImages`, `board.undo`, `board.undoHint`, `board.removeConfirm`, `board.keep`, `board.removeConfirmed`, `bubble`, `upcoming`, `categories`.
+- `frSearch` and `enSearch` (at the bottom of `fr.ts` and `en.ts`): the filter column of the home page, its switch, the "Soon · in meditation" label, the status line, the no-result message, and the words that search understands for each tool;
+- `toJpg`, `compress`, `errors.noImages` and the pages `compress.md` and `pdf-to-jpg.md` in both languages: the tools of milestone 1. Their search volumes, checked on 30 September 2026, are not copied into the wiki.
+- the footer pages and the first two articles (`apps/web/src/content/pages`, `apps/web/src/content/articles`), and their labels (`apps/web/src/i18n/pages.ts`).
 
-Les textes juridiques (Mentions légales, Confidentialité, Conditions d'utilisation, Cookies) sont une base sérieuse, pas un avis d'avocat. Ils couvrent l'éditeur et l'hébergeur, le traitement des fichiers dans le navigateur sans envoi au site, les données techniques que Cloudflare traite, l'absence de cookie et les deux clés de `localStorage`, les conditions d'un service gratuit fourni « en l'état », la nature de la signature posée par Signer (ni avancée ni qualifiée au sens d'eIDAS) et le droit français. Détail dans la [spec des pages du pied de page](../specs/2026-10-02-web-pages-design.md). Deux points restent ouverts :
+The legal texts (Legal notice, Privacy, Terms of use, Cookies) are a serious base, not a lawyer's opinion. They cover the publisher and the host, the processing of files in the browser with no upload to the site, the technical data that Cloudflare processes, the absence of cookies and the two `localStorage` keys, the terms of a free service provided "as is", the nature of the signature that Sign places (neither advanced nor qualified in the sense of eIDAS) and French law. Details in the [footer pages spec](../specs/2026-10-02-web-pages-design.md). Two points stay open:
 
-- la page Confidentialité doit nommer le service qui reçoit les e-mails (Cloudflare Email Routing, puis la boîte de destination, et son transfert hors UE s'il y en a un) ;
-- les notices des bibliothèques que `pdfium.wasm` embarque, au-delà de PDFium lui-même, restent à vérifier et à publier dans `public/licenses/`.
+- the Privacy page must name the service that receives the emails (Cloudflare Email Routing, then the destination mailbox, and its transfer outside the EU if there is one);
+- the notices of the libraries that `pdfium.wasm` embeds, beyond PDFium itself, are still to check and to publish in `public/licenses/`.
 
-L'éditeur est Snouzylabs S.R.L. (décision du 5 octobre 2026), société qui édite aussi workout.cool : les mentions légales d'un éditeur professionnel doivent donner la dénomination, le siège, le téléphone, le capital social, le numéro d'immatriculation (CUI) et le directeur de la publication. Siège, téléphone, capital et CUI restent à ajouter dès que l'auteur les transmet.
+The publisher is Snouzylabs S.R.L. (decision of 5 October 2026), the company that also publishes workout.cool: the legal notice of a professional publisher must give the company name, the registered office, the phone number, the share capital, the registration number (CUI) and the publication director. The registered office, phone number, capital and CUI are still to add as soon as the author sends them.
 
-Relecture du lot 1, le 1er octobre 2026 : les niveaux de compression et leurs FAQ FR/EN ne promettent plus une qualité intacte. Les trois niveaux réencodent les images avec perte ; la FAQ distingue le texte sélectionnable du texte contenu dans une photo ou un scan.
+Review of milestone 1, on 1 October 2026: the compression levels and their FR/EN FAQs no longer promise an intact quality. The three levels re-encode the images with loss; the FAQ separates selectable text from text inside a photo or a scan.
 
-## Reste à faire
+## Still to do
 
-- vérifier les marques, puis acheter holy-pdf.com et holypdf.app ;
-- appliquer le design system au site web : voir la [spec](../specs/2026-09-30-web-design-system-design.md) ;
-- icône d'appli iPhone (celle de l'appli Mac retirée, gardée au tag `mac-final` : `apps/mac/PDFToolbox/HolyPDF.icon`) ;
-- pour la version finale des illustrations, prévoir un illustrateur, avec les planches du canevas comme brief.
+- check the trademarks, then buy holy-pdf.com and holypdf.app;
+- apply the design system to the website: see the [spec](../specs/2026-09-30-web-design-system-design.md);
+- an iPhone app icon (the icon of the removed Mac app, kept at tag `mac-final`: `apps/mac/PDFToolbox/HolyPDF.icon`);
+- for the final version of the illustrations, plan an illustrator, with the canvas mockups as the brief.

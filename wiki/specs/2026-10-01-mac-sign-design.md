@@ -1,55 +1,55 @@
-# Mac — Signer un PDF
+# Mac: Sign a PDF
 
-_Appli Swift retirée le 5 octobre 2026 : cette spec est une archive, le code est au tag `mac-final`._
+_Swift app removed on 5 October 2026: this spec is an archive, and the code is at the tag `mac-final`._
 
-## Objectif
+## Goal
 
-Ajouter une signature visuelle dessinée ou importée à un PDF dans Holy PDF pour Mac, puis enregistrer une nouvelle copie. Le Scanner reste disponible. Aucun serveur, compte ou nouveau moteur : PDFKit, Core Graphics et ImageIO suffisent.
+Add a visual signature, drawn or imported, to a PDF in Holy PDF for Mac, then save a new copy. The Scanner stays available. No server, no account and no new engine: PDFKit, Core Graphics and ImageIO are enough.
 
-## Identité et parcours
+## Identity and flow
 
-Frère Plume rejoint le monastère comme deuxième outil. Le moine est exporté depuis le dessin officiel ; Bricolage reste réservé aux grands titres, les autres textes et contrôles restent natifs. Fonds système, accent bleu, modes clair et sombre, vouvoiement et catalogue français/anglais.
+Brother Quill joins the monastery as the second tool. The monk is exported from the official drawing; Bricolage stays reserved for large titles, and the other texts and controls stay native. System backgrounds, blue accent, light and dark modes, the formal « vous » and a French/English catalog.
 
-1. Ouvrir ou déposer un PDF. Un fichier verrouillé demande son mot de passe. Un PDF signé numériquement est refusé explicitement pour préserver son certificat. Un formulaire qui ne porte que des droits d'usage Adobe (`/UR`, `/UR3`, comme les formulaires du fisc américain) est accepté : personne ne l'a signé. La copie perd ces droits d'usage. Le contrôle est commun à Signer, Fusionner, Organiser et Filigrane.
-2. Créer une signature dans une feuille native : dessin à la souris/au trackpad, ou import PNG/JPEG. Le fond transparent d'un PNG est conservé ; un JPEG garde son fond.
-3. Afficher une page à la fois, choisir la page précédente/suivante, ajouter la signature, la déplacer et modifier sa taille proportionnellement. Plusieurs placements de la même signature sont possibles, et plusieurs marques différentes depuis le 3 octobre. Supprimer un placement et annuler une retouche sont disponibles.
-4. Enregistrer une copie avec le dialogue macOS. Le PDF source reste inchangé. Le résultat indique le fichier enregistré et permet de le montrer dans le Finder.
+1. Open or drop a PDF. A locked file asks for its password. A digitally signed PDF is explicitly refused, to preserve its certificate. A form that carries only Adobe usage rights (`/UR`, `/UR3`, like the forms of the US tax authority) is accepted: nobody signed it. The copy loses these usage rights. The check is shared by Sign, Merge, Organize and Watermark.
+2. Create a signature in a native sheet: drawing with the mouse or the trackpad, or PNG/JPEG import. The transparent background of a PNG is kept; a JPEG keeps its background.
+3. Show one page at a time, go to the previous or next page, add the signature, move it and change its size proportionally. Several placements of the same signature are possible, and several different marks since 3 October. Deleting a placement and undoing an edit are available.
+4. Save a copy with the macOS dialog. The source PDF stays unchanged. The result shows the saved file and lets the user show it in the Finder.
 
-Disposition de travail : page centrée sur un fond système à gauche ; panneau de signature et bouton d'enregistrement à droite. La signature se déplace au-dessus de l'aperçu, sans calculer un nouveau rendu PDF. La fenêtre garde ses dimensions minimales actuelles, 960 × 640. Les commandes désactivées expliquent le prochain geste. Les moines restent au démarrage et sur la carte, conformément au design natif.
+Work layout: page centered on a system background on the left; signature panel and save button on the right. The signature moves above the preview, without computing a new PDF render. The window keeps its current minimum dimensions, 960 × 640. Disabled controls explain the next action. The monks stay at startup and on the card, in line with the native design.
 
-## Plusieurs marques (3 octobre 2026)
+## Several marks (3 October 2026)
 
-À la demande de l'auteur, l'écran reprend ce que Signer fait sur le web ([spec du site](2026-10-01-web-sign-design.md)) : plusieurs marques différentes coexistent et chacune se pose autant de fois que voulu.
+At the author's request, the screen takes over what Sign does on the web ([site spec](2026-10-01-web-sign-design.md)): several different marks exist side by side, and each one can be placed as many times as wanted.
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Marques | Une liste « Vos marques » dans le panneau : signatures dessinées, images importées, lignes tapées. Vingt au plus, et l'écran le dit à la vingt et unième. Créer une marque n'efface pas les autres, ni une marque encore en train de se décoder ; la nouvelle devient la marque courante et se pose aussitôt | Un contrat demande une signature, des initiales et une date. Relecture du 3 octobre : un second ajout annulait le premier sans un mot |
-| Texte | Une ligne de 120 caractères au plus (le champ s'arrête là, et garde sa ligne après l'ajout), en Manuscrit (Bradley Hand, livrée avec macOS) ou en Simple (Helvetica), rendue en image transparente par Core Text, large comme ses glyphes, puis traitée comme une signature. Posée haute de 24 points, quelle que soit sa longueur | La règle du site, avec une police du Mac au lieu de Caveat : pas de fichier à embarquer. Relecture du 3 octobre : posée large de 28 % de la page, « AL » faisait un tiers de la hauteur |
-| Pose | « Placer sur cette page » pose la marque courante au centre ; un clic sur la page la pose à cet endroit, dans les limites de la page. Le premier clic ne fait que désélectionner la marque sélectionnée | Comme sur le site (« Ajouter ici ») |
-| Retrait | La corbeille d'une marque la retire avec toutes ses places ; « Retirer de la page » retire la place sélectionnée. Les deux s'annulent | |
-| Moteur | `PDFSigningDocument.signedData(marks:placements:)` : chaque place nomme sa marque ; chaque image est décodée une fois | Les tampons de PDFKit portent chacun leur apparence : une marque posée trois fois est écrite trois fois (le site partage un seul objet) |
+| Marks | A "Your marks" list in the panel: drawn signatures, imported images, typed lines. Twenty at most, and the screen says so at the twenty-first. Creating a mark does not erase the others, nor a mark that is still decoding; the new one becomes the current mark and is placed at once | A contract asks for a signature, initials and a date. Review of 3 October: a second addition cancelled the first one without a word |
+| Text | One line of 120 characters at most (the field stops there, and keeps its line after the addition), in Handwritten (Bradley Hand, shipped with macOS) or in Plain (Helvetica), rendered as a transparent image by Core Text, as wide as its glyphs, then treated like a signature. Placed 24 points high, whatever its length | The site's rule, with a Mac font instead of Caveat: no file to embed. Review of 3 October: placed at 28% of the page width, "AL" took a third of the height |
+| Placement | "Place on this page" places the current mark at the center; a click on the page places it at that spot, within the limits of the page. The first click only deselects the selected mark | Like on the site ("Add here") |
+| Removal | The trash button of a mark removes it with all its places; "Remove from the page" removes the selected place. Both can be undone | |
+| Engine | `PDFSigningDocument.signedData(marks:placements:)`: each place names its mark; each image is decoded once | Each PDFKit stamp carries its own appearance: a mark placed three times is written three times (the site shares a single object) |
 
-Hors de ce lot, que le site offre : la rotation d'une marque, le zoom de la page et la rotation de la page.
+Outside this milestone, and offered by the site: the rotation of a mark, the zoom of the page and the rotation of the page.
 
-## Conservation
+## Preservation
 
-Un acteur `PDFSigningDocument` dans `PDFCore` possède le document PDFKit et ses données. Il n'importe ni AppKit ni UIKit. L'export ouvre une copie des données originales et ajoute des annotations stamp avec une apparence persistante ; aucune reconstruction des pages, aucune pixellisation du document ni aplatissement global des annotations.
+A `PDFSigningDocument` actor in `PDFCore` owns the PDFKit document and its data. It imports neither AppKit nor UIKit. The export opens a copy of the original data and adds stamp annotations with a persistent appearance; no rebuild of the pages, no rasterization of the document and no global flattening of the annotations.
 
-Les placements sont stockés en rectangles normalisés, origine en haut à gauche de la page visible. Une conversion centralisée tient compte de CropBox et de la rotation. Les exports successifs repartent toujours de l'original : pas d'accumulation cachée. Supprimer l'auteur d'annotation que PDFKit fournit par défaut pour ne pas incorporer l'identité du compte Mac.
+The placements are stored as normalized rectangles, with the origin at the top left of the visible page. A single central conversion takes CropBox and rotation into account. Successive exports always start again from the original: no hidden accumulation. Remove the default annotation author that PDFKit supplies, so that the identity of the Mac account is not embedded.
 
-Le fichier importé ne change jamais. Les signatures et le mot de passe restent uniquement dans la session mémoire. La copie exportée d’un PDF protégé s’ouvre sans mot de passe, avec une indication dans l’interface. PDFKit peut conserver un dictionnaire de chiffrement à mot de passe vide : ne pas présenter cette copie comme déchiffrée. Fermer la fenêtre conserve la session ; quitter avertit si des placements n'ont pas été enregistrés.
+The imported file never changes. The signatures and the password stay only in the in-memory session. The exported copy of a protected PDF opens without a password, with a note in the interface. PDFKit can keep an encryption dictionary with an empty password: do not present this copy as decrypted. Closing the window keeps the session; quitting warns if placements were not saved.
 
 ## Performance
 
-- Aucun OCR ni moteur WebAssembly pour Signer ; ouverture et export hors de l'acteur principal.
-- Aperçu limité à une seule page, grand côté de 1 600 pixels maximum et surface bornée. Libérer l'ancien aperçu au changement de document et limiter les rendus obsolètes lors d'une navigation rapide.
-- Déplacement par superposition, sans rendre la page ni exporter le PDF pendant le geste. Viser moins de 16 ms de travail de mise à jour ; ne pas assimiler une mesure de géométrie à une mesure de fluidité de l'écran entier.
-- PDF ouvert dans l’application : 256 Mio maximum avant lecture. Au plus 100 placements et 100 opérations annulables par session.
-- Signature importée : 10 Mio et 16 Mpx maximum avant décodage, normalisée à 1 600 pixels de côté et 1 Mpx. Métadonnées de l'image non recopiées.
-- Mesurer un aperçu et un export sur un PDF synthétique de 20 pages : repères de 1 s pour l'aperçu et 3 s pour l'export sur cette machine, sans en faire une garantie universelle.
+- No OCR and no WebAssembly engine for Sign; opening and export off the main actor.
+- Preview limited to a single page, with a longest side of 1,600 pixels at most and a bounded area. Release the old preview when the document changes, and limit stale renders during fast navigation.
+- Moving by overlay, without rendering the page or exporting the PDF during the gesture. Aim for less than 16 ms of update work; do not treat a geometry measurement as a measurement of the smoothness of the whole screen.
+- PDF opened in the app: 256 MiB at most before reading. At most 100 placements and 100 undoable operations per session.
+- Imported signature: 10 MiB and 16 Mpx at most before decoding, normalized to 1,600 pixels per side and 1 Mpx. Image metadata not copied.
+- Measure a preview and an export on a synthetic 20-page PDF: reference values of 1 s for the preview and 3 s for the export on this machine, without making them a universal guarantee.
 
 ## Validation
 
-Le moteur doit prouver la persistance après réouverture, la transparence, les placements sous les quatre rotations avec recadrage, le texte sélectionnable, les liens, les champs, le titre, l'original intact et l'absence de cumul. Vérifier aussi les mots de passe, les fichiers invalides, les signatures numériques existantes et les limites d'image.
+The engine must prove persistence after reopening, transparency, placements under the four rotations with cropping, selectable text, links, fields, the title, the intact original and no accumulation. Also check passwords, invalid files, existing digital signatures and image limits.
 
-L'application doit couvrir création, placement, suppression, annulation et export ; vérifier les localisations et des captures clair/sombre. `swift test`, tests Xcode et `check-strings.py` restent les commandes de référence. Les contrôles de structure et de rendu sont explicitement délimités : pas de certification de tous les profils PDF ni des formulaires dynamiques.
+The app must cover creation, placement, deletion, undo and export; check the localizations and light and dark screenshots. `swift test`, the Xcode tests and `check-strings.py` stay the reference commands. The structure and rendering checks have explicit bounds: no certification of all PDF profiles or of dynamic forms.

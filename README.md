@@ -6,7 +6,7 @@ Free PDF tools that run in your browser. Merge, split, compress, sign, edit, fil
 
 No upload, no account, no quota, no advertising. The code is free software under the AGPL.
 
-[holy-pdf.com](https://holy-pdf.com) · [Wiki (French)](wiki/index.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Licensing](LICENSING.md)
+[holy-pdf.com](https://holy-pdf.com) · [Wiki](wiki/index.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Licensing](LICENSING.md)
 
 ## Why
 
@@ -22,13 +22,13 @@ The whole site is static. There is no backend to trust.
 
 | Category | Tools |
 |---|---|
-| Organise | Merge, Split, Organise pages, Delete pages, Extract pages, Rotate, Pages per sheet, Split in half, Bookmarks |
+| Organize | Merge, Split, Organize pages, Delete pages, Extract pages, Rotate, Pages per sheet, Split in half, Bookmarks |
 | Convert | JPG to PDF, PDF to JPG, PDF to Word, Pixelize |
 | Edit | Edit (text, images, shapes, pen, highlighter, annotations, links, stamps, form fields), Sign, Watermark, Page numbers, Overlay, Crop, Redact |
-| Optimise | Compress, Flatten, OCR, Scan (photos of documents into a clean PDF), Repair |
+| Optimize | Compress, Flatten, OCR, Scan (photos of documents into a clean PDF), Repair |
 | Security | Protect, Unlock |
 
-Each tool has a spec in [`wiki/specs/`](wiki/specs/) with every decision and its reason, in French.
+Each tool has a spec in [`wiki/specs/`](wiki/specs/) with every decision and its reason.
 
 ## Run it
 
@@ -45,10 +45,10 @@ Node 22.12 or later (CI uses 24) and pnpm. Details in [CONTRIBUTING.md](CONTRIBU
 - `apps/web/`: the site (Astro, Preact) and its engine. Development happens here.
 - `apps/desktop/`: the desktop app (Tauri 2) for Mac and Windows, then Linux: its own entry composed from the site's tools, in the system webview. `pnpm desktop:dev`, `pnpm desktop:build`, `pnpm desktop:smoke`. Needs Rust.
 - The native Swift app and its engine were removed on 5 October 2026; the tag `mac-final` keeps their last state.
-- `wiki/`: product, specs and technical guide, in French. Opens as an Obsidian vault.
+- `wiki/`: product, specs and technical guide. Opens as an Obsidian vault.
 - `tools/`: research prototypes.
 
-## Licence
+## License
 
 Copyright (C) 2026 Snouzylabs S.R.L. and the Holy PDF contributors.
 

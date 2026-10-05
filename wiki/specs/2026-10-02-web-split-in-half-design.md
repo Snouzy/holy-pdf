@@ -1,18 +1,18 @@
-# Web — Couper les pages en deux
+# Web: Split the pages in half
 
-_Rédigé et livré le 2 octobre 2026._
+_Written and shipped on 2 October 2026._
 
-Frère Massicot (`/fr/couper-pages-en-deux`, `/en/split-pages-in-half`) coupe chaque page d'un ou plusieurs PDF en deux pages qui se suivent : gauche puis droite (par défaut, pour un livre scanné ouvert), ou haut puis bas.
+Brother Trimmer (`/fr/couper-pages-en-deux`, `/en/split-pages-in-half`) cuts each page of one or more PDFs into two consecutive pages: left then right (the default, for a scanned open book), or top then bottom.
 
-## Moteur
+## Engine
 
-Opération `halves` de la requête `transform` (`engine/sheets.ts`) : un document neuf importe chaque page deux fois en un seul appel (ressources partagées copiées une fois), puis chaque copie reçoit pour MediaBox et CropBox la moitié qui lui revient. La moitié se calcule sur la page telle que le lecteur la voit (`pageFrame`) : une page pivotée est coupée dans le sens de lecture. Les pages restent vectorielles ; un PDF signé est accepté, comme pour Pages par feuille.
+Operation `halves` of the `transform` request (`engine/sheets.ts`): a new document imports each page twice in a single call (shared resources copied once), then each copy gets the half that belongs to it as its MediaBox and CropBox. The half is computed on the page as the reader sees it (`pageFrame`): a rotated page is cut in the reading direction. The pages stay vector; a signed PDF is accepted, as for Pages per sheet.
 
-## Limite
+## Limit
 
-Les annotations et les champs de formulaire de l'original ne suivent pas.
+The annotations and form fields of the original do not follow.
 
 ## Tests
 
-- Moteur (`tests/engine/halves.test.ts`) : taille de chaque moitié et mot visible dans chacune, relus par pdf.js, pour les deux coupes.
-- Navigateur (`tests/e2e/split-in-half.spec.ts`) : 2 pages coupées haut et bas donnent 4 pages à l'italienne.
+- Engine (`tests/engine/halves.test.ts`): size of each half and a word visible in each, read back by pdf.js, for both cuts.
+- Browser (`tests/e2e/split-in-half.spec.ts`): 2 pages cut top and bottom give 4 landscape pages.

@@ -1,49 +1,49 @@
-# Mac — Fusionner des PDF
+# Mac: Merge PDF files
 
-_Appli Swift retirée le 5 octobre 2026 : cette spec est une archive, le code est au tag `mac-final`._
+_Swift app removed on 5 October 2026: this spec is an archive, the code is at tag `mac-final`._
 
-## Objectif
+## Goal
 
-Troisième outil natif : réunir plusieurs PDF en un seul fichier, dans un ordre choisi, sans modifier les originaux. Frère Agrafe rejoint la grille de l’accueil. La session Web reste indépendante. Aucun serveur, moteur supplémentaire ou dépendance.
+Third native tool: combine several PDFs into one file, in a chosen order, without modifying the originals. Brother Staple joins the home grid. The Web session stays independent. No server, no extra engine, no dependency.
 
-## Parcours
+## Flow
 
-1. Choisir plusieurs PDF ou les déposer. Les fichiers sont lus séquentiellement hors du thread principal. Chaque ligne affiche son nom, son nombre de pages et son poids, avec un aperçu de première page chargé à l’apparition de la ligne.
-2. Un fichier protégé demande son mot de passe dans une feuille dédiée. Un fichier illisible ou incompatible reste visible avec un message et peut être retiré. Un PDF signé numériquement est refusé pour ne pas présenter une fusion comme conservant son certificat.
-3. Changer l’ordre des documents par glissement ou avec les boutons Monter/Descendre ; retirer un fichier et annuler l’action. Ajouter d’autres fichiers reste possible. Le déplacement des pages au sein d’un document relève du futur outil Organiser.
-4. Fusionner exige au moins deux fichiers valides, sans fichier encore verrouillé ou en erreur. Le panneau macOS enregistre une copie. Aucun fichier source, lien symbolique ou lien physique vers une source ne peut devenir la destination.
-5. Le résultat indique le nom du fichier enregistré et propose Afficher dans le Finder. Un nouveau lot demande confirmation si le travail courant n’a pas été exporté ; quitter également. Fermer la fenêtre conserve la session.
+1. Choose several PDFs or drop them. The files are read one after another, off the main thread. Each row shows its name, its page count and its size, with a first-page preview that loads when the row appears.
+2. A protected file asks for its password in a dedicated sheet. An unreadable or incompatible file stays visible with a message and can be removed. A digitally signed PDF is refused, so that a merge does not look as if it kept its certificate.
+3. Change the order of the documents by dragging or with the Move Up/Move Down buttons; remove a file and undo the action. You can still add more files. Moving pages inside a document belongs to the future Organize pages tool.
+4. Merge requires at least two valid files, with no file still locked or in error. The macOS panel saves a copy. No source file, and no symbolic link or hard link to a source, can become the destination.
+5. The result shows the name of the saved file and offers Show in Finder. A new batch asks for confirmation if the current work was not exported; quitting does too. Closing the window keeps the session.
 
-## Conservation
+## Preservation
 
-`PDFMergeCollection`, acteur de `PDFCore`, conserve les données sources immuables et leurs informations validées. L’export reconstruit l’assemblage depuis des copies fraîches des données sources, en insérant leurs pages PDF ; il ne dessine pas les pages dans un nouveau contexte bitmap. L’ordre de l’interface détermine l’ordre exact d’export. Les exports successifs sont indépendants.
+`PDFMergeCollection`, an actor in `PDFCore`, keeps the immutable source data and their validated information. The export rebuilds the assembly from fresh copies of the source data, by inserting their PDF pages; it does not draw the pages into a new bitmap context. The order in the interface sets the exact export order. Successive exports are independent.
 
-Les tests couvrent texte sélectionnable, images, MediaBox/CropBox, rotations, liens URI, destinations internes, annotations avec apparence, signets et champs remplis. Les champs de documents distincts doivent rester indépendants même si leurs noms se ressemblent. PDFKit peut demander de renommer des champs internes et de résoudre explicitement des destinations avant insertion. Les structures interactives que le moteur ne peut conserver (formulaires XFA ou calculés, scripts, pièces jointes, calques) sont refusées explicitement. Les documents contenant des balises d’accessibilité ou des profils d’archivage/impression sont acceptés avec une indication visible avant export : ces structures ne seront pas reprises, la conformité PDF/A et les couleurs à l’impression ne sont pas garanties. Les préférences de vue initiale ne sont pas reprises dans le nouveau document. Aucune promesse de conservation de tous les profils PDF ou des certificats numériques.
+The tests cover selectable text, images, MediaBox/CropBox, rotations, URI links, internal destinations, annotations with appearance, bookmarks and filled fields. Fields from separate documents must stay independent even if their names look alike. PDFKit can require internal fields to be renamed and destinations to be resolved explicitly before insertion. Interactive structures that the engine cannot keep (XFA or calculated forms, scripts, attachments, layers) are refused explicitly. Documents that contain accessibility tags or archiving/print profiles are accepted with a visible notice before export: these structures will not be carried over, and PDF/A conformance and print colors are not guaranteed. Initial view preferences are not carried over into the new document. No promise to keep all PDF profiles or digital certificates.
 
-Les copies issues de sources protégées s’ouvrent sans mot de passe, ce que l’interface annonce. Mots de passe et documents ne sont conservés que dans la session locale. L’auteur d’un document source n’est pas repris comme auteur du document fusionné.
+Copies made from protected sources open without a password, and the interface says so. Passwords and documents are kept only in the local session. The author of a source document is not carried over as the author of the merged document.
 
-## Performance et limites
+## Performance and limits
 
-- Aucun PDF rendu au déplacement d’une ligne ; seul l’ordre d’identifiants change.
-- Première page uniquement, aperçu borné à 240 pixels de côté ; cache de 32 aperçus maximum (moins de 7,4 Mo RGBA hors frais du framework). Les demandes hors écran sont annulables.
-- 100 fichiers chargés au maximum, 256 Mio par fichier, 512 Mio cumulés de données sources, y compris les documents retenus pour annuler une suppression. Ce plafond ne représente pas la mémoire totale PDFKit ni le pic d’export.
-- 100 opérations annulables ; libérer les sources supprimées quand aucune opération ne peut les restaurer. Un nouveau lot libère également l’historique.
-- Import séquentiel, traitement PDFKit dans l’acteur ; lectures et écriture de fichiers hors de l’acteur principal.
-- Mesurer une fusion de 20 documents / 100 pages synthétiques et le premier aperçu. Repères indicatifs : aperçu < 1 s, export < 3 s sur cette machine.
+- No PDF is rendered when a row moves; only the order of identifiers changes.
+- First page only, preview bounded to 240 pixels per side; cache of 32 previews at most (under 7.4 MB RGBA, framework overhead excluded). Off-screen requests can be canceled.
+- 100 files loaded at most, 256 MiB per file, 512 MiB of source data in total, including the documents kept to undo a removal. This cap does not represent the total PDFKit memory or the export peak.
+- 100 undoable operations; release the removed sources when no operation can restore them. A new batch also releases the history.
+- Sequential import, PDFKit processing in the actor; file reads and writes off the main actor.
+- Measure a merge of 20 documents / 100 synthetic pages and the first preview. Indicative targets: preview < 1 s, export < 3 s on this machine.
 
 ## Interface
 
-Cartes d’accueil en grille adaptative (deux côte à côte dès 960 points). Frère Agrafe vient du dessin officiel Web, exporté dans un sous-catalogue propre à Fusionner sans modifier Web ni Generated. Fonds système, accent bleu, Bricolage pour les titres, textes français/anglais et vouvoiement. Les commandes ⌘O, ⌘E et ⌘Z suivent l’outil affiché.
+Home cards in an adaptive grid (two side by side from 960 points). Brother Staple comes from the official Web drawing, exported into a sub-catalog specific to Merge, without modifying Web or Generated. System backgrounds, blue accent, Bricolage for titles, French/English texts and the formal « vous ». The ⌘O, ⌘E and ⌘Z commands follow the displayed tool.
 
 ## Validation
 
-Tests PDFCore avec fixtures synthétiques, vérification indépendante du PDF exporté, tests de session (ordre, undo, erreurs, export et protection des sources), captures natives clair/sombre, catalogue de textes et export de marque. Pas de photo ou document personnel ajouté au dépôt.
+PDFCore tests with synthetic fixtures, independent check of the exported PDF, session tests (order, undo, errors, export and source protection), native light/dark captures, string catalog and brand export. No personal photo or document added to the repository.
 
 
-## Retours d’usage du 2 octobre
+## Usage feedback of 2 October
 
-Le clic sur une vignette ouvre une feuille d’aperçu du document entier, avec navigation page précédente/suivante. Une seule page est rendue à la demande, jusqu’à 1 600 pixels de côté, et libérée à la fermeture ; les vignettes restent à 240 pixels. Les fichiers protégés utilisent les données déjà ouvertes dans la session.
+A click on a thumbnail opens a preview sheet of the whole document, with previous/next page navigation. Only one page is rendered, on demand, up to 1,600 pixels per side, and it is released on close; the thumbnails stay at 240 pixels. Protected files use the data already opened in the session.
 
-« Aperçu », à côté de l'enregistrement (4 octobre 2026), ouvre la même feuille sur le PDF fusionné : toutes les pages dans l'ordre de la liste, chacune rendue depuis son fichier, sans rien fusionner. Le bouton suit l'état de l'enregistrement.
+"Preview", next to the save button (4 October 2026), opens the same sheet on the merged PDF: all the pages in the list order, each one rendered from its file, without merging anything. The button follows the save state.
 
-Le dépôt de fichiers du Finder doit fonctionner sur une ligne et sur les zones vides. Le réordonnancement utilise des destinations explicites avant/après pour atteindre les deux extrémités. Le survol distingue les boutons actifs, sans changer leurs dimensions ni les rendre actifs lorsqu’ils sont désactivés.
+Dropping files from the Finder must work on a row and on empty areas. Reordering uses explicit before/after destinations to reach both ends. Hover marks the active buttons, without changing their size, and does not make disabled buttons look active.

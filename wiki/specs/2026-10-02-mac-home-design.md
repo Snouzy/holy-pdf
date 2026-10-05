@@ -1,55 +1,55 @@
-# Mac — Accueil par catégories, avec recherche
+# Mac: Home by categories, with search
 
-_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Demandé par l'auteur le 2 octobre, après [Images en PDF et PDF en images](2026-10-02-mac-images-design.md) : l'accueil avait quinze cartes à plat._
+_Written on 2 October 2026. Status: Swift app removed on 5 October 2026 (tag `mac-final`); at the time, shipped in `apps/mac`. Requested by the author on 2 October, after [Images to PDF and PDF to images](2026-10-02-mac-images-design.md): the home screen had fifteen cards in a flat list._
 
-## Objectif
+## Goal
 
-Retrouver un outil sur l'accueil de Holy PDF pour Mac comme sur le site : par sa catégorie, ou en tapant ce qu'on veut faire.
+Find a tool on the Holy PDF for Mac home screen as on the site: by its category, or by typing what you want to do.
 
-La spec est réussie quand :
+The spec succeeds when:
 
-- les outils sont rangés sous les cinq catégories du site, dans son ordre ;
-- taper « alléger » trouve Compresser, « mot de passe » trouve Protéger et Déverrouiller, « fusioner » (avec la faute) trouve Fusionner ;
-- la recherche du Mac et celle du site répondent pareil aux mêmes cas ;
-- les mots de recherche ne sont écrits qu'à un endroit : le site ;
-- les tests de l'appli et des textes passent, sans avertissement du compilateur.
+- the tools are grouped under the five categories of the site, in the site's order;
+- typing « alléger » finds Compress, « mot de passe » finds Protect and Unlock, « fusioner » (with the typo) finds Merge;
+- the Mac search and the site search give the same answers to the same cases;
+- the search words are written in one place only: the site;
+- the app and string tests pass, with no compiler warning.
 
-## Décisions
+## Decisions
 
-| Sujet | Décision | Raison |
+| Topic | Decision | Reason |
 |---|---|---|
-| Catégories | Organiser, Convertir, Modifier, Optimiser, Sécurité : celles du site (`apps/web/src/cast.ts`), dans son ordre, avec ses noms | Une seule façon de ranger les outils pour la marque |
-| Rangement | Organiser : Fusionner, Organiser, Diviser, Extraire. Convertir : Images en PDF, PDF en images. Modifier : Signer, Filigrane, Numéroter, Noircir. Optimiser : Scanner, Compresser, OCR. Sécurité : Protéger, Déverrouiller | Le rangement du site, Scanner compris |
-| Outils à venir | Leurs moines endormis sont sous les cartes de leur catégorie | La section « Bientôt » séparée disparaît : deux outils seulement (un seul depuis PDF en Word, livré le 2 octobre au soir) |
-| Recherche | Le champ de recherche de la fenêtre (`searchable`, ⌘F). Dès qu'un mot utile est tapé, les catégories laissent la place aux moines trouvés. Tant que la demande ne dit rien (vide, mots vides, « pd » en route vers « pdf »), les catégories restent | Le champ natif de macOS, sans rien dessiner. Le site garde aussi sa vue normale dans ce cas |
-| Règles | Celles du site (`apps/web/src/home/search.ts`), portées en Swift dans `ToolSearch` : accents et majuscules ignorés, mot en cours de frappe, une faute dès 4 lettres et deux dès 7, mots vides ignorés (« pdf », « de », « fichier »), sens d'une conversion (« pdf en jpg » avant « jpg en pdf »), outils prêts avant les outils à venir | Les deux recherches doivent répondre pareil |
-| Noms et mots | L'index de recherche du site (les noms de chaque outil et ses mots, comme `search.json.ts` le construit), copié dans `App/SearchTerms.json` par `apps/web/tests/unit/macSearch.test.ts` : `pnpm test` échoue si la copie n'est plus à jour, `UPDATE_MAC_ASSETS=1 pnpm test` la réécrit. Chaque outil du Mac est cherché par son titre, son moine, et les noms et les mots du site | Une seule source, et le même mécanisme que les dessins des moines. Un script à part avait laissé la copie périmer le jour même (2 octobre). Les noms du site portent des mots que les titres du Mac n'ont pas : « convertir », « add ». Sans eux, « convertir pdf en jpg » trouvait l'outil inverse (relecture du 2 octobre) |
-| Langue | Celle de l'interface (`Bundle.main.preferredLocalizations`), pas celle de la région | Un Mac réglé sur la France avec l'appli en anglais doit chercher en anglais |
-| Correspondance | Chaque outil du Mac nomme les outils du site dont il prend les mots. Organiser prend aussi ceux de Supprimer des pages et de Pivoter, qu'il fait sur Mac | « tourner » doit trouver Organiser |
-| Rien trouvé | « Aucun moine ne fait ça… pour l'instant », un conseil, et « Voir tous les moines » | Les textes du site |
-| Hors de ce lot | Favoris et outils récents | Prévus par la feuille de route, à faire quand l'usage le demandera |
+| Categories | Organize, Convert, Edit, Optimize, Security: the site's categories (`apps/web/src/cast.ts`), in its order, with its names | One single way to group the tools for the brand |
+| Grouping | Organize: Merge, Organize pages, Split, Extract pages. Convert: Images to PDF, PDF to images. Edit: Sign, Watermark, Page numbers, Redact. Optimize: Scanner, Compress, OCR. Security: Protect, Unlock | The site's grouping, Scanner included |
+| Upcoming tools | Their sleeping monks sit under the cards of their category | The separate "Soon" section goes away: it had only two tools (only one since PDF to Word, shipped on the evening of 2 October) |
+| Search | The window search field (`searchable`, ⌘F). As soon as a useful word is typed, the categories give way to the monks found. While the query says nothing (empty, stop words, "pd" on its way to "pdf"), the categories stay | The native macOS field, with nothing to draw. The site also keeps its normal view in this case |
+| Rules | The site's rules (`apps/web/src/home/search.ts`), ported to Swift in `ToolSearch`: accents and case ignored, word being typed, one typo from 4 letters and two from 7, stop words ignored (« pdf », « de », « fichier »), direction of a conversion (« pdf en jpg » before « jpg en pdf »), ready tools before upcoming tools | The two searches must give the same answers |
+| Names and words | The site's search index (the names of each tool and its words, as `search.json.ts` builds it), copied into `App/SearchTerms.json` by `apps/web/tests/unit/macSearch.test.ts`: `pnpm test` fails if the copy is out of date, `UPDATE_MAC_ASSETS=1 pnpm test` rewrites it. Each Mac tool is found by its title, its monk, and the site's names and words | One single source, and the same mechanism as the monk drawings. A separate script had let the copy go stale on the same day (2 October). The site's names carry words that the Mac titles do not have: « convertir », "add". Without them, « convertir pdf en jpg » found the opposite tool (review of 2 October) |
+| Language | The interface language (`Bundle.main.preferredLocalizations`), not the region | A Mac set to France with the app in English must search in English |
+| Mapping | Each Mac tool names the site tools whose words it takes. Organize pages also takes the words of Delete pages and Rotate, which it does on Mac | « tourner » must find Organize pages |
+| Nothing found | "No monk does that… yet", a tip, and "See all the monks" | The site's texts |
+| Outside this milestone | Favorites and recent tools | Planned in the roadmap, to do when usage asks for them |
 
-## Parcours
+## Flow
 
-1. L'accueil montre les cinq catégories, chacune avec ses cartes.
-2. ⌘F ou un clic dans le champ de la barre d'outils ; taper un mot.
-3. L'accueil montre les moines trouvés, le meilleur d'abord, et leur nombre.
-4. Effacer le champ, ou « Voir tous les moines », ramène les catégories.
+1. The home screen shows the five categories, each with its cards.
+2. ⌘F or a click in the toolbar field; type a word.
+3. The home screen shows the monks found, the best match first, and their number.
+4. Clearing the field, or "See all the monks", brings back the categories.
 
-## Limites connues
+## Known limits
 
-- Le site dit par quel mot un outil a été trouvé (« alléger » → Compresser) ; le Mac ne le dit pas.
-- Pas de filtre par catégorie ni de vue compacte, que le site a.
-- Les mots suivent la langue de l'appli : français, sinon anglais.
-- « ß » et les ligatures (« ﬁ ») sont lus comme « ss » et « fi » ; le site en fait des espaces. Seul écart mesuré sur 443 demandes.
+- The site says which word found a tool (« alléger » → Compress); the Mac does not.
+- No category filter and no compact view, which the site has.
+- The words follow the app language: French, otherwise English.
+- "ß" and ligatures ("ﬁ") are read as "ss" and "fi"; the site turns them into spaces. This is the only difference measured over 443 queries.
 
 ## Tests
 
-| Niveau | Quoi | Où |
+| Level | What | Where |
 |---|---|---|
-| Recherche | Les cas de `apps/web/tests/unit/search.test.ts` : synonyme, accents, mot en cours, fautes, mot inconnu, mots vides, sens d'une conversion, moine, outils prêts d'abord | `ToolSearchTests` |
-| Catalogue | Chaque outil a sa catégorie, ses noms et ses mots dans les deux langues ; « alléger », « mot de passe », « caviarder », « supprimer une page », « tourner », « shrink », « word » ; les 22 cas du site sur son index construit, plus « add page numbers » et « convertir » | `ToolCatalogTests` |
-| Fenêtre | Le champ de recherche est dans la barre d'outils de la vraie fenêtre | `HomeSearchFieldTests` |
-| Écrans | Accueil par catégories en clair, en sombre et étroit ; moines trouvés ; outil à venir trouvé ; rien trouvé | `ScreenSnapshots` |
-| Index à jour | La copie de l'index de recherche du site, contrôlée par les tests unitaires du site : qui change un mot sur le site est prévenu par `pnpm verify` | `apps/web/tests/unit/macSearch.test.ts` |
-| Textes | Tous traduits, sans tutoiement | `check-strings.py` |
+| Search | The cases of `apps/web/tests/unit/search.test.ts`: synonym, accents, word being typed, typos, unknown word, stop words, direction of a conversion, monk, ready tools first | `ToolSearchTests` |
+| Catalog | Each tool has its category, its names and its words in both languages; « alléger », « mot de passe », « caviarder », « supprimer une page », « tourner », "shrink", "word"; the site's 22 cases on its built index, plus "add page numbers" and « convertir » | `ToolCatalogTests` |
+| Window | The search field is in the toolbar of the real window | `HomeSearchFieldTests` |
+| Screens | Home by categories in light, in dark and narrow; monks found; upcoming tool found; nothing found | `ScreenSnapshots` |
+| Up-to-date index | The copy of the site's search index, checked by the site's unit tests: whoever changes a word on the site is warned by `pnpm verify` | `apps/web/tests/unit/macSearch.test.ts` |
+| Strings | All translated, never the informal « tu » | `check-strings.py` |

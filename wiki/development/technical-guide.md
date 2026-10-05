@@ -1,52 +1,52 @@
-# Guide technique
+# Technical guide
 
-_Rédigé le 29 septembre 2026 pour le moteur Swift et l'appli Mac ; réécrit le 5 octobre 2026 pour le site et l'appli de bureau, l'appli Swift ayant été retirée (son code et ses règles sont au tag `mac-final`)._
+_Written on 29 September 2026 for the Swift engine and the Mac app. Rewritten on 5 October 2026 for the site and the desktop app, after the Swift app was removed (its code and its rules are at the tag `mac-final`)._
 
-## Où est quoi
+## Where things are
 
-- `apps/web/` : le site Astro, la planche en îlot Preact, le moteur PDFium et qpdf en WebAssembly dans un Worker. Les choix, les mesures et les pièges : [Version Web](web-version.md) et la [spec du socle](../specs/2026-09-29-web-organiser-design.md).
-- `apps/desktop/` : l'appli de bureau Tauri, une entrée Preact composée des briques du site, qui importe `apps/web/src` par chemin relatif et n'y change rien. Specs : [coque Tauri](../specs/2026-10-05-desktop-tauri-design.md) et [coque applicative](../specs/2026-10-05-desktop-shell-design.md).
-- `wiki/` : une spec par outil avant le code (ce qu'il fait, chaque décision et sa raison). Un changement de code met à jour sa page du wiki dans le même commit.
+- `apps/web/`: the Astro site, the board as a Preact island, the PDFium and qpdf engine in WebAssembly in a Worker. The choices, the measurements and the pitfalls: [Web version](web-version.md) and the [foundation spec](../specs/2026-09-29-web-organiser-design.md).
+- `apps/desktop/`: the Tauri desktop app, a Preact entry built from the site's components. It imports `apps/web/src` by relative path and changes nothing in it. Specs: [Tauri shell](../specs/2026-10-05-desktop-tauri-design.md) and [app shell](../specs/2026-10-05-desktop-shell-design.md).
+- `wiki/`: one spec per tool before the code (what it does, each decision and its reason). A code change updates its wiki page in the same commit.
 
-## Règles de code
+## Code rules
 
-- TypeScript strict, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes` : un avertissement se corrige, il ne s'ignore pas.
-- Un état se modélise en union discriminée (`DocStatus`, `Flow`), jamais en booléens combinés. Les erreurs sont typées (`EngineError`) ; l'interface les traduit en phrases.
-- Le moteur prend des données et rend des données ; aucune phrase destinée à l'utilisateur hors des dictionnaires `i18n/` (français et anglais, « vous », espace insécable à l'intérieur des « »).
-- Pas d'abstraction prématurée : un protocole ou une indirection seulement quand une seconde implémentation existe. Le code doit rester lisible dans six mois par un développeur junior ou par une IA.
-- Un composant se nomme d'après sa fonction, pas son contexte d'origine (`PageThumbnail`, pas `ScannerBoardThumbnail`).
+- Strict TypeScript, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`: you fix a warning, you do not ignore it.
+- Model a state as a discriminated union (`DocStatus`, `Flow`), never as combined booleans. Errors are typed (`EngineError`); the interface turns them into sentences.
+- The engine takes data and returns data. No sentence for the user outside the `i18n/` dictionaries (French and English, « vous » in French, a non-breaking space inside « »).
+- No premature abstraction: add a protocol or an indirection only when a second implementation exists. The code must stay readable in six months by a junior developer or by an AI.
+- Name a component after its function, not after the context it came from (`PageThumbnail`, not `ScannerBoardThumbnail`).
 
-## Dépendances
+## Dependencies
 
-- Une bibliothèque n'entre que par une spec qui dit pourquoi le navigateur, Astro ou Preact ne suffisent pas ; la liste est tenue dans la [spec du socle](../specs/2026-09-29-web-organiser-design.md). Les versions sont épinglées.
-- Une dépendance embarquée est créditée dans `apps/web/public/licenses/`, les pages de mentions et [LICENSING.md](../../LICENSING.md).
+- A library comes in only through a spec that says why the browser, Astro or Preact are not enough. The [foundation spec](../specs/2026-09-29-web-organiser-design.md) keeps the list. Versions are pinned.
+- An embedded dependency is credited in `apps/web/public/licenses/`, the legal notice pages and [LICENSING.md](../../LICENSING.md).
 
 ## Performance
 
-**Mesurer avant d'optimiser.** Une intuition de performance est fausse une fois sur deux : on chiffre, on corrige, on re-chiffre.
-- Les budgets du site vivent dans `apps/web/lighthouserc.json` ; `pnpm verify:full` les tient. Les mesures sont dans [Version Web](web-version.md).
-- Rien ne change de taille pendant un glisser (pages, coins) : sinon le contenu saute sous le curseur. Les rendus lourds attendent la fin du geste.
+**Measure before you optimize.** A performance intuition is wrong half the time: measure, fix, measure again.
+- The site budgets live in `apps/web/lighthouserc.json`; `pnpm verify:full` enforces them. The measurements are in [Web version](web-version.md).
+- Nothing changes size during a drag (pages, corners): otherwise the content jumps under the pointer. Heavy renders wait for the end of the gesture.
 
 ## Interface
 
-- Couleurs par les tokens de `styles/tokens.css`, clair et sombre : le mode sombre doit fonctionner partout.
-- Une action qui s'annule ne demande pas de confirmation (règle Apple) : supprimer une page se rattrape avec ⌘Z. Supprimer un document reste confirmé, avec son nom, et le message rappelle ⌘Z.
-- L'appli de bureau (`apps/desktop`) se juge comme une appli native de son système, pas comme un site dans une fenêtre : sur Mac comme l'appli Swift, sur Windows comme une appli Windows. Fenêtre, menus, raccourcis, dialogues et fichiers sont ceux du système ; rien de l'en-tête, du pied, des pages ou des liens du site n'y apparaît. Le principe et ce qu'il impose sont dans la [spec de la coque applicative](../specs/2026-10-05-desktop-shell-design.md).
+- Colors come from the tokens of `styles/tokens.css`, light and dark: dark mode must work everywhere.
+- An action that can be undone does not ask for confirmation (Apple rule): deleting a page is undone with ⌘Z. Deleting a document stays confirmed, with its name, and the message reminds the user of ⌘Z.
+- Judge the desktop app (`apps/desktop`) as a native app of its system, not as a site in a window: on Mac like the Swift app, on Windows like a Windows app. Window, menus, shortcuts, dialogs and files are those of the system. Nothing from the site's header, footer, pages or links appears in it. The principle and what it requires are in the [application shell spec](../specs/2026-10-05-desktop-shell-design.md).
 
-## Commentaires
+## Comments
 
-En anglais, et seulement pour ce que le code ne peut pas dire : une raison, une contrainte, un piège. Jamais une paraphrase de la ligne suivante. Par défaut, un changement n'ajoute aucun commentaire.
+In English, and only for what the code cannot say: a reason, a constraint, a pitfall. Never a paraphrase of the next line. By default, a change adds no comment.
 
 ## Tests
 
-Voir [Tests](tests.md).
+See [Tests](tests.md).
 
-## Confidentialité
+## Privacy
 
-- Aucun fichier ne quitte l'appareil. Le site traite tout dans le navigateur ; l'appli de bureau n'a pas de greffon HTTP et sa CSP limite `connect-src` à elle-même et à l'IPC de Tauri.
-- Aucune photo réelle dans le dépôt : `fixtures-private/` est ignoré par git. Un dépôt privé reste un tiers, et peut devenir public.
+- No file leaves the device. The site processes everything in the browser. The desktop app has no HTTP plugin, and its CSP limits `connect-src` to itself and to the Tauri IPC.
+- No real photo in the repository: git ignores `fixtures-private/`. A private repository still sits with a third party, and it can become public.
 
 ## Git
 
-- Une branche et une pull request par changement, jamais de push direct sur `main`.
-- Les tests arrivent avec le changement, et la page du wiki concernée est mise à jour dans le même commit. Le reste est dans [CONTRIBUTING.md](../../CONTRIBUTING.md).
+- One branch and one pull request per change, never a direct push to `main`.
+- Tests come with the change, and the wiki page concerned is updated in the same commit. The rest is in [CONTRIBUTING.md](../../CONTRIBUTING.md).
