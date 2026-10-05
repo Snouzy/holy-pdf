@@ -18,6 +18,17 @@ Trois gestes du site n'existent pas dans WKWebView sous wry : le lien `<a downlo
 
 La pratique courante (VS Code, Obsidian, Linear, Stirling PDF v2 qui passe sur Tauri) : une seule base de composants, deux entrées. Le site marketing d'un côté, la coque applicative de l'autre. On ne cache pas des sections du site : on compose une autre page avec les mêmes briques.
 
+## Principe : une appli du système, pas un site dans une fenêtre
+
+Décision de l'auteur, 5 octobre 2026 : l'appli de bureau se juge comme une appli native de son système. Sur Mac, elle doit se comporter et se présenter comme l'appli Swift gelée le 4 octobre ; sur Windows comme une appli Windows ; sur Linux comme une appli du bureau. Le web est sa technique, pas son allure. Concrètement :
+
+- **La fenêtre est celle du système** : barre de titre intégrée sur Mac, décorations natives ailleurs, taille et position mémorisées, mode sombre et couleur d'accent du système, police système pour les commandes (Bricolage pour les grands titres seulement, comme sur Mac).
+- **Les gestes sont ceux du système** : menus dans la langue avec leurs raccourcis (⌘O, ⌘W, ⌘Q, ⌘Z), dialogues natifs pour ouvrir et enregistrer, dépôt de fichiers n'importe où, double-clic dans le Finder ou l'Explorateur, « Afficher dans le Finder », une garde avant de quitter avec un résultat non enregistré.
+- **Rien du web ne transparaît** : pas d'en-tête ni de pied de site, pas de texte de référencement, pas de sélecteur de langue, pas d'URL ni de navigation par pages, pas de « télécharger » ni de « nouvel onglet », pas de lien qui remplace l'appli dans sa fenêtre, pas de bouton de thème.
+- **Le document est au centre** : il reste ouvert d'un outil à l'autre, et l'appli ne recharge jamais.
+
+Le test : quelqu'un qui connaît l'appli Swift ne doit pas voir la différence dans la première minute, et quelqu'un qui connaît le site ne doit pas y penser. Chaque décision ci-dessous découle de ce principe ; une décision qui le contredit se justifie dans sa ligne, ou ne se prend pas.
+
 ## Objectif et critères de réussite
 
 À l'ouverture, Holy PDF pour le bureau est une appli : on reconnaît la marque et le monastère, et rien ne rappelle un site.

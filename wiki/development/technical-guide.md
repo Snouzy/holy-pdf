@@ -111,6 +111,7 @@ C'est le piège du projet : pixels de la photo, pixels du rendu, fractions de pa
 - Couleurs système et sémantiques. Le mode sombre doit fonctionner. Une exception : la couleur d'accent de l'appli Mac est le bleu de la marque (`AccentColor`, exportée du site, voir la [spec](../specs/2026-10-01-mac-design-system-design.md)).
 - Les boutons utilisent `.buttonHover()` avant leur éventuel `.disabled(...)` : variation de luminosité, pointeur et animation courte respectant Réduire les animations, sans changer les dimensions. Les cartes/vignettes gardent leurs survols existants ; les menus et dialogues système conservent leurs comportements natifs.
 - Un composant se nomme d'après sa fonction, pas son contexte d'origine (`PageThumbnail`, pas `ScannerBoardThumbnail`).
+- L'appli de bureau (`apps/desktop`) se juge comme une appli native de son système, pas comme un site dans une fenêtre : sur Mac comme l'appli Swift, sur Windows comme une appli Windows. Fenêtre, menus, raccourcis, dialogues et fichiers sont ceux du système ; rien de l'en-tête, du pied, des pages ou des liens du site n'y apparaît. Le principe et ce qu'il impose sont dans la [spec de la coque applicative](../specs/2026-10-05-desktop-shell-design.md).
 
 ## Commentaires
 
