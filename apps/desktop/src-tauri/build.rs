@@ -13,12 +13,15 @@ fn main() {
   collect_script_hashes(&dist, &mut hashes);
   let script_hashes = hashes.into_iter().map(|hash| format!(" '{hash}'")).collect::<String>();
   let csp = format!(
-    "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'{script_hashes}; connect-src 'self' ipc: http://ipc.localhost; worker-src 'self' blob:; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'"
+    "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'{script_hashes}; connect-src 'self' ipc: http://ipc.localhost; worker-src 'self' blob:; img-src 'self' blob: data:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'"
   );
   let mut config: serde_json::Value = env::var("TAURI_CONFIG")
     .ok()
     .and_then(|json| serde_json::from_str(&json).ok())
     .unwrap_or_default();
+  if config["app"]["security"]["csp"].is_string() {
+    println!("cargo:warning=build.rs replaces the csp of the Tauri config");
+  }
   config["app"]["security"]["csp"] = csp.into();
   config["app"]["security"]["dangerousDisableAssetCspModification"] = true.into();
   println!("cargo:rustc-env=TAURI_CONFIG={config}");

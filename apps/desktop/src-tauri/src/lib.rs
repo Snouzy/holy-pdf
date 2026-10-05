@@ -1,8 +1,17 @@
-use std::{env, process, sync::Mutex, thread, time::Duration};
+use std::{
+  env, process,
+  sync::{
+    Mutex,
+    atomic::{AtomicBool, Ordering},
+  },
+  thread,
+  time::Duration,
+};
 use tauri::{AppHandle, Manager, RunEvent, WebviewUrl, WebviewWindowBuilder};
 
 const EXPECTED_STEPS: usize = 5;
 const PROBE: &str = include_str!("../../smoke/probe.js");
+static VERDICT: AtomicBool = AtomicBool::new(false);
 
 #[derive(serde::Deserialize)]
 struct Step {
@@ -17,6 +26,7 @@ struct Report {
 #[derive(serde::Deserialize)]
 struct PageReport {
   page: String,
+  title: String,
   errors: Vec<String>,
 }
 
@@ -25,26 +35,34 @@ struct Smoke {
   reported: Mutex<usize>,
 }
 
+fn verdict(app: &AppHandle, code: i32) {
+  VERDICT.store(true, Ordering::Relaxed);
+  app.exit(code);
+}
+
 #[tauri::command]
 fn smoke_report(app: AppHandle, report: String) {
   println!("SMOKE {report}");
-  let passed = serde_json::from_str::<Report>(&report)
-    .is_ok_and(|parsed| parsed.steps.len() == EXPECTED_STEPS && parsed.steps.iter().all(|step| step.ok));
-  app.exit(if passed { 0 } else { 1 });
+  let passed = app.try_state::<Smoke>().is_none()
+    && serde_json::from_str::<Report>(&report)
+      .is_ok_and(|parsed| parsed.steps.len() == EXPECTED_STEPS && parsed.steps.iter().all(|step| step.ok));
+  verdict(&app, if passed { 0 } else { 1 });
 }
 
 #[tauri::command]
 fn smoke_page(app: AppHandle, report: String) {
   println!("SMOKE {report}");
-  let smoke = app.state::<Smoke>();
+  let Some(smoke) = app.try_state::<Smoke>() else { return verdict(&app, 1) };
   let mut reported = smoke.reported.lock().unwrap();
-  let passed = serde_json::from_str::<PageReport>(&report)
-    .is_ok_and(|parsed| smoke.pages.get(*reported) == Some(&parsed.page) && parsed.errors.is_empty());
+  // A missing page is served as an error text: it loads, has no title, and reports no error.
+  let passed = serde_json::from_str::<PageReport>(&report).is_ok_and(|parsed| {
+    smoke.pages.get(*reported) == Some(&parsed.page) && !parsed.title.is_empty() && parsed.errors.is_empty()
+  });
   *reported += 1;
   if !passed {
-    app.exit(1);
+    verdict(&app, 1);
   } else if *reported == smoke.pages.len() {
-    app.exit(0);
+    verdict(&app, 0);
   }
 }
 
@@ -61,8 +79,11 @@ pub fn run() {
     None => home(),
     Some(pages) => pages.first().cloned().unwrap_or_else(|| String::from("index.html")),
   };
-  tauri::Builder::default()
-    .invoke_handler(tauri::generate_handler![smoke_report, smoke_page])
+  let mut builder = tauri::Builder::default();
+  if smoke_mode {
+    builder = builder.invoke_handler(tauri::generate_handler![smoke_report, smoke_page]);
+  }
+  builder
     .setup(move |app| {
       let mut window = WebviewWindowBuilder::new(app, "main", WebviewUrl::App(start.into()))
         .title("Holy PDF")
@@ -75,7 +96,7 @@ pub fn run() {
       // A page that never loads reports nothing: the watchdog turns that silence into a verdict.
       thread::spawn(|| {
         thread::sleep(Duration::from_secs(120));
-        eprintln!("SMOKE no report after 120 s");
+        eprintln!("SMOKE no verdict after 120 s");
         process::exit(2);
       });
       if !pages.is_empty() {
@@ -88,9 +109,9 @@ pub fn run() {
     .build(tauri::generate_context!())
     .expect("error while running tauri application")
     .run(move |_, event| {
-      // Closing the window ends the event loop with 0: in smoke mode that would pass for a verdict.
-      if smoke_mode && matches!(event, RunEvent::ExitRequested { code: None, .. }) {
-        eprintln!("SMOKE window closed before the verdict");
+      // The close button and Cmd+Q end the loop with 0: in smoke mode only a verdict may.
+      if smoke_mode && matches!(event, RunEvent::Exit) && !VERDICT.load(Ordering::Relaxed) {
+        eprintln!("SMOKE closed before the verdict");
         process::exit(3);
       }
     });
