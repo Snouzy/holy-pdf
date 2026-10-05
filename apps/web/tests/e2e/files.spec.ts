@@ -32,6 +32,8 @@ test("offers to turn images into pages on Merge", async ({ page }) => {
     { name: "green.png", mimeType: "image/png", buffer: solidPng(200, 300, [30, 200, 30]) },
   ]);
   await expect(question).toContainText("These are 2 images. Shall I turn them into PDF pages before merging?");
+  // The dialog lives beside the board, not inside it: its buttons must still wear the board's style, not the browser's.
+  await expect(question.getByRole("button", { name: "Convert" })).toHaveCSS("font-weight", "700");
   await question.getByRole("button", { name: "Convert" }).click();
   await expectThumbnails(page, 3);
   await expect(page.locator(".file-tab")).toHaveCount(3);
