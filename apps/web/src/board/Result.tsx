@@ -9,6 +9,7 @@ import type { Lang, Tool } from "../tools";
 import { deliveryOf, type SaveOutcome, type Saver, shareFiles, thisDevice } from "./deliver";
 import { engine } from "./engine";
 import { docxType, type Made } from "./flow";
+import { PagePreview, type Sheet } from "./PagePreview";
 import { formatSize } from "./size";
 
 type Props = { tool: Tool; t: Dictionary; lang: Lang; made: Made; saver: Saver; onSaved: () => void; onBack: () => void; onAgain: () => void };
@@ -19,7 +20,18 @@ export function Result({ tool, t, lang, made, saver, onSaved, onBack, onAgain }:
   const [error, setError] = useState<EngineError | null>(null);
   const [outcome, setOutcome] = useState<SaveOutcome | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
+  const [preview, setPreview] = useState<{ sheets: Sheet[]; index: number } | null>(null);
+  const [viewing, setViewing] = useState(false);
+  const opened = useRef<string[]>([]);
+  const gone = useRef(false);
   useLayoutEffect(() => heading.current?.focus(), []);
+  useEffect(
+    () => () => {
+      gone.current = true;
+      closeOpened();
+    },
+    [],
+  );
   const monk = cast[tool.id];
   const kind = made.type === "image/jpeg" ? "images" : made.type === docxType ? "word" : "pdf";
   const [single] = made.files;
@@ -63,7 +75,51 @@ export function Result({ tool, t, lang, made, saver, onSaved, onBack, onAgain }:
     return null;
   }
 
-  const { preview, open, reveal } = saver;
+  function closeOpened() {
+    for (const docId of opened.current) engine.close(docId);
+    opened.current = [];
+  }
+
+  /** The files just made, reopened in the engine for the time of the preview; the images as they are. */
+  async function view() {
+    setViewing(true);
+    setError(null);
+    setFailure(null);
+    try {
+      const sheets: Sheet[] = [];
+      for (const [position, file] of made.files.entries()) {
+        // Unmounted while opening: the cleanup closed what was open, the rest must not open.
+        if (gone.current) return;
+        if (made.type === "image/jpeg") {
+          sheets.push({ key: `${position}:${file.name}`, label: file.name, rotation: 0, render: async () => new Blob([file.bytes], { type: made.type }) });
+          continue;
+        }
+        const docId = `result-${crypto.randomUUID()}`;
+        opened.current.push(docId);
+        const result = await engine.open(docId, new File([file.bytes], file.name, { type: made.type }), "pdf", made.password);
+        if (gone.current) return;
+        if (!result.ok) {
+          closeOpened();
+          setError(result.error);
+          return;
+        }
+        result.value.forEach((size, index) =>
+          sheets.push({
+            key: `${docId}:${index}`,
+            label: made.files.length > 1 ? t.board.pageOfFile(file.name, index + 1) : t.board.page(index + 1),
+            rotation: 0,
+            size,
+            render: (width) => engine.thumbnail(docId, index, width).then((rendered) => (rendered.ok ? rendered.value : null)),
+          }),
+        );
+      }
+      setPreview({ sheets, index: 0 });
+    } finally {
+      setViewing(false);
+    }
+  }
+
+  const { open, reveal } = saver;
 
   return (
     <section class="result">
@@ -94,8 +150,8 @@ export function Result({ tool, t, lang, made, saver, onSaved, onBack, onAgain }:
               <Icon name="download" size={22} />
               {label}
             </button>
-            {preview && delivery === "one" && single && made.type === "application/pdf" && (
-              <button type="button" onClick={() => attempt(preview(single.bytes, single.name, made.type))}>
+            {made.type !== docxType && (
+              <button type="button" disabled={viewing} onClick={() => void view()}>
                 <Icon name="view" size={18} />
                 {t.flow.view}
               </button>
@@ -131,6 +187,15 @@ export function Result({ tool, t, lang, made, saver, onSaved, onBack, onAgain }:
         <Icon name="again" size={18} />
         {texts.again}
       </button>
+      <PagePreview
+        sheets={preview?.sheets ?? []}
+        index={preview?.index ?? null}
+        onIndex={(index) => {
+          if (index === null) closeOpened();
+          setPreview(index === null ? null : preview && { ...preview, index });
+        }}
+        t={t}
+      />
     </section>
   );
 }

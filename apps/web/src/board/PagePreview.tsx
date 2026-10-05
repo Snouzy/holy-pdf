@@ -2,36 +2,30 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import type { PageSize } from "../engine/types";
 import type { Dictionary } from "../i18n/fr";
 import { Icon } from "../illustrations/Icon";
-import { engine } from "./engine";
-import type { PageRef } from "./state";
 
-type Props = {
-  pages: PageRef[];
-  sizeOf: (page: PageRef) => PageSize;
-  labelOf: (page: PageRef) => string;
-  index: number | null;
-  onIndex: (index: number | null) => void;
-  t: Dictionary;
-};
+/** What the preview shows: a page of the board, or a page or image of the result. `render` gets the width in pixels. */
+export type Sheet = { key: string; label: string; rotation: 0 | 90 | 180 | 270; size?: PageSize; render: (width: number) => Promise<Blob | null> };
+
+type Props = { sheets: Sheet[]; index: number | null; onIndex: (index: number | null) => void; t: Dictionary };
 
 /** The Swift app's sheet rendered the long side at 1 600 px at most: enough for a screen, cheap enough for a 200-page scan. */
 const maxSide = 1600;
 /** A held arrow key must not queue one render per page on the worker. */
 const settle = 100;
 
-/** One page at a time, as big as the window allows: the click on a thumbnail, the arrows, Échap. */
-export function PagePreview({ pages, sizeOf, labelOf, index, onIndex, t }: Props) {
+/** One sheet at a time, as big as the window allows: the click on a thumbnail or on « Voir », the arrows, Échap. */
+export function PagePreview({ sheets, index, onIndex, t }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
   const frame = useRef<HTMLDivElement>(null);
   const urls = useRef(new Map<string, string>());
   const pending = useRef(new Set<string>());
   const failed = useRef(new Set<string>());
   const closing = useRef(false);
-  const latest = useRef({ index, count: pages.length });
-  latest.current = { index, count: pages.length };
+  const latest = useRef({ index, count: sheets.length });
+  latest.current = { index, count: sheets.length };
   const [, landed] = useState(0);
-  const page = index === null ? undefined : pages[index];
-  const key = page ? `${page.docId}:${page.index}:${page.rotation}` : null;
+  const sheet = index === null ? undefined : sheets[index];
+  const key = sheet?.key ?? null;
   const url = key ? (urls.current.get(key) ?? null) : null;
 
   function step(by: number) {
@@ -46,7 +40,7 @@ export function PagePreview({ pages, sizeOf, labelOf, index, onIndex, t }: Props
   useEffect(() => {
     const element = dialog.current;
     if (!element) return;
-    if (!page || key === null) {
+    if (!sheet || key === null) {
       if (element.open) {
         closing.current = true;
         element.close();
@@ -57,24 +51,30 @@ export function PagePreview({ pages, sizeOf, labelOf, index, onIndex, t }: Props
       return;
     }
     if (!element.open) element.showModal();
-    const sheet = frame.current;
-    if (!sheet || urls.current.has(key) || pending.current.has(key) || failed.current.has(key)) return;
+    const box = frame.current;
+    if (!box || urls.current.has(key) || pending.current.has(key) || failed.current.has(key)) return;
     const timer = setTimeout(() => {
-      const sideways = page.rotation % 180 !== 0;
-      const size = sizeOf(page);
-      const box = sideways ? { width: sheet.clientHeight, height: sheet.clientWidth } : { width: sheet.clientWidth, height: sheet.clientHeight };
-      const shown = Math.min(box.width, (box.height * size.width) / size.height) * devicePixelRatio;
-      const width = Math.round(Math.min(shown, maxSide * Math.min(1, size.width / size.height)));
+      const sideways = sheet.rotation % 180 !== 0;
+      const room = sideways ? { width: box.clientHeight, height: box.clientWidth } : { width: box.clientWidth, height: box.clientHeight };
+      const ratio = sheet.size ? sheet.size.width / sheet.size.height : 1;
+      const width = Math.round(Math.min(Math.min(room.width, room.height * ratio) * devicePixelRatio, maxSide * Math.min(1, ratio)));
       pending.current.add(key);
-      void engine.thumbnail(page.docId, page.index, width).then((result) => {
+      void sheet.render(width).then((image) => {
         pending.current.delete(key);
-        if (result.ok) urls.current.set(key, URL.createObjectURL(result.value));
+        if (image) urls.current.set(key, URL.createObjectURL(image));
         else failed.current.add(key);
         landed((count) => count + 1);
       });
     }, settle);
     return () => clearTimeout(timer);
   });
+
+  useEffect(
+    () => () => {
+      for (const made of urls.current.values()) URL.revokeObjectURL(made);
+    },
+    [],
+  );
 
   // On the document: in Chromium a click focuses the button, and a button that turns disabled drops the focus to body.
   useEffect(() => {
@@ -102,18 +102,18 @@ export function PagePreview({ pages, sizeOf, labelOf, index, onIndex, t }: Props
         else onIndex(null);
       }}
     >
-      {page && key !== null && index !== null && (
+      {sheet && key !== null && index !== null && (
         <>
           <div class="preview-head">
-            <p class="preview-title">{labelOf(page)}</p>
+            <p class="preview-title">{sheet.label}</p>
             <button type="button" aria-label={t.board.closePreview} onClick={() => onIndex(null)}>
               <Icon name="close" size={20} />
             </button>
           </div>
           <div class="preview-sheet">
-            <div ref={frame} class={page.rotation % 180 !== 0 ? "preview-frame sideways" : "preview-frame"}>
+            <div ref={frame} class={sheet.rotation % 180 !== 0 ? "preview-frame sideways" : "preview-frame"}>
               {url ? (
-                <img src={url} alt="" style={{ transform: `rotate(${page.rotation}deg)` }} />
+                <img src={url} alt="" style={{ transform: `rotate(${sheet.rotation}deg)` }} />
               ) : failed.current.has(key) ? (
                 <p class="preview-failed">{t.board.previewFailed}</p>
               ) : (
@@ -125,8 +125,8 @@ export function PagePreview({ pages, sizeOf, labelOf, index, onIndex, t }: Props
             <button type="button" aria-label={t.board.previousPage} disabled={index === 0} onClick={() => step(-1)}>
               <Icon name="back" size={20} />
             </button>
-            <p>{t.board.pageOf(index + 1, pages.length)}</p>
-            <button type="button" aria-label={t.board.nextPage} disabled={index === pages.length - 1} onClick={() => step(1)}>
+            <p>{t.board.pageOf(index + 1, sheets.length)}</p>
+            <button type="button" aria-label={t.board.nextPage} disabled={index === sheets.length - 1} onClick={() => step(1)}>
               <Icon name="arrow" size={20} />
             </button>
           </div>

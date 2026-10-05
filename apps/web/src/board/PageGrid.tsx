@@ -22,7 +22,8 @@ import { FilePicker } from "./FilePicker";
 import { fileColor } from "./FileList";
 import type { Action, Board, PageRef } from "./state";
 import { formatSize } from "./size";
-import { PagePreview } from "./PagePreview";
+import { engine } from "./engine";
+import { PagePreview, type Sheet } from "./PagePreview";
 import { useThumbnail } from "./thumbnails";
 
 /** CSS pixels. Thumbnails render at twice this size, for sharp screens. */
@@ -71,6 +72,14 @@ export function PageGrid({ board, tool, t, lang, sizes, dispatch, onFiles }: Pro
     onDragCancel: ({ active }) => t.board.cancelled(labelOf(active.id)),
   };
 
+  const sheetOf = (page: PageRef): Sheet => ({
+    key: `${page.docId}:${page.index}:${page.rotation}`,
+    label: labelOf(page.id),
+    rotation: page.rotation,
+    size: pageSizes.get(page.docId)?.[page.index] ?? a4,
+    render: (width) => engine.thumbnail(page.docId, page.index, width).then((result) => (result.ok ? result.value : null)),
+  });
+
   function onDragEnd({ active, over }: DragEndEvent) {
     if (!over || active.id === over.id) return;
     dispatch({ type: "pageMoved", pageId: String(active.id), toIndex: board.pages.findIndex((page) => page.id === over.id) });
@@ -117,14 +126,7 @@ export function PageGrid({ board, tool, t, lang, sizes, dispatch, onFiles }: Pro
           </li>
         </ol>
       </SortableContext>
-      <PagePreview
-        pages={board.pages}
-        sizeOf={(page) => pageSizes.get(page.docId)?.[page.index] ?? a4}
-        labelOf={(page) => labelOf(page.id)}
-        index={previewed}
-        onIndex={setPreviewed}
-        t={t}
-      />
+      <PagePreview sheets={board.pages.map(sheetOf)} index={previewed} onIndex={setPreviewed} t={t} />
     </DndContext>
   );
 }

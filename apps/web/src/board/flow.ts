@@ -16,6 +16,8 @@ export type Made = {
   after: number;
   /** Pages of the one PDF made, 0 when that is not the proof to show. */
   pages: number;
+  /** The password a Protect result opens with: the preview needs it. */
+  password?: string;
 };
 
 export type Flow =
