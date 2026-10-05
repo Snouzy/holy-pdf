@@ -1,6 +1,6 @@
 # Mac — Pages par feuille, Couper les pages en deux, Pixelliser
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/mac`. Demandé par l'auteur le 2 octobre, après [Aplatir](2026-10-02-mac-flatten-design.md) : le site a les trois outils depuis le même jour ([pages par feuille](2026-10-02-web-pages-per-sheet-design.md), [couper en deux](2026-10-02-web-split-in-half-design.md), [pixelliser](2026-10-02-web-pixelize-design.md))._
+_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Demandé par l'auteur le 2 octobre, après [Aplatir](2026-10-02-mac-flatten-design.md) : le site a les trois outils depuis le même jour ([pages par feuille](2026-10-02-web-pages-per-sheet-design.md), [couper en deux](2026-10-02-web-split-in-half-design.md), [pixelliser](2026-10-02-web-pixelize-design.md))._
 
 ## Objectif
 

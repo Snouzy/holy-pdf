@@ -114,5 +114,5 @@ Relecture du lot 1, le 1er octobre 2026 : les niveaux de compression et leurs FA
 
 - vérifier les marques, puis acheter holy-pdf.com et holypdf.app ;
 - appliquer le design system au site web : voir la [spec](../specs/2026-09-30-web-design-system-design.md) ;
-- icône d'appli iPhone (celle du Mac : `apps/mac/PDFToolbox/HolyPDF.icon`) ;
+- icône d'appli iPhone (celle de l'appli Mac retirée, gardée au tag `mac-final` : `apps/mac/PDFToolbox/HolyPDF.icon`) ;
 - pour la version finale des illustrations, prévoir un illustrateur, avec les planches du canevas comme brief.

@@ -1,6 +1,6 @@
 # Mac — Filigrane
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/mac`._
+_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`._
 
 ## Objectif
 

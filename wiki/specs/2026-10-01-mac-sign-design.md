@@ -1,5 +1,7 @@
 # Mac — Signer un PDF
 
+_Appli Swift retirée le 5 octobre 2026 : cette spec est une archive, le code est au tag `mac-final`._
+
 ## Objectif
 
 Ajouter une signature visuelle dessinée ou importée à un PDF dans Holy PDF pour Mac, puis enregistrer une nouvelle copie. Le Scanner reste disponible. Aucun serveur, compte ou nouveau moteur : PDFKit, Core Graphics et ImageIO suffisent.

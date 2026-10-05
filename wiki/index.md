@@ -11,14 +11,16 @@ Ouvrable dans Obsidian : **Ouvrir un dossier comme coffre**, puis choisir le dos
 
 ## Développement
 
-- [Guide technique](development/technical-guide.md) — règles de code, coordonnées, performance, confidentialité.
+- [Guide technique](development/technical-guide.md) — où est quoi, règles de code du site et de l'appli de bureau, performance, confidentialité, git.
 - [Algorithme du scanner](development/algorithm.md) — le pipeline, indépendant du langage, et ses mesures.
-- [Tests](development/tests.md) — commandes, niveaux, lot privé.
+- [Tests](development/tests.md) — commandes, niveaux, vérifications à la main.
 - [Version Web](development/web-version.md) — site Astro, moteur dans le navigateur, pièges connus.
 - [Benchmark de compression](development/compression-benchmark-2026-10-01.md) — comparaison PDFium, qpdf, Cantoo et MuPDF, mesures navigateur et limites.
 - [Mots-clés du site](development/web-keywords.md) — l'adresse de chaque outil en français et en anglais, les candidats de recherche, volumes à vérifier.
 
 ## Specs
+
+_Les specs « Mac : … » décrivent l'appli Swift, retirée le 5 octobre 2026 ; son code est au tag `mac-final`. Elles restent comme archive des décisions._
 
 - [Mac : Modifier un PDF, étape A](specs/2026-10-04-mac-edit-design.md) — ajouts écrits dans la page, toutes les lettres, images recadrées, pivotées et retournées ; B (annotations, liens) et C (contenu d'origine) suivent.
 - [Mac : Filigrane](specs/2026-10-02-mac-watermark-design.md) — texte ou image dans le contenu des pages, opacité, angle, plage, sans moteur ajouté.

@@ -1,6 +1,6 @@
 # Scanner Mac v1 — design
 
-_Rédigé le 29 septembre 2026. Statut : livré le 1er octobre 2026 (PR #2 et #7)._
+_Rédigé le 29 septembre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré le 1er octobre 2026 (PR #2 et #7)._
 
 ## Contexte
 
@@ -295,7 +295,7 @@ Restent à mesurer dans le plan, sur le lot privé, chacune avec sa solution de 
 
 ## Règles techniques
 
-Détaillées dans le [guide technique](../development/technical-guide.md) :
+Détaillées dans le guide technique de l'époque (`git show mac-final:wiki/development/technical-guide.md`) :
 
 - Swift 6, concurrence stricte ; pas de `!` ni de `as!` sans commentaire qui justifie ;
 - états en enums à valeurs associées, erreurs typées ;

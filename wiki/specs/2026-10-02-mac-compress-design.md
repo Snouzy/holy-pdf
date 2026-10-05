@@ -1,6 +1,6 @@
 # Mac — Compresser
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/mac`. Troisième des six outils commandés le 2 octobre (avant : [Numéros de page](2026-10-02-mac-page-numbers-design.md), [Protéger et Déverrouiller](2026-10-02-mac-protect-unlock-design.md) ; ensuite : OCR, Noircir)._
+_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Troisième des six outils commandés le 2 octobre (avant : [Numéros de page](2026-10-02-mac-page-numbers-design.md), [Protéger et Déverrouiller](2026-10-02-mac-protect-unlock-design.md) ; ensuite : OCR, Noircir)._
 
 ## Objectif
 

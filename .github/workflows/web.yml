@@ -2,10 +2,10 @@ name: Web
 
 on:
   pull_request:
-    paths: ["apps/web/**", "apps/mac/PDFToolbox/App/SearchTerms.json", "apps/mac/PDFToolbox/Assets.xcassets/Generated/**", "apps/mac/PDFToolbox/HolyPDF.icon/**", "patches/**", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".github/workflows/web.yml"]
+    paths: ["apps/web/**", "patches/**", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".github/workflows/web.yml"]
   push:
     branches: [main]
-    paths: ["apps/web/**", "apps/mac/PDFToolbox/App/SearchTerms.json", "apps/mac/PDFToolbox/Assets.xcassets/Generated/**", "apps/mac/PDFToolbox/HolyPDF.icon/**", "patches/**", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".github/workflows/web.yml"]
+    paths: ["apps/web/**", "patches/**", "package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", ".github/workflows/web.yml"]
 
 jobs:
   check:

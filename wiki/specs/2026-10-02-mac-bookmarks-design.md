@@ -1,6 +1,6 @@
 # Mac — Ajouter des signets
 
-_Rédigé le 2 octobre 2026. Statut : livré dans `apps/mac`. Suite de la liste approuvée par l'auteur le 2 octobre, après [les feuilles, la coupe et Pixelliser](2026-10-02-mac-sheets-design.md). Le site a l'outil depuis le 3 octobre : [spec web](2026-10-03-web-bookmarks-design.md)._
+_Rédigé le 2 octobre 2026. Statut : appli Swift retirée le 5 octobre 2026 (tag `mac-final`) ; à l'époque, livré dans `apps/mac`. Suite de la liste approuvée par l'auteur le 2 octobre, après [les feuilles, la coupe et Pixelliser](2026-10-02-mac-sheets-design.md). Le site a l'outil depuis le 3 octobre : [spec web](2026-10-03-web-bookmarks-design.md)._
 
 ## Objectif
 

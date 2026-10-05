@@ -20,7 +20,7 @@ La pratique courante (VS Code, Obsidian, Linear, Stirling PDF v2 qui passe sur T
 
 ## Principe : une appli du système, pas un site dans une fenêtre
 
-Décision de l'auteur, 5 octobre 2026 : l'appli de bureau se juge comme une appli native de son système. Sur Mac, elle doit se comporter et se présenter comme l'appli Swift gelée le 4 octobre ; sur Windows comme une appli Windows ; sur Linux comme une appli du bureau. Le web est sa technique, pas son allure. Concrètement :
+Décision de l'auteur, 5 octobre 2026 : l'appli de bureau se juge comme une appli native de son système. Sur Mac, elle doit se comporter et se présenter comme l'appli Swift gelée le 4 octobre (retirée le 5, son code est au tag `mac-final`) ; sur Windows comme une appli Windows ; sur Linux comme une appli du bureau. Le web est sa technique, pas son allure. Concrètement :
 
 - **La fenêtre est celle du système** : barre de titre intégrée sur Mac, décorations natives ailleurs, taille et position mémorisées, mode sombre et couleur d'accent du système, police système pour les commandes (Bricolage pour les grands titres seulement, comme sur Mac).
 - **Les gestes sont ceux du système** : menus dans la langue avec leurs raccourcis (⌘O, ⌘W, ⌘Q, ⌘Z), dialogues natifs pour ouvrir et enregistrer, dépôt de fichiers n'importe où, double-clic dans le Finder ou l'Explorateur, « Afficher dans le Finder », une garde avant de quitter avec un résultat non enregistré.

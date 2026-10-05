@@ -1,4 +1,5 @@
 .DS_Store
+# Swift builds: kept so that a checkout of the tag mac-final stays clean.
 .build/
 .swiftpm/
 DerivedData/

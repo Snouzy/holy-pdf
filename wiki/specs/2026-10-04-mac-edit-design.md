@@ -1,5 +1,7 @@
 # Mac — Modifier un PDF (étape A : ajouts dans la page)
 
+_Appli Swift retirée le 5 octobre 2026 : cette spec est une archive, le code est au tag `mac-final`._
+
 _Rédigé le 4 octobre 2026. Découpage choisi le même jour : un seul outil « Modifier un PDF », livré en trois étapes. A (cette spec) : ajouts écrits dans la page, et images qu'on recadre, pivote et retourne. B : annotations (notes, soulignement, texte barré, tampons, commentaires avec auteur) et liens, écrits en annotations. C : modifier le texte d'origine, déplacer ou supprimer les objets d'origine, après un essai de PDFium natif. Le site a l'outil depuis le 4 octobre ([spec web](2026-10-04-web-edit-design.md)) ; le Mac reprend ses règles et va plus loin sur le texte et les images._
 
 Frère Scribe (« Brother Scribe »), la plume, concentré, catégorie Modifier, ajoute du texte, des images, des formes, des traits à main levée et du surlignage sur les pages d'un PDF, puis enregistre une copie.
