@@ -50,7 +50,7 @@ La fenêtre est construite en Rust (`WebviewWindowBuilder`), pas dans `tauri.con
 
 ## Ce qui vient ensuite
 
-Dans l'ordre, chacun avec sa ligne ici :
+La forme de l'appli (une entrée dédiée composée avec les briques du site, à la place du site entier) est décidée dans [Bureau : la coque applicative](2026-10-05-desktop-shell-design.md), qui reprend les points 1 à 3 ci-dessous dans ses lots. Dans l'ordre, chacun avec sa ligne ici :
 
 1. Enregistrer un résultat : le site le fait par un lien `<a download>`, que wry annule sur Mac tant que la coque n'a pas de gestionnaire `on_download` ; aujourd'hui aucun outil ne peut donc enregistrer sa copie dans la coque. Poser ce gestionnaire avec le dialogue natif. Liens externes (GitHub, stores, mentions) : ils remplacent le site dans la fenêtre, sans retour ; les ouvrir dans le navigateur (`on_navigation` et `tauri-plugin-opener`). « Voir » le résultat passe par `window.open`, que WKWebView ignore : ouvrir le fichier avec le lecteur du système.
 2. Ouvrir un PDF par double-clic (association de fichiers), déposer depuis le Finder ou l'Explorateur, enregistrer sur place par le dialogue natif, traiter un dossier entier.
