@@ -19,8 +19,18 @@ test("adds a PDF from the tile after the pages", async ({ page }) => {
   await page.goto("/en/merge-pdf");
   await chooseFiles(page, [await pdfFile("a.pdf", ["A1"])]);
   await expectThumbnails(page, 1);
-  await page.getByLabel("Add a PDF").setInputFiles([await pdfFile("b.pdf", ["B1"])]);
+  await page.locator(".add-tile").getByLabel("Add a PDF").setInputFiles([await pdfFile("b.pdf", ["B1"])]);
   await expectThumbnails(page, 2);
+});
+
+test("adds a PDF from the panel, above the verb; a phone keeps the bar for the verb alone", async ({ page }) => {
+  await page.goto("/en/merge-pdf");
+  await chooseFiles(page, [await pdfFile("a.pdf", ["A1"])]);
+  await expectThumbnails(page, 1);
+  await page.locator(".go").getByLabel("Add a PDF").setInputFiles([await pdfFile("b.pdf", ["B1"])]);
+  await expectThumbnails(page, 2);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator(".go .add")).toBeHidden();
 });
 
 test("views the result in a new browser tab, then downloads it", async ({ page }) => {
@@ -67,7 +77,7 @@ test("shows the file tabs and colour marks only when several files share the boa
   await expect(page.locator(".file-tabs")).toHaveCount(0);
   const mark = () => page.locator(".page-sheet").first().evaluate((sheet) => getComputedStyle(sheet, "::before").display);
   expect(await mark()).toBe("none");
-  await page.getByLabel("Add a PDF").setInputFiles([await pdfFile("b.pdf", ["B1"])]);
+  await page.locator(".add-tile").getByLabel("Add a PDF").setInputFiles([await pdfFile("b.pdf", ["B1"])]);
   await expectThumbnails(page, 2);
   await expect(page.locator(".file-tab")).toHaveCount(2);
   expect(await mark()).not.toBe("none");

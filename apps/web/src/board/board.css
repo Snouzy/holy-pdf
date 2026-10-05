@@ -226,6 +226,8 @@
     background: var(--surface); box-shadow: var(--shadow-panel);
   }
   .board .verb, .progress { min-height: 56px; }
+  /* The bar under the thumb keeps the verb alone: the grid's tile adds files there. */
+  .go .add { display: none; }
   .monk-disc { width: 56px; height: 56px; }
   .monk-disc .monk { width: 50px; height: auto; }
 }
