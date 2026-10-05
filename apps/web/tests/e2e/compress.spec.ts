@@ -5,10 +5,12 @@ import { chooseFiles, dragFiles, hoverFiles, pdfFile, photoPdfFile } from "./sup
 
 async function breakCompactorModule(context: BrowserContext) {
   let injected = 0;
+  let broken = true;
   const parentWorker = /\/worker-[^/]+\.js/;
   // Chromium and Firefox do not expose the initial nested-worker script to routing.
   // Give that worker a real missing URL by changing its parent's bundled URL instead.
   await context.route(parentWorker, async (route) => {
+    if (!broken) return route.continue();
     const response = await route.fetch();
     const body = (await response.text()).replace(/qpdf\.worker-[\w-]+\.js/g, () => {
       injected++;
@@ -16,7 +18,8 @@ async function breakCompactorModule(context: BrowserContext) {
     });
     await route.fulfill({ response, body });
   });
-  return { count: () => injected, restore: () => context.unroute(parentWorker) };
+  // Not unroute: it can hang for good when the board restarts its engine and that request is paused on the route.
+  return { count: () => injected, restore: () => { broken = false; } };
 }
 
 test("compresses a PDF with a photo, and shows how much lighter it is", async ({ page }) => {
@@ -99,20 +102,19 @@ test("keeps a document containing a digital signature byte for byte", async ({ p
 
 for (const [asset, pattern] of [["WASM", /qpdf.*\.wasm/], ["module", /qpdf\.worker-[^/]+\.js/]] as const) {
   test(`can retry after the compactor ${asset} fails to load`, async ({ page, context, browserName }) => {
-    // Two full compressions and a worker restart: over 30 s when the three browsers share the machine.
-    test.slow();
     let blocked = 0;
     const brokenModule = asset === "module" && browserName !== "webkit"
       ? await breakCompactorModule(context) : undefined;
-    if (!brokenModule) await context.route(pattern, (route) => { blocked++; return route.abort(); });
+    let blocking = !brokenModule;
+    if (blocking) await context.route(pattern, (route) => (blocking ? (blocked++, route.abort()) : route.continue()));
     await page.goto("/en/compress-pdf");
     await chooseFiles(page, [await photoPdfFile("retry.pdf", ["Retry"])]);
     await expect(page.locator(".file-card img")).toHaveCount(1);
     await page.getByRole("button", { name: "Compress the PDF", exact: true }).click();
     await expect.poll(() => brokenModule?.count() ?? blocked).toBeGreaterThan(0);
     await expect(page.getByText("The PDF engine could not load. Check your connection.")).toBeVisible();
-    if (brokenModule) await brokenModule.restore();
-    else await context.unroute(pattern);
+    if (brokenModule) brokenModule.restore();
+    else blocking = false;
     await page.getByRole("button", { name: "Compress the PDF", exact: true }).click();
     await expect(page.locator(".result h2")).toHaveText(/^Your PDF is \d+% lighter$/);
   });
