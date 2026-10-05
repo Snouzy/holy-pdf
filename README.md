@@ -4,9 +4,9 @@
 
 Free PDF tools that run in your browser. Merge, split, compress, sign, edit, fill forms, scan, OCR: the files never leave your device.
 
-No upload, no account, no quota, no advertising. The code is free software under the AGPL.
+No upload, no account, no quota, no advertising. The code is free software under the AGPL. A desktop app for Mac and Windows is on the way.
 
-[holy-pdf.com](https://holy-pdf.com) · [Wiki](wiki/index.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Licensing](LICENSING.md)
+[holy-pdf.com](https://holy-pdf.com) (not online yet) · [Wiki](wiki/index.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Licensing](LICENSING.md)
 
 ## Why
 
@@ -23,7 +23,7 @@ The whole site is static. There is no backend to trust.
 | Category | Tools |
 |---|---|
 | Organize | Merge, Split, Organize pages, Delete pages, Extract pages, Rotate, Pages per sheet, Split in half, Bookmarks |
-| Convert | JPG to PDF, PDF to JPG, PDF to Word, Pixelize |
+| Convert | JPG to PDF, PDF to JPG, PDF to Word, Pixelize; Web page to PDF is coming |
 | Edit | Edit (text, images, shapes, pen, highlighter, annotations, links, stamps, form fields), Sign, Watermark, Page numbers, Overlay, Crop, Redact |
 | Optimize | Compress, Flatten, OCR, Scan (photos of documents into a clean PDF), Repair |
 | Security | Protect, Unlock |
