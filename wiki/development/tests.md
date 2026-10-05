@@ -699,3 +699,4 @@ Rust via rustup est nécessaire ; rien ne tourne en CI. Le serveur de développe
 7. Aide › Site part dans le navigateur, l'appli reste sur son écran.
 8. ⌘Q quitte ; ⌘W ferme la fenêtre et quitte (la garde vient au lot 2).
 9. ⌘Z dans le champ de recherche annule la frappe ; ⌘Z sur la planche annule la retouche ; jamais les deux. ⌘F et ⌘K activent la recherche, ⌘[ ramène au monastère, Entrée ouvre le meilleur moine.
+10. La barre latérale liste les outils par thématique, l'outil ouvert en surbrillance ; un clic change d'outil, « Monastère » revient à l'accueil. Réduire la fenêtre sous 1 280 px la cache et fait revenir le chevron.

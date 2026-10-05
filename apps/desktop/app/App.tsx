@@ -11,6 +11,7 @@ import { accepted } from "./files";
 import { Monastery } from "./Monastery";
 import { findTools, isTool } from "./search";
 import { inTauri, lang, platform } from "./shell";
+import { Sidebar } from "./Sidebar";
 import { Titlebar } from "./Titlebar";
 import { ToolScreen } from "./ToolScreen";
 
@@ -80,8 +81,10 @@ export function App() {
   }
 
   function openTool(id: ToolId) {
-    setHanded(accepted(tools[id], arrived));
-    setArrived([]);
+    const kept = accepted(tools[id], arrived);
+    setHanded(kept);
+    // A tool that takes none of the arrived files leaves them on the monastery for the next one.
+    if (kept.length > 0) setArrived([]);
     setQuery("");
     setTool(id);
   }
@@ -98,14 +101,19 @@ export function App() {
     <>
       <Titlebar tool={tool} query={query} onQuery={setQuery} onHome={home} matches={matches} onOpen={openTool} />
       {notice && <p class="notice" role="alert">{notice}</p>}
-      {tool ? (
-        <ToolScreen key={tool} id={tool} files={handed} />
-      ) : (
-        <>
-          <HomeDrop onFiles={setArrived} />
-          <Monastery found={found} arrived={arrived} onOpen={openTool} onChangeFiles={() => setArrived([])} onReset={() => setQuery("")} />
-        </>
-      )}
+      <div class="shell">
+        <Sidebar tool={tool} onOpen={openTool} onHome={home} />
+        <div class="screen">
+          {tool ? (
+            <ToolScreen key={tool} id={tool} files={handed} />
+          ) : (
+            <>
+              <HomeDrop onFiles={setArrived} />
+              <Monastery found={found} arrived={arrived} onOpen={openTool} onChangeFiles={() => setArrived([])} onReset={() => setQuery("")} />
+            </>
+          )}
+        </div>
+      </div>
       <div class="drop-overlay" aria-hidden="true"><p>{boardTexts[lang].drop.release}</p></div>
     </>
   );
