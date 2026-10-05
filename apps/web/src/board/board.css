@@ -1,11 +1,11 @@
-:is(.board, .result, .scanner) button, .button {
+:is(.board, .result, .scanner, .confirm) button, .button {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem; min-height: 40px; padding: 0.5rem 0.875rem;
   border: 1.5px solid var(--line); border-radius: var(--radius-control); background: var(--surface); color: var(--ink);
   font-weight: 700; cursor: pointer;
 }
 .button:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
-:is(.board, .result, .scanner) button:disabled { opacity: 0.45; cursor: not-allowed; }
-:is(.board, .result, .scanner) button.primary, .dropzone .button { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
+:is(.board, .result, .scanner, .confirm) button:disabled { opacity: 0.45; cursor: not-allowed; }
+:is(.board, .result, .scanner, .confirm) button.primary, .dropzone .button { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 
 .dropzone { display: flex; flex-direction: column; align-items: center; gap: 1.375rem; margin-top: 3rem; padding-top: 5rem; }
 .dropzone-card {
@@ -170,7 +170,7 @@
 @keyframes shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
 
 @media (max-width: 700px) {
-  :is(.board, .result, .scanner) button, .button, .controls button { min-height: 44px; }
+  :is(.board, .result, .scanner, .confirm) button, .button, .controls button { min-height: 44px; }
   .controls button, .preview-head button, .preview-nav button { width: 44px; }
   .pages { grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr)); gap: 0.75rem; padding: 0.875rem; }
   .board .cut { inset-inline-end: calc(-0.375rem - 22px); }
@@ -353,8 +353,8 @@
 .size-bars strong { min-width: 4.5rem; text-align: right; }
 
 @media (hover: hover) {
-  :is(.board, .result, .scanner) button:hover:not(:disabled), .button:hover { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
-  :is(.board, .result, .scanner) button:is(.primary, .verb):hover:not(:disabled), .dropzone .button:hover {
+  :is(.board, .result, .scanner, .confirm) button:hover:not(:disabled), .button:hover { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
+  :is(.board, .result, .scanner, .confirm) button:is(.primary, .verb):hover:not(:disabled), .dropzone .button:hover {
     border-color: var(--accent-hover); background: var(--accent-hover); color: var(--on-accent);
     box-shadow: 0 12px 28px color-mix(in srgb, var(--accent) 38%, transparent);
   }
