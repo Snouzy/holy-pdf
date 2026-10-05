@@ -28,6 +28,33 @@ export function PagePreview({ sheets, index, onIndex, t }: Props) {
   const key = sheet?.key ?? null;
   const url = key ? (urls.current.get(key) ?? null) : null;
 
+  const swipe = useRef<{ x: number; y: number; at: number } | null>(null);
+
+  // A one-finger horizontal swipe turns the page; a zoomed page or a second finger leaves the gesture to the browser.
+  function swipeStart(event: TouchEvent) {
+    const touch = event.touches[0];
+    swipe.current = event.touches.length === 1 && touch && (visualViewport?.scale ?? 1) <= 1.01 ? { x: touch.clientX, y: touch.clientY, at: event.timeStamp } : null;
+  }
+
+  function swipeMove(event: TouchEvent) {
+    const start = swipe.current;
+    const touch = event.touches[0];
+    if (!start || !touch || !frame.current) return;
+    if (event.touches.length > 1) return swipeEnd();
+    const dx = touch.clientX - start.x;
+    frame.current.style.transform = Math.abs(dx) > Math.abs(touch.clientY - start.y) ? `translateX(${dx / 2}px)` : "";
+  }
+
+  function swipeEnd(event?: TouchEvent) {
+    const start = swipe.current;
+    const touch = event?.changedTouches[0];
+    swipe.current = null;
+    if (frame.current) frame.current.style.transform = "";
+    if (!start || !touch || event.timeStamp - start.at > 800) return;
+    const dx = touch.clientX - start.x;
+    if (Math.abs(dx) >= 50 && Math.abs(dx) > 1.5 * Math.abs(touch.clientY - start.y)) step(dx < 0 ? 1 : -1);
+  }
+
   function step(by: number) {
     const { index: current, count } = latest.current;
     if (current === null) return;
@@ -110,7 +137,7 @@ export function PagePreview({ sheets, index, onIndex, t }: Props) {
               <Icon name="close" size={20} />
             </button>
           </div>
-          <div class="preview-sheet">
+          <div class="preview-sheet" onTouchStart={swipeStart} onTouchMove={swipeMove} onTouchEnd={swipeEnd} onTouchCancel={() => swipeEnd()}>
             <div ref={frame} class={sheet.rotation % 180 !== 0 ? "preview-frame sideways" : "preview-frame"}>
               {url ? (
                 <img src={url} alt="" style={{ transform: `rotate(${sheet.rotation}deg)` }} />
