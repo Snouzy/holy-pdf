@@ -4,7 +4,8 @@ Holy PDF processes documents on the user's device: neither the site nor the desk
 
 ## Report a vulnerability
 
-Open a private report on GitHub: **Security** tab → **Report a vulnerability**. An email address will come with the site's launch.
+- Preferred: open a private report on GitHub (**Security** tab → **Report a vulnerability**).
+- Or write to [hello@holy-pdf.com](mailto:hello@holy-pdf.com) with "Security" as the subject.
 
 Do not open a public issue for a vulnerability. Never attach a real document: a minimal synthetic PDF is enough.
 

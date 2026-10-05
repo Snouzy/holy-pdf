@@ -440,6 +440,6 @@ To do at the very start of the plan, before writing the components:
 ## Next steps
 
 - review of the new texts and approval of dark mode on the site;
-- the purchase of holy-pdf.com (not registered on 5 October 2026), then `SITE_URL` and `INDEXABLE=true` at deploy. PR #20 renamed the Cloudflare Worker `holy-pdf-web` on 5 October 2026;
+- the purchase of holy-pdf.com (not registered on 5 October 2026), then `SITE_URL` and `INDEXABLE=true` at deploy. Update, 6 October 2026: domain bought, `SITE_URL` set, the site deployed by CI (PR #23); `INDEXABLE=true` still to set. PR #20 renamed the Cloudflare Worker `holy-pdf-web` on 5 October 2026;
 - the final illustrations by an illustrator, with the canvas mockups as the brief;
 - the share images (Open Graph) with the monks.

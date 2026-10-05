@@ -189,4 +189,4 @@ In the same commit as the code:
 
 - **Cloudflare cookies**: the static site sets none, but a bot protection option can add `__cf_bm`. Check the `Set-Cookie` headers after the first deployment, and correct the Cookies page if needed.
 - **Sign**: shipped in the site on 2 October 2026. The pages mention it: its What's new entry, its FAQ question, the Signature section of the Terms, the Press fact, and the credits of qpdf and of the third-party files.
-- **E-mail address**: it receives nothing until the domain is bought. The site is not online until then.
+- **E-mail address**: it receives nothing until the domain is bought. The site is not online until then. Update, 6 October 2026: the domain is bought, the site is online, and hello@holy-pdf.com forwards to the author's mailbox (Cloudflare Email Routing).

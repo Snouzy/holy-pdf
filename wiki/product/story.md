@@ -48,7 +48,7 @@ If you are also the person the whole family sends its PDFs to, you probably know
 - Talk about Acrobat or the Adobe subscription for the past uses. Do not suggest that Reader forces a subscription on everyone.
 - Tell the alternatives met along the way as a personal experience. Do not claim that all competitors are paid or exploit documents.
 - Signing is a need at the origin of the project. Sign has been available on the site since 2 October 2026, and the desktop app runs the same tools (the Swift Mac app that also had it was removed on 5 October). The Scanner has been on the site since 3 October 2026, with perspective correction and searchable text: describe what it does, nothing more.
-- On 5 October 2026, the site is not online and the desktop app is not distributed: publish the story once the site is reachable.
+- On 5 October 2026, the site is not online and the desktop app is not distributed: publish the story once the site is reachable. Update, 6 October 2026: the site is online at holy-pdf.com (`noindex` until the author opens it); the desktop app is still not distributed.
 - The [web documentation](../development/web-version.md) describes how files are processed in the browser. This does not mean that the site makes no network request to load its pages and its engine.
 - The story describes the free web tools that are available, in line with the [brand texts](brand.md). It does not promise that all future products will be free: the [roadmap](roadmap.md) decided on 4 October 2026 (free site with no account, code under AGPL-3.0, paid desktop app as a one-time purchase).
 

@@ -54,7 +54,7 @@ V1 succeeds when:
 | Tool screens | One shared board, set per tool | A single component to optimize, already cached from one tool to the next |
 | Analytics | No script. Google Search Console only | No third-party script on the critical path |
 | COOP / COEP | Not in v1 | No engine uses WebAssembly threads. These headers will come back with the scanner (OpenCV with threads). 3 October 2026: the Scanner shipped without them, and `public/_headers` still sets neither |
-| Domain | The brand's domain, chosen later. Until then, the `*.workers.dev` address, with `noindex` | Do not let search engines index a temporary address. Replaced on 30 September 2026 ([design system spec](2026-09-30-web-design-system-design.md)): holy-pdf.com, not bought yet on 5 October 2026; until then, each build is `noindex` unless `INDEXABLE=true` |
+| Domain | The brand's domain, chosen later. Until then, the `*.workers.dev` address, with `noindex` | Do not let search engines index a temporary address. Replaced on 30 September 2026 ([design system spec](2026-09-30-web-design-system-design.md)): holy-pdf.com, not bought yet on 5 October 2026, bought and live on 6 October 2026 (PR #23); then as before, each build is `noindex` unless `INDEXABLE=true` |
 
 ## Structure
 
