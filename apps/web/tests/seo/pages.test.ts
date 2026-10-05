@@ -105,6 +105,10 @@ describe("built pages", () => {
     expect(html).not.toContain("<astro-island");
   });
 
+  it("points robots.txt at the sitemap of the site's own address", () => {
+    expect(readFileSync(join(dist, "robots.txt"), "utf8")).toBe(`User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap-index.xml\n`);
+  });
+
   it("lists every page in the sitemap", () => {
     const sitemap = readFileSync(join(dist, "sitemap-0.xml"), "utf8");
     const listed = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);

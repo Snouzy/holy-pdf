@@ -2,7 +2,7 @@
 
 _Created on 30 September 2026. Volumes not verified: no volume source was available that day. The URLs stay those of the spec. Redo before the public launch, with a keyword research tool._
 
-_5 October 2026: not redone yet, and the site is not online. The table covers only the first seven tools. Update, 6 October 2026: the site is online at holy-pdf.com, with `noindex` until the author opens it to search engines._
+_5 October 2026: not redone yet, and the site is not online. The table covers only the first seven tools. Update, 6 October 2026: the site is online at holy-pdf.com, open to search engines since the same day._
 
 | Tool | Language | Kept URL | Candidates to compare | Volume |
 |---|---|---|---|---|
