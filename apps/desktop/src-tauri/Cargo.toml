@@ -13,6 +13,11 @@ rust-version = "1.90"
 name = "app_lib"
 crate-type = ["rlib"]
 
+# Unbundled, as under `tauri dev`, macOS names the app in the Dock after its executable file; Cargo refuses a space.
+[[bin]]
+name = "HolyPDF"
+path = "src/main.rs"
+
 [build-dependencies]
 base64 = "0.22"
 serde_json = "1.0"
