@@ -78,7 +78,7 @@ apps/web/src/
   layouts/Base.astro    head et script (tokens, polices, thème), la barre du site et la largeur des pages
   styles/base.css       les règles que chaque page et l'appli de bureau partagent (corps, liens, titres, voile de dépôt, surligneur)
   layouts/SiteNav.astro, SiteFooter.astro    la barre du haut et ses menus, le pied de page
-  illustrations/ToolIcon.tsx    les icônes au trait des outils
+  illustrations/ToolIcon.tsx    les icônes au trait des outils, prises dans Lucide (5 octobre 2026 : les glyphes maison étaient laids)
   pages/[lang]/index.astro, [tool].astro, 404.astro
   i18n/fr.ts, en.ts     nouveaux textes
 public/favicon.svg      tête du moine auréolé
