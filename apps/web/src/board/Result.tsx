@@ -51,8 +51,9 @@ export function Result({ tool, t, lang, made, saver, onSaved, onBack, onAgain }:
     }
   }
 
-  function show(action: ((path: string) => Promise<void>) | undefined, path: string) {
-    action?.(path).catch((problem: unknown) => setFailure(reasonOf(problem)));
+  function attempt(action: Promise<void>) {
+    setFailure(null);
+    action.catch((problem: unknown) => setFailure(reasonOf(problem)));
   }
 
   async function zipped() {
@@ -62,12 +63,7 @@ export function Result({ tool, t, lang, made, saver, onSaved, onBack, onAgain }:
     return null;
   }
 
-  function view() {
-    if (!single) return;
-    const url = URL.createObjectURL(new Blob([single.bytes], { type: made.type }));
-    window.open(url, "_blank");
-    setTimeout(() => URL.revokeObjectURL(url), 60_000);
-  }
+  const { preview, open, reveal } = saver;
 
   return (
     <section class="result">
@@ -98,20 +94,20 @@ export function Result({ tool, t, lang, made, saver, onSaved, onBack, onAgain }:
               <Icon name="download" size={22} />
               {label}
             </button>
-            {!saving && delivery === "one" && made.type === "application/pdf" && (
-              <button type="button" onClick={view}>
+            {preview && delivery === "one" && single && made.type === "application/pdf" && (
+              <button type="button" onClick={() => attempt(preview(single.bytes, single.name, made.type))}>
                 <Icon name="view" size={18} />
                 {t.flow.view}
               </button>
             )}
-            {savedPath && saver.open && (
-              <button type="button" onClick={() => show(saver.open, savedPath)}>
+            {savedPath && open && (
+              <button type="button" onClick={() => attempt(open(savedPath))}>
                 <Icon name="view" size={18} />
                 {t.flow.open}
               </button>
             )}
-            {savedPath && saver.reveal && (
-              <button type="button" onClick={() => show(saver.reveal, savedPath)}>
+            {savedPath && reveal && (
+              <button type="button" onClick={() => attempt(reveal(savedPath))}>
                 {t.flow.reveal[saver.platform ?? "linux"]}
               </button>
             )}
