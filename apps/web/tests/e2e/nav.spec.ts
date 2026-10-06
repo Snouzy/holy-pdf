@@ -110,7 +110,9 @@ test("closes the drawer after a client-side navigation", async ({ page }) => {
 test("links the footer to the tools, and names each social network", async ({ page }) => {
   await page.goto("/en");
   const footer = page.locator(".site-footer");
-  await expect(footer.getByRole("link", { name: /^Holy PDF on / })).toHaveCount(4);
+  const socials = footer.getByRole("link", { name: /^Holy PDF on / });
+  await expect(socials).toHaveCount(3);
+  expect(await socials.evaluateAll((links) => links.map((link) => link.getAttribute("aria-label")))).toEqual(["Holy PDF on X", "Holy PDF on Instagram", "Holy PDF on TikTok"]);
   await footer.getByRole("link", { name: "Compress PDF" }).click();
   await expect(page).toHaveURL(/\/en\/compress-pdf$/);
 });
