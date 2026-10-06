@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { chooseFiles, pdfFile } from "./support";
+import { chooseFiles, deskPhotoFile, pdfFile } from "./support";
 
 test("plays the tool's film on demand, then leads to the file chooser", async ({ page }) => {
   const films: string[] = [];
@@ -37,6 +37,19 @@ test("closes with Escape, gives the focus back, and steps aside once a file is i
   await expect(open).toBeFocused();
   expect(await page.locator("dialog.reel video").evaluate((video: HTMLVideoElement) => video.paused)).toBe(true);
   await chooseFiles(page, [await pdfFile("a.pdf", ["A1"])]);
+  await expect(open).toBeHidden();
+});
+
+test("steps aside on the Scanner once a photo is in, and offers photos at the end", async ({ page }) => {
+  await page.goto("/fr/scanner");
+  const open = page.getByRole("button", { name: "Voir Frère Déclic à l'œuvre · 15 s" });
+  await open.click();
+  const dialog = page.getByRole("dialog", { name: "Frère Déclic à l'œuvre" });
+  await page.locator("dialog.reel video").evaluate((video) => video.dispatchEvent(new Event("ended")));
+  await expect(dialog.getByRole("button", { name: "Choisir des photos" })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await chooseFiles(page, [await deskPhotoFile("desk.jpg")]);
+  await expect(page.locator(".scanner")).toBeVisible({ timeout: 60_000 });
   await expect(open).toBeHidden();
 });
 

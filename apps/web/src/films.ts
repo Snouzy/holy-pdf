@@ -9,6 +9,7 @@ export const films: Partial<Record<Lang, { src: string; poster: string }>> = {
 /** The vertical film of a tool, made by `scripts/tool-film.mjs`: `public/videos/tools/<id>-<lang>.mp4` and `<id>.webp`. */
 export const toolFilms: Partial<Record<ToolId, { seconds: number; langs: Lang[] }>> = {
   redact: { seconds: 15, langs: ["fr", "en"] },
+  scan: { seconds: 15, langs: ["fr", "en"] },
 };
 
 export function toolFilm(id: ToolId, lang: Lang): { src: string; thumb: string; seconds: number } | null {
