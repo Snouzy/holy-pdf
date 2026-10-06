@@ -59,6 +59,7 @@ _The "Mac: …" specs, the Scanner Mac v1 spec and the Mac app design system spe
 
 - [Desktop: Tauri shell on the site's code](specs/2026-10-05-desktop-tauri-design.md): the proof that the site's engine runs in the Tauri webview (PDFium, qpdf, workers, `tauri://`), the built site loaded in the shell, the CSP and the smoke tests, and the order of the next steps.
 - [Desktop: the app shell, design](specs/2026-10-05-desktop-shell-design.md): the desktop app built from the site's building blocks, without the site around them: monastery, tool screen, title bar, native open and save, and the changes that the board needs.
+- [Web: a short film per tool](specs/2026-10-06-web-tool-films-design.md): the 15-second vertical film of a tool behind the home film's pill, a native dialog, nothing loaded before the click, an end that opens the file chooser.
 - [Web: audience measurement with GA4](specs/2026-10-06-web-analytics-design.md): Google Analytics behind a port, loaded only after consent, a banner with no flash, the tool's name and never a file.
 - [Web: Overlay two PDFs](specs/2026-10-03-web-overlay-design.md): the pages of one PDF over or under the pages of another.
 - [Web: Add bookmarks](specs/2026-10-03-web-bookmarks-design.md): read, add, rename, arrange and remove the bookmarks of a PDF.
