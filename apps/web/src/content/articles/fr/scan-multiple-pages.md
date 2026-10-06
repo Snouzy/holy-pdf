@@ -1,6 +1,7 @@
 ---
 section: guides
 lang: fr
+topics: [administrative-documents, ocr, privacy, scan]
 slug: scanner-plusieurs-pages-en-un-seul-pdf
 title: Comment scanner plusieurs pages dans un seul PDF
 description: "Transformez plusieurs photos de pages en un seul PDF propre et bien ordonné. Gratuit, sans inscription et sans envoyer vos documents."

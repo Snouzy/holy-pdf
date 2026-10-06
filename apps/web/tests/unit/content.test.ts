@@ -1,4 +1,4 @@
-import { existsSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { pageIds } from "../../src/sitePages";
@@ -25,5 +25,24 @@ describe("articles", () => {
     const [first, ...others] = languages.map((lang) => readdirSync(join(content, "articles", lang)).sort());
     expect(first?.length).toBeGreaterThan(0);
     for (const names of others) expect(names).toEqual(first);
+  });
+
+  it("declares the same normalized topics in every language", () => {
+    const [firstLang, ...otherLangs] = languages;
+    if (!firstLang) throw new Error("No language configured");
+    for (const name of readdirSync(join(content, "articles", firstLang)).sort()) {
+      const topics = (lang: string) => {
+        const markdown = readFileSync(join(content, "articles", lang, name), "utf8");
+        const raw = /^topics: \[([^\]]+)\]$/m.exec(markdown)?.[1];
+        expect(raw, `${lang}/${name} topics`).toBeDefined();
+        const values = raw?.split(",").map((value) => value.trim()) ?? [];
+        expect(values.length, `${lang}/${name} topics`).toBeGreaterThan(0);
+        expect(values.length, `${lang}/${name} topics`).toBeLessThanOrEqual(5);
+        expect(values, `${lang}/${name} normalized topics`).toEqual(values.map((value) => value.toLowerCase()).sort());
+        return values;
+      };
+      const expected = topics(firstLang);
+      for (const lang of otherLangs) expect(topics(lang), `${lang}/${name} topics match`).toEqual(expected);
+    }
   });
 });

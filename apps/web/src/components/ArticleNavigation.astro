@@ -1,0 +1,73 @@
+---
+import type { MarkdownHeading } from "astro";
+
+type Props = {
+  headings: MarkdownHeading[];
+  contentsLabel: string;
+  progressLabel: string;
+};
+
+const { headings, contentsLabel, progressLabel } = Astro.props;
+const sections = headings.filter(({ depth }) => depth === 2);
+---
+
+<progress class="reading-progress" max="100" value="0" aria-label={progressLabel}></progress>
+{sections.length > 0 && (
+  <nav class="article-toc" aria-labelledby="article-toc-title">
+    <p id="article-toc-title" class="article-toc-title">{contentsLabel}</p>
+    <ol>
+      {sections.map(({ slug, text }, index) => (
+        <li><a href={`#${slug}`} data-toc-link aria-current={index === 0 ? "location" : undefined}>{text}</a></li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+<script>
+  const setupArticleNavigation = () => {
+    const article = document.querySelector<HTMLElement>(".article-page");
+    const progress = document.querySelector<HTMLProgressElement>(".reading-progress");
+    const links = [...document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]")];
+    if (!article || !progress) return;
+
+    const sections = links
+      .map((link) => ({ link, heading: document.getElementById(link.hash.slice(1)) }))
+      .filter((item): item is { link: HTMLAnchorElement; heading: HTMLElement } => item.heading !== null);
+    const update = () => {
+      const articleTop = article.offsetTop;
+      const readableDistance = Math.max(1, article.offsetHeight - innerHeight);
+      progress.value = Math.max(0, Math.min(100, ((scrollY - articleTop) / readableDistance) * 100));
+
+      if (sections.length > 0) {
+        const threshold = (document.querySelector<HTMLElement>(".site-header")?.getBoundingClientRect().bottom ?? 0) + 32;
+        const current = sections.reduce((active, section) => section.heading.getBoundingClientRect().top <= threshold ? section : active, sections[0]);
+        for (const section of sections) {
+          if (section === current) section.link.setAttribute("aria-current", "location");
+          else section.link.removeAttribute("aria-current");
+        }
+      }
+    };
+
+    update();
+    addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update, { passive: true });
+  };
+
+  setupArticleNavigation();
+</script>
+
+<style>
+  .reading-progress {
+    position: fixed; z-index: 11; top: var(--nav-height); left: 0; width: 100%; height: 0.25rem;
+    border: 0; border-radius: 0; background: transparent; appearance: none;
+  }
+  .reading-progress::-webkit-progress-bar { background: transparent; }
+  .reading-progress::-webkit-progress-value { background: var(--accent); }
+  .reading-progress::-moz-progress-bar { background: var(--accent); }
+  .article-toc { padding: 1rem; border: 1px solid var(--line); border-radius: var(--radius-panel); background: var(--surface); box-shadow: var(--shadow-panel); }
+  .article-toc-title { margin: 0 0 0.75rem; font-family: var(--font-title); font-size: 1.0625rem; font-weight: 800; }
+  ol { display: grid; gap: 0.625rem; margin: 0; padding: 0; list-style: none; }
+  a { display: block; padding-inline-start: 0.75rem; border-inline-start: 3px solid transparent; color: var(--ink-soft); font-size: 0.9375rem; font-weight: 700; line-height: 1.3; text-decoration: none; }
+  a[aria-current="location"] { border-color: var(--accent); color: var(--accent); }
+  @media print { .reading-progress, .article-toc { display: none; } }
+</style>

@@ -16,23 +16,41 @@ type Props = {
   lead: string;
   updated?: Date | undefined;
   published?: Date | undefined;
+  isArticle?: boolean;
+  readingMinutes?: number | undefined;
+  image?: string | undefined;
 };
 
-const { lang, title, description, paths, jsonLd, h1, emoji, lead, updated, published } = Astro.props;
+const { lang, title, description, paths, jsonLd, h1, emoji, lead, updated, published, isArticle = false, readingMinutes, image } = Astro.props;
 const texts = pageTexts[lang];
+const Root = isArticle ? "article" : "div";
+const day = (date: Date) => date.toISOString().slice(0, 10);
 ---
 
-<Base lang={lang} title={title} description={description} paths={paths} jsonLd={jsonLd}>
-  <header class="page-head">
-    <slot name="art" />
-    <h1>{h1}<Emoji char={emoji} /></h1>
-    <p class="lead">{lead}</p>
-    {published && <p class="meta">{formatDate(published, lang)} · {author}</p>}
-    {updated && <p class="meta">{texts.updated(formatDate(updated, lang))}</p>}
-  </header>
-  <div class="prose">
-    <slot />
-  </div>
+<Base lang={lang} title={title} description={description} paths={paths} jsonLd={jsonLd} ogType={isArticle ? "article" : "website"} image={image}>
+  <Root class:list={{ "article-page": isArticle }}>
+    <slot name="breadcrumbs" />
+    <header class="page-head">
+      <slot name="art" />
+      <h1>{h1}<Emoji char={emoji} /></h1>
+      <p class="lead">{lead}</p>
+      {published && (
+        <p class="meta">
+          {texts.published} <time datetime={day(published)}>{formatDate(published, lang)}</time> · {author}
+          {readingMinutes && <> · <span class="reading-time">{texts.readingTime(readingMinutes)}</span></>}
+        </p>
+      )}
+      {updated && <p class="meta">{texts.updated} <time datetime={day(updated)}>{formatDate(updated, lang)}</time></p>}
+    </header>
+    {isArticle ? (
+      <div class="article-body">
+        <aside class="toc-rail"><slot name="toc" /></aside>
+        <div class="prose"><slot /></div>
+      </div>
+    ) : (
+      <div class="prose"><slot /></div>
+    )}
+  </Root>
   <slot name="after" />
 </Base>
 
@@ -42,6 +60,9 @@ const texts = pageTexts[lang];
   .lead { max-width: 39rem; margin: 0; font-size: 1.3125rem; line-height: 1.45; color: var(--ink-soft); }
   .meta { margin: 0; font-size: 0.9375rem; font-weight: 700; color: var(--ink-soft); }
   .prose { max-width: 48rem; margin: 3rem auto 0; font-size: 1.0625rem; }
+  .article-body { display: grid; grid-template-columns: minmax(12rem, 17rem) minmax(0, 48rem); justify-content: center; gap: clamp(2rem, 5vw, 4.5rem); margin-top: 3rem; }
+  .article-body .prose { width: 100%; margin: 0; }
+  .toc-rail { position: sticky; top: calc(var(--nav-height) + 1.5rem); align-self: start; min-width: 0; }
   .prose :global(h2) { margin: 2.5rem 0 0.75rem; font-size: clamp(1.5rem, 2.5vw, 1.875rem); }
   .prose :global(:is(p, ul, ol, table)) { margin: 0 0 1rem; }
   .prose :global(:is(p, li, td)) { color: var(--ink-soft); }
@@ -62,5 +83,7 @@ const texts = pageTexts[lang];
   @media (max-width: 900px) {
     .page-head { padding-top: 1.5rem; }
     .lead { font-size: 1.0625rem; }
+    .article-body { grid-template-columns: minmax(0, 48rem); gap: 2rem; }
+    .toc-rail { position: static; }
   }
 </style>

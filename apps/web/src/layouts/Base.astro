@@ -15,11 +15,13 @@ type Props = {
   description: string;
   paths: Record<Lang, string>;
   jsonLd?: object[];
+  ogType?: "website" | "article";
+  image?: string | undefined;
   /** The router keeps the board across a language switch. */
   clientRouter?: boolean;
 };
 
-const { lang, title, description, paths, jsonLd = [], clientRouter = false } = Astro.props;
+const { lang, title, description, paths, jsonLd = [], ogType = "website", image, clientRouter = false } = Astro.props;
 // Pages stay out of search engines until the site has its own domain: set INDEXABLE=true at build time.
 const indexable = process.env.INDEXABLE === "true";
 const measurementId = process.env.GA4_ID || undefined;
@@ -100,6 +102,16 @@ const url = (path: string) => new URL(path, Astro.site).href;
     </script>
     <title>{title}</title>
     <meta name="description" content={description} />
+    <meta property="og:site_name" content="Holy PDF" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url(paths[lang])} />
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {image && <meta name="twitter:image" content={image} />}
     {!indexable && <meta name="robots" content="noindex" />}
     {clientRouter && <ClientRouter />}
     <link rel="canonical" href={url(paths[lang])} />

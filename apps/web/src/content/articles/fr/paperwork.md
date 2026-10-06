@@ -1,6 +1,7 @@
 ---
 section: guides
 lang: fr
+topics: [administrative-documents, merge, privacy]
 slug: preparer-un-dossier-administratif-en-pdf
 title: Préparer un dossier administratif en un seul PDF
 description: "Photos de papiers, PDF éparpillés, fichier trop lourd : préparez votre dossier en un seul PDF, pas à pas, gratuitement et sans rien envoyer."

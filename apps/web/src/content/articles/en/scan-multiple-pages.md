@@ -1,6 +1,7 @@
 ---
 section: guides
 lang: en
+topics: [administrative-documents, ocr, privacy, scan]
 slug: scan-multiple-pages-into-one-pdf
 title: How to scan multiple pages into one PDF
 description: "Turn photos of several pages into one clean, ordered PDF. Free, no sign-up, and your documents never leave your device."
