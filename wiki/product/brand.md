@@ -88,6 +88,16 @@ A monk in a brown homespun habit, yellow rope, five moods: happy, focused, joyfu
 | Edit | Brother Scribe | quill |
 | Crop | Brother Framer | photo frame |
 
+## GitHub images
+
+Made on 6 October 2026, in `.github/assets/`:
+
+- `social-preview.png` (1280 × 640), the repository's social preview. Three monks at work were generated with GPT Image 2.5 Flare (FAL), with the site's monks of Merge, Sign, Compress and Split as references. The logo, the title and the text are set in HTML with the site's fonts, because image models write badly. GitHub takes it in Settings, General, Social preview: the API cannot upload it.
+- `readme-home-*.png`, `readme-merge-*.png`: screenshots of the built site at 2x, light and dark, with synthetic PDFs.
+- `film-poster.jpg`: the frame at 24 s of the English film, with a play button. It links to the film on the site.
+
+Generated monks must stay close to the drawn ones: they are the brand. Check each new image against `apps/web/src/illustrations/Monk.tsx` before use.
+
 ## Texts to review
 
 Written with the design system, not reviewed yet. Shared texts in `apps/web/src/i18n/`: `fr.ts` and `en.ts` for the board and the search, `frSite.ts` and `enSite.ts` for the monks, the home page, the menus and the footer; Sign controls in `apps/web/src/signature/text.ts`, loaded with the editor:

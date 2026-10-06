@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for looking. This page says how the project works so that your time is well spent.
+Thank you for looking. This page says how the project works so that your time is well spent. Everyone here follows the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Where things are
 
