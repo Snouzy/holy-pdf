@@ -115,3 +115,10 @@ describe("built pages", () => {
     expect(listed.sort()).toEqual(pages.map(({ path }) => `${site}${path}`).sort());
   });
 });
+
+describe("audience measurement", () => {
+  it("is on every page of a build with GA4_ID, and on none without", () => {
+    const id = process.env.GA4_ID;
+    for (const { path, html } of pages) expect(html.includes(id ? `data-measurement-id="${id}"` : "data-measurement-id"), path).toBe(Boolean(id));
+  });
+});

@@ -20,11 +20,11 @@ type Props = {
   photos: File[]; lang: Lang; onPhotos: (files: File[]) => void;
   /** Passed by Board, not imported: a module shared with Board's chunk becomes one more request before LCP on every tool page. */
   engine: Pick<Engine, "scanPdf" | "zip">; Skeleton: typeof DocumentSkeleton;
-  saver: Saver; confirm: Confirm; onSavedChange?: (saved: boolean) => void;
+  saver: Saver; confirm: Confirm; onSavedChange?: (saved: boolean) => void; onDownloaded?: () => void;
 };
 type State = { session: Session; history: History };
 
-export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton, saver, confirm, onSavedChange }: Props) {
+export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton, saver, confirm, onSavedChange, onDownloaded }: Props) {
   const t = scannerTexts[lang];
   const saving = saver.kind === "save";
   const [state, setState] = useState<State>({ session: emptySession, history: emptyHistory });
@@ -203,7 +203,9 @@ export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton, saver, co
       const zipped = files.length > 1 ? await engine.zip(files) : null;
       if (zipped && !zipped.ok) return;
       const outcome = await saver.save(zipped ? zipped.value : files[0]!.bytes, zipped ? "scan.zip" : files[0]!.name, zipped ? "application/zip" : "application/pdf");
-      if (outcome.kind !== "cancelled" && docs.length === session.documents.length) setSaved(true);
+      if (outcome.kind === "cancelled") return;
+      onDownloaded?.();
+      if (docs.length === session.documents.length) setSaved(true);
     } catch (problem) {
       setFailure(problem instanceof Error ? problem.message : String(problem));
     } finally {

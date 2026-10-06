@@ -15,7 +15,7 @@ You will get an acknowledgement within a week. There is no bounty program.
 
 In order of severity:
 
-1. Anything that makes a document, or part of it, leave the device: a network request carrying file data, a third-party script, a storage that outlives the session without the user's action.
+1. Anything that makes a document, or part of it, leave the device: a network request carrying file data, a third-party script, a storage that outlives the session without the user's action. The site loads one third-party script, Google Analytics, and only after the visitor accepts audience measurement: it receives page views and the name of the tool used. Giving it any file data (a name, a size, a page count, a text) is in this category.
 2. In the desktop app: reading or writing a file the user did not choose, or loading a remote page or script inside the app window.
 3. Code execution or cross-site scripting from the content of a PDF (text, metadata, bookmarks, form fields, links).
 4. A crafted PDF that corrupts the output of another file in the same session.

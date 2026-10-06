@@ -1,5 +1,6 @@
 import type { JSX } from "preact";
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState } from "preact/hooks";
+import { track } from "../analytics/port";
 import type { BookmarksDraft } from "../bookmarks/outline";
 import type { CropDraft } from "../crop/box";
 import type { EditDraft } from "../edit/model";
@@ -275,7 +276,9 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
     if (flow.step === "working") return;
     move({ type: "started" });
     const made = tool.output === "signed" ? await makeSigned() : tool.output === "images" ? await makeImages() : tool.output === "compressed" ? await makeCompressed() : tool.output === "transformed" ? await makeTransformed() : await makePdfs();
-    if (made) move({ type: "finished", made });
+    if (!made) return;
+    move({ type: "finished", made });
+    track({ name: "tool_done", tool: tool.id });
   }
 
   async function makeSigned(): Promise<Made | null> {
@@ -479,7 +482,7 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
     if (editorLoadFailed) return <p role="alert">{t.errors.engineUnavailable} <button type="button" onClick={() => void loadEditor()}>{t.retry}</button></p>;
     return withDialog(
       scannerModule ? (
-        <scannerModule.ScannerApp photos={photos} lang={lang} engine={engine} onPhotos={addFiles} Skeleton={DocumentSkeleton} saver={saver} confirm={confirm} onSavedChange={setScannerSaved} />
+        <scannerModule.ScannerApp photos={photos} lang={lang} engine={engine} onPhotos={addFiles} Skeleton={DocumentSkeleton} saver={saver} confirm={confirm} onSavedChange={setScannerSaved} onDownloaded={() => track({ name: "tool_done", tool: tool.id })} />
       ) : <DocumentSkeleton label={t.board.opening} />,
     );
   }

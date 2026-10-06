@@ -7,6 +7,7 @@ description: "PDFium en WebAssembly, un Worker, et aucun fichier envoyé : comme
 h1: Comment Holy PDF traite vos PDF sans les envoyer
 lead: Vos fichiers restent sur votre appareil. Voici comment, et comment le vérifier vous-même.
 published: 2026-10-02
+updated: 2026-10-06
 ---
 
 Beaucoup d'outils PDF en ligne fonctionnent ainsi : votre fichier part sur leur serveur, il y est traité, puis le résultat revient. Holy PDF fait l'inverse : le moteur vient à votre fichier.
@@ -22,7 +23,8 @@ Le navigateur lit votre fichier sur votre appareil et le confie à ce moteur. Le
 Le site utilise le réseau pour vous envoyer ses pages et son moteur, jamais pour recevoir vos fichiers. Votre navigateur télécharge :
 
 - les pages du site, leurs styles et leurs polices ;
-- le moteur PDF, un fichier d'environ 4,6 Mo avant compression, au premier fichier déposé.
+- le moteur PDF, un fichier d'environ 4,6 Mo avant compression, au premier fichier déposé ;
+- si vous avez accepté la mesure d'audience, le script de Google Analytics, qui reçoit ensuite les pages vues et le nom de l'outil utilisé, jamais votre fichier.
 
 Chaque requête dit au serveur quelle page vous demandez, comme sur tout site. Aucune ne contient vos fichiers.
 

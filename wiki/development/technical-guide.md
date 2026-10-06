@@ -44,6 +44,7 @@ See [Tests](tests.md).
 ## Privacy
 
 - No file leaves the device. The site processes everything in the browser. The desktop app has no HTTP plugin, and its CSP limits `connect-src` to itself and to the Tauri IPC.
+- Audience measurement goes through the port `apps/web/src/analytics/port.ts`: a `Measure` has no free field, so no file data can reach it. Google Analytics loads only after the visitor accepts, on a build with `GA4_ID`. See the [spec](../specs/2026-10-06-web-analytics-design.md).
 - No real photo in the repository: git ignores `fixtures-private/`. The repository is public: anyone can read what is committed.
 
 ## Git

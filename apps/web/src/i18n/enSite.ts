@@ -18,6 +18,13 @@ export const enSite: SiteDictionary = {
     all: "All tools",
     soon: "Soon",
   },
+  consent: {
+    label: "Audience measurement",
+    text: "Holy PDF would like to count its visits with Google Analytics. Your files never go there: only the pages viewed and the tool used.",
+    more: "About cookies",
+    decline: "Decline",
+    accept: "Accept",
+  },
   footer: {
     label: "Footer",
     promises: { local: "Nothing is uploaded", free: "Free, no hidden limit", account: "No account" },
@@ -38,6 +45,7 @@ export const enSite: SiteDictionary = {
     terms: "Terms of use",
     notice: "Legal notice",
     cookies: "Cookies",
+    cookieSettings: "Cookie settings",
     about: "About",
     contact: "Contact",
     press: "Press",

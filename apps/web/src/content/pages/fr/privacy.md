@@ -5,7 +5,7 @@ title: "Confidentialité : vos fichiers restent chez vous"
 description: "La politique de confidentialité de Holy PDF : vos fichiers sont traités dans votre navigateur, jamais envoyés. Ce que le site voit, et vos droits."
 h1: Confidentialité
 lead: Vos fichiers ne quittent pas votre appareil. Voici le peu que le site voit, et vos droits.
-updated: 2026-10-05
+updated: 2026-10-06
 ---
 
 ## Qui est responsable
@@ -21,14 +21,24 @@ Quand vous fermez l'onglet, il ne reste rien, sauf les fichiers que vous avez t�
 ## Ce que le site ne collecte pas
 
 - Pas de compte : ni nom, ni adresse e-mail, ni mot de passe.
-- Pas d'outil de mesure d'audience, pas de publicité, pas de pixel de suivi.
-- Pas de cookie : voir la page [Cookies](/fr/cookies).
+- Pas de publicité, pas de pixel de suivi.
+- Pas de mesure d'audience ni de cookie sans votre accord : voir plus bas et la page [Cookies](/fr/cookies).
 
 ## Ce que voit l'hébergeur
 
 Pour vous envoyer les pages du site, l'hébergeur Cloudflare reçoit les données techniques de chaque requête : votre adresse IP, votre navigateur, la page demandée et l'heure. Il s'en sert pour servir le site et le protéger des attaques. La base légale est l'intérêt légitime : un site doit fonctionner et rester sûr. L'éditeur ne garde aucun journal de ces requêtes ; Cloudflare les conserve selon sa propre politique.
 
 Cloudflare est établi aux États-Unis. Il est certifié au Data Privacy Framework UE–États-Unis, qui encadre ce transfert. Détails dans la [politique de confidentialité de Cloudflare](https://www.cloudflare.com/privacypolicy/).
+
+## La mesure d'audience, si vous l'acceptez
+
+Si vous l'acceptez dans le bandeau, Holy PDF compte ses visites avec Google Analytics 4. Il reçoit les pages consultées, votre navigateur, le type de votre appareil, votre pays approximatif et le nom de l'outil utilisé quand il a fini. Il ne reçoit jamais vos fichiers, ni leur nom, ni leur taille, ni leur contenu.
+
+- Finalité : connaître la fréquentation du site et les outils utilisés.
+- Base légale : votre consentement. Vous pouvez le retirer à tout moment avec le bouton « Gérer les cookies », en bas de chaque page.
+- Destinataire : Google Ireland Limited, qui traite ces données pour le compte de l'éditeur. Google LLC, aux États-Unis, est certifié au Data Privacy Framework UE–États-Unis, qui encadre le transfert. Détails dans la [politique de confidentialité de Google](https://policies.google.com/privacy).
+- Conservation : deux mois dans Google Analytics. Ses cookies durent 13 mois au plus.
+- Les signaux Google et la personnalisation des annonces sont coupés : ces données ne servent pas à vous montrer de la publicité.
 
 ## Si vous écrivez
 

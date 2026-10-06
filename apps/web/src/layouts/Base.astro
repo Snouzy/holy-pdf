@@ -5,6 +5,7 @@ import { fontFaces, preloadedFonts } from "../styles/fonts";
 import "../styles/tokens.css";
 import "../styles/base.css";
 import { type Lang, languages } from "../tools";
+import Consent from "./Consent.astro";
 import SiteFooter from "./SiteFooter.astro";
 import SiteNav from "./SiteNav.astro";
 
@@ -21,6 +22,8 @@ type Props = {
 const { lang, title, description, paths, jsonLd = [], clientRouter = false } = Astro.props;
 // Pages stay out of search engines until the site has its own domain: set INDEXABLE=true at build time.
 const indexable = process.env.INDEXABLE === "true";
+const measurementId = process.env.GA4_ID || undefined;
+if (measurementId && !/^G-[A-Z0-9]+$/.test(measurementId)) throw new Error(`GA4_ID is not a GA4 measurement ID: ${measurementId}`);
 const t = dictionaries[lang];
 const url = (path: string) => new URL(path, Astro.site).href;
 ---
@@ -109,7 +112,8 @@ const url = (path: string) => new URL(path, Astro.site).href;
     <main>
       <slot />
     </main>
-    <SiteFooter lang={lang} paths={paths} />
+    <SiteFooter lang={lang} paths={paths} consent={measurementId !== undefined} />
+    {measurementId && <Consent lang={lang} measurementId={measurementId} />}
     <div class="drop-overlay" aria-hidden="true"><p>{t.drop.release}</p></div>
   </body>
 </html>

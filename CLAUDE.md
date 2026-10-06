@@ -9,7 +9,7 @@ Before any task, read [wiki/index.md](wiki/index.md), then the [technical guide]
 - A code change updates its wiki page in the same commit.
 - Never commit `fixtures-private/` or any real photo.
 - Desktop: `pnpm desktop:smoke` (Rust through rustup) and `pnpm --filter @holy-pdf/desktop check`.
-- Deploy: each push to `main` that touches the site deploys it to holy-pdf.com (Cloudflare Worker `holy-pdf-web`, `.github/workflows/web.yml`), after `pnpm verify`. The repository variable `INDEXABLE` decides whether search engines may index it.
+- Deploy: each push to `main` that touches the site deploys it to holy-pdf.com (Cloudflare Worker `holy-pdf-web`, `.github/workflows/web.yml`), after `pnpm verify`. The repository variable `INDEXABLE` decides whether search engines may index it; `GA4_ID` turns on Google Analytics, after the visitor's consent.
 - Site: `apps/web`, a pnpm workspace at the root (`pnpm dev`, and `pnpm verify` from the root: types, unit tests, build, SEO, Chromium end-to-end). `pnpm verify:full` adds Firefox, WebKit and Lighthouse.
 
 ## Merging into `main`

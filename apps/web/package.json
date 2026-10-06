@@ -14,7 +14,7 @@
     "test:seo": "vitest run --project seo",
     "bench": "playwright test --project bench --workers 1",
     "verify": "pnpm check && pnpm test && pnpm build && pnpm test:seo && playwright test --project chromium",
-    "verify:full": "pnpm check && pnpm test && pnpm build && pnpm test:seo && pnpm e2e && INDEXABLE=true pnpm build && pnpm lighthouse"
+    "verify:full": "pnpm check && pnpm test && pnpm build && pnpm test:seo && pnpm e2e && INDEXABLE=true GA4_ID=G-TEST1234 pnpm build && GA4_ID=G-TEST1234 pnpm test:seo && playwright test consent --project chromium && pnpm lighthouse"
   },
   "dependencies": {
     "@astrojs/preact": "6.0.5",
