@@ -20,8 +20,8 @@ export const enSite: SiteDictionary = {
   },
   consent: {
     label: "Audience measurement",
-    text: "Holy PDF would like to count its visits with Google Analytics. Your files never go there: only the pages viewed and the tool used.",
-    more: "About cookies",
+    text: "Our monks have taken a vow of silence about your files. They would only like to count visits with Google Analytics: the pages viewed and the tool used, nothing else.",
+    more: "The abbey's rule on cookies",
     decline: "Decline",
     accept: "Accept",
   },

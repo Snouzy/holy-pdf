@@ -23,8 +23,8 @@ export const frSite = {
   },
   consent: {
     label: "Mesure d'audience",
-    text: "Holy PDF aimerait compter ses visites avec Google Analytics. Vos fichiers n'y vont jamais : seulement les pages vues et l'outil utilisé.",
-    more: "À propos des cookies",
+    text: "Nos moines ont fait vœu de silence sur vos fichiers. Ils aimeraient seulement compter les visites avec Google Analytics : les pages vues et l'outil utilisé, rien d'autre.",
+    more: "La règle de l'abbaye sur les cookies",
     decline: "Refuser",
     accept: "Accepter",
   },
