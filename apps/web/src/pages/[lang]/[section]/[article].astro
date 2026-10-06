@@ -22,7 +22,7 @@ export const getStaticPaths = (async () => {
 }) satisfies GetStaticPaths;
 
 const { entry, paths } = Astro.props;
-const { section, lang, title, description, h1, lead, published, updated } = entry.data;
+const { section, lang, title, description, h1, lead, image, published, updated } = entry.data;
 const { Content } = await render(entry);
 const url = (path: string) => new URL(path, Astro.site).href;
 const day = (date: Date) => date.toISOString().slice(0, 10);
@@ -41,6 +41,7 @@ const jsonLd = [
     "@type": "BlogPosting",
     headline: h1,
     description,
+    ...(image ? { image: url(image) } : {}),
     datePublished: day(published),
     dateModified: day(updated ?? published),
     author: { "@type": "Person", name: author },

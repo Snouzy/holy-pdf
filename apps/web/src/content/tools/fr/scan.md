@@ -23,4 +23,6 @@ faq:
 
 Scanner un document sert à envoyer un papier signé, une facture ou une pièce d'identité sans scanner : une photo suffit.
 
+Vous avez plusieurs pages ? Suivez le guide pour [les scanner dans un seul PDF](/fr/guides/scanner-plusieurs-pages-en-un-seul-pdf), les remettre dans l'ordre et vérifier le fichier avant de l'envoyer.
+
 Frère Déclic fait tout sur votre appareil : vos photos ne quittent jamais votre ordinateur ou votre téléphone.

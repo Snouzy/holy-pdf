@@ -70,7 +70,7 @@ describe("built pages", () => {
 
   const toolPages = pages.filter(({ html }) => html.includes('"@type":"WebApplication"'));
   const contentPages = pages.filter(({ path, html }) => path.split("/").length > 2 && !html.includes('"@type":"WebApplication"'));
-  const structured = (html: string): { "@type": string; mainEntity?: { name: string }[] }[] =>
+  const structured = (html: string): { "@type": string; image?: string; mainEntity?: { name: string }[] }[] =>
     [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1] ?? "{}"));
   const faqPages = pages.filter(({ path }) => /^\/[a-z]+\/faq$/.test(path));
 
@@ -103,6 +103,13 @@ describe("built pages", () => {
 
   it.each(contentPages)("$path hydrates no island", ({ html }) => {
     expect(html).not.toContain("<astro-island");
+  });
+
+  it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {
+    const hero = "/articles/scan-multiple-pages/scan-multiple-pages-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain('width="1600" height="893"');
+    expect(structured(html).find((data) => data["@type"] === "BlogPosting")?.image).toBe(`${site}${hero}`);
   });
 
   it("points robots.txt at the sitemap of the site's own address", () => {

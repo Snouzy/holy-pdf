@@ -34,7 +34,7 @@ const pages = defineCollection({
 const articles = defineCollection({
   // The default id would be the frontmatter slug; "<lang>/<file name>" pairs the two languages of an article.
   loader: glob({ pattern: "**/*.md", base: "./src/content/articles", generateId: ({ entry }) => entry.replace(/\.md$/, "") }),
-  schema: z.object({ section: z.enum(sections), slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/), published: z.coerce.date(), ...meta }),
+  schema: z.object({ section: z.enum(sections), slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/), image: z.string().optional(), published: z.coerce.date(), ...meta }),
 });
 
 export const collections = { tools, pages, articles };
