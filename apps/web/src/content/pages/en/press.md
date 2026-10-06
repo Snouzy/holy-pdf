@@ -22,7 +22,7 @@ Holy PDF brings together free online PDF tools that work on documents in the bro
 
 ## The founder
 
-Mathias Bradiceanu, developer, also the creator of [Workout.cool](https://workout.cool). The founder's story, and the project's, are in [About](/en/about).
+A developer, also the creator of [Workout.cool](https://workout.cool). The founder's story, and the project's, are in [About](/en/about).
 
 ## Logo
 

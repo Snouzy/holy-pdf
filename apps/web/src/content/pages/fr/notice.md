@@ -5,14 +5,14 @@ title: Mentions légales de Holy PDF
 description: "Les mentions légales de Holy PDF : l'éditeur du site, son hébergeur, le contact et les crédits des polices, icônes et bibliothèques utilisées."
 h1: Mentions légales
 lead: Qui édite Holy PDF, qui l'héberge, et à qui l'on doit quoi.
-updated: 2026-10-05
+updated: 2026-10-07
 ---
 
 ## Éditeur
 
 Holy PDF est édité par Snouzylabs S.R.L., éditeur de logiciels, société de droit roumain, qui édite aussi [workout.cool](https://workout.cool).
 
-- Directeur de la publication : Mathias BRADICEANU, gérant
+- Siège social : Com. Afumati, Str. Fagului nr. 40F, tarla 92, parcela 337/15, constructia C1, camera 1, parter, 237241 Afumati, Roumanie
 - Contact : [hello@holy-pdf.com](mailto:hello@holy-pdf.com)
 
 ## Hébergeur

@@ -33,7 +33,7 @@ The site's code is free software, published under the AGPL-3.0-or-later licence 
 
 ## Who is behind it
 
-My name is Mathias Bradiceanu. I build Holy PDF around very ordinary needs: preparing an application, helping your parents, dealing with a document and moving on. I also created [Workout.cool](https://workout.cool), an open source fitness platform.
+I am a developer. I build Holy PDF around very ordinary needs: preparing an application, helping your parents, dealing with a document and moving on. I also created [Workout.cool](https://workout.cool), an open source fitness platform.
 
 ## Write to the monastery
 

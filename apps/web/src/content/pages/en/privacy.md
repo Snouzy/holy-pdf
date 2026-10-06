@@ -5,12 +5,12 @@ title: "Privacy: your files stay with you"
 description: "The Holy PDF privacy policy: your files are processed in your browser and never uploaded. What the site sees, and your rights."
 h1: Privacy
 lead: Your files never leave your device. Here is the little the site sees, and your rights.
-updated: 2026-10-06
+updated: 2026-10-07
 ---
 
 ## Who is responsible
 
-The data controller is Snouzylabs S.R.L., publisher of the site, represented by Mathias BRADICEANU. For any question: [hello@holy-pdf.com](mailto:hello@holy-pdf.com).
+The data controller is Snouzylabs S.R.L., publisher of the site. For any question: [hello@holy-pdf.com](mailto:hello@holy-pdf.com).
 
 ## Your files
 

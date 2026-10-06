@@ -1,6 +1,6 @@
 ---
 import { formatDate, pageTexts } from "../i18n/pages";
-import { author } from "../sitePages";
+import { siteName } from "../site";
 import type { Lang } from "../tools";
 import Base from "./Base.astro";
 import Emoji from "./Emoji.astro";
@@ -36,7 +36,7 @@ const day = (date: Date) => date.toISOString().slice(0, 10);
       <p class="lead">{lead}</p>
       {published && (
         <p class="meta">
-          {texts.published} <time datetime={day(published)}>{formatDate(published, lang)}</time> · {author}
+          {texts.published} <time datetime={day(published)}>{formatDate(published, lang)}</time> · {siteName}
           {readingMinutes && <> · <span class="reading-time">{texts.readingTime(readingMinutes)}</span></>}
         </p>
       )}
