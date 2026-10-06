@@ -20,6 +20,14 @@ Not Next.js: its server side (server rendering, Server Components, API routes) h
 
 _Status on 5 October 2026: the site is not online. The deploy step of `.github/workflows/web.yml` has never run, because the repository has no `SITE_URL` variable and no Cloudflare secrets. The Cloudflare Worker is named `holy-pdf-web` (`apps/web/wrangler.jsonc`). Update, 6 October 2026: holy-pdf.com was bought on Cloudflare; the site is online there, deployed by CI on each push to `main` that touches it (PR #23), open to search engines since the repository variable `INDEXABLE` became `true` the same day; hello@holy-pdf.com forwards to the author's mailbox through Cloudflare Email Routing. The Worker answers on the domain as a custom domain, and `workers_dev: false` keeps no copy on workers.dev. The zone has Always Use HTTPS on. `www.holy-pdf.com` (a proxied placeholder record) redirects to the root with a 301 that keeps the path and the query (the dashboard's "Redirect from WWW to root" rule). The repository variable `GA4_ID` turns on Google Analytics, after consent ([spec](../specs/2026-10-06-web-analytics-design.md))._
 
+## Editorial pages
+
+Blog posts and guides share one static article template. It renders a visible, localized breadcrumb that matches the `BreadcrumbList` data, an H2 table of contents with stable deep links, and a fixed reading-progress bar. The current table-of-contents section follows the reader with a small framework-free script; the navigation is sticky on wide screens and returns to document flow on smaller screens. These controls are navigation aids, not claimed ranking factors.
+
+The article body uses the semantic `article` and `time` elements. Publication and update dates come only from frontmatter. Reading time is an explicitly estimated value derived at build time. Open Graph and Twitter metadata reuse the canonical title, description, URL and reviewed editorial image when one exists. `BlogPosting` has a page-stable `@id`, `mainEntityOfPage`, the visible author, and Holy PDF as publisher. The visible breadcrumb and the JSON-LD hierarchy must stay aligned.
+
+Every localized article declares one to five normalized, language-independent `topics`. The build ranks related content by shared topics, then by section and publication date, excludes the current article, and never crosses locales. The cards use the destination title and description as descriptive internal links. Topics are editorial routing data, not visible keyword stuffing.
+
 ## Engine
 
 The engine is rewritten in TypeScript from the [scanner algorithm](algorithm.md). The Swift code cannot be shared: Swift compiles to WebAssembly since version 6.2, but Vision, Core Image and ImageIO do not exist on this target.

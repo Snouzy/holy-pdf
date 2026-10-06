@@ -61,6 +61,20 @@ test("leads from the blog to its article and back", async ({ page }) => {
   await expect(page).toHaveURL(/\/en\/blog$/);
 });
 
+test("tracks article reading progress and the current section", async ({ page }) => {
+  await page.goto(articles.en);
+  const progress = page.locator(".reading-progress");
+  await expect(progress).toHaveAttribute("max", "100");
+  await expect(page.locator(".article-toc a[aria-current='location']")).toHaveCount(1);
+  const initial = Number(await progress.getAttribute("value"));
+  await page.evaluate(() => {
+    scrollTo(0, document.documentElement.scrollHeight);
+    dispatchEvent(new Event("scroll"));
+  });
+  await expect.poll(async () => Number(await progress.getAttribute("value"))).toBeGreaterThan(initial);
+  await expect.poll(async () => Number(await progress.getAttribute("value"))).toBeGreaterThanOrEqual(99);
+});
+
 for (const width of [320, 390]) {
   test(`fits every content page in a ${width} px wide screen, even with fallback fonts`, async ({ page }) => {
     await page.route(/\.woff2$/, (route) => route.abort());

@@ -1,6 +1,7 @@
 ---
 section: blog
 lang: en
+topics: [browser-processing, privacy]
 slug: your-pdfs-stay-on-your-device
 title: How Holy PDF works on your PDFs without uploading
 description: "PDFium in WebAssembly, a Worker, and no file uploaded: how Holy PDF processes your PDFs in the browser, and how to check it yourself."

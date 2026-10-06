@@ -1,6 +1,7 @@
 ---
 section: guides
 lang: en
+topics: [administrative-documents, merge, privacy]
 slug: prepare-paperwork-as-one-pdf
 title: Prepare your paperwork as a single PDF
 description: "Photos of papers, scattered PDFs, a file too heavy to upload: prepare your application as one PDF, step by step, for free and without uploading."

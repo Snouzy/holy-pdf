@@ -1,6 +1,7 @@
 ---
 section: blog
 lang: fr
+topics: [browser-processing, privacy]
 slug: vos-pdf-restent-sur-votre-appareil
 title: Comment Holy PDF traite vos PDF sans les envoyer
 description: "PDFium en WebAssembly, un Worker, et aucun fichier envoyé : comment Holy PDF travaille vos PDF dans le navigateur, et comment le vérifier."

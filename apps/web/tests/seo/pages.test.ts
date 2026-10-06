@@ -70,9 +70,10 @@ describe("built pages", () => {
 
   const toolPages = pages.filter(({ html }) => html.includes('"@type":"WebApplication"'));
   const contentPages = pages.filter(({ path, html }) => path.split("/").length > 2 && !html.includes('"@type":"WebApplication"'));
-  const structured = (html: string): { "@type": string; image?: string; mainEntity?: { name: string }[] }[] =>
+  const structured = (html: string): { "@id"?: string; "@type": string; image?: string; mainEntity?: { name: string }[]; mainEntityOfPage?: { "@id": string }; publisher?: { name: string } }[] =>
     [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1] ?? "{}"));
   const faqPages = pages.filter(({ path }) => /^\/[a-z]+\/faq$/.test(path));
+  const articlePages = pages.filter(({ html }) => structured(html).some((data) => data["@type"] === "BlogPosting"));
 
   it.each(toolPages)("$path gives each question an anchor and marks them up as an FAQ", ({ html }) => {
     const ids = [...html.matchAll(/<details[^>]* id="([^"]+)"/g)].map((match) => match[1]);
@@ -103,6 +104,37 @@ describe("built pages", () => {
 
   it.each(contentPages)("$path hydrates no island", ({ html }) => {
     expect(html).not.toContain("<astro-island");
+  });
+
+  it.each(articlePages)("$path has visible article navigation and semantic metadata", ({ path, html }) => {
+    expect(html).toMatch(/<article[^>]*class="article-page"/);
+    expect(html).toContain('<nav class="breadcrumbs"');
+    expect(html).toContain('aria-current="page"');
+    expect(html).toContain('<nav class="article-toc"');
+    expect(html).toContain('<progress class="reading-progress"');
+    expect(html).toMatch(/<time datetime="\d{4}-\d{2}-\d{2}"[^>]*>/);
+    expect(html).toContain('class="reading-time"');
+    expect(html).toContain('<section class="related-articles"');
+
+    const articleHtml = html.slice(html.indexOf("<article"), html.indexOf("</article>") + "</article>".length);
+    const headings = [...articleHtml.matchAll(/<h2 id="([^"]+)"/g)].map((match) => match[1]);
+    const tocTargets = [...articleHtml.matchAll(/<a href="#([^"]+)" data-toc-link/g)].map((match) => match[1]);
+    expect(tocTargets).toEqual(headings);
+
+    const lang = path.split("/")[1];
+    const related = [...html.matchAll(/<a class="related-card[^>]* href="(\/[^"]+)"/g)].map((match) => match[1] ?? "");
+    expect(related.length).toBeGreaterThan(0);
+    for (const href of related) {
+      expect(href.startsWith(`/${lang}/`), href).toBe(true);
+      expect(existsSync(join(dist, href, "index.html")), href).toBe(true);
+    }
+
+    expect(first(html, /<meta property="og:type" content="([^"]+)"/)).toBe("article");
+    expect(first(html, /<meta property="og:url" content="([^"]+)"/)).toBe(`${site}${path}`);
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.["@id"]).toBe(`${site}${path}#article`);
+    expect(posting?.mainEntityOfPage?.["@id"]).toBe(`${site}${path}`);
+    expect(posting?.publisher?.name).toBe("Holy PDF");
   });
 
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {
