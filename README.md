@@ -6,7 +6,20 @@ Free PDF tools that run in your browser. Merge, split, compress, sign, edit, fil
 
 No upload, no account, no quota, no advertising. The code is free software under the AGPL. A desktop app for Mac and Windows is on the way.
 
+[![Try it on holy-pdf.com](https://img.shields.io/badge/try_it-holy--pdf.com-2346d8)](https://holy-pdf.com)
+[![License: AGPL-3.0-or-later](https://img.shields.io/badge/license-AGPL--3.0--or--later-141a2e)](LICENSING.md)
+[![Site checks](https://github.com/Snouzy/holy-pdf/actions/workflows/web.yml/badge.svg?branch=main)](https://github.com/Snouzy/holy-pdf/actions/workflows/web.yml)
+
 [holy-pdf.com](https://holy-pdf.com) · [Wiki](wiki/index.md) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md) · [Licensing](LICENSING.md)
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/readme-home-dark.png">
+  <img src=".github/assets/readme-home-light.png" alt="The Holy PDF home page: “I want to merge my PDFs”, and Brother Staple ready to do it in the browser.">
+</picture>
+
+## See it in 30 seconds
+
+[![Watch the 30-second film](.github/assets/film-poster.jpg)](https://holy-pdf.com/videos/holy-pdf-en.mp4)
 
 ## Why
 
@@ -17,6 +30,11 @@ I kept an Adobe subscription for a few PDFs a month: a signature to add, a famil
 Everything runs in your tab. The engines (PDFium and qpdf compiled to WebAssembly, OpenCV, Tesseract) load once and work inside a Web Worker. Open the browser's developer tools on the Network tab, run any tool, and watch: after the page's own assets, no request carries your file.
 
 The whole site is static. There is no backend to trust.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/assets/readme-merge-dark.png">
+  <img src=".github/assets/readme-merge-light.png" alt="Merge PDF files: three PDFs open as page thumbnails, ready to reorder and merge, with the note “No file leaves your device”.">
+</picture>
 
 ## Tools
 

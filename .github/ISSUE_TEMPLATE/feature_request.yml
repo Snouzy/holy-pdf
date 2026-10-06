@@ -1,0 +1,29 @@
+name: Tool or feature request
+description: A new tool, or a change to an existing one.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you. English or French, as you prefer.
+        Two rules decide most requests: everything runs on the user's device, and the site has no account, quota or advertising. See [CONTRIBUTING.md](https://github.com/Snouzy/holy-pdf/blob/main/CONTRIBUTING.md).
+  - type: textarea
+    id: need
+    attributes:
+      label: What you need to do
+      description: The task, not the solution. For example, "send a 40 MB scan by email".
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What Holy PDF could do
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: As far as I know, this can run entirely in the browser, with no server.
+          required: true
