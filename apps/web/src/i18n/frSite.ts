@@ -9,6 +9,7 @@ export const frSite = {
   nav: {
     label: "Navigation principale",
     menu: "Menu",
+    github: "Code source sur GitHub",
     tools: {
       merge: "Fusionner PDF",
       split: "Diviser PDF",

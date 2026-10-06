@@ -6,6 +6,7 @@ export const enSite: SiteDictionary = {
   nav: {
     label: "Main navigation",
     menu: "Menu",
+    github: "Source code on GitHub",
     tools: {
       merge: "Merge PDF",
       split: "Split PDF",
