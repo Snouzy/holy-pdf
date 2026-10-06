@@ -4,8 +4,11 @@
   "compatibility_date": "2026-09-29",
   "workers_dev": false,
   "routes": [{ "pattern": "holy-pdf.com", "custom_domain": true }],
+  "main": "worker/videos.ts",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": ["/videos/*"],
     "html_handling": "drop-trailing-slash",
     "not_found_handling": "404-page"
   }

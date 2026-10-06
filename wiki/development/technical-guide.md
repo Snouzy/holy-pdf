@@ -4,7 +4,7 @@ _Written on 29 September 2026 for the Swift engine and the Mac app. Rewritten on
 
 ## Where things are
 
-- `apps/web/`: the Astro site, the board as a Preact island, the PDFium and qpdf engine in WebAssembly in a Worker. The choices, the measurements and the pitfalls: [Web version](web-version.md) and the [foundation spec](../specs/2026-09-29-web-organiser-design.md).
+- `apps/web/`: the Astro site, the board as a Preact island, the PDFium and qpdf engine in WebAssembly in a Worker. `apps/web/worker/` holds the Cloudflare Worker script that serves the videos in byte ranges. The choices, the measurements and the pitfalls: [Web version](web-version.md) and the [foundation spec](../specs/2026-09-29-web-organiser-design.md).
 - `apps/desktop/`: the Tauri desktop app, a Preact entry built from the site's components. It imports `apps/web/src` by relative path and changes nothing in it. Specs: [Tauri shell](../specs/2026-10-05-desktop-tauri-design.md) and [app shell](../specs/2026-10-05-desktop-shell-design.md).
 - `wiki/`: one spec per tool before the code (what it does, each decision and its reason). A code change updates its wiki page in the same commit.
 
