@@ -23,4 +23,6 @@ faq:
 
 Scanning a document lets you send a signed paper, an invoice or an ID without a scanner: a photo is enough.
 
+Have several pages? Follow the guide to [scan them into one PDF](/en/guides/scan-multiple-pages-into-one-pdf), put them in order, and check the file before sending it.
+
 Brother Snap does everything on your device: your photos never leave your computer or your phone.
