@@ -21,6 +21,13 @@ export const frSite = {
     all: "Tous les outils",
     soon: "Bientôt",
   },
+  consent: {
+    label: "Mesure d'audience",
+    text: "Holy PDF aimerait compter ses visites avec Google Analytics. Vos fichiers n'y vont jamais : seulement les pages vues et l'outil utilisé.",
+    more: "À propos des cookies",
+    decline: "Refuser",
+    accept: "Accepter",
+  },
   footer: {
     label: "Pied de page",
     promises: { local: "Rien n'est envoyé", free: "Gratuit, sans limite cachée", account: "Sans compte" },
@@ -41,6 +48,7 @@ export const frSite = {
     terms: "Conditions d'utilisation",
     notice: "Mentions légales",
     cookies: "Cookies",
+    cookieSettings: "Gérer les cookies",
     about: "À propos",
     contact: "Contact",
     press: "Presse",

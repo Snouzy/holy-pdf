@@ -15,6 +15,7 @@ Open an issue first for anything bigger than a fix. A feature without a spec row
 
 - Everything runs on the user's device. A tool that needs a server is out of scope.
 - No account, no quota, no advertising on the site.
+- Audience measurement goes through `apps/web/src/analytics/port.ts`, after the visitor's consent, and never carries file data.
 
 ## Set up
 

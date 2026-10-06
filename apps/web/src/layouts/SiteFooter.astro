@@ -7,9 +7,9 @@ import { pagePath } from "../sitePages";
 import { type Lang, languages, tools } from "../tools";
 import Emoji from "./Emoji.astro";
 
-type Props = { lang: Lang; paths: Record<Lang, string> };
+type Props = { lang: Lang; paths: Record<Lang, string>; consent: boolean };
 
-const { lang, paths } = Astro.props;
+const { lang, paths, consent } = Astro.props;
 const t = dictionaries[lang];
 const f = t.footer;
 const other = languages.find((candidate) => candidate !== lang) ?? lang;
@@ -95,6 +95,7 @@ const socials = [
     <div class="footer-bottom">
       <a class="footer-button" href={paths[other]} hreflang={other} lang={other}><Icon name="globe" size={18} />{t.otherLanguage}</a>
       <button class="footer-button" type="button" data-toggle="theme" aria-pressed="false"><Icon name="moon" size={18} />{t.menu.darkMode}</button>
+      {consent && <button class="footer-button" type="button" data-consent-open><Icon name="shield" size={18} />{f.cookieSettings}</button>}
       <ul class="socials">
         {socials.map(({ name, path }) => (
           <li>

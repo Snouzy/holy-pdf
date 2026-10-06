@@ -27,6 +27,7 @@ jobs:
         env:
           SITE_URL: ${{ vars.SITE_URL }}
           INDEXABLE: ${{ vars.INDEXABLE }}
+          GA4_ID: ${{ vars.GA4_ID }}
       - if: github.event_name == 'push' && vars.SITE_URL != ''
         uses: cloudflare/wrangler-action@v4.1.3
         with:

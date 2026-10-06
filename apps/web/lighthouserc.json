@@ -33,7 +33,7 @@
           "assertions": {
             "largest-contentful-paint": ["error", { "maxNumericValue": 1500 }],
             "resource-summary:script:size": ["error", { "maxNumericValue": 24576 }],
-            "resource-summary:document:size": ["error", { "maxNumericValue": 40960 }],
+            "resource-summary:document:size": ["error", { "maxNumericValue": 43008 }],
             "cumulative-layout-shift": ["error", { "maxNumericValue": 0.01 }]
           }
         },

@@ -1,0 +1,57 @@
+---
+import { dictionaries } from "../i18n";
+import { pagePath } from "../sitePages";
+import type { Lang } from "../tools";
+
+type Props = { lang: Lang; measurementId: string };
+
+const { lang, measurementId } = Astro.props;
+const t = dictionaries[lang].consent;
+---
+
+{/* Runs before the banner is parsed, so it never flashes for a visitor who chose. The CNIL asks again after six months. */}
+<script is:inline>
+  (() => {
+    let choice = "ask";
+    try {
+      const [saved, at] = (localStorage.getItem("analytics") ?? "").split(":");
+      if ((saved === "granted" || saved === "denied") && Date.now() - Number(at) < 182 * 864e5) choice = saved;
+    } catch {}
+    document.documentElement.dataset.consent = choice;
+  })();
+</script>
+<aside class="consent" data-measurement-id={measurementId} aria-label={t.label}>
+  <p>{t.text} <a href={pagePath("cookies", lang)}>{t.more}</a></p>
+  <div class="consent-actions">
+    <button type="button" data-consent-choice="denied">{t.decline}</button>
+    <button type="button" data-consent-choice="granted">{t.accept}</button>
+  </div>
+</aside>
+<script>
+  import { startConsent } from "../analytics/consent";
+
+  startConsent();
+</script>
+
+<style>
+  .consent {
+    position: fixed; z-index: 14; inset: auto 1rem max(1rem, env(safe-area-inset-bottom)); display: none; flex-wrap: wrap; align-items: center;
+    gap: 0.75rem 1.25rem; box-sizing: border-box; max-width: 46rem; margin-inline: auto; padding: 1rem 1.25rem;
+    border: 1.5px solid var(--line); border-radius: var(--radius-panel); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-lifted);
+  }
+  :global(:root[data-consent="ask"]) .consent { display: flex; }
+  .consent p { flex: 1 1 20rem; margin: 0; font-size: 0.9375rem; }
+  .consent a { white-space: nowrap; }
+  .consent-actions { display: flex; gap: 0.5rem; }
+  .consent button {
+    min-height: 44px; padding: 0.5rem 1.125rem; border: 1.5px solid var(--accent); border-radius: var(--radius-control);
+    background: var(--surface); color: var(--accent); font: inherit; font-weight: 700; cursor: pointer;
+  }
+  @media (hover: hover) {
+    .consent button:hover { background: var(--accent-tint); }
+  }
+  @media (max-width: 30rem) {
+    .consent-actions { flex: 1 1 100%; }
+    .consent button { flex: 1; }
+  }
+</style>
