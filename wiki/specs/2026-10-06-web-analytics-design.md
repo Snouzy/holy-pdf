@@ -1,6 +1,6 @@
 # Web: audience measurement with GA4, design
 
-Date: 6 October 2026. Status: implemented, waiting for the measurement ID.
+Date: 6 October 2026. Status: live since 6 October 2026, measurement ID `G-MXL28X94FS`.
 
 ## Why
 
@@ -51,14 +51,20 @@ The banner, its styles and its two scripts add about 1.1 KB to each document, wi
 
 ## Setting it up
 
-1. In Google Analytics, create a property and a web data stream for `https://holy-pdf.com`. Copy the measurement ID (`G-…`).
-2. Add the repository variable `GA4_ID` (Settings, Secrets and variables, Actions, Variables). The next deploy of the site turns the banner on.
-3. In the property:
-   - Data retention: two months, the default, as the Privacy page says.
+Done on 6 October 2026. The Analytics account « Holy PDF » holds only this site, so that a sale hands over this account alone. The Snouzylabs Google login owns it.
+
+1. Account and property « Holy PDF », time zone Europe/Paris, EUR, account data sharing all off, web stream `https://holy-pdf.com`.
+2. Repository variable `GA4_ID`. A new value needs a deploy: `gh run rerun` on the last run of `web.yml` reads it.
+3. Property settings, as the Privacy page says:
+   - Event and user data retention: two months. The API refuses `userDataRetention` alone: send both fields in one request.
    - Google signals: off.
-   - Enhanced measurement: keep the page views and their "browser history events" option, which count the language switch of the client router. Turn off "File downloads" and "Form interactions": the site does not need them.
-   - Custom definitions: a dimension with scope "Event" on the parameter `tool`, to read the tools in the reports.
-4. When an ad network asks, give it read access in the property access management.
+   - Enhanced measurement: page views only, with the "browser history events" option, which counts the language switch of the client router. Scrolls, outbound clicks, site search, video, file downloads and form interactions are off: the Privacy page lists only the pages viewed and the tool used.
+   - Custom dimension « Outil », scope Event, parameter `tool`.
+4. When an ad network asks, give it read access in the account access management.
+
+### Admin API
+
+Google blocks `gcloud auth application-default login` with the Analytics scopes ("This app is blocked"). Scripts use a service account instead: `ga-admin@snouzylabs-admin.iam.gserviceaccount.com`, in the Cloud project `snouzylabs-admin`, Administrator of the Analytics account. It has no key. The Snouzylabs login impersonates it (`roles/iam.serviceAccountTokenCreator`) and asks the IAM Credentials API for a token with the scopes `analytics.edit` and `analytics.manage.users`. Before a sale, remove it from the account.
 
 ## Later: ads
 
