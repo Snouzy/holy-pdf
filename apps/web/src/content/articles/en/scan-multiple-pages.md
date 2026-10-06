@@ -6,8 +6,14 @@ title: How to scan multiple pages into one PDF
 description: "Turn photos of several pages into one clean, ordered PDF. Free, no sign-up, and your documents never leave your device."
 h1: How to scan multiple pages into one PDF
 lead: Photograph every page, check the order, and download one PDF. The images stay on your device.
+image: /articles/scan-multiple-pages/scan-multiple-pages-hero.webp
 published: 2026-10-06
 ---
+
+<figure class="article-visual article-visual--hero">
+  <img src="/articles/scan-multiple-pages/scan-multiple-pages-hero.webp" alt="Brother Snap photographs three sheets that become one PDF" width="1600" height="893" loading="eager" decoding="async" />
+  <figcaption>Photograph the pages, check their order, then collect them in one PDF.</figcaption>
+</figure>
 
 You do not need a desktop scanner to combine several pages into a PDF. Your phone is enough: photograph the pages, then let Holy PDF straighten and group them on your device.
 
@@ -22,6 +28,11 @@ Take all the photos before you start. You can then select them together in [Scan
 Open the Scanner and choose every page of the document in the same import. They are placed in one multi-page document.
 
 Holy PDF detects the paper, straightens the page, and removes shadows. Check any page marked with a warning: move its corners if the outline is wrong, then erase anything outside the paper when necessary.
+
+<figure class="article-visual">
+  <img src="/articles/scan-multiple-pages/scanner-three-pages-en.webp" alt="Three pages imported into one document in the Holy PDF scanner" width="1300" height="325" loading="lazy" decoding="async" />
+  <figcaption>The three photos stay grouped in the same document before download.</figcaption>
+</figure>
 
 All this processing happens in your browser. The photos are not uploaded to a server.
 

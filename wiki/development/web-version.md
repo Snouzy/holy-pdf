@@ -268,15 +268,15 @@ The footer links lead to 12 pages, in French and in English: What's new, FAQ, Bl
 |---|---|
 | `src/sitePages.ts` | the ids, the translated slugs, the emoji of each page; `pagePath`, `articlePath` |
 | `src/content/pages/<lang>/<id>.md` | the text of a page, its title, its description, its subtitle (`lead`), its date (`updated`) |
-| `src/content/articles/<lang>/<file>.md` | a blog article or a guide (`section`), its translated `slug`, its date (`published`) |
-| `src/layouts/ContentPage.astro` | the centered header and the text column; no island |
+| `src/content/articles/<lang>/<file>.md` | a blog article or a guide (`section`), its translated `slug`, its date (`published`), and optionally its leading `image` |
+| `src/layouts/ContentPage.astro` | the centered header and the text column; no island; responsive figures and captions inside the article column |
 | `src/pages/[lang]/[page].astro` | the pages; the list of articles under Blog and Guides, the links to each tool under the FAQ |
-| `src/pages/[lang]/[section]/[article].astro` | the articles, with `BlogPosting` in JSON-LD |
+| `src/pages/[lang]/[section]/[article].astro` | the articles, with `BlogPosting` in JSON-LD and its absolute image URL when the frontmatter declares `image` |
 | `src/i18n/pages.ts` | the template labels, kept apart from `fr.ts` and `en.ts`, which `Board.tsx` imports in full |
 
 **Adding content:**
 
-- an article: one `.md` file per language, with the same file name, in `src/content/articles/<lang>/`. No TS file to touch;
+- an article: one `.md` file per language, with the same file name, in `src/content/articles/<lang>/`. No TS file to touch. Put shared editorial images under `public/articles/<article>/`; use optimized local files, explicit dimensions and localized alternative text in the Markdown;
 - a page: its id and its slugs in `sitePages.ts`, one `.md` per language, a link in `SiteFooter.astro` if the page appears there;
 - a language: the language in `languages` (`tools.ts`). TypeScript then asks for a slug for each page and each tool, and for the labels of `i18n/pages.ts`; then one `.md` per page and per article.
 
