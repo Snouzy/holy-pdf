@@ -1,0 +1,65 @@
+---
+import { chooseLabel } from "../board/DropZone";
+import { toolFilm } from "../films";
+import { dictionaries } from "../i18n";
+import { Icon } from "../illustrations/Icon";
+import type { Lang, Tool } from "../tools";
+import Watch from "./Watch.astro";
+
+type Props = { tool: Tool; lang: Lang };
+
+const { tool, lang } = Astro.props;
+const film = toolFilm(tool.id, lang);
+const t = dictionaries[lang];
+const monk = t.monks[tool.id].name;
+---
+
+{film && (
+  <Fragment>
+    <Watch class="reel-open" poster={film.thumb} label={t.toolFilm.watch(monk)} detail={`· ${t.toolFilm.seconds(film.seconds)}`} />
+    <dialog class="reel" aria-label={t.toolFilm.title(monk)} data-src={film.src}>
+      <video controls playsinline preload="none"></video>
+      <form method="dialog"><button class="reel-close" aria-label={t.toolFilm.close}><Icon name="close" size={20} /></button></form>
+      <div class="reel-end" hidden>
+        <p>{t.toolFilm.end}</p>
+        <button class="reel-choose" type="button">{chooseLabel(tool, t)}</button>
+        <button class="reel-again" type="button">{t.toolFilm.again}</button>
+      </div>
+    </dialog>
+    <script>
+      import "../toolFilm";
+    </script>
+  </Fragment>
+)}
+
+<style>
+  :global(main:has(.board, .result) .reel-open) { display: none; }
+  .reel {
+    width: fit-content; max-width: none; max-height: none; padding: 0; overflow: hidden; border: 4px solid var(--ink); border-radius: 22px;
+    background: var(--surface); box-shadow: 8px 8px 0 var(--ink);
+  }
+  .reel::backdrop { background: color-mix(in srgb, var(--monk-ink) 72%, transparent); }
+  /* The films are drawn on the light theme's background, whatever the theme of the page. */
+  .reel video { display: block; height: min(86dvh, 820px); aspect-ratio: 9 / 16; object-fit: contain; background: #eef1f6; }
+  .reel-close {
+    position: absolute; top: 0.75rem; right: 0.75rem; display: grid; place-items: center; width: 44px; height: 44px;
+    border: 2px solid var(--ink); border-radius: 50%; background: var(--surface); color: var(--ink); cursor: pointer;
+  }
+  .reel-end {
+    position: absolute; inset: auto 0 0; display: grid; gap: 0.625rem; padding: 4rem 1.25rem 1.5rem; text-align: center;
+    background: linear-gradient(transparent, var(--surface) 40%);
+  }
+  .reel-end[hidden] { display: none; }
+  .reel-end p { margin: 0; font-family: var(--font-title); font-weight: 800; font-size: 1.25rem; color: var(--ink); }
+  .reel-end button { min-height: 48px; border-radius: var(--radius-control); font: inherit; font-weight: 800; cursor: pointer; }
+  .reel-choose { border: 1.5px solid var(--accent); background: var(--accent); color: var(--on-accent); }
+  .reel-again { border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); }
+  @media (max-width: 40rem) {
+    .reel { margin: 0; width: 100vw; height: 100dvh; border: 0; border-radius: 0; box-shadow: none; }
+    .reel video { width: 100%; height: 100%; aspect-ratio: auto; }
+  }
+  @media (hover: hover) {
+    .reel-close:hover, .reel-again:hover { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
+    .reel-choose:hover { border-color: var(--accent-hover); background: var(--accent-hover); }
+  }
+</style>

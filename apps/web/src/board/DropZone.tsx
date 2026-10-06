@@ -7,9 +7,13 @@ import { FilePicker } from "./FilePicker";
 
 type Props = { tool: Tool; t: Dictionary; onFiles: (files: File[]) => void };
 
+export function chooseLabel(tool: Tool, t: Dictionary): string {
+  return tool.accepts === "photo" ? t.drop.choosePhotos : tool.accepts === "image" ? t.drop.chooseImages : tool.multipleFiles ? t.drop.choosePdfs : t.drop.choosePdf;
+}
+
 export function DropZone({ tool, t, onFiles }: Props) {
   const monk = cast[tool.id];
-  const label = tool.accepts === "photo" ? t.drop.choosePhotos : tool.accepts === "image" ? t.drop.chooseImages : tool.multipleFiles ? t.drop.choosePdfs : t.drop.choosePdf;
+  const label = chooseLabel(tool, t);
   return (
     <div class="dropzone" style={`--tool: var(--${monk.category}); --tool-tint: var(--${monk.category}-tint)`}>
       <div class="dropzone-card">

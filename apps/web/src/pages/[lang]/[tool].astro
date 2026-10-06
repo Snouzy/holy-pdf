@@ -9,6 +9,7 @@ import { Avatar } from "../../illustrations/Avatar";
 import { Icon } from "../../illustrations/Icon";
 import Base from "../../layouts/Base.astro";
 import Emoji from "../../layouts/Emoji.astro";
+import ToolFilm from "../../layouts/ToolFilm.astro";
 import { alternates, homePath, siteName, toolPath } from "../../site";
 import { tools } from "../../tools";
 
@@ -55,6 +56,7 @@ const jsonLd = [
     <div class="tool-head">
       <h1>{h1}<Emoji char={monk.emoji} /></h1>
       <p class="intro">{t.monks[tool.id].intro}</p>
+      <ToolFilm tool={tool} lang={lang} />
     </div>
 
     <Board client:load transition:persist={`board-${tool.id}`} transition:persist-props toolId={tool.id} lang={lang} monks={{ fr: dictionaries.fr.monks[tool.id], en: dictionaries.en.monks[tool.id] }} />

@@ -19,6 +19,14 @@ export const enSite: SiteDictionary = {
     all: "All tools",
     soon: "Soon",
   },
+  toolFilm: {
+    watch: (monk: string) => `Watch ${monk} at work`,
+    seconds: (count: number) => `${count} s`,
+    title: (monk: string) => `${monk} at work`,
+    close: "Close the video",
+    end: "Your turn: nothing leaves your device.",
+    again: "Watch again",
+  },
   consent: {
     label: "Audience measurement",
     text: "Our monks have taken a vow of silence about your files. They would only like to count visits with Google Analytics: the pages viewed and the tool used, nothing else.",

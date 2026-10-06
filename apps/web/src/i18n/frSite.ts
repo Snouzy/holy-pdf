@@ -22,6 +22,14 @@ export const frSite = {
     all: "Tous les outils",
     soon: "Bientôt",
   },
+  toolFilm: {
+    watch: (monk: string) => `Voir ${monk} à l'œuvre`,
+    seconds: (count: number) => `${count} s`,
+    title: (monk: string) => `${monk} à l'œuvre`,
+    close: "Fermer la vidéo",
+    end: "À vous : rien ne quitte votre appareil.",
+    again: "Revoir",
+  },
   consent: {
     label: "Mesure d'audience",
     text: "Nos moines ont fait vœu de silence sur vos fichiers. Ils aimeraient seulement compter les visites avec Google Analytics : les pages vues et l'outil utilisé, rien d'autre.",

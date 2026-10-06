@@ -1,0 +1,30 @@
+---
+type Props = { poster: string; label: string; detail?: string; class?: string };
+
+const { poster, label, detail, class: extra } = Astro.props;
+---
+
+<button class:list={["watch", extra]} type="button" aria-haspopup="dialog">
+  <span class="watch-preview"><img src={poster} alt="" width="52" height="52" /></span>
+  {label}
+  {detail && <span class="watch-detail">{detail}</span>}
+</button>
+
+<style>
+  .watch {
+    display: inline-flex; align-items: center; gap: 0.75rem; padding: 0.25rem 1.125rem 0.25rem 0.25rem; border: 2px solid var(--ink); border-radius: 999px;
+    background: var(--surface); color: var(--ink); font: inherit; font-weight: 800; cursor: pointer; box-shadow: 3px 3px 0 var(--ink);
+    transition-property: translate, box-shadow; transition-duration: 150ms;
+  }
+  .watch-preview { position: relative; display: block; flex-shrink: 0; width: 52px; height: 52px; overflow: hidden; border-radius: 50%; }
+  .watch-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .watch-preview::after { content: ""; position: absolute; inset: 0; background: color-mix(in srgb, var(--monk-ink) 35%, transparent); }
+  .watch-preview::before {
+    content: ""; position: absolute; z-index: 1; left: 55%; top: 50%; width: 14px; height: 16px; translate: -50% -50%;
+    background: var(--paper); clip-path: polygon(0 0, 100% 50%, 0 100%);
+  }
+  .watch-detail { font-weight: 600; color: var(--muted); }
+  @media (hover: hover) {
+    .watch:hover { translate: -2px -2px; box-shadow: 5px 5px 0 var(--ink); }
+  }
+</style>
