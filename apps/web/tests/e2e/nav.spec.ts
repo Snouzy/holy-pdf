@@ -145,9 +145,19 @@ test("centres the icon of each square button in the bar", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/fr");
   const middle = (box: { y: number; height: number } | null) => (box ? box.y + box.height / 2 : Number.NaN);
-  for (const name of ["Mode sombre", "Menu"]) {
-    const button = page.locator(".site-header").getByRole("button", { name });
-    const offset = middle(await button.locator("svg:visible").boundingBox()) - middle(await button.boundingBox());
-    expect(Math.abs(offset), name).toBeLessThan(1);
+  const bar = page.locator(".site-header");
+  for (const control of [bar.getByRole("button", { name: "Mode sombre" }), bar.getByRole("button", { name: "Menu" }), bar.getByRole("link", { name: "Code source sur GitHub" })]) {
+    const offset = middle(await control.locator("svg:visible").boundingBox()) - middle(await control.boundingBox());
+    expect(Math.abs(offset), String(control)).toBeLessThan(1);
+  }
+});
+
+test("links the source code from the bar, on a computer and on a phone", async ({ page }) => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/en");
+    const link = page.locator(".site-header").getByRole("link", { name: "Source code on GitHub" });
+    await expect(link, `${width}px`).toBeVisible();
+    await expect(link).toHaveAttribute("href", "https://github.com/Snouzy/holy-pdf");
   }
 });

@@ -2,7 +2,7 @@
 import { dictionaries } from "../i18n";
 import { Icon } from "../illustrations/Icon";
 import { Monk } from "../illustrations/Monk";
-import { homePath, siteName, toolPath } from "../site";
+import { homePath, siteName, sourceUrl, toolPath } from "../site";
 import { pagePath } from "../sitePages";
 import { type Lang, languages, tools } from "../tools";
 import Emoji from "./Emoji.astro";
@@ -51,7 +51,7 @@ const columns: { title: string; links: { label: string; href: string }[] }[] = [
     title: siteName,
     links: [
       ...(["about", "contact", "press"] as const).map((id) => ({ label: f[id], href: pagePath(id, lang) })),
-      { label: f.sourceCode, href: "https://github.com/Snouzy/holy-pdf" },
+      { label: f.sourceCode, href: sourceUrl },
     ],
   },
 ];
