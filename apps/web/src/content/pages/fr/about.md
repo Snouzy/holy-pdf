@@ -33,7 +33,7 @@ Le code du site est publié sous licence libre AGPL-3.0-or-later sur [GitHub](ht
 
 ## Qui est derrière
 
-Je m'appelle Mathias Bradiceanu. Je construis Holy PDF autour de besoins très ordinaires : préparer un dossier, aider ses parents, s'occuper d'un document et passer à autre chose. J'ai aussi créé [Workout.cool](https://workout.cool), une plateforme de fitness open source.
+Je suis développeur. Je construis Holy PDF autour de besoins très ordinaires : préparer un dossier, aider ses parents, s'occuper d'un document et passer à autre chose. J'ai aussi créé [Workout.cool](https://workout.cool), une plateforme de fitness open source.
 
 ## Écrire au monastère
 

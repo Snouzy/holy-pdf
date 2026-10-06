@@ -37,7 +37,7 @@ The spec succeeds when:
 | Mac and iPhone | A single "Apps" page, sections `#mac` and `#iphone` | Two "soon" pages would be two thin pages. |
 | Missing content | A real minimal content everywhere | Choice of the author: no empty "in meditation" page. |
 | E-mail address | `hello@holy-pdf.com` | Like `hello@workout.cool`. It works once the domain is bought and Cloudflare Email Routing is set up. |
-| Publisher | Snouzylabs S.R.L., a company under Romanian law that also publishes workout.cool, Mathias BRADICEANU as publication director (decision of 5 October 2026) | LCEN, art. 6-III-1: a professional publisher gives its company name, its registered office, its phone number, its share capital, its registration (CUI) and the name of the publication director. Registered office, phone number, capital and CUI are to be added as soon as the author sends them |
+| Publisher | Snouzylabs S.R.L., a company under Romanian law that also publishes workout.cool, with its registered office in Afumați. No person is named on the site since 7 October 2026 (decision of the author) | A company established in Romania follows the EU e-commerce directive as Romania transposes it (art. 5: name, geographic address, contact, trade register number, tax code). It asks for the company, not its manager. The French LCEN, with its named publication director, applies to publishers established in France. The tax code (CUI) and the trade register number are to be added as soon as the author sends them |
 | Template labels | `src/i18n/pages.ts`, separate from `fr.ts` and `en.ts` | `Board.tsx` imports the whole dictionaries: these labels have no place in the JavaScript of the tool pages (same trap as `frSearch`). |
 
 ## Addresses
@@ -110,7 +110,7 @@ The language switch (`paths` of `Base.astro`) leads to the same page in the othe
 - **The text**: a `.prose` column of 48 rem, centered, as under the tools; `h2` on the left; links in `--accent`, underlined; simple tables.
 - **The monks**: on "About", a happy monk, without a halo (the halo is reserved for the logo); on "Apps", the sleeping monk and the "Soon" stamp of the upcoming tools. The other pages have no monk.
 - **Blog and Guides**: each article as a card (title, date, `lead`), and the whole card is a link.
-- **Article**: under the title, "October 2, 2026 · Mathias Bradiceanu"; at the end, a link to its list.
+- **Article**: under the title, "October 2, 2026 · Holy PDF"; at the end, a link to its list. The structured data name the organization as author and publisher (no person since 7 October 2026).
 - **Dates**: formatted at build time by `Intl.DateTimeFormat(lang, { dateStyle: "long" })`.
 
 The template loads no Preact island and no script beyond those of `Base.astro`.
@@ -135,14 +135,14 @@ The legal texts are a serious base, not the opinion of a lawyer: they stay in "T
 
 ### Legal
 
-- **Legal notice**: publisher Snouzylabs S.R.L., publication director Mathias BRADICEANU; contact `hello@holy-pdf.com`; host Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, United States; intellectual property: the texts, the code and the illustration files under AGPL-3.0-or-later, the name, the logo and the monk reserved ([BRAND.md](../../BRAND.md)); credits: Bricolage Grotesque and Figtree (SIL Open Font License), Simple Icons (CC0), PDFium and qpdf, with a link to `/licenses/`. On 5 October 2026, the credits also name @embedpdf/pdfium, Tesseract, OpenCV, libheif, Caveat, Feather and Lucide, each with a link to its licence file.
-- **Privacy**: data controller Snouzylabs S.R.L., represented by Mathias BRADICEANU; the files are processed in the browser and the site never receives them; no account, no analytics tool; Cloudflare processes the technical data of the requests (IP address, browser, requested page) to serve the site and protect it, and transfers this data to the United States under the Data Privacy Framework, to which it is certified; the e-mails received serve only to reply, then they are deleted; rights of access, rectification, erasure and objection; complaint to the CNIL.
+- **Legal notice**: publisher Snouzylabs S.R.L. and its registered office; contact `hello@holy-pdf.com`; host Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, United States; intellectual property: the texts, the code and the illustration files under AGPL-3.0-or-later, the name, the logo and the monk reserved ([BRAND.md](../../BRAND.md)); credits: Bricolage Grotesque and Figtree (SIL Open Font License), Simple Icons (CC0), PDFium and qpdf, with a link to `/licenses/`. On 5 October 2026, the credits also name @embedpdf/pdfium, Tesseract, OpenCV, libheif, Caveat, Feather and Lucide, each with a link to its licence file.
+- **Privacy**: data controller Snouzylabs S.R.L.; the files are processed in the browser and the site never receives them; no account; audience measurement only after consent since 6 October 2026 ([GA4 spec](2026-10-06-web-analytics-design.md)); Cloudflare processes the technical data of the requests (IP address, browser, requested page) to serve the site and protect it, and transfers this data to the United States under the Data Privacy Framework, to which it is certified; the e-mails received serve only to reply, then they are deleted; rights of access, rectification, erasure and objection; complaint to the CNIL.
 - **Terms of use**: free service, without an account, provided "as is", with no guarantee of availability; the user keeps their rights on their documents and stays responsible for them (lawful use, rights on the content); Sign puts a signature image, which is neither an advanced electronic signature nor a qualified signature in the sense of the eIDAS regulation, because there is no certificate; keep your originals; the monks, the texts and the code belong to the project, the third-party components follow their license; the terms can change, with the date at the top; French law.
 - **Cookies**: no cookie; a table of the two `localStorage` keys (`theme`: the chosen theme; `view`: the compact view of the home page), which stay on the device and are never sent; how to clear them from the browser.
 
 ### Holy PDF
 
-- **About**, on the outline of workout.cool: why Holy PDF; the story, taken from the [story of Holy PDF](../product/story.md) and its guidelines; the principle of local processing; who is behind it, Mathias Bradiceanu, also the creator of Workout.cool; write to the monastery.
+- **About**, on the outline of workout.cool: why Holy PDF; the story, taken from the [story of Holy PDF](../product/story.md) and its guidelines; the principle of local processing; who is behind it, a developer, also the creator of Workout.cool, not named since 7 October 2026; write to the monastery.
 - **Contact**: the address; for a bug, the browser, the tool and the steps; **never attach a personal document**; a pointer to Press.
 - **Press**: Holy PDF in one paragraph; the facts (free, local processing, no account, the tool families); the founder and a link to "About"; the logo to download (`/favicon.svg`); the contact, with "Press" as the subject.
 

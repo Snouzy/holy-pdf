@@ -5,12 +5,12 @@ title: "Confidentialité : vos fichiers restent chez vous"
 description: "La politique de confidentialité de Holy PDF : vos fichiers sont traités dans votre navigateur, jamais envoyés. Ce que le site voit, et vos droits."
 h1: Confidentialité
 lead: Vos fichiers ne quittent pas votre appareil. Voici le peu que le site voit, et vos droits.
-updated: 2026-10-06
+updated: 2026-10-07
 ---
 
 ## Qui est responsable
 
-Le responsable du traitement est Snouzylabs S.R.L., éditeur du site, représentée par Mathias BRADICEANU. Pour toute question : [hello@holy-pdf.com](mailto:hello@holy-pdf.com).
+Le responsable du traitement est Snouzylabs S.R.L., éditeur du site. Pour toute question : [hello@holy-pdf.com](mailto:hello@holy-pdf.com).
 
 ## Vos fichiers
 

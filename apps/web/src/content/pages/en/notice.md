@@ -5,14 +5,14 @@ title: Holy PDF legal notice
 description: "The Holy PDF legal notice: who publishes the site, who hosts it, how to reach us, and credits for the fonts, icons and libraries it uses."
 h1: Legal notice
 lead: Who publishes Holy PDF, who hosts it, and who we owe what.
-updated: 2026-10-05
+updated: 2026-10-07
 ---
 
 ## Publisher
 
 Holy PDF is published by Snouzylabs S.R.L., a software publisher incorporated in Romania, which also publishes [workout.cool](https://workout.cool).
 
-- Publication director: Mathias BRADICEANU, managing director
+- Registered office: Com. Afumati, Str. Fagului nr. 40F, tarla 92, parcela 337/15, constructia C1, camera 1, parter, 237241 Afumati, Romania
 - Contact: [hello@holy-pdf.com](mailto:hello@holy-pdf.com)
 
 ## Host

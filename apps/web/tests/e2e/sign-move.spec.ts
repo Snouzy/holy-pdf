@@ -44,7 +44,7 @@ test("keeps the three signature modes the same size, on one line, in Draw and in
   const draw = await sizes();
   expect(new Set(draw.map(([, height]) => height)).size).toBe(1);
   await page.getByRole("button", { name: "Text", exact: true }).click();
-  await page.getByLabel("Your text", { exact: true }).fill("Mathias Bradiceanu");
+  await page.getByLabel("Your text", { exact: true }).fill("Isabelle Fontanier");
   expect(await sizes()).toEqual(draw);
   // Headless browsers hide scrollbars: check that the longest label still fits once a classic 15 px scrollbar takes its share.
   await page.evaluate(() => document.fonts.ready);

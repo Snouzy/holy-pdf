@@ -6,8 +6,6 @@ export type PageId = (typeof pageIds)[number];
 export const sections = ["blog", "guides"] as const satisfies readonly PageId[];
 export type Section = (typeof sections)[number];
 
-export const author = "Mathias Bradiceanu";
-
 export const sitePages: Record<PageId, { slug: Record<Lang, string>; emoji: string }> = {
   news: { slug: { fr: "nouveautes", en: "whats-new" }, emoji: "🔔" },
   faq: { slug: { fr: "faq", en: "faq" }, emoji: "🙋" },
