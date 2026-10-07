@@ -22,7 +22,7 @@ Abra [Juntar PDF](/pt-br/juntar-pdf) e solte todos os PDFs, incluindo o que foi 
 
 ## 3. Organize as páginas
 
-Uma página está de cabeça para baixo? Use [Girar PDF](/pt-br/girar-pdf). Há uma página a mais? Use [Excluir páginas de PDF](/pt-br/excluir-paginas-pdf). Para reorganizar tudo, abra [Organizar páginas de PDF](/pt-br/organizar-pdf).
+Uma página está de cabeça para baixo? Use [Girar PDF](/pt-br/girar-pdf). Há uma página a mais? Use [Remover páginas de PDF](/pt-br/remover-paginas-pdf). Para reorganizar tudo, abra [Organizar páginas de PDF](/pt-br/organizar-pdf).
 
 ## 4. Reduza o tamanho do arquivo
 

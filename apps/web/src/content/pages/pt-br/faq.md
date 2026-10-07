@@ -7,38 +7,38 @@ h1: Perguntas frequentes
 lead: Respostas curtas para as dúvidas mais comuns.
 ---
 
-## O Holy PDF é gratuito?
+## O Holy PDF é grátis?
 
-Sim. As ferramentas do site são gratuitas, sem limite oculto e sem marca d'água.
+Sim. As ferramentas do site são gratuitas, não exigem conta e não adicionam marca d'água. A capacidade depende da memória do dispositivo e da complexidade dos arquivos.
 
-## Preciso de uma conta?
+## Preciso criar uma conta?
 
-Não. Abra uma ferramenta, solte seus arquivos, obtenha o resultado.
+Não. Abra uma ferramenta, solte seus arquivos e baixe o resultado.
 
 ## Meus arquivos são enviados para um servidor?
 
-Não. Eles são processados em seu navegador, em seu dispositivo, e nunca deixá-lo. [Como funciona e como verificar](/pt-br/blog/seus-pdfs-ficam-no-seu-dispositivo).
+Não. Eles são processados no navegador, no seu dispositivo, e não são enviados. [Veja como funciona e como verificar](/pt-br/blog/seus-pdfs-ficam-no-seu-dispositivo).
 
-## Quais navegadores?
+## Quais navegadores são compatíveis?
 
-Versões recentes do Chrome, Edge, Firefox e Safari, em um computador como em um telefone. O site precisa de JavaScript e WebAssembly, que todos esses navegadores oferecem.
+Versões recentes do Chrome, Edge, Firefox e Safari, no computador ou no celular. O site precisa de JavaScript e WebAssembly, recursos disponíveis nesses navegadores.
 
-## Funciona num telefone?
+## Funciona no celular?
 
-Sim, no navegador do telefone, sem aplicativo para instalar. Com um arquivo muito grande, um telefone pode ser mais lento do que um computador: todo o trabalho acontece no dispositivo.
+Sim, diretamente no navegador, sem instalar um aplicativo. Arquivos muito grandes podem demorar mais ou esbarrar no limite de memória do aparelho, pois todo o processamento acontece nele.
 
 ## Há um tamanho máximo?
 
-O site não estabelece limite de tamanho. O motor funciona na memória do navegador, que tem seu próprio limite: um arquivo muito grande pode falhar, especialmente em um telefone. Num computador recente, a fusão de dez arquivos de 50 páginas leva menos de dois segundos.
+O site não define um limite fixo. O processamento usa a memória disponível no navegador, então arquivos muito grandes podem falhar, principalmente em celulares. O resultado depende do tamanho e da complexidade do PDF e da capacidade do dispositivo.
 
-## Uma assinatura feita com o Holy PDF é legalmente válida?
+## Uma assinatura feita com o Holy PDF tem validade jurídica?
 
-Assinar coloca uma imagem da sua assinatura no PDF: uma assinatura electrónica simples. Tem documentos diários, quando as partes o aceitam. Não é uma assinatura qualificada ao abrigo do regulamento eIDAS, e não substitui aquela em que a lei o exige.
+A ferramenta insere no PDF uma imagem da sua assinatura. A validade depende do documento, da legislação aplicável e da aceitação das partes. Verifique os requisitos do seu caso antes de usar o arquivo assinado.
 
-## Há alguma aplicação?
+## Há algum aplicativo?
 
-Ainda não. Um aplicativo desktop para Mac e Windows, então Linux, está em obras, construído no código do site, com a mesma promessa: seus arquivos permanecem em seu dispositivo. Veja [os aplicativos](/pt-br/aplicativos).
+Ainda não. Um aplicativo para Mac e Windows, seguido do Linux, está em desenvolvimento e usa o mesmo código do site. Depois virá uma versão para iPhone. Veja a página de [aplicativos](/pt-br/aplicativos).
 
-## O código do Holy PDF está aberto?
+## O código do Holy PDF é aberto?
 
-Sim. O código do site é publicado sob a licença AGPL-3.0 ou posterior em [GitHub](https://github.com/Snouzy/holy-pdf). Você também pode verificar a promessa sem ler uma linha de código. Abra a guia Rede das ferramentas de desenvolvimento do seu navegador, execute uma ferramenta e assista: nenhuma solicitação carrega seu arquivo.
+Sim. O código do site é publicado no [GitHub](https://github.com/Snouzy/holy-pdf) sob a licença AGPL-3.0-or-later. Você também pode verificar o processamento local sem ler código: abra a aba Rede das ferramentas de desenvolvedor, execute uma ferramenta e confirme que nenhuma solicitação envia seu arquivo.

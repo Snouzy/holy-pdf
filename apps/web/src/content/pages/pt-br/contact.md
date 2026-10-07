@@ -7,27 +7,27 @@ h1: Contato
 lead: Dúvida, erro ou ideia? Escreva para o mosteiro.
 ---
 
-## Escrever
+## Escreva
 
-Um endereço: [hello@holy-pdf.com](mailto:hello@holy-pdf.com).
+Use o endereço [hello@holy-pdf.com](mailto:hello@holy-pdf.com).
 
-## Reportar um erro
+## Relate um erro
 
-Para que eu possa reproduzir o problema, diga-me:
+Para ajudar a reproduzir o problema, informe:
 
-- O navegador e a sua versão (Chrome 131, Safari 18...);
-- O dispositivo (computador, telefone);
-- a ferramenta que utilizou;
-- os passos, em ordem, e a mensagem mostrada.
+- o navegador e a versão, como Chrome 131 ou Safari 18;
+- o dispositivo, como computador ou celular;
+- a ferramenta que você usou;
+- os passos, na ordem, e a mensagem exibida.
 
-## Nunca anexar um documento pessoal
+## Não anexe documentos pessoais
 
-Você não precisa anexar um documento para receber ajuda. Descreva o arquivo em vez disso: seu número de páginas, seu tamanho, de onde vem (digitalização, exportação do Word, foto). Uma captura de tela também ajuda, desde que nenhum documento pessoal apareça nele.
+Você não precisa anexar um documento para receber ajuda. Em vez disso, descreva o arquivo: número de páginas, tamanho e origem, como digitalização, exportação do Word ou foto. Uma captura de tela também pode ajudar, desde que não mostre dados pessoais.
 
-## Uma ideia para uma ferramenta
+## Sugira uma ferramenta
 
-Falta uma ferramenta? Diz. Suas mensagens ajudam a escolher os próximos monges.
+Está faltando alguma ferramenta? Diga qual. Suas mensagens ajudam a escolher os próximos freis.
 
 ## Imprensa
 
-Jornalista? A página [Press](/pt-br/imprensa) tem o essencial.
+É jornalista? A página de [Imprensa](/pt-br/imprensa) reúne as principais informações.

@@ -34,7 +34,7 @@ Os arquivos que você processa com o Holy PDF continuam sendo seus. O site nunca
 - **@embedpdf/pdfium**, PDFium para o navegador: CloudPDF, Ji Chang, [licença MIT](/licenses/embedpdf-pdfium.txt).
 - **qpdf**, a compactação de arquivos: Jay Berkenbilt, [licença Apache 2.0](/licenses/qpdf.txt), distribuído por @wasm-zoo/qpdf.
 - **Tesseract** e **Tesseract.js**, a leitura de páginas digitalizadas: os autores do Tesseract, Jerome Wu e os autores do Tesseract.js, [licença Apache 2.0](/licenses/tesseract.txt).
-- **OpenCV**, o processamento das fotos do Scanner: equipe OpenCV, [licença Apache 2.0](/licenses/opencv.txt).
+- **OpenCV**, o processamento das fotos na ferramenta Digitalizar para PDF: equipe OpenCV, [licença Apache 2.0](/licenses/opencv.txt).
 - **libheif** e seu decodificador libde265, a leitura de fotos HEIC do iPhone: struktur AG, [licença LGPL 3.0](/licenses/libheif.txt). O site os disponibiliza em seus próprios arquivos (`/scan/libheif.js`, `/scan/libheif.wasm`), que podem ser substituídos.
 - **Bricolage Grotesque**, a fonte dos títulos: Mathieu Triay, [SIL Open Font License 1.1](/licenses/bricolage-grotesque.txt).
 - **Figtree**, a fonte do corpo do texto: Erik Kennedy, [SIL Open Font License 1.1](/licenses/figtree.txt).

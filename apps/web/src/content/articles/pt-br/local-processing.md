@@ -17,7 +17,7 @@ Muitas ferramentas de PDF online funcionam assim: seu arquivo vai para o servido
 
 Quando você solta o primeiro arquivo, o navegador baixa um mecanismo de PDF: o PDFium, projeto de código aberto que também exibe PDFs no Chrome. Ele é compilado em WebAssembly, formato que o navegador executa com rapidez.
 
-O navegador lê o arquivo no seu dispositivo e o entrega ao mecanismo. O processamento acontece em um Worker, uma thread separada, para que a página continue responsiva. O resultado é criado na memória e então oferecido pelo navegador para download. Em nenhum momento o arquivo passa pela rede.
+O navegador lê o arquivo no seu dispositivo e o entrega ao mecanismo. O processamento acontece em um Worker, uma linha de execução separada, para que a página continue responsiva. O resultado é criado na memória e então oferecido pelo navegador para download. Em nenhum momento o arquivo passa pela rede.
 
 ## O que ainda trafega pela rede
 

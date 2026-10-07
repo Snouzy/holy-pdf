@@ -16,7 +16,7 @@ O código do site foi publicado como software livre sob a licença AGPL-3.0-or-l
 Dois freis chegaram ao mosteiro:
 
 - [Editar PDF](/pt-br/editar-pdf): Frei Escriba adiciona textos, imagens, formas, anotações, links e carimbos, além de preencher formulários e criar campos.
-- [Recortar PDF](/pt-br/recortar-pdf): Frei Moldurador remove as margens de uma página ou de todas elas.
+- [Cortar PDF](/pt-br/cortar-pdf): Frei Moldurador oculta as margens de uma página ou de todas elas.
 
 ## 3 de outubro de 2026
 
@@ -25,7 +25,7 @@ Quatro freis chegaram ao mosteiro:
 - [Adicionar marcadores ao PDF](/pt-br/marcadores-pdf), com Frei Fita;
 - [Sobrepor dois PDFs](/pt-br/sobrepor-pdf), com Frei Camada;
 - [Reparar PDF](/pt-br/reparar-pdf), com Frei Restaurador;
-- [Digitalizar documento](/pt-br/digitalizar-documento), com Frei Clique.
+- [Digitalizar para PDF](/pt-br/digitalizar-para-pdf), com Frei Clique.
 
 ## 2 de outubro de 2026
 
@@ -40,7 +40,7 @@ Doze freis chegaram ao mosteiro:
 - [Achatar PDF](/pt-br/achatar-pdf), com Frei Rolo;
 - [Proteger PDF com senha](/pt-br/proteger-pdf), com Frei Cadeado;
 - [Desbloquear PDF](/pt-br/desbloquear-pdf), com Frei Chave;
-- [Ocultar informações de PDF](/pt-br/ocultar-informacoes-pdf), com Frei Tinteiro;
+- [Ocultar texto de PDF](/pt-br/ocultar-texto-pdf), com Frei Tinteiro;
 - [Aplicar OCR em PDF](/pt-br/ocr-pdf), com Frei Leitor;
 - [Converter PDF para Word](/pt-br/pdf-para-word), com Frei Copista.
 
@@ -58,7 +58,7 @@ Os primeiros freis começaram a trabalhar:
 - [Juntar PDF](/pt-br/juntar-pdf), com Frei Grampeador;
 - [Dividir PDF](/pt-br/dividir-pdf), com Frei Tesoura;
 - [Organizar páginas de PDF](/pt-br/organizar-pdf), com Frei Encadernador;
-- [Excluir páginas de PDF](/pt-br/excluir-paginas-pdf), com Frei Borracha;
+- [Remover páginas de PDF](/pt-br/remover-paginas-pdf), com Frei Borracha;
 - [Extrair páginas de PDF](/pt-br/extrair-paginas-pdf), com Frei Lupa;
 - [Girar PDF](/pt-br/girar-pdf), com Frei Giro;
 - [Converter JPG para PDF](/pt-br/jpg-para-pdf), com Frei Moldura.

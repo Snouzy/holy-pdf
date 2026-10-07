@@ -5,24 +5,24 @@ title: Organizar páginas de PDF grátis
 description: Reordene, gire ou exclua páginas de um PDF e salve uma nova cópia. Grátis e sem enviar o arquivo.
 h1: Organizar páginas de PDF
 steps:
-- Largue o PDF na área acima ou escolha-o no dispositivo.
-- Arraste as páginas para a ordem certa. Rodar ou apagar os que precisam dele.
-- Clique em "Tidy up the pages", em seguida, "Baixe o PDF".
+- Solte o PDF na área acima ou escolha-o no dispositivo.
+- Arraste as páginas para a ordem desejada. Gire ou exclua as páginas necessárias.
+- Clique em "Organizar as páginas" e depois em "Baixar o PDF".
 faq:
-- question: O meu PDF é enviado para um servidor?
+- question: Meu PDF é enviado para um servidor?
   answer: Não. Tudo acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: Posso mover páginas sem um rato?
-  answer: 'Sim. Com um dedo em um telefone, ou com o teclado: selecione uma página, pressione Espaço, mova-o com as teclas de seta e, em seguida, pressione Espaço novamente.'
-- question: 'Cometi um erro: como volto?'
-  answer: Clique em "Desfazer" ou pressione Ctrl+Z (□Z em um Mac). O seu arquivo original nunca foi alterado.
-- question: A qualidade da página muda?
-  answer: Não. As páginas são copiadas como são. Uma rotação não comprime nada novamente.
+- question: Posso mover páginas sem usar o mouse?
+  answer: 'Sim. No celular, use o dedo. Com o teclado, selecione uma página, pressione Espaço, mova-a com as setas e pressione Espaço novamente.'
+- question: Cometi um erro. Como desfaço?
+  answer: 'Clique em “Desfazer” ou pressione Ctrl+Z no Windows e Linux, ou ⌘+Z no Mac. O arquivo original não é alterado.'
+- question: A qualidade das páginas muda?
+  answer: Não. As páginas são copiadas sem nova compressão, inclusive quando você as gira.
 - question: Meu PDF tem muitas páginas. Isso é um problema?
-  answer: Não. Somente as páginas na tela são desenhadas, de modo que a página continua responsiva mesmo com várias centenas de páginas.
+  answer: A ferramenta renderiza somente as páginas visíveis na tela para manter a interface responsiva. O limite prático depende da memória do dispositivo.
 - question: É grátis?
   answer: Sim, sem cadastro e sem marca d'água.
 ---
 
-Organizar um PDF permite colocar um documento mal digitalizado de volta em ordem, virar páginas que estão do lado deles, ou remover páginas em branco.
+Organizar PDF ajuda a corrigir a ordem de um documento digitalizado, girar páginas que ficaram de lado e remover folhas em branco.
 
-Para combinar vários arquivos PDF, use a ferramenta Juntar.
+Para combinar vários arquivos, use a ferramenta Juntar PDF.

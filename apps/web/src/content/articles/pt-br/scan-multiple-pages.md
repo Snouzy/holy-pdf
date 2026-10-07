@@ -22,11 +22,11 @@ Você não precisa de um scanner de mesa para reunir várias páginas em um PDF.
 
 Coloque as folhas sobre uma superfície plana e com iluminação uniforme. Mantenha a página inteira no enquadramento e evite projetar a sombra da mão ou do celular.
 
-Tire todas as fotos antes de começar. Depois, selecione-as juntas em [Digitalizar documento](/pt-br/digitalizar-documento). A ferramenta aceita arquivos JPEG e PNG, além de fotos HEIC do iPhone.
+Tire todas as fotos antes de começar. Depois, selecione-as juntas em [Digitalizar para PDF](/pt-br/digitalizar-para-pdf). A ferramenta aceita arquivos JPEG e PNG, além de fotos HEIC do iPhone.
 
 ## 2. Importe as fotos juntas
 
-Abra o Scanner e escolha todas as páginas do documento na mesma importação. Elas serão colocadas em um único documento de várias páginas.
+Abra a ferramenta Digitalizar para PDF e escolha todas as páginas do documento na mesma importação. Elas serão colocadas em um único documento de várias páginas.
 
 O Holy PDF detecta o papel, alinha a página e remove sombras. Confira toda página marcada com um aviso: ajuste os cantos se o contorno estiver incorreto e apague o que estiver fora do papel quando necessário.
 
@@ -77,7 +77,7 @@ Sim. Selecione as duas fotos na mesma importação; elas se tornarão duas pági
 
 ### Posso usar fotos HEIC do iPhone?
 
-Sim. O Scanner aceita fotos HEIC, além de arquivos JPEG e PNG.
+Sim. A ferramenta Digitalizar para PDF aceita fotos HEIC, além de arquivos JPEG e PNG.
 
 ### Como separar dois documentos fotografados juntos?
 

@@ -5,28 +5,28 @@ title: Editar PDF online grátis
 description: Adicione textos, imagens, formas, links, anotações e destaques ao PDF. Grátis e direto no seu dispositivo.
 h1: Editar PDF
 steps:
-- 'Largue seu PDF na área acima: sua primeira página mostra.'
-- 'Escolha uma ferramenta, em seguida, clique ou arraste na página: texto, imagem, retângulo, seta, caneta, marcador, nota, realce de palavra, link ou carimbo. Os campos de um formulário são preenchidos no lugar: clique em um. A ferramenta Campo adiciona alguns: texto, caixa de seleção ou dropdown.'
-- Corrigir, mover ou excluir o que o PDF já detém; mover, redimensionar ou excluir o que você adicionou; em seguida, clique em "Salvar as alterações".
+- 'Solte o PDF na área acima: a primeira página será exibida.'
+- 'Escolha uma ferramenta e clique ou arraste na página: texto, imagem, retângulo, seta, caneta, marca-texto, nota, destaque, link ou carimbo. Para preencher um campo existente, clique nele. A ferramenta Campo adiciona texto, caixa de seleção ou lista suspensa.'
+- Corrija, mova ou exclua o conteúdo existente; ajuste o que você adicionou e clique em "Salvar as alterações".
 faq:
-- question: Posso alterar o texto já no PDF?
-  answer: 'Sim: clique duas vezes em uma linha para corrigi-la no lugar. Ele mantém sua fonte quando essa fonte pode escrever as letras que você digita; caso contrário, ela muda para a fonte padrão mais próxima, e a tela lhe diz. Uma linha também pode ser movida, ou excluída.'
-- question: Posso anotar o PDF e adicionar links?
-  answer: 'Sim: uma nota com seu texto e autor, um destaque, um sublinhado ou um strike-through sobre as palavras que você arrasta, e um link para um endereço web ou para uma página do documento. Eles são anotações reais: Acrobat e Preview abri-los.'
+- question: Posso alterar o texto que já está no PDF?
+  answer: 'Sim. Clique duas vezes em uma linha para editá-la. A fonte original é mantida quando aceita os caracteres digitados; caso contrário, a ferramenta usa uma fonte padrão semelhante e avisa você. Também é possível mover ou excluir a linha.'
+- question: Posso fazer anotações e adicionar links?
+  answer: 'Sim. Você pode incluir notas, destaques, sublinhados, tachados e links para sites ou páginas do documento. São anotações de PDF reconhecidas pelo Acrobat e pelo Preview.'
 - question: Posso mover, cortar ou excluir uma imagem do PDF?
-  answer: 'Sim: clique nele, depois arraste-o, redimensione-o pelos seus cantos, gire-o, espelha-o, corte-o ou apague-o. Um desenho move e apaga também. Um objeto excluído deixa o arquivo.'
-- question: O texto está pronto?
-  answer: 'Sim: arraste com a ferramenta Texto para desenhar uma caixa, e suas linhas se enrolam em sua largura, na tela como no arquivo. Um único clique coloca um texto livre.'
-- question: O texto adicionado permanece o texto?
-  answer: 'Sim: pode ser selecionado, copiado e encontrado por pesquisa, em cada leitor de PDF.'
-- question: Que cartas posso escrever?
-  answer: 'Letras latinas com seus acentos comuns (é, è, ç, ü...). As fontes padrão do PDF não podem escrever algumas letras da Europa Oriental, emojis ou outros alfabetos: a tela diz isso.'
+  answer: 'Sim. Clique na imagem para mover, redimensionar, girar, espelhar, cortar ou excluir. Desenhos também podem ser movidos ou apagados. O objeto excluído deixa de fazer parte do arquivo.'
+- question: O texto cabe automaticamente na caixa?
+  answer: 'Sim. Arraste a ferramenta Texto para criar uma caixa: as linhas se ajustam à largura na tela e no arquivo. Um clique simples adiciona texto livre.'
+- question: O texto adicionado continua selecionável?
+  answer: Sim. Ele pode ser selecionado, copiado e encontrado pela busca nos leitores de PDF compatíveis.
+- question: Quais caracteres posso usar?
+  answer: 'Letras latinas e acentos comuns, como é, ç e ü. As fontes padrão de PDF podem não aceitar emojis, outros alfabetos ou alguns caracteres do Leste Europeu; a ferramenta avisa quando isso acontece.'
 - question: Meu PDF é enviado para um servidor?
   answer: Não. Tudo acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: Que tal um PDF protegido ou assinado?
-  answer: 'Um PDF protegido abre com sua senha, e a cópia o mantém. Um PDF assinado é recusado: a cópia editada tornaria sua assinatura inválida.'
+- question: E se o PDF estiver protegido ou assinado?
+  answer: 'Um PDF protegido abre com a sua senha, e a cópia mantém essa proteção. Um PDF com assinatura digital é recusado, pois a edição invalidaria a assinatura.'
 ---
 
-A edição de um PDF permite corrigir uma data ou um nome, preencher um formulário impresso, anotar um documento, circular um detalhe ou adicionar um logotipo, sem instalar nada.
+Editar PDF permite corrigir um nome ou uma data, preencher um formulário, anotar um documento, destacar um trecho ou adicionar um logotipo sem instalar nada.
 
 Frei Escriba faz tudo no seu dispositivo: seus documentos nunca saem do computador ou do celular.

@@ -7,4 +7,4 @@ h1: Blog
 lead: 'Nos bastidores do mosteiro: como seus PDFs são processados e por quê.'
 ---
 
-Como o Holy PDF funciona em seus arquivos, as escolhas técnicas por trás dos monges, e o que aprendemos construindo o mosteiro.
+Veja como o Holy PDF processa seus arquivos, conheça as escolhas técnicas por trás dos freis e acompanhe o que aprendemos ao construir o mosteiro.

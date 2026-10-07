@@ -5,22 +5,22 @@ title: PDF para Word online grátis
 description: Converta PDF para Word editável em formato DOCX, mantendo textos, estilos e imagens. Grátis e no seu dispositivo.
 h1: Converter PDF para Word
 steps:
-- Largue um ou mais PDFs na área acima, ou escolha-os no seu dispositivo.
+- Solte um ou mais PDFs na área acima ou escolha-os no dispositivo.
 - Clique em "Converter para Word".
-- Baixe o documento .docx e abra-o em Word, Páginas, LibreOffice ou Google Docs.
+- Baixe o arquivo .docx e abra-o no Word, Pages, LibreOffice ou Google Docs.
 faq:
 - question: Meu PDF é enviado para um servidor?
   answer: Não. A conversão acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: O que é guardado?
-  answer: O texto, parágrafo por parágrafo, com sua fonte, tamanho, negrito e itálico, e as imagens onde estão. Cada página do PDF inicia uma nova página do documento.
-- question: O layout será o mesmo?
-  answer: Nem sempre. Um simples documento sai fiel. As tabelas tornam-se linhas de texto, e uma página em colunas é copiada coluna após coluna. Leia o documento novamente antes de enviá-lo.
-- question: Que tal um PDF digitalizado?
-  answer: 'Uma digitalização não tem texto: somente sua imagem é mantida. Execute-o através do OCR primeiro para ler seu texto, em seguida, converter a cópia.'
-- question: Que formato de arquivo é feito?
-  answer: Um documento .docx, formato do Word desde 2007, que Pages, LibreOffice e Google Docs também leram.
+- question: O que é preservado?
+  answer: O texto, os parágrafos, a fonte, o tamanho, o negrito, o itálico e as imagens. Cada página do PDF começa em uma nova página do documento.
+- question: O layout fica igual?
+  answer: Nem sempre. Documentos simples costumam ficar próximos do original. Tabelas podem virar linhas de texto, e colunas podem ser copiadas uma após a outra. Revise o arquivo antes de usá-lo.
+- question: E se o PDF for digitalizado?
+  answer: 'Uma digitalização não contém texto selecionável. Aplique OCR ao arquivo primeiro e depois converta a cópia para Word.'
+- question: Qual formato é criado?
+  answer: Um arquivo .docx, formato usado pelo Word. Pages, LibreOffice e Google Docs também abrem esse formato.
 ---
 
-Convertendo um PDF para Word permite levar um documento de volta para editá-lo: corrigir um texto, reutilizar uma passagem, atualizá-lo.
+Converter PDF para Word permite voltar a editar um documento, corrigir um trecho, reutilizar conteúdo ou atualizar informações.
 
-Irmão Copista faz tudo no seu dispositivo: seus documentos nunca deixam seu computador ou telefone.
+Frei Copista faz tudo no seu dispositivo: seus documentos nunca saem do computador ou do celular.

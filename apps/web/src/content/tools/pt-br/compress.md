@@ -5,24 +5,24 @@ title: Comprimir PDF online grátis
 description: Reduza o tamanho do PDF comprimindo as imagens sem perder o texto selecionável. Grátis e sem enviar arquivos.
 h1: Comprimir PDF
 steps:
-- Largue o PDF na área acima ou escolha-o no dispositivo.
+- Solte o PDF na área acima ou escolha-o no dispositivo.
 - 'Escolha o nível de compressão: comece com “Recomendado”.'
-- Clique em "Comprimir o PDF", em seguida, "Baixar o PDF".
+- Clique em "Comprimir o PDF" e depois em "Baixar o PDF".
 faq:
 - question: Meu PDF é enviado para um servidor?
-  answer: Não. A compressão é executada no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: Que nível devo escolher?
-  answer: '"Recomendado" balanceia o tamanho do arquivo e a qualidade da imagem. “Extremo” comprime mais, com maior perda de detalhes. “Baixo” prioriza a qualidade da imagem. Todos os três níveis podem perder detalhes: verifique o resultado, especialmente para o texto digitalizado.'
+  answer: Não. A compressão acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
+- question: Qual nível devo escolher?
+  answer: '“Recomendado” equilibra tamanho e qualidade. “Extremo” comprime mais, com maior perda de detalhes. “Baixo” prioriza a qualidade. Confira o resultado, principalmente se houver texto digitalizado.'
 - question: O texto permanece selecionável?
-  answer: 'Texto que já é selecionável permanece selecionável em todos os níveis: fontes e desenhos vetoriais são preservados. Texto em uma foto ou digitalização permanece uma imagem e pode tornar-se menos nítida após a compressão.'
-- question: Porque é que o meu PDF quase não encolheu?
-  answer: Um PDF sem foto, ou com fotos já compactadas, tem pouco a perder. Em seguida, Holy PDF lhe dá o arquivo de volta como era.
+  answer: 'O texto que já era selecionável continua assim em todos os níveis: fontes e elementos vetoriais são preservados. O texto em fotos ou digitalizações continua sendo uma imagem e pode ficar menos nítido.'
+- question: Por que meu PDF quase não diminuiu?
+  answer: Um PDF sem fotos, ou com fotos já compactadas, pode ter pouco espaço para redução. Nesse caso, o Holy PDF devolve o arquivo original.
 - question: Posso comprimir vários PDFs ao mesmo tempo?
-  answer: 'Sim. Solte-os juntos: cada um é comprimido por conta própria, em seguida, você obtê-los em um arquivo ZIP em um computador, ou através da folha de compartilhamento em um telefone.'
+  answer: 'Sim. Solte todos juntos: cada PDF é comprimido separadamente. No computador, você os recebe em um arquivo ZIP; no celular, usa o menu de compartilhamento.'
 - question: É grátis?
   answer: Sim, sem cadastro e sem marca d'água.
 ---
 
-Comprimir um PDF ajuda a enviá-lo por e-mail quando está acima do limite de tamanho, ou enviá-lo para um site que cobre o peso dos arquivos.
+Comprimir PDF ajuda a enviar arquivos por e-mail ou por sites que limitam o tamanho dos anexos.
 
-Frei Prensa faz tudo em seu dispositivo: seus documentos nunca deixam seu computador ou telefone, de importação para download.
+Frei Prensa faz tudo no seu dispositivo: seus documentos nunca saem do computador ou do celular, do carregamento ao download.

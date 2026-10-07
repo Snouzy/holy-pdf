@@ -7,4 +7,4 @@ h1: Guias de PDF
 lead: Tarefas do dia a dia, passo a passo, com as ferramentas na ordem certa.
 ---
 
-Cada guia começa de uma tarefa real e leva você de ferramenta para ferramenta, na ordem certa.
+Cada guia parte de uma tarefa real e mostra quais ferramentas usar, na ordem certa.

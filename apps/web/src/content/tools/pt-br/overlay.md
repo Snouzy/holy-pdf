@@ -5,22 +5,22 @@ title: Sobrepor dois PDFs online grátis
 description: Sobreponha as páginas de um PDF em outro para aplicar timbre, fundo ou aviso. Grátis e direto no seu dispositivo.
 h1: Sobrepor dois PDFs
 steps:
-- Largue o PDF ou PDFs que recebem, na área acima.
-- Escolha o PDF para colocar em, em seguida, se ele vai sobre as páginas ou sob eles.
-- Clique em "Sobrepor os PDFs", em seguida, baixe a cópia.
+- Solte o PDF de destino na área acima.
+- Escolha o PDF que será sobreposto e defina se ele ficará por cima ou por baixo das páginas.
+- Clique em "Sobrepor os PDFs" e baixe a cópia.
 faq:
-- question: Como é que as páginas combinam?
-  answer: 'Página 1 do PDF colocado vai na página 1, página 2 na página 2, e sua última página em cada página esquerda: um cabeçalho de uma página serve um documento inteiro.'
-- question: Mais ou menos, qual é a diferença?
-  answer: 'Sobre, o PDF colocado cobre a página: para uma nota ou um selo. Em baixo, mostra apenas onde a página está em branco: para um cabeçalho. Uma página digitalizada, que pinta o papel, esconde-a inteiramente.'
+- question: Como as páginas são combinadas?
+  answer: 'A página 1 do PDF sobreposto é aplicada à página 1 do destino, a página 2 à página 2 e assim por diante. Quando o PDF sobreposto termina, a última página dele se repete nas páginas restantes.'
+- question: Qual é a diferença entre colocar por cima e por baixo?
+  answer: 'Por cima, o PDF sobreposto cobre o conteúdo do destino, ideal para avisos e selos. Por baixo, ele aparece somente nas áreas transparentes ou vazias, ideal para timbres e fundos. Uma página digitalizada pode esconder totalmente a camada inferior.'
 - question: Meus PDFs são enviados para um servidor?
   answer: Não. Tudo acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: O texto fica de texto?
-  answer: 'Sim: o texto de ambos os PDFs permanece selecionável e pesquisável, e a página colocada é ajustada a cada página sem distorção.'
-- question: Que tal um PDF protegido?
-  answer: 'Um PDF protegido não pode ser colocado: desbloqueie-o primeiro com o Frei Chave.'
+- question: O texto continua selecionável?
+  answer: 'Sim. O texto dos dois PDFs permanece selecionável e pesquisável. A página sobreposta é ajustada ao tamanho da página de destino sem distorção.'
+- question: E se o PDF sobreposto estiver protegido?
+  answer: 'Um PDF protegido não pode ser sobreposto. Desbloqueie-o primeiro com o Frei Chave.'
 ---
 
-Sobreposição de dois PDFs coloca uma carta no seu cabeçalho, ou uma nota em cada página de um arquivo, sem copiar nada.
+Sobrepor dois PDFs permite aplicar um timbre, um fundo ou um aviso em todas as páginas sem precisar copiar o conteúdo manualmente.
 
 Frei Camada faz tudo no seu dispositivo: seus documentos nunca saem do computador ou do celular.

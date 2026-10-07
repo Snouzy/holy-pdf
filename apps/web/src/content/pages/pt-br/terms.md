@@ -26,7 +26,7 @@ Você deve ter o direito de processar os documentos que abrir no Holy PDF e usá
 
 ## Assinatura
 
-A ferramenta Assinar coloca uma imagem da sua assinatura no documento: uma assinatura eletrônica simples. Sem certificado, ela não é uma assinatura eletrônica avançada nem qualificada segundo o regulamento eIDAS. Ela não substitui uma assinatura qualificada quando a lei exigir uma.
+A ferramenta Assinar coloca uma imagem da sua assinatura no documento. Ela não verifica sua identidade nem garante que o arquivo cumpra os requisitos legais do seu caso. Confira a legislação aplicável e as exigências de quem receberá o documento.
 
 ## Disponibilidade e garantias
 

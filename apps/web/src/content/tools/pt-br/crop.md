@@ -1,26 +1,26 @@
 ---
 tool: crop
 lang: pt-br
-title: Recortar PDF e remover margens grátis
-description: Recorte páginas do PDF, ajuste a área que deseja manter e remova margens. Grátis e direto no seu dispositivo.
-h1: Recortar PDF
+title: Cortar PDF e ocultar margens grátis
+description: Corte a área visível das páginas do PDF, ajuste o enquadramento e oculte margens. Grátis e direto no seu dispositivo.
+h1: Cortar PDF
 steps:
-- 'Largue seu PDF na área acima: sua primeira página mostra, com uma moldura.'
-- Desenhe a área para manter, ajuste-a por seus punhos, em seguida, escolha todas as páginas ou a página mostrada.
-- Clique em "Recortar o PDF", em seguida, baixe a cópia.
+- 'Solte o PDF na área acima: a primeira página será exibida com uma moldura.'
+- Desenhe a área que deseja manter, ajuste-a pelas alças e escolha se o corte vale para a página atual ou para todas.
+- Clique em "Recortar o PDF" e baixe a cópia.
 faq:
-- question: O que está fora do quadro é excluído?
-  answer: 'Não: fica no arquivo, escondido, como em cada leitor de PDF que recorta. Para realmente remover uma área do arquivo, use o Frei Tinteiro, que oculta as informações.'
-- question: Minhas páginas não são do mesmo tamanho. O que acontece?
-  answer: 'O quadro mantém a mesma parte de cada página: uma página maior perde margens maiores, nas mesmas proporções.'
-- question: Posso cortar uma única página?
-  answer: 'Sim: mostre-o, em seguida, escolha “Página somente” antes de cortar.'
+- question: O conteúdo fora da moldura é excluído?
+  answer: 'Não. Ele continua no arquivo, mas fica oculto, como ocorre no recorte feito por leitores de PDF. Para remover informações do arquivo, use o Frei Tinteiro.'
+- question: Minhas páginas têm tamanhos diferentes. O que acontece?
+  answer: 'A moldura mantém a mesma proporção em todas as páginas. Por isso, uma página maior pode perder margens maiores.'
+- question: Posso cortar apenas uma página?
+  answer: 'Sim. Exiba a página e escolha “Somente esta página” antes de cortar.'
 - question: Meu PDF é enviado para um servidor?
   answer: Não. Tudo acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: Que tal um PDF protegido ou assinado?
-  answer: 'Um PDF protegido abre com sua senha, e a cópia o mantém. Um PDF assinado é recusado: a cópia cortada tornaria sua assinatura inválida.'
+- question: E se o PDF estiver protegido ou assinado?
+  answer: 'Um PDF protegido abre com a sua senha, e a cópia mantém essa proteção. Um PDF com assinatura digital é recusado, pois o corte invalidaria a assinatura.'
 ---
 
-Cortar um PDF remove as margens de uma digitalização, isola uma tabela ou uma imagem, ou traz uma página para baixo para o tamanho que vale a pena ler em uma tela.
+Cortar PDF reduz a área visível da página. Isso ajuda a ocultar margens de uma digitalização, destacar uma tabela ou facilitar a leitura na tela.
 
 Frei Moldurador faz tudo no seu dispositivo: seus documentos nunca saem do computador ou do celular.

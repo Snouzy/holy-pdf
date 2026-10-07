@@ -5,24 +5,24 @@ title: Dividir PDF online grátis
 description: Separe um PDF onde quiser ou a cada número definido de páginas. Baixe as partes sem enviar o arquivo.
 h1: Dividir PDF
 steps:
-- Largue o PDF na área acima ou escolha-o no dispositivo.
-- Clique na tesoura entre duas páginas para cortar lá, ou dividir cada N páginas.
-- 'Clique em "Divide o PDF", em seguida, baixe as partes: um arquivo ZIP em um computador, a folha de compartilhamento em um telefone.'
+- Solte o PDF na área acima ou escolha-o no dispositivo.
+- Clique na tesoura entre duas páginas ou escolha dividir a cada número definido de páginas.
+- 'Clique em "Dividir o PDF" e baixe as partes: em um ZIP no computador ou pelo menu de compartilhamento no celular.'
 faq:
-- question: O meu PDF é enviado para um servidor?
-  answer: Não. A separação acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: Como faço para dividir cada 2 páginas, ou cada 10 páginas?
-  answer: Digite o número de páginas ao lado de "Divide cada", em seguida, clique em "Aplicar". As tesouras vão para o lugar sozinhas.
-- question: Por que um arquivo ZIP?
-  answer: Navegadores bloqueiam várias transferências consecutivas. O ZIP mantém cada parte em um único download.
-- question: Como se chamam os novos arquivos?
-  answer: 'Eles mantêm o nome do seu PDF, seguido do número de peça: contrato-1.pdf, contrato-2.pdf, e assim por diante.'
+- question: Meu PDF é enviado para um servidor?
+  answer: Não. A divisão acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
+- question: Como divido a cada 2 ou 10 páginas?
+  answer: Digite o número ao lado de "Dividir a cada" e clique em "Aplicar". Os pontos de corte serão posicionados automaticamente.
+- question: Por que recebo um arquivo ZIP?
+  answer: Navegadores podem bloquear vários downloads seguidos. O ZIP reúne todas as partes em um único download.
+- question: Como os novos arquivos são nomeados?
+  answer: 'Eles mantêm o nome do PDF seguido do número da parte: contrato-1.pdf, contrato-2.pdf e assim por diante.'
 - question: A qualidade muda?
-  answer: Não. Páginas são copiadas como são, sem nenhuma compressão nova.
+  answer: Não. As páginas são copiadas sem nova compressão.
 - question: É grátis?
   answer: Sim, sem cadastro e sem marca d'água.
 ---
 
-Dividir um PDF permite separar os documentos de um arquivo que foi digitalizado de uma só vez, ou enviar apenas a parte útil de um documento longo.
+Dividir PDF permite separar documentos digitalizados de uma só vez ou compartilhar somente a parte necessária de um arquivo longo.
 
-Você também pode girar ou excluir páginas antes de cortar.
+Você também pode girar ou remover páginas antes de dividir.

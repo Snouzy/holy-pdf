@@ -5,22 +5,22 @@ title: Girar PDF online grátis
 description: Gire uma ou todas as páginas do PDF em intervalos de 90 graus, sem perder qualidade e sem enviar o arquivo.
 h1: Girar PDF
 steps:
-- Largue o PDF na área acima ou escolha-o no dispositivo.
-- Clique em ↻ sob uma página ou clique em "Girar tudo".
-- Clique em "Rotar o PDF", em seguida, "Baixar o PDF".
+- Solte o PDF na área acima ou escolha-o no dispositivo.
+- Clique em ↻ sob uma página ou em "Girar tudo".
+- Clique em "Girar o PDF" e depois em "Baixar o PDF".
 faq:
-- question: O meu PDF é enviado para um servidor?
+- question: Meu PDF é enviado para um servidor?
   answer: Não. Tudo acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: A rotação diminui a qualidade?
-  answer: Não. O PDF mantém as páginas como elas são e apenas registros que maneira de mostrá-los.
-- question: Posso rodar vários arquivos PDF ao mesmo tempo?
-  answer: 'Sim. Jogue-os juntos: você recebe um PDF com cada página, na ordem que você os adicionou.'
-- question: Para que lado a página vira?
-  answer: Um quarto gira no sentido horário a cada clique. Quatro cliques trazem de volta como era.
+- question: Girar diminui a qualidade?
+  answer: Não. A ferramenta altera apenas a orientação de exibição; o conteúdo da página não é recomprimido.
+- question: Posso girar apenas algumas páginas?
+  answer: Sim. Use a seta abaixo de cada página que precisa ser girada. As outras mantêm a orientação atual.
+- question: Para que lado a página gira?
+  answer: Cada clique gira a página 90 graus no sentido horário. Quatro cliques a devolvem à orientação inicial.
 - question: É grátis?
   answer: Sim, sem cadastro e sem marca d'água.
 ---
 
-Girar um PDF permite endireitar uma digitalização que saiu de lado, ou uma tabela na paisagem, antes de enviá-la ou imprimi-la.
+Girar PDF permite corrigir uma digitalização que ficou de lado ou ajustar a orientação de uma tabela antes de compartilhar ou imprimir.
 
-Você também pode alterar a ordem de página ou excluir páginas no mesmo lugar.
+Você também pode reorganizar ou remover páginas na mesma tela.

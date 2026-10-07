@@ -4,7 +4,7 @@ lang: pt-br
 title: "Privacidade: seus arquivos ficam com você"
 description: "Política de privacidade do Holy PDF: arquivos processados no navegador sem envio, dados técnicos vistos pelo site e seus direitos."
 h1: Privacidade
-lead: Seus arquivos nunca saem do dispositivo. Veja os poucos dados que o site recebe e os seus direitos.
+lead: Seus arquivos nunca saem do dispositivo. Veja quais dados o site recebe e conheça seus direitos.
 updated: 2026-10-07
 ---
 

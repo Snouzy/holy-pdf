@@ -5,22 +5,22 @@ title: Reparar PDF corrompido grátis
 description: Tente recuperar um PDF que não abre após download incompleto, corrupção ou salvamento incorreto. Grátis e local.
 h1: Reparar PDF corrompido
 steps:
-- 'Largue o PDF danificado ou PDFs na área acima: cada um é lido, e suas páginas legíveis são contadas.'
-- Verifique quantas páginas foram encontradas em cada arquivo.
-- Clique em "Reparar o PDF", em seguida, baixe a cópia reparada.
+- 'Solte um ou mais PDFs danificados na área acima: a ferramenta tentará ler cada arquivo e contará as páginas encontradas.'
+- Confira quantas páginas legíveis foram encontradas.
+- Clique em "Reparar o PDF" e baixe a cópia reparada.
 faq:
 - question: Quais PDFs podem ser reparados?
-  answer: Um download interrompido, um anexo truncado, um arquivo cuja tabela interna está errada ou ausente, um PDF precedido por bytes estranhos. O Frei Restaurador lê os objetos do arquivo um a um e reconstrói sua estrutura.
-- question: Está tudo recuperado?
-  answer: 'O que ainda está no arquivo, sim. O que está faltando não retorna: se o fim do arquivo for perdido, as últimas páginas podem estar faltando. O número de páginas encontradas mostra antes da reparação.'
+  answer: A ferramenta pode tentar reconstruir downloads interrompidos, anexos truncados e arquivos com estruturas internas ausentes ou incorretas. O resultado depende dos dados que ainda estiverem legíveis.
+- question: Todo o conteúdo será recuperado?
+  answer: 'Não há garantia. A ferramenta tenta recuperar os objetos legíveis, mas dados ausentes não podem ser recriados. A cópia pode continuar incompleta ou incompatível com alguns leitores.'
 - question: Meu PDF é enviado para um servidor?
   answer: Não. Tudo acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
-- question: Que tal um PDF protegido?
-  answer: 'Digite sua senha quando solicitado: a cópia reparada mantém a mesma senha.'
-- question: Que tal um PDF assinado?
-  answer: 'É recusado: a cópia reescrita tornaria sua assinatura inválida.'
+- question: E se o PDF estiver protegido?
+  answer: 'Digite a senha quando solicitado. A cópia reparada mantém a mesma proteção.'
+- question: E se o PDF estiver assinado?
+  answer: 'Ele é recusado, pois reescrever o arquivo invalidaria a assinatura digital.'
 ---
 
-Reparar um PDF reabre um arquivo que Preview, Acrobat ou seu navegador se recusam: a cópia reparada abre em todos os lugares.
+Reparar PDF tenta criar uma nova cópia a partir das partes legíveis de um arquivo danificado. Confira todas as páginas e teste o resultado no leitor que você usa.
 
 Frei Restaurador faz tudo no seu dispositivo: seus documentos nunca saem do computador ou do celular.
