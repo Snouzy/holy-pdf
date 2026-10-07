@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
@@ -21,6 +22,7 @@ const pages = htmlFiles(dist).map((file) => {
 });
 
 const first = (html: string, pattern: RegExp) => pattern.exec(html)?.[1];
+const sitemapUrls = () => [...readFileSync(join(dist, "sitemap-0.xml"), "utf8").matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 const homes = pages.filter(({ path }) => path.split("/").length === 2);
 const emoji = /\p{Extended_Pictographic}/u;
 
@@ -150,9 +152,16 @@ describe("built pages", () => {
   });
 
   it("lists every page in the sitemap", () => {
-    const sitemap = readFileSync(join(dist, "sitemap-0.xml"), "utf8");
-    const listed = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-    expect(listed.sort()).toEqual(pages.map(({ path }) => `${site}${path}`).sort());
+    expect(sitemapUrls().sort()).toEqual(pages.map(({ path }) => `${site}${path}`).sort());
+  });
+
+  it("serves the IndexNow key, which the deploy script sends with every page of the sitemap", () => {
+    const key = readFileSync(join(dist, "indexnow.txt"), "utf8");
+    expect(key).toMatch(/^[a-f0-9]{32}$/);
+    const script = join(import.meta.dirname, "../../scripts/indexnow.mjs");
+    const run = (indexable: string) => execFileSync("node", [script, "--dry-run"], { env: { ...process.env, SITE_URL: site, INDEXABLE: indexable }, encoding: "utf8" });
+    expect(JSON.parse(run("true"))).toEqual({ host: new URL(site).host, key, keyLocation: `${site}/indexnow.txt`, urlList: sitemapUrls() });
+    expect(run("")).toContain("skipped");
   });
 });
 
