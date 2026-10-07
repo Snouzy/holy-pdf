@@ -37,3 +37,8 @@ jobs:
           packageManager: pnpm
           wranglerVersion: "4.143.1"
           command: deploy
+      - if: github.event_name == 'push' && vars.SITE_URL != ''
+        run: node apps/web/scripts/indexnow.mjs
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          INDEXABLE: ${{ vars.INDEXABLE }}
