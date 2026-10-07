@@ -34,6 +34,30 @@ Three languages since 7 October 2026: French, English and Brazilian Portuguese. 
 | Films and OCR | The home film and the tool films of Redact and the Scanner exist in Portuguese (`scripts/home-film.mjs`, `scripts/tool-film.mjs`). OCR reads French and English (`fra`, `eng`); the Portuguese data (`por`) is not served yet. |
 | Desktop | The app speaks French and English (`AppLang` in `apps/desktop/app/shell.ts`): its menus in `lib.rs` have no Portuguese yet. |
 
+### The blog, one market at a time
+
+The blog is run separately for each language (decision of 7 October 2026). A literal translation is not enough, because each market has:
+
+- its own keywords and volumes;
+- sometimes another intent behind the same words;
+- a SERP that may favour another format;
+- other competitors, examples and legal references;
+- expressions that nobody searches for in the other language.
+
+Example: « juntar PDF » is the natural query in Brazil; a plain translation of « fusionner PDF » would give a weaker keyword.
+
+The structure that works:
+
+- one localized URL per version: `/fr/blog/…`, `/pt-br/blog/…`;
+- a keyword research per language and country;
+- a title, a description, an H1 and an outline written for that market;
+- content, examples and internal links adapted to it;
+- `hreflang` between equivalent pages only when they really answer the same intent.
+
+The subject and the editorial structure can be shared, but each version is rewritten as native content, never translated mechanically. Some French pages will have no reason to exist in pt-BR, and the other way round.
+
+_Today's code is stricter than this rule: `[section]/[article].astro` fails the build when an article has no sibling in every language, and `content.test.ts` wants the same file names under each language folder. Lifting both, so that an article may exist in one market only and link its equivalents when they exist, is the next step._
+
 ## Editorial pages
 
 Blog posts and guides share one static article template. It renders a visible, localized breadcrumb that matches the `BreadcrumbList` data, an H2 table of contents with stable deep links, and a fixed reading-progress bar. The current table-of-contents section follows the reader with a small framework-free script; the navigation is sticky on wide screens and returns to document flow on smaller screens. These controls are navigation aids, not claimed ranking factors.
