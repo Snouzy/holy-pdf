@@ -1,7 +1,20 @@
 import { copyFile, readdir, rename, rmdir } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
 import preact from "@astrojs/preact";
 import sitemap from "@astrojs/sitemap";
 import { defineConfig } from "astro/config";
+import { lastModified } from "./src/lastmod";
+
+// Google reads `lastmod` only when it is reliable: the date a page declares, or the last commit of its Markdown, never the build's.
+let lastmod;
+const sitemapOptions = {
+  filter: (page) => !page.endsWith("/404"),
+  serialize: (item) => {
+    lastmod ??= lastModified(fileURLToPath(new URL("src/content", import.meta.url)));
+    const date = lastmod.get(new URL(item.url).pathname);
+    return date ? { ...item, lastmod: date } : item;
+  },
+};
 
 // Cloudflare serves the nearest 404.html: one per language folder, and the English one at the root.
 const notFoundPages = {
@@ -42,5 +55,5 @@ export default defineConfig({
       },
     },
   },
-  integrations: [preact({ compat: true }), sitemap({ filter: (page) => !page.endsWith("/404") }), notFoundPages],
+  integrations: [preact({ compat: true }), sitemap(sitemapOptions), notFoundPages],
 });
