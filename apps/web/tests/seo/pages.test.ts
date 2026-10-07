@@ -151,8 +151,15 @@ describe("built pages", () => {
     expect(readFileSync(join(dist, "robots.txt"), "utf8")).toBe(`User-agent: *\nAllow: /\n\nSitemap: ${site}/sitemap-index.xml\n`);
   });
 
-  it("lists every page in the sitemap", () => {
+  it("lists every page in the sitemap, dated unless it is a home", () => {
     expect(sitemapUrls().sort()).toEqual(pages.map(({ path }) => `${site}${path}`).sort());
+    const entries = [...readFileSync(join(dist, "sitemap-0.xml"), "utf8").matchAll(/<url><loc>([^<]+)<\/loc>(?:<lastmod>([^<]+)<\/lastmod>)?<\/url>/g)];
+    expect(entries.length).toBe(pages.length);
+    for (const [, loc, lastmod] of entries) {
+      const home = new URL(loc ?? "").pathname.split("/").length === 2;
+      expect(lastmod === undefined, loc).toBe(home);
+      if (lastmod) expect(lastmod).toMatch(/^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}\.\d{3}Z)?$/);
+    }
   });
 
   it("serves the IndexNow key, which the deploy script sends with every page of the sitemap", () => {
