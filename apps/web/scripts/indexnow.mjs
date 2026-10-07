@@ -18,10 +18,15 @@ if (process.argv.includes("--dry-run")) {
   process.exit(0);
 }
 
-const served = await fetch(body.keyLocation);
-if (!served.ok || (await served.text()).trim() !== key) {
-  console.error(`IndexNow: ${body.keyLocation} does not serve the key (${served.status}).`);
-  process.exit(1);
+// The domain serves the previous deploy for a few seconds after wrangler returns: the first run got a 404 here.
+for (let attempt = 1; ; attempt++) {
+  const served = await fetch(body.keyLocation);
+  if (served.ok && (await served.text()).trim() === key) break;
+  if (attempt === 6) {
+    console.error(`IndexNow: ${body.keyLocation} does not serve the key (${served.status}).`);
+    process.exit(1);
+  }
+  await new Promise((resolve) => setTimeout(resolve, 5000));
 }
 
 const response = await fetch("https://api.indexnow.org/indexnow", {
