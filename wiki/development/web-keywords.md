@@ -4,6 +4,8 @@ _Created on 30 September 2026. Volumes not verified: no volume source was availa
 
 _5 October 2026: not redone yet, and the site is not online. The table covers only the first seven tools. Update, 6 October 2026: the site is online at holy-pdf.com, open to search engines since the same day._
 
+Holy PDF is one multilingual website, but keyword research and editorial priorities are independent for each language and market. Follow the [multilingual SEO launch runbook](../product/multilingual-seo-launch-runbook.md); do not translate this table or an editorial calendar mechanically.
+
 | Tool | Language | Kept URL | Candidates to compare | Volume |
 |---|---|---|---|---|
 | merge | fr | `/fr/fusionner-pdf` | fusionner pdf, fusionner des pdf, combiner pdf, assembler pdf | not verified |

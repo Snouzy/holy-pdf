@@ -8,6 +8,7 @@ You can open it in Obsidian: **Open folder as vault**, then choose the `wiki/` f
 - [Brand identity](product/brand.md): Holy PDF, with the name, one monk per tool and the Blue Ink palette.
 - [The story of Holy PDF](product/story.md): the lack of space, the family's PDFs and the birth of the project.
 - [Launch posts](product/social-posts.md): the LinkedIn, Instagram and X versions, in French.
+- [Multilingual SEO launch runbook](product/multilingual-seo-launch-runbook.md): one multilingual site, with independent keyword research, content ownership and launch gates for each market.
 
 ## Development
 
