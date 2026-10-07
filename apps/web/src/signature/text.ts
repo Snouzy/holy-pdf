@@ -32,4 +32,21 @@ const fr: typeof en = {
   format: "Choisissez un fichier PNG, JPG ou JPEG valide.", bytes: "Cette image dépasse 10 Mo. Choisissez un fichier plus léger.",
   pixels: "Cette image dépasse 16 mégapixels. Réduisez d’abord ses dimensions.", decode: "Cette image n’a pas pu être lue. Essayez une autre image.", empty: "Dessinez d’abord votre signature.",
 };
-export const signatureText = { en, fr };
+const ptBR: typeof en = {
+  rotatePage: "Girar a página 90°", rotateSignature: "Girar a assinatura", moveSignature: "Mover a assinatura",
+  zoomIn: "Ampliar", zoomOut: "Reduzir", resetZoom: "Voltar o zoom a 100%",
+  retry: "Tentar a visualização novamente",
+  undoStroke: "Desfazer o último traço", enlargeDrawing: "Ampliar a área de desenho", closeDrawing: "Fechar a área de desenho", largeDrawLabel: "Desenhe sua assinatura na área grande",
+  drawingHelp: "Sem pressa. Você pode desfazer cada traço sem recomeçar.", drawingLimit: "A área de desenho está cheia. Desfaça um traço, apague o desenho ou use esta assinatura.",
+  textMode: "Texto", assets: "Há imagens diferentes demais. Remova as assinaturas sem uso antes de adicionar outra.",
+  draw: "Desenhar", import: "Importar uma imagem", drawLabel: "Desenhe sua assinatura", clear: "Apagar o desenho", use: "Adicionar a esta página",
+  choose: "Escolha um PNG, JPG ou JPEG", formats: "PNG/JPG/JPEG · até 10 MB e 16 megapixels. A transparência do PNG é preservada; o JPG mantém o fundo.",
+  addHere: "Adicionar aqui", placeHint: "Clique na página e depois em Adicionar aqui para escolher a posição.",
+  add: "Adicionar a esta página", remove: "Remover esta assinatura", size: "Tamanho da assinatura", previous: "Página anterior", next: "Próxima página",
+  page: "Página", of: "de", preview: "Visualização da página do PDF", loading: "Carregando a página…", previewError: "Esta página não pôde ser exibida.",
+  placement: "Assinatura", resize: "Redimensionar a assinatura", instructions: "Arraste a assinatura para movê-la, o canto para redimensionar ou ↻ para girar. Clique fora para visualizar. Shift: passos de 15°. No teclado: as setas movem ou giram, + e - redimensionam.",
+  loadingImage: "Preparando a imagem…", note: "Uma assinatura visual, sem certificado digital.",
+  format: "Escolha um arquivo PNG, JPG ou JPEG válido.", bytes: "Esta imagem passa de 10 MB. Escolha um arquivo mais leve.",
+  pixels: "Esta imagem passa de 16 megapixels. Reduza as dimensões primeiro.", decode: "Esta imagem não pôde ser lida. Tente outra imagem.", empty: "Desenhe sua assinatura primeiro.",
+};
+export const signatureText = { en, fr, "pt-br": ptBR };

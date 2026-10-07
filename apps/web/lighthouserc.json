@@ -8,7 +8,9 @@
         "http://localhost/en/merge-pdf/",
         "http://localhost/fr/fusionner-pdf/",
         "http://localhost/en/compress-pdf/",
-        "http://localhost/en/sign-pdf/"
+        "http://localhost/en/sign-pdf/",
+        "http://localhost/pt-br/",
+        "http://localhost/pt-br/juntar-pdf/"
       ],
       "numberOfRuns": 3
     },
@@ -28,7 +30,7 @@
           }
         },
         {
-          "matchingUrlPattern": "/(en|fr)/$",
+          "matchingUrlPattern": "/(en|fr|pt-br)/$",
           "aggregationMethod": "median-run",
           "assertions": {
             "largest-contentful-paint": ["error", { "maxNumericValue": 1500 }],
@@ -38,7 +40,7 @@
           }
         },
         {
-          "matchingUrlPattern": "/(en|fr)/[a-z-]+/$",
+          "matchingUrlPattern": "/(en|fr|pt-br)/[a-z-]+/$",
           "aggregationMethod": "median-run",
           "assertions": {
             "largest-contentful-paint": ["error", { "maxNumericValue": 1600 }],

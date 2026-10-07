@@ -1,4 +1,5 @@
 import { standardWidths } from "./standardWidths";
+import type { Lang } from "../tools";
 import type { Box, EditFont, PageFont, Point } from "./types";
 
 /** From the top of a line to its baseline, per point of size: the Ascender of each standard font's metrics. */
@@ -64,9 +65,10 @@ export function wrapped(text: string, font: EditFont, bold: boolean, size: numbe
   return lines;
 }
 
-export const stampWords: Record<"fr" | "en", string[]> = {
+export const stampWords: Record<Lang, string[]> = {
   fr: ["APPROUVÉ", "REFUSÉ", "BROUILLON", "CONFIDENTIEL", "URGENT", "PAYÉ", "REÇU", "COPIE", "ANNULÉ", "SIGNER ICI"],
   en: ["APPROVED", "REJECTED", "DRAFT", "CONFIDENTIAL", "URGENT", "PAID", "RECEIVED", "COPY", "VOID", "SIGN HERE"],
+  "pt-br": ["APROVADO", "REPROVADO", "RASCUNHO", "CONFIDENCIAL", "URGENTE", "PAGO", "RECEBIDO", "CÓPIA", "CANCELADO", "ASSINE AQUI"],
 };
 
 export type StampLayout = { stroke: number; radius: number; title: { size: number; x: number; y: number }; date: { size: number; x: number; y: number } | null };

@@ -30,6 +30,22 @@ test("opens Convert PDF, then closes it with Escape or a click elsewhere", async
   await expect(menu).not.toHaveAttribute("open");
 });
 
+test("opens the language menu, then closes it with Escape or a click elsewhere", async ({ page }) => {
+  await page.goto("/en/merge-pdf");
+  const menu = page.locator(".language-menu");
+  const summary = menu.locator("summary");
+  await expect(summary).toHaveAccessibleName("Language: English");
+  await summary.click();
+  await expect(menu.getByRole("link", { name: "Français" })).toHaveAttribute("href", "/fr/fusionner-pdf");
+  await expect(menu.getByRole("link", { name: "Português" })).toHaveAttribute("href", "/pt-br/juntar-pdf");
+  await page.keyboard.press("Escape");
+  await expect(menu).not.toHaveAttribute("open");
+  await expect(summary).toBeFocused();
+  await summary.click();
+  await page.locator("main").click({ position: { x: 5, y: 5 } });
+  await expect(menu).not.toHaveAttribute("open");
+});
+
 test("keeps one menu open at a time", async ({ page }) => {
   await page.goto("/en");
   await page.locator(".convert-menu summary").click();

@@ -11,7 +11,7 @@ import Base from "../../layouts/Base.astro";
 import Emoji from "../../layouts/Emoji.astro";
 import ToolFilm from "../../layouts/ToolFilm.astro";
 import { alternates, homePath, siteName, toolPath } from "../../site";
-import { tools } from "../../tools";
+import { locales, perLanguage, tools } from "../../tools";
 
 export const getStaticPaths = (async () => {
   const entries = await getCollection("tools");
@@ -36,7 +36,7 @@ const jsonLd = [
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Any",
     browserRequirements: "Requires JavaScript and WebAssembly",
-    inLanguage: lang,
+    inLanguage: locales[lang],
     offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
   },
   {
@@ -59,7 +59,7 @@ const jsonLd = [
       <ToolFilm tool={tool} lang={lang} />
     </div>
 
-    <Board client:load transition:persist={`board-${tool.id}`} transition:persist-props toolId={tool.id} lang={lang} monks={{ fr: dictionaries.fr.monks[tool.id], en: dictionaries.en.monks[tool.id] }} />
+    <Board client:load transition:persist={`board-${tool.id}`} transition:persist-props toolId={tool.id} lang={lang} monks={perLanguage((code) => dictionaries[code].monks[tool.id])} />
     <a class="below" href="#how-to">{t.toolPage.below}</a>
   </div>
 

@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { expect, test, type Page } from "@playwright/test";
 import { getDocument, OPS } from "pdfjs-dist/legacy/build/pdf.mjs";
 import { gradientJpeg, readWithPdfjs } from "../engine/support";
-import { chooseFiles, dragFiles, hoverFiles, pdfFile, solidPng } from "./support";
+import { chooseFiles, dragFiles, hoverFiles, pdfFile, solidPng, switchLanguage } from "./support";
 
 async function openPdf(page: Page, labels = ["Page one", "Page two"]) {
   await page.goto("/en/sign-pdf");
@@ -176,7 +176,7 @@ test("keeps drawing and placement usable on a narrow screen", async ({ page }) =
 test("preserves the signature while switching language and clears it on reload", async ({ page }) => {
   await openPdf(page, ["Contract"]);
   await draw(page);
-  await page.getByRole("banner").getByRole("link", { name: "Français", exact: true }).click();
+  await switchLanguage(page, "Français");
   await expect(page).toHaveURL(/\/fr\/signer-pdf$/);
   await expect(page.getByRole("button", { name: "Signer le PDF", exact: true })).toBeEnabled();
   await expect(page.locator(".signature-placement")).toHaveCount(1);
@@ -218,7 +218,7 @@ test("blocks export while a replacement JPEG decodes and translates errors after
   await expect(page.locator(".signature-placement")).toHaveCount(1);
   await input.setInputFiles({ name: "fake.jpg", mimeType: "image/jpeg", buffer: Buffer.from("not jpeg") });
   await expect(page.getByRole("alert")).toContainText("Choose a valid PNG, JPG or JPEG file.");
-  await page.getByRole("banner").getByRole("link", { name: "Français", exact: true }).click();
+  await switchLanguage(page, "Français");
   await expect(page.getByRole("alert")).toContainText("Choisissez un fichier PNG, JPG ou JPEG valide.");
 });
 

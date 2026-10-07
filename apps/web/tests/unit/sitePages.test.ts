@@ -29,6 +29,7 @@ describe("page dates", () => {
     try {
       expect(formatDate(new Date("2026-10-02"), "fr")).toBe("2 octobre 2026");
       expect(formatDate(new Date("2026-10-02"), "en")).toBe("October 2, 2026");
+      expect(formatDate(new Date("2026-10-02"), "pt-br")).toBe("2 de outubro de 2026");
     } finally {
       if (zone === undefined) delete process.env.TZ;
       else process.env.TZ = zone;

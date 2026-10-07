@@ -4,7 +4,6 @@ import type { MonkTexts } from "./fr";
 
 /** Texts of the server-rendered pages only. Apart from `fr`: the board island never bundles them. */
 export const frSite = {
-  otherLanguage: "English",
   menu: { darkMode: "Mode sombre" },
   nav: {
     label: "Navigation principale",
@@ -20,6 +19,7 @@ export const frSite = {
     },
     convert: "Convertir PDF",
     all: "Tous les outils",
+    language: "Langue",
     soon: "Bientôt",
   },
   toolFilm: {

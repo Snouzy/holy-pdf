@@ -11,7 +11,7 @@ import { boardTexts } from "../i18n/board";
 import type { Dictionary, MonkTexts } from "../i18n/fr";
 import { Icon } from "../illustrations/Icon";
 import type { SignatureDraft } from "../signature/SignatureEditor";
-import { acceptsKind, type Lang, languages, looksLikeImage, type ToolId, tools } from "../tools";
+import { acceptsKind, type Lang, languages, locales, looksLikeImage, type ToolId, tools } from "../tools";
 import "./board.css";
 import { bubbleOf } from "./bubble";
 import { useConfirm } from "./ConfirmDialog";
@@ -164,7 +164,7 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
   // The board survives a language switch with its first props (transition:persist-props): the page's
   // <html lang> says which language to show after each client-side navigation.
   useEffect(() => {
-    const followPage = () => setLang(languages.find((code) => code === document.documentElement.lang) ?? firstLang);
+    const followPage = () => setLang(languages.find((code) => locales[code] === document.documentElement.lang) ?? firstLang);
     document.addEventListener("astro:after-swap", followPage);
     return () => document.removeEventListener("astro:after-swap", followPage);
   }, []);

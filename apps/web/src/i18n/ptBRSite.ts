@@ -1,7 +1,6 @@
 import type { SiteDictionary } from "./frSite";
 
 export const ptBRSite: SiteDictionary = {
-  otherLanguage: "Français",
   menu: { darkMode: "Modo escuro" },
   nav: {
     label: "Navegação principal",
@@ -17,7 +16,8 @@ export const ptBRSite: SiteDictionary = {
     },
     convert: "Converter PDF",
     all: "Todas as ferramentas",
-    soon: "Em breve.",
+    language: "Idioma",
+    soon: "Em breve",
   },
   toolFilm: {
     watch: (monk: string) => `Veja ${monk} trabalhando`,

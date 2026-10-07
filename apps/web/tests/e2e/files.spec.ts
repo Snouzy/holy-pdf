@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { gradientJpeg, readWithPdfjs, withOrientation } from "../engine/support";
-import { chooseFiles, dragFiles, expectThumbnails, exportWith, hoverFiles, pdfFile, solidPng } from "./support";
+import { chooseFiles, dragFiles, expectThumbnails, exportWith, hoverFiles, pdfFile, solidPng, switchLanguage } from "./support";
 
 test("turns a phone photo upright on its page", async ({ page }) => {
   await page.goto("/en/jpg-to-pdf");
@@ -128,11 +128,22 @@ test("turns a PNG into a page", async ({ page }) => {
   expect(pages.map((p) => [p.width, p.height])).toEqual([[842, 595]]);
 });
 
+test("follows a switch to Portuguese, board included", async ({ page }) => {
+  await page.goto("/en/merge-pdf");
+  await chooseFiles(page, [await pdfFile("a.pdf", ["A1"]), await pdfFile("b.pdf", ["B1"])]);
+  await expectThumbnails(page, 2);
+  await switchLanguage(page, "Português");
+  await expect(page).toHaveURL(/\/pt-br\/juntar-pdf$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/^Juntar PDF\s📎$/);
+  await expect(page.getByRole("button", { name: "Juntar os PDFs" })).toBeVisible();
+  await expectThumbnails(page, 2);
+});
+
 test("keeps the files when switching language", async ({ page }) => {
   await page.goto("/fr/fusionner-pdf");
   await chooseFiles(page, [await pdfFile("a.pdf", ["A1"]), await pdfFile("b.pdf", ["B1"])]);
   await expectThumbnails(page, 2);
-  await page.locator(".site-header").getByRole("link", { name: "English" }).click();
+  await switchLanguage(page, "English");
   await expect(page).toHaveURL(/\/en\/merge-pdf$/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(/^Merge PDF files\s📎$/);
   await expectThumbnails(page, 2);

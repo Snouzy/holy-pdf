@@ -30,7 +30,16 @@ const fr: typeof en = {
   previous: "Page précédente", next: "Page suivante", page: "Page", of: "sur",
   preview: "Aperçu de la page PDF", loading: "Chargement de la page…", previewError: "Cette page n'a pas pu être affichée.", retry: "Réessayer l'aperçu",
 };
-const texts = { en, fr };
+const ptBR: typeof en = {
+  title: "Título do marcador", add: (page) => `Adicionar um marcador à página ${page}`, defaultTitle: (page) => `Página ${page}`,
+  hint: "Mostre uma página com as setas sob a visualização e depois adicione o marcador dela.",
+  count: (count) => `Marcadores: ${count}`, none: "Este PDF ainda não tem marcadores.",
+  skipped: (count) => `Marcadores que não levam a nenhuma página deste PDF: ${count}. A cópia não os mantém.`,
+  show: "Mostrar esta página", deeper: "Colocar sob o marcador acima", shallower: "Subir um nível", remove: "Remover este marcador",
+  previous: "Página anterior", next: "Próxima página", page: "Página", of: "de",
+  preview: "Visualização da página do PDF", loading: "Carregando a página…", previewError: "Esta página não pôde ser exibida.", retry: "Tentar a visualização novamente",
+};
+const texts = { en, fr, "pt-br": ptBR };
 
 export type BookmarksProps = {
   sizes: PageSize[]; lang: Lang; value: BookmarksDraft; onChange: (update: (draft: BookmarksDraft) => BookmarksDraft) => void; disabled: boolean;

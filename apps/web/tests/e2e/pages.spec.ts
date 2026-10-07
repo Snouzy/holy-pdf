@@ -3,7 +3,7 @@ import { pageIds, pagePath } from "../../src/sitePages";
 import { languages } from "../../src/tools";
 import { overflowing } from "./support";
 
-const articles = { fr: "/fr/blog/vos-pdf-restent-sur-votre-appareil", en: "/en/blog/your-pdfs-stay-on-your-device" };
+const articles = { fr: "/fr/blog/vos-pdf-restent-sur-votre-appareil", en: "/en/blog/your-pdfs-stay-on-your-device", "pt-br": "/pt-br/blog/seus-pdfs-ficam-no-seu-dispositivo" };
 
 async function hrefs(page: Page, scope: string): Promise<string[]> {
   const all = await page.locator(`${scope} a[href^="/"]`).evaluateAll((links) => links.map((link) => link.getAttribute("href") ?? ""));

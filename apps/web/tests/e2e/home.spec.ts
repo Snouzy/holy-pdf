@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { languages } from "../../src/tools";
 import { overflowing } from "./support";
 
 test("opens the tool named in the sentence, with its monk", async ({ page }) => {
@@ -165,7 +166,7 @@ for (const width of [320, 390]) {
   test(`fits the home page in a ${width} px wide screen, even with fallback fonts`, async ({ page }) => {
     await page.route(/\.woff2$/, (route) => route.abort());
     await page.setViewportSize({ width, height: 800 });
-    for (const lang of ["fr", "en"]) {
+    for (const lang of languages) {
       await page.goto(`/${lang}`);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), `/${lang}: ${await overflowing(page)}`).toBe(width);
     }

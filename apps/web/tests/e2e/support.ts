@@ -185,3 +185,9 @@ export function overflowing(page: Page): Promise<string> {
       .join("; ");
   });
 }
+
+export async function switchLanguage(page: Page, name: string) {
+  const header = page.locator(".site-header");
+  await header.locator(".language-menu summary").click();
+  await header.locator(".language-drop").getByRole("link", { name, exact: true }).click();
+}

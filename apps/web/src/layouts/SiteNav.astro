@@ -5,13 +5,13 @@ import { Icon } from "../illustrations/Icon";
 import { Monk } from "../illustrations/Monk";
 import { ToolIcon } from "../illustrations/ToolIcon";
 import { homePath, siteName, sourceUrl, toolPath } from "../site";
-import { type Lang, languages, tools } from "../tools";
+import { type Lang, languageNames, languages, locales, tools } from "../tools";
 
 type Props = { lang: Lang; paths: Record<Lang, string> };
 
 const { lang, paths } = Astro.props;
 const t = dictionaries[lang];
-const other = languages.find((candidate) => candidate !== lang) ?? lang;
+const others = languages.filter((candidate) => candidate !== lang);
 const groups = byCategory();
 const convert = groups.find(({ category }) => category === "convert");
 const tint = (category: Category) => `--tool: var(--${category}); --tool-tint: var(--${category}-tint)`;
@@ -75,7 +75,9 @@ const github = "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6
           </details>
         </li>
       </ul>
-      <a class="language drawer-language" href={paths[other]} hreflang={other} lang={other}><Icon name="globe" size={18} />{t.otherLanguage}</a>
+      <div class="drawer-languages">
+        {others.map((other) => <a class="language" href={paths[other]} hreflang={locales[other]} lang={locales[other]}><Icon name="globe" size={18} />{languageNames[other]}</a>)}
+      </div>
     </nav>
     <div class="nav-actions">
       <a class="github" href={sourceUrl} aria-label={t.nav.github}>
@@ -85,7 +87,12 @@ const github = "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6
         <span class="theme-moon"><Icon name="moon" size={22} /></span>
         <span class="theme-sun"><Icon name="sun" size={22} /></span>
       </button>
-      <a class="language" href={paths[other]} hreflang={other} lang={other}><Icon name="globe" size={18} />{t.otherLanguage}</a>
+      <details class="nav-menu language-menu" name="nav">
+        <summary class="language"><Icon name="globe" size={18} /><span class="visually-hidden">{t.nav.language}: </span>{languageNames[lang]}</summary>
+        <ul class="drop language-drop">
+          {others.map((other) => <li><a href={paths[other]} hreflang={locales[other]} lang={locales[other]}>{languageNames[other]}</a></li>)}
+        </ul>
+      </details>
       <button class="burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label={t.nav.menu}>
         <span class="burger-open"><Icon name="menu" size={22} /></span>
         <span class="burger-close"><Icon name="close" size={22} /></span>
@@ -152,15 +159,22 @@ const github = "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6
     display: inline-flex; align-items: center; gap: 0.375rem; min-height: 44px; padding: 0 0.75rem; border: 1.5px solid var(--line);
     border-radius: var(--radius-control); background: var(--surface); font-weight: 700; font-size: 0.875rem; color: var(--ink); text-decoration: none;
   }
+  summary.language { list-style: none; cursor: pointer; }
+  summary.language::-webkit-details-marker { display: none; }
+  .language-drop { left: auto; right: 0; width: 12rem; }
+  .language-drop a { padding-inline: 0.75rem; }
   :global(:root:not([data-theme])) .theme-toggle, .theme-sun, :global([data-theme="dark"]) .theme-moon { display: none; }
   .theme-moon, .burger-open, :global([data-theme="dark"]) .theme-sun { display: contents; }
-  .burger, .burger-close, .drawer-language { display: none; }
+  .burger, .burger-close, .drawer-languages { display: none; }
 
+  @media (max-width: 78rem) {
+    .nav-links { gap: 1.125rem; }
+  }
   @media (max-width: 75rem) {
     .nav-bar { gap: 0.5rem; }
     .brand { margin-inline-end: auto; }
     .burger { display: inline-flex; }
-    .nav-actions .language { display: none; }
+    .language-menu { display: none; }
     :global([data-menu="open"]) .burger-open { display: none; }
     :global([data-menu="open"]) .burger-close { display: contents; }
     :global([data-menu="open"] body) { overflow: hidden; }
@@ -176,7 +190,7 @@ const github = "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6
     .mega-col.asleep, .soon { display: none; }
     .drop, .mega ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.625rem; }
     .drop a, .mega a { background: var(--surface); }
-    .drawer-language { display: inline-flex; margin-top: 1.25rem; }
+    .drawer-languages { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
   }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
     .brand:hover .brand-mark { transform: rotate(-8deg) scale(1.06); }

@@ -130,7 +130,7 @@ export const ptBR: BoardTexts = {
     saved: "Salvo",
     open: "Abrir",
     reveal: { mac: "Mostrar no Finder", windows: "Mostrar no Explorador", linux: "Mostrar na pasta" },
-    saveFailed: "A gravação falhou:",
+    saveFailed: "Falha ao salvar:",
     dropMore: "Você também pode arrastar mais PDFs para esta área.",
     more: (n: number) =>`e mais ${n}`,
     chosen: (n: number) => (n === 1 ? "1 página selecionada" : `${n} páginas selecionadas`),

@@ -1,5 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
-import { chooseFiles, expectThumbnails, pdfFile } from "./support";
+import { chooseFiles, expectThumbnails, pdfFile, switchLanguage } from "./support";
 
 /** Runs only on a build with GA4_ID: `pnpm verify:full` makes one for Lighthouse. */
 async function open(page: Page) {
@@ -70,11 +70,11 @@ test("asks again after six months", async ({ page }) => {
 test("keeps the question, then the answer, across a language switch", async ({ page }) => {
   await open(page);
   await expect(banner(page)).toBeVisible();
-  await page.locator(".site-header a.language:not(.drawer-language)").click();
+  await switchLanguage(page, "Français");
   await expect(page).toHaveURL(/\/fr\/fusionner-pdf$/);
   await expect(page.getByRole("button", { name: "Accepter" })).toBeVisible();
   await page.getByRole("button", { name: "Refuser" }).click();
-  await page.locator(".site-header a.language:not(.drawer-language)").click();
+  await switchLanguage(page, "English");
   await expect(page).toHaveURL(/\/en\/merge-pdf$/);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(banner(page)).toBeHidden();

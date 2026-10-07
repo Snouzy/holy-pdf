@@ -68,7 +68,34 @@ const fr: typeof en = {
   previous: "Page précédente", next: "Page suivante", page: "Page", of: "sur", zoomIn: "Agrandir", zoomOut: "Réduire", resetZoom: "Taille normale",
   preview: "Aperçu de la page PDF", loading: "Chargement de la page…", previewError: "Cette page n'a pas pu être affichée.", retry: "Réessayer l'aperçu",
 };
-const texts = { en, fr };
+const ptBR: typeof en = {
+  tools: "Ferramentas", style: "Estilo", selection: "Adição selecionada", original: "Objeto do documento",
+  kinds: { text: "Texto", image: "Imagem", path: "Traço", form: "Grupo", shading: "Degradê" },
+  tool: { select: "Selecionar", text: "Texto", rectangle: "Retângulo", ellipse: "Elipse", line: "Linha", arrow: "Seta", ink: "Caneta", highlight: "Marca-texto", note: "Nota", markHighlight: "Destacar o texto", underline: "Sublinhar", strikeout: "Riscar", link: "Link", stamp: "Carimbo", field: "Campo" },
+  fieldKinds: { text: "Texto", checkbox: "Caixa de seleção", combo: "Lista suspensa" }, fieldName: "Campo", fieldLabel: "Nome", fieldMultiline: "Várias linhas", fieldOptions: "Opções, uma por linha",
+  fieldHint: "Clique onde o campo deve ficar ou arraste a moldura dele; dê um nome a ele no painel.", fieldNames: (page) => `Página ${page}: cada campo precisa de um nome próprio, sem ponto, e uma lista precisa de opções.`,
+  fieldTurned: "Esta página está girada: os campos devem ficar em uma página sem rotação.",
+  stampWord: "Palavra", stampCustom: "Outro texto", stampDate: "Adicionar a data de hoje", stampHint: "Clique onde o carimbo deve ficar ou arraste a moldura dele.",
+  noteText: "Nota", selectedNote: "Nota selecionada", author: "Autor", selectedLink: "Link selecionado", target: "Destino", webAddress: "Endereço web", documentPage: "Página do documento", url: "https://…", linkPage: "Página",
+  invalidLink: "O endereço começa com https:// ou mailto:.", linkMissing: (page) => `Um link da página ${page} ainda não tem endereço.`,
+  markupHint: "Arraste sobre as palavras a marcar.", noteHint: "Clique onde a nota deve ficar.",
+  picture: "Imagem", turnLeft: "Girar à esquerda", turnRight: "Girar à direita", mirrorAcross: "Espelhar esquerda-direita", mirrorDown: "Espelhar cima-baixo",
+  crop: "Recortar", applyCrop: "Aplicar o recorte", cancelCrop: "Cancelar o recorte", cropHint: "Arraste os cantos da moldura e depois aplique.",
+  image: "Imagem", color: "Cor", width: "Espessura", widths: ["Fina", "Média", "Grossa"], fill: "Preenchimento", outline: "Contorno", filled: "Preenchido",
+  font: "Fonte", bold: "Negrito", size: "Tamanho", front: "Trazer para a frente", back: "Enviar para trás", remove: "Excluir", undo: "Desfazer", redo: "Refazer",
+  colors: ["Preto", "Azul", "Vermelho", "Verde", "Amarelo", "Branco"], typeHere: "Seu texto",
+  hint: "Escolha uma ferramenta e clique ou arraste na página. Arraste com a ferramenta Texto para uma caixa cujas linhas quebram. Dê um clique duplo em um texto para alterá-lo, o seu ou o do documento.",
+  originalHint: "Arraste para mover. Dê um clique duplo em um texto para corrigi-lo.",
+  fieldsHint: "Clique em um campo do formulário para preenchê-lo.",
+  pageIsPicture: "Esta página é uma imagem, como uma digitalização: seu texto não pode ser corrigido, mas pode ser coberto com um retângulo branco e um texto novo. O Frei Tinteiro remove um trecho de vez.",
+  unwritable: "Um texto tem caracteres que as fontes do PDF não conseguem escrever (algumas letras do leste europeu, emojis, alfabetos não latinos).", imageError: "Esta imagem não pôde ser lida.",
+  fontChanges: (family) => `A fonte do PDF não tem todas essas letras: o texto passará para ${family}.`,
+  cannotWrite: "Algumas destas letras não podem ser escritas neste PDF: a correção não será mantida.",
+  refused: "A correção não foi mantida: algumas de suas letras não podem ser escritas neste PDF.",
+  previous: "Página anterior", next: "Próxima página", page: "Página", of: "de", zoomIn: "Ampliar", zoomOut: "Reduzir", resetZoom: "Tamanho normal",
+  preview: "Visualização da página do PDF", loading: "Carregando a página…", previewError: "Esta página não pôde ser exibida.", retry: "Tentar a visualização novamente",
+};
+const texts = { en, fr, "pt-br": ptBR };
 
 const palette: Rgb[] = [[0, 0, 0], [29, 78, 216], [220, 38, 38], [22, 163, 74], [250, 204, 21], [255, 255, 255]];
 const widths = [1, 3, 6];
@@ -1032,7 +1059,8 @@ function Segments({ label, options, chosen, onChoose }: { label: string; options
   </div>;
 }
 
-const today = (lang: Lang) => new Date().toLocaleDateString(lang === "fr" ? "fr-FR" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
+const dateLocales: Record<Lang, string> = { fr: "fr-FR", en: "en-GB", "pt-br": "pt-BR" };
+const today = (lang: Lang) => new Date().toLocaleDateString(dateLocales[lang], { day: "numeric", month: "short", year: "numeric" });
 
 const ToolGlyph = ({ path }: { path: string }) => <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d={path} fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>;
 

@@ -24,7 +24,14 @@ const fr: typeof en = {
   zone: "Zone à garder", previous: "Page précédente", next: "Page suivante", page: "Page", of: "sur",
   preview: "Aperçu de la page PDF", loading: "Chargement de la page…", previewError: "Cette page n'a pas pu être affichée.", retry: "Réessayer l'aperçu",
 };
-const texts = { en, fr };
+const ptBR: typeof en = {
+  pages: "Páginas", all: "Todas as páginas", only: (page) => `Somente a página ${page}`, reset: "Redefinir a área",
+  size: (width, height) => `Página cortada: ${width} × ${height} mm`,
+  hint: "Desenhe a área a manter e ajuste-a pelas alças. O que fica fora continua no arquivo, oculto: para removê-lo, use o Frei Tinteiro.",
+  zone: "Área a manter", previous: "Página anterior", next: "Próxima página", page: "Página", of: "de",
+  preview: "Visualização da página do PDF", loading: "Carregando a página…", previewError: "Esta página não pôde ser exibida.", retry: "Tentar a visualização novamente",
+};
+const texts = { en, fr, "pt-br": ptBR };
 const handles: CropHandle[] = ["nw", "n", "ne", "e", "se", "s", "sw", "w"];
 const millimetres = (points: number) => Math.round(points * 25.4 / 72);
 

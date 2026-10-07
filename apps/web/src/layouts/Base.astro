@@ -4,7 +4,7 @@ import { dictionaries } from "../i18n";
 import { fontFaces, preloadedFonts } from "../styles/fonts";
 import "../styles/tokens.css";
 import "../styles/base.css";
-import { type Lang, languages } from "../tools";
+import { type Lang, languages, locales } from "../tools";
 import Consent from "./Consent.astro";
 import SiteFooter from "./SiteFooter.astro";
 import SiteNav from "./SiteNav.astro";
@@ -31,7 +31,7 @@ const url = (path: string) => new URL(path, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={locales[lang]}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -70,7 +70,7 @@ const url = (path: string) => new URL(path, Astro.site).href;
         addEventListener("scroll", scrolled, { passive: true });
         document.addEventListener("click", (event) => {
           const target = event.target instanceof Element ? event.target : null;
-          if (!target?.closest(".site-nav details")) for (const menu of document.querySelectorAll(".site-nav details[open]")) menu.open = false;
+          if (!target?.closest(".site-header details")) for (const menu of document.querySelectorAll(".site-header details[open]")) menu.open = false;
           if (target?.closest(".burger")) drawer(root.dataset.menu !== "open");
           const key = target?.closest("[data-toggle]")?.getAttribute("data-toggle");
           if (!key) return;
@@ -82,7 +82,7 @@ const url = (path: string) => new URL(path, Astro.site).href;
         document.addEventListener("keydown", (event) => {
           const from = event.target instanceof Element ? event.target : null;
           if (event.key !== "Escape" || !(from === document.body || from?.closest(".site-header"))) return;
-          const menu = document.querySelector(".site-nav details[open]");
+          const menu = document.querySelector(".site-header details[open]");
           if (menu) {
             menu.open = false;
             menu.querySelector("summary")?.focus();
@@ -93,7 +93,7 @@ const url = (path: string) => new URL(path, Astro.site).href;
         });
         // relatedTarget is null when Safari leaves focus on the body after a click: the click handler closes the menu then.
         document.addEventListener("focusout", (event) => {
-          const menu = event.target instanceof Element ? event.target.closest(".site-nav details[open]") : null;
+          const menu = event.target instanceof Element ? event.target.closest(".site-header details[open]") : null;
           if (menu && event.relatedTarget instanceof Node && !menu.contains(event.relatedTarget)) menu.open = false;
         });
         // A drawer left open while the window grows past the breakpoint would keep the page inert and hidden from view.
@@ -115,7 +115,7 @@ const url = (path: string) => new URL(path, Astro.site).href;
     {!indexable && <meta name="robots" content="noindex" />}
     {clientRouter && <ClientRouter />}
     <link rel="canonical" href={url(paths[lang])} />
-    {languages.map((code) => <link rel="alternate" hreflang={code} href={url(paths[code])} />)}
+    {languages.map((code) => <link rel="alternate" hreflang={locales[code]} href={url(paths[code])} />)}
     <link rel="alternate" hreflang="x-default" href={url(paths.en)} />
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
   </head>

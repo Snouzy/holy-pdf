@@ -26,7 +26,7 @@ test("the home answers the pointer", async ({ page }) => {
     header.locator(".brand"),
     header.getByRole("link", { name: "Merge PDF" }),
     header.getByRole("button", { name: "Dark mode" }),
-    header.locator(".nav-actions").getByRole("link", { name: "Français" }),
+    header.locator(".language-menu summary"),
     footer.locator(".footer-links a").first(),
     footer.getByRole("button", { name: "Dark mode" }),
     footer.locator(".socials a").first(),

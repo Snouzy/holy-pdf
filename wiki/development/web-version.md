@@ -20,6 +20,20 @@ Not Next.js: its server side (server rendering, Server Components, API routes) h
 
 _Status on 5 October 2026: the site is not online. The deploy step of `.github/workflows/web.yml` has never run, because the repository has no `SITE_URL` variable and no Cloudflare secrets. The Cloudflare Worker is named `holy-pdf-web` (`apps/web/wrangler.jsonc`). Update, 6 October 2026: holy-pdf.com was bought on Cloudflare; the site is online there, deployed by CI on each push to `main` that touches it (PR #23), open to search engines since the repository variable `INDEXABLE` became `true` the same day; hello@holy-pdf.com forwards to the author's mailbox through Cloudflare Email Routing. The Worker answers on the domain as a custom domain, and `workers_dev: false` keeps no copy on workers.dev. The zone has Always Use HTTPS on. `www.holy-pdf.com` (a proxied placeholder record) redirects to the root with a 301 that keeps the path and the query (the dashboard's "Redirect from WWW to root" rule). The repository variable `GA4_ID` turns on Google Analytics, after consent ([spec](../specs/2026-10-06-web-analytics-design.md))._
 
+## Languages
+
+Three languages since 7 October 2026: French, English and Brazilian Portuguese. The registry is `languages` in `src/tools.ts`; TypeScript then names every table that misses the new language.
+
+| Where | Rule |
+|---|---|
+| URL | `/<code>/…` with `fr`, `en`, `pt-br`. The slugs of the tools (`tools.ts`) and of the pages (`sitePages.ts`) are written per language; an article carries its slug in its frontmatter, under the same file name in every language (`content.test.ts`). |
+| `lang`, `hreflang`, `inLanguage`, `Intl` | The BCP 47 tag from `locales`: `pt-BR` where the URL says `pt-br`. `x-default` stays English. |
+| Dictionaries | `fr.ts` and `frSite.ts` define the types; `en.ts`, `enSite.ts`, `ptBR.ts` and `ptBRSite.ts` are typed against them. The component texts (the editors, the Scanner, the signature, `i18n/pages.ts`, the stamp words in `engine/editMetrics.ts`) hold one block per language. |
+| Language switch | In the header, a menu under the globe and the current language's name lists the other languages, each named in its own language (`languageNames`): two pills no longer fit at 1280 px. The drawer and the footer show one link per other language. |
+| Fonts | The `unicode-range` in `styles/fonts.ts` covers the Portuguese letters (á ã í ó ú õ and their capitals, º ª); `scripts/subset-fonts.py` regenerates the two WOFF2 files (13.8 KB and 12.7 KB). |
+| Films and OCR | No film is recorded in Portuguese: the home and the tool pages show none. OCR reads French and English (`fra`, `eng`); the Portuguese data (`por`) is not served yet. |
+| Desktop | The app speaks French and English (`AppLang` in `apps/desktop/app/shell.ts`): its menus in `lib.rs` have no Portuguese yet. |
+
 ## Editorial pages
 
 Blog posts and guides share one static article template. It renders a visible, localized breadcrumb that matches the `BreadcrumbList` data, an H2 table of contents with stable deep links, and a fixed reading-progress bar. The current table-of-contents section follows the reader with a small framework-free script; the navigation is sticky on wide screens and returns to document flow on smaller screens. These controls are navigation aids, not claimed ranking factors.
@@ -270,7 +284,7 @@ Final Lighthouse: **18 runs on six pages**, with no rebuild during the collectio
 
 _Added on 2 October 2026: [spec](../specs/2026-10-02-web-pages-design.md)._
 
-The footer links lead to 12 pages, in French and in English: What's new, FAQ, Blog, PDF guides, Apps (`#mac`, `#iphone`), Privacy, Terms of use, Legal notice, Cookies, About, Contact, Press. Only the social network icons still point to `#`.
+The footer links lead to 12 pages, in each language: What's new, FAQ, Blog, PDF guides, Apps (`#mac`, `#iphone`), Privacy, Terms of use, Legal notice, Cookies, About, Contact, Press. Only the social network icons still point to `#`.
 
 | File | Role |
 |---|---|
