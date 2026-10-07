@@ -1,5 +1,4 @@
-import type { Lang } from "../../web/src/tools";
-import type { Platform } from "./shell";
+import type { AppLang, Platform } from "./shell";
 
 const fr = {
   title: {
@@ -29,4 +28,4 @@ const en: typeof fr = {
   changeFiles: "Change files",
 };
 
-export const texts: Record<Lang, typeof fr> = { fr, en };
+export const texts: Record<AppLang, typeof fr> = { fr, en };

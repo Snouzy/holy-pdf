@@ -20,6 +20,44 @@ Not Next.js: its server side (server rendering, Server Components, API routes) h
 
 _Status on 5 October 2026: the site is not online. The deploy step of `.github/workflows/web.yml` has never run, because the repository has no `SITE_URL` variable and no Cloudflare secrets. The Cloudflare Worker is named `holy-pdf-web` (`apps/web/wrangler.jsonc`). Update, 6 October 2026: holy-pdf.com was bought on Cloudflare; the site is online there, deployed by CI on each push to `main` that touches it (PR #23), open to search engines since the repository variable `INDEXABLE` became `true` the same day; hello@holy-pdf.com forwards to the author's mailbox through Cloudflare Email Routing. The Worker answers on the domain as a custom domain, and `workers_dev: false` keeps no copy on workers.dev. The zone has Always Use HTTPS on. `www.holy-pdf.com` (a proxied placeholder record) redirects to the root with a 301 that keeps the path and the query (the dashboard's "Redirect from WWW to root" rule). The repository variable `GA4_ID` turns on Google Analytics, after consent ([spec](../specs/2026-10-06-web-analytics-design.md))._
 
+## Languages
+
+Three languages since 7 October 2026: French, English and Brazilian Portuguese. The registry is `languages` in `src/tools.ts`; TypeScript then names every table that misses the new language.
+
+| Where | Rule |
+|---|---|
+| URL | `/<code>/…` with `fr`, `en`, `pt-br`. The slugs of the tools (`tools.ts`) and of the pages (`sitePages.ts`) are written per language; an article carries its slug in its frontmatter, under the same file name in every language (`content.test.ts`). |
+| `lang`, `hreflang`, `inLanguage`, `Intl` | The BCP 47 tag from `locales`: `pt-BR` where the URL says `pt-br`. `x-default` stays English. |
+| Dictionaries | `fr.ts` and `frSite.ts` define the types; `en.ts`, `enSite.ts`, `ptBR.ts` and `ptBRSite.ts` are typed against them. The component texts (the editors, the Scanner, the signature, `i18n/pages.ts`, the stamp words in `engine/editMetrics.ts`) hold one block per language. |
+| Language switch | In the header, a menu under the globe and the current language's name lists the other languages, each named in its own language (`languageNames`): two pills no longer fit at 1280 px. The drawer and the footer show one link per other language. |
+| Fonts | The `unicode-range` in `styles/fonts.ts` covers the Portuguese letters (á ã í ó ú õ and their capitals, º ª); `scripts/subset-fonts.py` regenerates the two WOFF2 files (13.8 KB and 12.7 KB). |
+| Films and OCR | The home film and the tool films of Redact and the Scanner exist in Portuguese (`scripts/home-film.mjs`, `scripts/tool-film.mjs`). OCR reads French and English (`fra`, `eng`); the Portuguese data (`por`) is not served yet. |
+| Desktop | The app speaks French and English (`AppLang` in `apps/desktop/app/shell.ts`): its menus in `lib.rs` have no Portuguese yet. |
+
+### The blog, one market at a time
+
+The blog is run separately for each language (decision of 7 October 2026). A literal translation is not enough, because each market has:
+
+- its own keywords and volumes;
+- sometimes another intent behind the same words;
+- a SERP that may favour another format;
+- other competitors, examples and legal references;
+- expressions that nobody searches for in the other language.
+
+Example: « juntar PDF » is the natural query in Brazil; a plain translation of « fusionner PDF » would give a weaker keyword.
+
+The structure that works:
+
+- one localized URL per version: `/fr/blog/…`, `/pt-br/blog/…`;
+- a keyword research per language and country;
+- a title, a description, an H1 and an outline written for that market;
+- content, examples and internal links adapted to it;
+- `hreflang` between equivalent pages only when they really answer the same intent.
+
+The subject and the editorial structure can be shared, but each version is rewritten as native content, never translated mechanically. Some French pages will have no reason to exist in pt-BR, and the other way round.
+
+_Today's code is stricter than this rule: `[section]/[article].astro` fails the build when an article has no sibling in every language, and `content.test.ts` wants the same file names under each language folder. Lifting both, so that an article may exist in one market only and link its equivalents when they exist, is the next step._
+
 ## Editorial pages
 
 Blog posts and guides share one static article template. It renders a visible, localized breadcrumb that matches the `BreadcrumbList` data, an H2 table of contents with stable deep links, and a fixed reading-progress bar. The current table-of-contents section follows the reader with a small framework-free script; the navigation is sticky on wide screens and returns to document flow on smaller screens. These controls are navigation aids, not claimed ranking factors.
@@ -270,7 +308,7 @@ Final Lighthouse: **18 runs on six pages**, with no rebuild during the collectio
 
 _Added on 2 October 2026: [spec](../specs/2026-10-02-web-pages-design.md)._
 
-The footer links lead to 12 pages, in French and in English: What's new, FAQ, Blog, PDF guides, Apps (`#mac`, `#iphone`), Privacy, Terms of use, Legal notice, Cookies, About, Contact, Press. Only the social network icons still point to `#`.
+The footer links lead to 12 pages, in each language: What's new, FAQ, Blog, PDF guides, Apps (`#mac`, `#iphone`), Privacy, Terms of use, Legal notice, Cookies, About, Contact, Press. Only the social network icons still point to `#`.
 
 | File | Role |
 |---|---|
@@ -351,7 +389,7 @@ The home FAQ has its own texts, shorter than those of the FAQ page. A question a
 - **Inline image (`BI … EI`)**: it has no XObject that the native document can draw alone. "Extract images" then reads its bitmap (`FPDFImageObj_GetBitmap`), already without clipping, instead of failing on the whole file.
 - **File chosen before hydration**: the island reads it from its `<input type="file">`, then must empty the input. Otherwise Firefox restores this file on reload and the tool opens it again.
 - **Linux fallback fonts**: they are wider than the macOS ones (CI uses them when the site fonts are blocked). At 320 px, a long word of the home title or of a table cell overflowed. The titles of the content pages and of the 404 page, and the table cells of a content page, now break a word that does not fit alone (`overflow-wrap: anywhere`). The home title of that time went with the rebuild of the home, and the 360 px hyphenation rule is gone; content page titles still hyphenate below 30 rem. The overflow tests name the element that overflows.
-- **Board texts**: the island imports `i18n/board.ts`, which contains only the board texts (`fr.ts`, `en.ts`). The texts of the served pages only (menu, footer, home, categories, upcoming tools) live in `frSite.ts` and `enSite.ts`, and `dictionaries` joins both for Astro. Importing `dictionaries` into an island would bring everything into it: measured on 2 October 2026, the split removes 2.4 KB gzip from the tool pages and brings their LCP from 1,670 back to 1,520 ms. A new text goes into `fr.ts` if it serves the board, into `frSite.ts` otherwise. The texts of the monks also live in `frSite.ts`: the page of a tool passes to the board only the monk of that tool, in both languages (prop `monks`), so that each new tool does not make all the pages heavier (measured on 2 October 2026: −3.1 KB gzip, LCP of the tool pages from 1,670 to 1,520 ms). The props of an island must be serializable: the result title is a list of rules (`TitleRule[]`, `{count}` in the texts), read by `titleFor`.
+- **Board texts**: a tool page mounts the island of its language (`board/BoardFr.tsx`, `BoardEn.tsx`, `BoardPtBr.tsx`), which imports that language's board texts and no other; `i18n/board.ts` loads another language's chunk on a language switch. A third language bundled in the shared chunk had cost 144 ms of LCP on every tool page; splitting it into its own request cost 150 more, until the hooks, the JSX runtime and the icons joined the Preact chunk (`manualChunks`): on the tool pages Lighthouse's LCP element is the consent banner at the end of the document, and every request in flight delays the document's end. The texts of the served pages only (menu, footer, home, categories, upcoming tools) live in `frSite.ts` and `enSite.ts`, and `dictionaries` joins both for Astro. Importing `dictionaries` into an island would bring everything into it: measured on 2 October 2026, the split removes 2.4 KB gzip from the tool pages and brings their LCP from 1,670 back to 1,520 ms. A new text goes into `fr.ts` if it serves the board, into `frSite.ts` otherwise. The texts of the monks also live in `frSite.ts`: the page of a tool passes to the board only the monk of that tool, in both languages (prop `monks`), so that each new tool does not make all the pages heavier (measured on 2 October 2026: −3.1 KB gzip, LCP of the tool pages from 1,670 to 1,520 ms). The props of an island must be serializable: the result title is a list of rules (`TitleRule[]`, `{count}` in the texts), read by `titleFor`.
 - **`astro dev` cache**: it lives in `node_modules/.vite-dev`, apart from `node_modules/.vite`, which the build, `astro check` and vitest read. After this change, run `pnpm dev --force` once.
 - **Preact runs the effect it queued last**: when two state changes land in one frame, Preact runs the effect of the last render only, not one effect per render. An effect that opens a `<dialog>` for the state of its own render can then open it for a state that is already gone. `board/PagePreview.tsx` therefore uses one effect with no dependency list: it runs after each render and makes the dialog agree with the current state.
 - **Late `close` event of a `<dialog>`**: the `close` event of a `close()` that the code calls arrives later, possibly after the dialog opened again. A handler that takes it for the user's close then closes the new preview. `PagePreview.tsx` sets a flag before its own `close()` and ignores the event that this flag marks.

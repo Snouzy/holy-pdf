@@ -4,7 +4,7 @@ import { Icon } from "../illustrations/Icon";
 import { Monk } from "../illustrations/Monk";
 import { homePath, siteName, sourceUrl, toolPath } from "../site";
 import { pagePath } from "../sitePages";
-import { type Lang, languages, tools } from "../tools";
+import { type Lang, languageNames, languages, locales, tools } from "../tools";
 import Emoji from "./Emoji.astro";
 
 type Props = { lang: Lang; paths: Record<Lang, string>; consent: boolean };
@@ -12,7 +12,7 @@ type Props = { lang: Lang; paths: Record<Lang, string>; consent: boolean };
 const { lang, paths, consent } = Astro.props;
 const t = dictionaries[lang];
 const f = t.footer;
-const other = languages.find((candidate) => candidate !== lang) ?? lang;
+const others = languages.filter((candidate) => candidate !== lang);
 // The social accounts do not exist yet: their links point to "#".
 const later = "#";
 const promises = [
@@ -92,7 +92,7 @@ const socials = [
       </nav>
     </div>
     <div class="footer-bottom">
-      <a class="footer-button" href={paths[other]} hreflang={other} lang={other}><Icon name="globe" size={18} />{t.otherLanguage}</a>
+      {others.map((other) => <a class="footer-button" href={paths[other]} hreflang={locales[other]} lang={locales[other]}><Icon name="globe" size={18} />{languageNames[other]}</a>)}
       <button class="footer-button" type="button" data-toggle="theme" aria-pressed="false"><Icon name="moon" size={18} />{t.menu.darkMode}</button>
       {consent && <button class="footer-button" type="button" data-consent-open><Icon name="shield" size={18} />{f.cookieSettings}</button>}
       <ul class="socials">

@@ -1,7 +1,6 @@
 import type { SiteDictionary } from "./frSite";
 
 export const enSite: SiteDictionary = {
-  otherLanguage: "Français",
   menu: { darkMode: "Dark mode" },
   nav: {
     label: "Main navigation",
@@ -17,6 +16,7 @@ export const enSite: SiteDictionary = {
     },
     convert: "Convert PDF",
     all: "All tools",
+    language: "Language",
     soon: "Soon",
   },
   toolFilm: {

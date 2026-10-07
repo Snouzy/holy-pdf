@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
+import { languages, locales } from "../../src/tools";
 
 /** Checks the built site: run `pnpm build` first. */
 const dist = join(import.meta.dirname, "../../dist");
@@ -27,20 +28,20 @@ describe("built pages", () => {
   it("has a home per language and a page per content file", () => {
     const markdown = (folder: string) =>
       readdirSync(join(import.meta.dirname, "../../src/content", folder), { recursive: true }).filter((file) => String(file).endsWith(".md")).length;
-    expect(pages.length).toBe(2 + markdown("tools") + markdown("pages") + markdown("articles"));
+    expect(pages.length).toBe(languages.length + markdown("tools") + markdown("pages") + markdown("articles"));
   });
 
   it.each(pages)("$path has its title, description, H1 and language", ({ path, html }) => {
     expect(first(html, /<title>([^<]+)<\/title>/)?.length ?? 0).toBeGreaterThan(10);
     expect(first(html, /<meta name="description" content="([^"]+)"/)?.length ?? 0).toBeGreaterThanOrEqual(70);
     expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
-    expect(first(html, /<html lang="([a-z]+)"/)).toBe(path.split("/")[1]);
+    expect(first(html, /<html lang="([A-Za-z-]+)"/)?.toLowerCase()).toBe(path.split("/")[1]);
   });
 
-  it.each(pages)("$path points to itself as canonical and to both languages", ({ path, html }) => {
+  it.each(pages)("$path points to itself as canonical and to every language", ({ path, html }) => {
     expect(first(html, /<link rel="canonical" href="([^"]+)"/)).toBe(`${site}${path}`);
     const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((m) => [m[1], m[2]]));
-    expect([...alternates.keys()].sort()).toEqual(["en", "fr", "x-default"]);
+    expect([...alternates.keys()].sort()).toEqual([...languages.map((lang) => locales[lang]), "x-default"].sort());
     for (const href of alternates.values()) {
       const target = new URL(href ?? "").pathname;
       expect(existsSync(join(dist, target, "index.html")), `${href} exists`).toBe(true);
@@ -72,7 +73,7 @@ describe("built pages", () => {
   const contentPages = pages.filter(({ path, html }) => path.split("/").length > 2 && !html.includes('"@type":"WebApplication"'));
   const structured = (html: string): { "@id"?: string; "@type": string; image?: string; mainEntity?: { name: string }[]; mainEntityOfPage?: { "@id": string }; publisher?: { name: string } }[] =>
     [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1] ?? "{}"));
-  const faqPages = pages.filter(({ path }) => /^\/[a-z]+\/faq$/.test(path));
+  const faqPages = pages.filter(({ path }) => /^\/[a-z-]+\/faq$/.test(path));
   const articlePages = pages.filter(({ html }) => structured(html).some((data) => data["@type"] === "BlogPosting"));
 
   it.each(toolPages)("$path gives each question an anchor and marks them up as an FAQ", ({ html }) => {
@@ -83,13 +84,13 @@ describe("built pages", () => {
   });
 
   it("builds a FAQ page per language", () => {
-    expect(faqPages.length).toBe(2);
+    expect(faqPages.length).toBe(languages.length);
   });
 
   it.each(faqPages)("$path links every tool question to its answer, and marks up its own questions", ({ path, html }) => {
     const lang = path.split("/")[1] ?? "";
     const expected = toolPages.filter((page) => page.path.startsWith(`/${lang}/`));
-    const links = [...html.matchAll(/<a href="(\/[a-z]+\/[a-z0-9-]+)#([a-z0-9-]+)"/g)].filter(([, target]) => expected.some((page) => page.path === target));
+    const links = [...html.matchAll(/<a href="(\/[a-z-]+\/[a-z0-9-]+)#([a-z0-9-]+)"/g)].filter(([, target]) => expected.some((page) => page.path === target));
     const questions = expected.reduce((sum, page) => sum + (page.html.match(/<details[^>]* id="/g)?.length ?? 0), 0);
     expect(links.length).toBe(questions);
     for (const [, target, id] of links) {

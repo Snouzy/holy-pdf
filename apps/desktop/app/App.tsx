@@ -4,7 +4,6 @@ import { open } from "@tauri-apps/plugin-dialog";
 import { readFile } from "@tauri-apps/plugin-fs";
 import { useEffect, useState } from "preact/hooks";
 import { useFileDrop } from "../../web/src/board/useFileDrop";
-import { boardTexts } from "../../web/src/i18n/board";
 import { dictionaries } from "../../web/src/i18n";
 import { type ToolId, tools } from "../../web/src/tools";
 import { accepted } from "./files";
@@ -114,7 +113,7 @@ export function App() {
           )}
         </div>
       </div>
-      <div class="drop-overlay" aria-hidden="true"><p>{boardTexts[lang].drop.release}</p></div>
+      <div class="drop-overlay" aria-hidden="true"><p>{dictionaries[lang].drop.release}</p></div>
     </>
   );
 }

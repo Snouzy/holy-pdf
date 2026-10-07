@@ -20,7 +20,12 @@ const fr: typeof en = {
   remove: "Retirer cette zone", move: "Déplacer cette zone", clearPage: "Vider cette page", previous: "Page précédente", next: "Page suivante", page: "Page", of: "sur",
   preview: "Aperçu de la page PDF", loading: "Chargement de la page…", previewError: "Cette page n'a pas pu être affichée.", retry: "Réessayer l'aperçu",
 };
-const texts = { en, fr };
+const ptBR: typeof en = {
+  note: "Cada página ocultada vira uma imagem: seu texto não pode mais ser selecionado. O título, os marcadores e os metadados do documento não são verificados.",
+  remove: "Remover esta área", move: "Mover esta área", clearPage: "Limpar esta página", previous: "Página anterior", next: "Próxima página", page: "Página", of: "de",
+  preview: "Visualização da página do PDF", loading: "Carregando a página…", previewError: "Esta página não pôde ser exibida.", retry: "Tentar a visualização novamente",
+};
+const texts = { en, fr, "pt-br": ptBR };
 
 /** A drag shorter than this, in either direction and as a share of the page, is a click. */
 const smallest = 0.01;

@@ -34,8 +34,10 @@ export default defineConfig({
       assetsInlineLimit: (file) => (file.includes("_astro_type_script_") ? true : undefined),
       rollupOptions: {
         output: {
-          // Vite wraps each dynamic import in a preload helper; inside the Preact chunk it costs no extra request.
-          manualChunks: (id) => (id.includes("vite/preload-helper") || id.endsWith("/preact/dist/preact.module.js") ? "preact" : undefined),
+          // Vite wraps each dynamic import in a preload helper; inside the Preact chunk it costs no extra request. The hooks, the JSX
+          // runtime and the icons ride along: every island loads them, and each request of its own delays the document's end (the LCP).
+          manualChunks: (id) =>
+            id.includes("vite/preload-helper") || /\/node_modules\/preact\//.test(id) || id.endsWith("/src/illustrations/Icon.tsx") ? "preact" : undefined,
         },
       },
     },

@@ -116,6 +116,11 @@ describe("searchTools on the built index", () => {
 });
 
 describe("the word lists", () => {
+  it("skips the Portuguese function words, so a whole sentence still finds its monk", () => {
+    expect(searchTools("juntar arquivos em um pdf", searchIndex("pt-br"))[0]?.id).toBe("merge");
+    expect(searchTools("como comprimir o meu pdf", searchIndex("pt-br"))[0]?.id).toBe("compress");
+  });
+
   it.each(languages)("give every tool, ready or to come, at least five words in %s", (lang) => {
     for (const id of [...toolIds, ...upcomingIds]) expect(searchTexts[lang].terms[id].length).toBeGreaterThanOrEqual(5);
   });

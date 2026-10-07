@@ -1,4 +1,4 @@
-import type { Lang, Tool } from "./tools";
+import { type Lang, perLanguage, type Tool } from "./tools";
 
 export const siteName = "Holy PDF";
 export const sourceUrl = "https://github.com/Snouzy/holy-pdf";
@@ -12,5 +12,5 @@ export function homePath(lang: Lang): string {
 }
 
 export function alternates(pathFor: (lang: Lang) => string): Record<Lang, string> {
-  return { fr: pathFor("fr"), en: pathFor("en") };
+  return perLanguage(pathFor);
 }

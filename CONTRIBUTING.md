@@ -34,7 +34,7 @@ Node 22.12 or later (CI runs 24, see `.github/workflows/web.yml`) and pnpm. End-
 
 - Tests come with the change. Engine behavior is tested in `apps/web/tests/engine` against the real WebAssembly build.
 - Never commit a real document, photo or personal file. Test fixtures are synthetic and generated in code.
-- User-facing text exists in French and English: the dictionaries in `apps/web/src/i18n`, `apps/web/src/scanner/texts.ts`, `apps/web/src/signature/` and `apps/desktop/app/texts.ts`, the desktop menus in `apps/desktop/src-tauri/src/lib.rs`, and the pages in `apps/web/src/content`. French uses « vous », and a non-breaking space inside « » only, as the existing pages do.
+- User-facing text exists in French, English and Brazilian Portuguese: the dictionaries in `apps/web/src/i18n`, `apps/web/src/scanner/texts.ts`, `apps/web/src/signature/`, the editors' texts, and the pages in `apps/web/src/content`. The desktop app speaks French and English only: `apps/desktop/app/texts.ts` and its menus in `apps/desktop/src-tauri/src/lib.rs`. French uses « vous », and a non-breaking space inside « » only, as the existing pages do.
 - Comments are in English, and only for a why. The code says the what.
 - Keep the loading budgets: the site must stay fast on a phone.
 

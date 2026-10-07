@@ -1,5 +1,5 @@
 import type { Section } from "../sitePages";
-import type { Lang } from "../tools";
+import { type Lang, locales } from "../tools";
 
 const fr = {
   updated: "Mis à jour le",
@@ -27,9 +27,21 @@ const en: PageTexts = {
   toolQuestions: "Questions about each tool",
 };
 
-export const pageTexts: Record<Lang, PageTexts> = { fr, en };
+const ptBR: PageTexts = {
+  updated: "Atualizado em",
+  published: "Publicado em",
+  readingTime: (minutes) => `${minutes} min de leitura estimada`,
+  breadcrumbs: "Trilha de navegação",
+  contents: "Neste artigo",
+  readingProgress: "Progresso da leitura",
+  related: "Artigos relacionados",
+  back: { blog: "Todos os artigos do blog", guides: "Todos os guias" },
+  toolQuestions: "As perguntas sobre cada ferramenta",
+};
+
+export const pageTexts: Record<Lang, PageTexts> = { fr, en, "pt-br": ptBR };
 
 export function formatDate(date: Date, lang: Lang): string {
   // Frontmatter dates are UTC midnight: the local time zone would show the day before west of UTC.
-  return new Intl.DateTimeFormat(lang, { dateStyle: "long", timeZone: "UTC" }).format(date);
+  return new Intl.DateTimeFormat(locales[lang], { dateStyle: "long", timeZone: "UTC" }).format(date);
 }

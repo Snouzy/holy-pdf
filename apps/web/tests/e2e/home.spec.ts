@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { languages } from "../../src/tools";
 import { overflowing } from "./support";
 
 test("opens the tool named in the sentence, with its monk", async ({ page }) => {
@@ -165,7 +166,7 @@ for (const width of [320, 390]) {
   test(`fits the home page in a ${width} px wide screen, even with fallback fonts`, async ({ page }) => {
     await page.route(/\.woff2$/, (route) => route.abort());
     await page.setViewportSize({ width, height: 800 });
-    for (const lang of ["fr", "en"]) {
+    for (const lang of languages) {
       await page.goto(`/${lang}`);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), `/${lang}: ${await overflowing(page)}`).toBe(width);
     }
@@ -244,6 +245,12 @@ test("answers « Comment ça marche ? » with the film in the conversation", asy
   await page.goto("/fr");
   await expect(page.locator(".chat dt").first()).toHaveText("Comment ça marche ?");
   await expect(page.locator(".chat dd").first().locator("video")).toHaveAttribute("preload", "none");
+});
+
+test("plays the Portuguese film on the Portuguese page", async ({ page }) => {
+  await page.goto("/pt-br");
+  await page.getByRole("button", { name: "Assista Holy PDF em 30 segundos" }).click();
+  await expect(page.getByRole("dialog", { name: "Holy PDF em 30 segundos" }).locator("video")).toHaveAttribute("src", "/videos/holy-pdf-pt-br.mp4");
 });
 
 test("plays the English film on the English page", async ({ page }) => {

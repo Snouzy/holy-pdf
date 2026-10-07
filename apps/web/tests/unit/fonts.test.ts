@@ -9,7 +9,10 @@ const ranges = [...readFileSync(join(src, "styles/fonts.ts"), "utf8").matchAll(/
 ]);
 const covered = (code: number) => ranges.some(([from = 0, to = 0]) => code >= from && code <= to);
 const texts = [
-  ...["i18n/fr.ts", "i18n/en.ts", "i18n/frSite.ts", "i18n/enSite.ts", "i18n/pages.ts", "signature/text.ts", "signature/TypedSignature.tsx"].map((file) => join(src, file)),
+  ...[
+    "i18n/fr.ts", "i18n/en.ts", "i18n/frSite.ts", "i18n/enSite.ts", "i18n/ptBR.ts", "i18n/ptBRSite.ts", "i18n/pages.ts",
+    "signature/text.ts", "signature/TypedSignature.tsx", "scanner/texts.ts",
+  ].map((file) => join(src, file)),
   ...["content/tools", "content/pages", "content/articles"].flatMap((folder) =>
     readdirSync(join(src, folder), { recursive: true, encoding: "utf8" })
       .filter((file) => /\.mdx?$/.test(file))
@@ -18,7 +21,7 @@ const texts = [
 ];
 const emoji = /[\p{Extended_Pictographic}\u{FE0F}\u{200D}]/u;
 // Neither font ever drew these signs: the system font does.
-const systemSigns = new Set(["✕", "⌘", "↻"]);
+const systemSigns = new Set(["✕", "⌘", "↻", "⚠"]);
 
 describe("the font subset", () => {
   it.each(texts)("covers every letter of %s", (file) => {

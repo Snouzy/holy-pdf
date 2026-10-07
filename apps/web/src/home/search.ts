@@ -7,6 +7,8 @@ const stopWords = new Set([
   "pdf", "pdfs", "de", "des", "du", "d", "un", "une", "le", "la", "les", "l", "en", "mon", "ma", "mes", "a", "au", "aux", "et", "pour", "sur",
   "the", "an", "my", "to", "of", "and", "for", "into", "file", "files", "fichier", "fichiers", "document", "documents", "page", "pages",
   "gratuit", "gratuite", "gratuitement", "ligne", "comment", "deux", "free", "online", "how", "two",
+  "o", "os", "as", "um", "uma", "em", "no", "na", "nos", "nas", "do", "da", "dos", "das", "e", "ou", "para", "pra", "por", "com", "meu", "minha", "meus", "minhas",
+  "arquivo", "arquivos", "pagina", "paginas", "gratis", "gratuito", "gratuita", "como", "dois", "duas",
 ]);
 
 const formats = new Set(["jpg", "jpeg", "png", "image", "images", "photo", "photos", "picture", "pictures", "word", "docx", "doc", "web", "html"]);

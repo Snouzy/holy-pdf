@@ -7,6 +7,7 @@ import { pageTexts } from "../../../i18n/pages";
 import ContentPage from "../../../layouts/ContentPage.astro";
 import { alternates, homePath, siteName } from "../../../site";
 import { articlePath, pagePath, sitePages } from "../../../sitePages";
+import { locales } from "../../../tools";
 
 export const getStaticPaths = (async () => {
   const entries = await getCollection("articles");
@@ -61,7 +62,7 @@ const jsonLd = [
     author: { "@type": "Organization", "@id": url("/#organization"), name: siteName, url: url("/") },
     publisher: { "@type": "Organization", "@id": url("/#organization"), name: siteName, url: url("/") },
     mainEntityOfPage: { "@type": "WebPage", "@id": canonical },
-    inLanguage: lang,
+    inLanguage: locales[lang],
     url: canonical,
   },
 ];

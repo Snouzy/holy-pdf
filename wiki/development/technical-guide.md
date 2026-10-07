@@ -12,7 +12,7 @@ _Written on 29 September 2026 for the Swift engine and the Mac app. Rewritten on
 
 - Strict TypeScript, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`: you fix a warning, you do not ignore it.
 - Model a state as a discriminated union (`DocStatus`, `Flow`), never as combined booleans. Errors are typed (`EngineError`); the interface turns them into sentences.
-- The engine takes data and returns data. No sentence for the user outside a French and English dictionary: `i18n/`, or the `texts` next to the component that shows them (a tool editor, the Scanner, the desktop app). « vous » in French, a non-breaking space inside « ».
+- The engine takes data and returns data. No sentence for the user outside a dictionary per language, French, English and Brazilian Portuguese: `i18n/`, or the `texts` next to the component that shows them (a tool editor, the Scanner). The desktop app speaks French and English only. « vous » in French, a non-breaking space inside « ».
 - No premature abstraction: add a protocol or an indirection only when a second implementation exists. The code must stay readable in six months by a junior developer or by an AI.
 - Name a component after its function, not after the context it came from (`PageThumbnail`, not `ScannerBoardThumbnail`).
 
