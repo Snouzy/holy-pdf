@@ -247,6 +247,12 @@ test("answers « Comment ça marche ? » with the film in the conversation", asy
   await expect(page.locator(".chat dd").first().locator("video")).toHaveAttribute("preload", "none");
 });
 
+test("plays the Portuguese film on the Portuguese page", async ({ page }) => {
+  await page.goto("/pt-br");
+  await page.getByRole("button", { name: "Assista Holy PDF em 30 segundos" }).click();
+  await expect(page.getByRole("dialog", { name: "Holy PDF em 30 segundos" }).locator("video")).toHaveAttribute("src", "/videos/holy-pdf-pt-br.mp4");
+});
+
 test("plays the English film on the English page", async ({ page }) => {
   await page.goto("/en");
   await expect(page.locator(".chat dt").first()).toHaveText("How does it work?");

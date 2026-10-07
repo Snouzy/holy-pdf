@@ -7,8 +7,8 @@ import type { EditDraft } from "../edit/model";
 import { readKind } from "../engine/format";
 import type { Progress } from "../engine/protocol";
 import type { EngineError, NamedBytes, RedactZone, TransformOp } from "../engine/types";
-import { boardTexts } from "../i18n/board";
-import type { Dictionary, MonkTexts } from "../i18n/fr";
+import { loadBoardTexts } from "../i18n/board";
+import type { BoardTexts, Dictionary, MonkTexts } from "../i18n/fr";
 import { Icon } from "../illustrations/Icon";
 import type { SignatureDraft } from "../signature/SignatureEditor";
 import { acceptsKind, type Lang, languages, locales, looksLikeImage, type ToolId, tools } from "../tools";
@@ -34,22 +34,25 @@ import { emptyBoard, reduce } from "./state";
 import { forgetThumbnails } from "./thumbnails";
 import { useFileDrop } from "./useFileDrop";
 
-type Props = {
+export type BoardProps = {
   toolId: ToolId; lang: Lang; monks: Record<Lang, MonkTexts>;
+  /** The texts of `lang`, imported by the page's island so that a tool page ships one language. */
+  texts: BoardTexts;
   /** Given by the desktop shell; the site mounts the board without them. `files` opens on each new array: hand one over
    *  only for new files, and keep the same reference otherwise, or the files come back on every render. */
   files?: File[]; saver?: Saver; confirm?: Confirm; onDocumentChange?: (document: BoardDocument) => void;
 };
 
-export default function Board({ toolId, lang: firstLang, monks, files: incoming, saver = downloader, confirm: askOutside, onDocumentChange }: Props) {
+export default function Board({ toolId, lang: firstLang, monks, texts: firstTexts, files: incoming, saver = downloader, confirm: askOutside, onDocumentChange }: BoardProps) {
   const tool = tools[toolId];
   const [lang, setLang] = useState(firstLang);
+  const [loaded, setLoaded] = useState<Partial<Record<Lang, BoardTexts>>>({ [firstLang]: firstTexts });
   const t = useMemo(() => {
-    const texts = boardTexts[lang];
+    const texts = loaded[lang] ?? firstTexts;
     // On the repair page, a file that does not open is one too damaged to repair.
     const errors = toolId === "repair" ? { ...texts.errors, damaged: texts.repair.unreadable } : texts.errors;
     return { ...texts, errors, monks: { [toolId]: monks[lang] } } as Dictionary;
-  }, [lang]);
+  }, [lang, loaded]);
   const [board, dispatch] = useReducer(reduce, emptyBoard);
   const [flow, move] = useReducer(advance, setup);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
@@ -164,7 +167,13 @@ export default function Board({ toolId, lang: firstLang, monks, files: incoming,
   // The board survives a language switch with its first props (transition:persist-props): the page's
   // <html lang> says which language to show after each client-side navigation.
   useEffect(() => {
-    const followPage = () => setLang(languages.find((code) => locales[code] === document.documentElement.lang) ?? firstLang);
+    const followPage = () => {
+      const next = languages.find((code) => locales[code] === document.documentElement.lang) ?? firstLang;
+      void loadBoardTexts[next]().then((texts) => {
+        setLoaded((all) => (all[next] ? all : { ...all, [next]: texts }));
+        setLang(next);
+      });
+    };
     document.addEventListener("astro:after-swap", followPage);
     return () => document.removeEventListener("astro:after-swap", followPage);
   }, []);

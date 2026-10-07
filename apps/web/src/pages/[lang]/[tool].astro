@@ -1,7 +1,9 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { getCollection, render } from "astro:content";
-import Board from "../../board/Board";
+import BoardEn from "../../board/BoardEn";
+import BoardFr from "../../board/BoardFr";
+import BoardPtBr from "../../board/BoardPtBr";
 import { cast } from "../../cast";
 import { faqPage, questionId } from "../../faq";
 import { dictionaries } from "../../i18n";
@@ -26,6 +28,8 @@ const { lang, title, description, h1, steps, faq } = entry.data;
 const t = dictionaries[lang];
 const monk = cast[tool.id];
 const { Content } = await render(entry);
+// One island per language, so that a tool page ships its own texts only: a dynamic tag cannot take client:load.
+const board = { toolId: tool.id, lang, monks: perLanguage((code) => dictionaries[code].monks[tool.id]) };
 const url = (path: string) => new URL(path, Astro.site).href;
 const jsonLd = [
   {
@@ -59,7 +63,9 @@ const jsonLd = [
       <ToolFilm tool={tool} lang={lang} />
     </div>
 
-    <Board client:load transition:persist={`board-${tool.id}`} transition:persist-props toolId={tool.id} lang={lang} monks={perLanguage((code) => dictionaries[code].monks[tool.id])} />
+    {lang === "fr" && <BoardFr client:load transition:persist={`board-${tool.id}`} transition:persist-props {...board} />}
+    {lang === "en" && <BoardEn client:load transition:persist={`board-${tool.id}`} transition:persist-props {...board} />}
+    {lang === "pt-br" && <BoardPtBr client:load transition:persist={`board-${tool.id}`} transition:persist-props {...board} />}
     <a class="below" href="#how-to">{t.toolPage.below}</a>
   </div>
 
