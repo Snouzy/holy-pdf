@@ -40,14 +40,33 @@ describe("built pages", () => {
     expect(first(html, /<html lang="([A-Za-z-]+)"/)?.toLowerCase()).toBe(path.split("/")[1]);
   });
 
-  it.each(pages)("$path points to itself as canonical and to every language", ({ path, html }) => {
+  it.each(pages)("$path points to itself as canonical and only to existing locale equivalents", ({ path, html }) => {
     expect(first(html, /<link rel="canonical" href="([^"]+)"/)).toBe(`${site}${path}`);
     const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((m) => [m[1], m[2]]));
-    expect([...alternates.keys()].sort()).toEqual([...languages.map((lang) => locales[lang]), "x-default"].sort());
-    for (const href of alternates.values()) {
-      const target = new URL(href ?? "").pathname;
-      expect(existsSync(join(dist, target, "index.html")), `${href} exists`).toBe(true);
+    const article = structured(html).some((data) => data["@type"] === "BlogPosting");
+    const currentLocale = locales[path.split("/")[1] as keyof typeof locales];
+    if (!article) expect([...alternates.keys()].sort()).toEqual([...languages.map((lang) => locales[lang]), "x-default"].sort());
+    else {
+      expect(alternates.get(currentLocale)).toBe(`${site}${path}`);
+      expect(alternates.has("x-default")).toBe(alternates.has(locales.en));
+      if (alternates.has(locales.en)) expect(alternates.get("x-default")).toBe(alternates.get(locales.en));
     }
+    for (const [alternateLocale, href] of alternates) {
+      const target = new URL(href ?? "").pathname;
+      const targetFile = join(dist, target, "index.html");
+      expect(existsSync(targetFile), `${href} exists`).toBe(true);
+      if (alternateLocale !== "x-default" && target !== path) {
+        const targetHtml = readFileSync(targetFile, "utf8");
+        expect(targetHtml, `${href} links back to ${path}`).toContain(`hreflang="${currentLocale}" href="${site}${path}"`);
+      }
+    }
+  });
+
+  it("does not invent hreflang siblings for a market-only article", () => {
+    const page = pages.find(({ path }) => path === "/pt-br/guias/como-dividir-um-pdf");
+    expect(page).toBeDefined();
+    const alternates = [...(page?.html ?? "").matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((match) => match[1]);
+    expect(alternates).toEqual(["pt-BR"]);
   });
 
   it.each(homes)("$path starts its title with Holy PDF", ({ html }) => {
@@ -73,7 +92,7 @@ describe("built pages", () => {
 
   const toolPages = pages.filter(({ html }) => html.includes('"@type":"WebApplication"'));
   const contentPages = pages.filter(({ path, html }) => path.split("/").length > 2 && !html.includes('"@type":"WebApplication"'));
-  const structured = (html: string): { "@id"?: string; "@type": string; image?: string; mainEntity?: { name: string }[]; mainEntityOfPage?: { "@id": string }; publisher?: { name: string } }[] =>
+  const structured = (html: string): { "@id"?: string; "@type": string; image?: string; author?: { "@type": string; name: string }; mainEntity?: { name: string }[]; mainEntityOfPage?: { "@id": string }; publisher?: { name: string } }[] =>
     [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1] ?? "{}"));
   const faqPages = pages.filter(({ path }) => /^\/[a-z-]+\/faq$/.test(path));
   const articlePages = pages.filter(({ html }) => structured(html).some((data) => data["@type"] === "BlogPosting"));
@@ -138,6 +157,33 @@ describe("built pages", () => {
     expect(posting?.["@id"]).toBe(`${site}${path}#article`);
     expect(posting?.mainEntityOfPage?.["@id"]).toBe(`${site}${path}`);
     expect(posting?.publisher?.name).toBe("Holy PDF");
+  });
+
+  it("links the FR and EN redaction guides without inventing a pt-BR alternate or switch", () => {
+    const expected = {
+      fr: `${site}/fr/guides/comment-caviarder-un-pdf`,
+      en: `${site}/en/guides/how-to-redact-a-pdf`,
+    };
+    for (const path of Object.values(expected).map((href) => new URL(href).pathname)) {
+      const html = pages.find((page) => page.path === path)?.html ?? "";
+      const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
+      expect(Object.fromEntries(alternates)).toEqual({ fr: expected.fr, en: expected.en, "x-default": expected.en });
+      expect(html).not.toContain('hreflang="pt-BR"');
+    }
+  });
+
+  it.each(pages.filter(({ path }) => path.includes("/guides/comment-caviarder") || path.includes("/guides/how-to-redact")))("$path exposes its editorial hero, localized product screenshot and Mathias byline", ({ path, html }) => {
+    const lang = path.startsWith("/fr/") ? "fr" : "en";
+    const screenshot = `/articles/redact-pdf/holy-pdf-redaction-ui-${lang}.webp`;
+    const hero = "/articles/redact-pdf/holy-pdf-redaction-guide-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain(`src="${screenshot}"`);
+    expect(html).toContain('width="1600" height="900"');
+    expect(html).toContain('width="1400" height="900"');
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
   });
 
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {

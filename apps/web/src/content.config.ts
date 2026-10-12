@@ -38,6 +38,7 @@ const articles = defineCollection({
     section: z.enum(sections),
     topics: z.array(z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)).min(1).max(5),
     slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    author: z.string().optional(),
     image: z.string().optional(),
     published: z.coerce.date(),
     ...meta,

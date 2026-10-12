@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { dictionaries } from "../../src/i18n";
 import { pageIds } from "../../src/sitePages";
 import { languages, toolIds } from "../../src/tools";
 
@@ -21,16 +22,22 @@ describe("site pages", () => {
 });
 
 describe("articles", () => {
-  it("exist in every language, under the same file names", () => {
-    const [first, ...others] = languages.map((lang) => readdirSync(join(content, "articles", lang)).sort());
-    expect(first?.length).toBeGreaterThan(0);
-    for (const names of others) expect(names).toEqual(first);
+  it("can publish the redaction guide in FR and EN without a filler pt-BR article", () => {
+    expect(existsSync(join(content, "articles/fr/redact-pdf.md"))).toBe(true);
+    expect(existsSync(join(content, "articles/en/redact-pdf.md"))).toBe(true);
+    expect(existsSync(join(content, "articles/pt-br/redact-pdf.md"))).toBe(false);
   });
 
-  it("declares the same normalized topics in every language", () => {
-    const [firstLang, ...otherLangs] = languages;
-    if (!firstLang) throw new Error("No language configured");
-    for (const name of readdirSync(join(content, "articles", firstLang)).sort()) {
+  it("publishes the PDF splitting guide only in its intended pt-BR market", () => {
+    expect(existsSync(join(content, "articles/pt-br/como-dividir-um-pdf.md"))).toBe(true);
+    expect(existsSync(join(content, "articles/fr/como-dividir-um-pdf.md"))).toBe(false);
+    expect(existsSync(join(content, "articles/en/como-dividir-um-pdf.md"))).toBe(false);
+  });
+
+  it("allows independent locale inventories and matches topics only across real equivalents", () => {
+    const names = new Set(languages.flatMap((lang) => readdirSync(join(content, "articles", lang))));
+    expect(names.size).toBeGreaterThan(0);
+    for (const name of names) {
       const topics = (lang: string) => {
         const markdown = readFileSync(join(content, "articles", lang, name), "utf8");
         const raw = /^topics: \[([^\]]+)\]$/m.exec(markdown)?.[1];
@@ -41,8 +48,20 @@ describe("articles", () => {
         expect(values, `${lang}/${name} normalized topics`).toEqual(values.map((value) => value.toLowerCase()).sort());
         return values;
       };
+      const available = languages.filter((lang) => existsSync(join(content, "articles", lang, name)));
+      const [firstLang, ...otherLangs] = available;
+      if (!firstLang) throw new Error(`No article found for ${name}`);
       const expected = topics(firstLang);
       for (const lang of otherLangs) expect(topics(lang), `${lang}/${name} topics match`).toEqual(expected);
     }
+  });
+});
+
+describe("split interval labels", () => {
+  it("uses the singular and plural required by each locale", () => {
+    expect(`${dictionaries.fr.board.cutEvery(1)} 1 ${dictionaries.fr.board.cutEveryUnit(1)}`).toBe("Couper par blocs de 1 page");
+    expect(`${dictionaries.fr.board.cutEvery(2)} 2 ${dictionaries.fr.board.cutEveryUnit(2)}`).toBe("Couper par blocs de 2 pages");
+    expect(`${dictionaries.en.board.cutEvery(1)} 1 ${dictionaries.en.board.cutEveryUnit(1)}`).toBe("Split every 1 page");
+    expect(`${dictionaries["pt-br"].board.cutEvery(1)} 1 ${dictionaries["pt-br"].board.cutEveryUnit(1)}`).toBe("Dividir cada 1 página");
   });
 });

@@ -58,7 +58,7 @@ The structure that works:
 
 The subject and the editorial structure can be shared, but each version is rewritten as native content, never translated mechanically. Some French pages will have no reason to exist in pt-BR, and the other way round.
 
-_Today's code is stricter than this rule: `[section]/[article].astro` fails the build when an article has no sibling in every language, and `content.test.ts` wants the same file names under each language folder. Lifting both, so that an article may exist in one market only and link its equivalents when they exist, is the next step._
+Since 12 October 2026, an article may exist in one market only. `[section]/[article].astro` links only the sibling files that actually exist, and emits no invented `hreflang` or language-switch destination. When a real English sibling exists, it remains the `x-default`; a market-only article has no `x-default`.
 
 ## Editorial pages
 
@@ -324,7 +324,7 @@ The footer links lead to 12 pages, in each language: What's new, FAQ, Blog, PDF 
 
 **Adding content:**
 
-- an article: one `.md` file per language, with the same file name, in `src/content/articles/<lang>/`. No TS file to touch. Put shared editorial images under `public/articles/<article>/`; use optimized local files, explicit dimensions and localized alternative text in the Markdown;
+- an article: one `.md` file in `src/content/articles/<lang>/` for each market that has been researched and approved. Equivalent siblings use the same file name so that the build can connect their `hreflang`; a market-specific article needs no placeholder in the other folders. No TS file to touch. Put shared editorial images under `public/articles/<article>/`; use optimized local files, explicit dimensions and localized alternative text in the Markdown;
 - a page: its id and its slugs in `sitePages.ts`, one `.md` per language, a link in `SiteFooter.astro` if the page appears there;
 - a language: the language in `languages` (`tools.ts`). TypeScript then asks for a slug for each page and each tool, and for the labels of `i18n/pages.ts`; then one `.md` per page and per article.
 
