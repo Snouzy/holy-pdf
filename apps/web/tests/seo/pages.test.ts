@@ -44,15 +44,29 @@ describe("built pages", () => {
     expect(first(html, /<link rel="canonical" href="([^"]+)"/)).toBe(`${site}${path}`);
     const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((m) => [m[1], m[2]]));
     const article = structured(html).some((data) => data["@type"] === "BlogPosting");
+    const currentLocale = locales[path.split("/")[1] as keyof typeof locales];
     if (!article) expect([...alternates.keys()].sort()).toEqual([...languages.map((lang) => locales[lang]), "x-default"].sort());
     else {
-      expect(alternates.get(locales[path.split("/")[1] as keyof typeof locales])).toBe(`${site}${path}`);
-      if (alternates.has("x-default")) expect(alternates.get("x-default")).toBe(alternates.get(locales.en));
+      expect(alternates.get(currentLocale)).toBe(`${site}${path}`);
+      expect(alternates.has("x-default")).toBe(alternates.has(locales.en));
+      if (alternates.has(locales.en)) expect(alternates.get("x-default")).toBe(alternates.get(locales.en));
     }
-    for (const href of alternates.values()) {
+    for (const [alternateLocale, href] of alternates) {
       const target = new URL(href ?? "").pathname;
-      expect(existsSync(join(dist, target, "index.html")), `${href} exists`).toBe(true);
+      const targetFile = join(dist, target, "index.html");
+      expect(existsSync(targetFile), `${href} exists`).toBe(true);
+      if (alternateLocale !== "x-default" && target !== path) {
+        const targetHtml = readFileSync(targetFile, "utf8");
+        expect(targetHtml, `${href} links back to ${path}`).toContain(`hreflang="${currentLocale}" href="${site}${path}"`);
+      }
     }
+  });
+
+  it("does not invent hreflang siblings for a market-only article", () => {
+    const page = pages.find(({ path }) => path === "/pt-br/guias/como-dividir-um-pdf");
+    expect(page).toBeDefined();
+    const alternates = [...(page?.html ?? "").matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((match) => match[1]);
+    expect(alternates).toEqual(["pt-BR"]);
   });
 
   it.each(homes)("$path starts its title with Holy PDF", ({ html }) => {

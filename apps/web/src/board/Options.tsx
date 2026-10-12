@@ -298,9 +298,9 @@ function CutEvery({ t, dispatch }: { t: Dictionary; dispatch: (action: Action) =
       }}
     >
       <label>
-        {t.board.cutEvery}{" "}
+        {t.board.cutEvery(every)}{" "}
         <input type="number" min={1} value={every} onInput={(event) => setEvery(Math.max(1, Number(event.currentTarget.value) || 1))} />{" "}
-        {t.board.cutEveryUnit}
+        {t.board.cutEveryUnit(every)}
       </label>
       <button type="submit">{t.board.apply}</button>
     </form>
