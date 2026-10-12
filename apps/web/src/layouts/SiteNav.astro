@@ -76,9 +76,11 @@ const github = "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6
           </details>
         </li>
       </ul>
-      <div class="drawer-languages">
-        {others.map((other) => <a class="language" href={other.path} hreflang={locales[other.lang]} lang={locales[other.lang]}><Icon name="globe" size={18} />{languageNames[other.lang]}</a>)}
-      </div>
+      {others.length > 0 && (
+        <div class="drawer-languages">
+          {others.map((other) => <a class="language" href={other.path} hreflang={locales[other.lang]} lang={locales[other.lang]}><Icon name="globe" size={18} />{languageNames[other.lang]}</a>)}
+        </div>
+      )}
     </nav>
     <div class="nav-actions">
       <a class="github" href={sourceUrl} aria-label={t.nav.github}>
@@ -88,12 +90,14 @@ const github = "M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6
         <span class="theme-moon"><Icon name="moon" size={22} /></span>
         <span class="theme-sun"><Icon name="sun" size={22} /></span>
       </button>
-      <details class="nav-menu language-menu" name="nav">
-        <summary class="language"><Icon name="globe" size={18} /><span class="visually-hidden">{t.nav.language}: </span>{languageNames[lang]}</summary>
-        <ul class="drop language-drop">
-          {others.map((other) => <li><a href={other.path} hreflang={locales[other.lang]} lang={locales[other.lang]}>{languageNames[other.lang]}</a></li>)}
-        </ul>
-      </details>
+      {others.length > 0 && (
+        <details class="nav-menu language-menu" name="nav">
+          <summary class="language"><Icon name="globe" size={18} /><span class="visually-hidden">{t.nav.language}: </span>{languageNames[lang]}</summary>
+          <ul class="drop language-drop">
+            {others.map((other) => <li><a href={other.path} hreflang={locales[other.lang]} lang={locales[other.lang]}>{languageNames[other.lang]}</a></li>)}
+          </ul>
+        </details>
+      )}
       <button class="burger" type="button" aria-expanded="false" aria-controls="site-nav" aria-label={t.nav.menu}>
         <span class="burger-open"><Icon name="menu" size={22} /></span>
         <span class="burger-close"><Icon name="close" size={22} /></span>
