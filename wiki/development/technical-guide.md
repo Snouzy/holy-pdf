@@ -33,6 +33,15 @@ _Written on 29 September 2026 for the Swift engine and the Mac app. Rewritten on
 - An action that can be undone does not ask for confirmation (Apple rule): deleting a page is undone with ⌘Z. Removing a file or a document stays confirmed, with its name. On the board, removing a file cannot be undone. In the Scanner, the message says that the removal can be undone.
 - Judge the desktop app (`apps/desktop`) as a native app of its system, not as a site in a window: on Mac like the Swift app, on Windows like a Windows app. Window, menus, shortcuts, dialogs and files are those of the system. Nothing from the site's header, footer, pages or links appears in it. The principle and what it requires are in the [application shell spec](../specs/2026-10-05-desktop-shell-design.md).
 
+## Localized editorial inventories
+
+- Tool pages and site pages remain complete locale matrices: every configured language must have its Markdown file and a working language switch.
+- Articles have independent editorial inventories per market. An article may exist in one language or a selected subset; never add a filler translation only to satisfy route generation.
+- Equivalent article siblings use the same Markdown filename under their locale directories. Their frontmatter slugs and copy remain independently authored for each market, while their normalized topics stay aligned.
+- `author` is optional article frontmatter. When present, it is the visible byline and a `Person` in `BlogPosting`; otherwise Holy PDF remains the organization author. The `image` field is the editorial/social hero, while localized product screenshots can remain separate figures in the body.
+- An article is always self-canonical. Its `hreflang` links and language switches include only equivalent siblings that actually exist. `x-default` points to the English sibling only when that sibling exists; otherwise it is omitted.
+- Sparse article support does not relax the locale-coverage tests for `content/tools` or `content/pages`.
+
 ## Comments
 
 In English, and only for what the code cannot say: a reason, a constraint, a pitfall. Never a paraphrase of the next line. By default, a change adds no comment.

@@ -21,16 +21,16 @@ describe("site pages", () => {
 });
 
 describe("articles", () => {
-  it("exist in every language, under the same file names", () => {
-    const [first, ...others] = languages.map((lang) => readdirSync(join(content, "articles", lang)).sort());
-    expect(first?.length).toBeGreaterThan(0);
-    for (const names of others) expect(names).toEqual(first);
+  it("can publish the redaction guide in FR and EN without a filler pt-BR article", () => {
+    expect(existsSync(join(content, "articles/fr/redact-pdf.md"))).toBe(true);
+    expect(existsSync(join(content, "articles/en/redact-pdf.md"))).toBe(true);
+    expect(existsSync(join(content, "articles/pt-br/redact-pdf.md"))).toBe(false);
   });
 
-  it("declares the same normalized topics in every language", () => {
-    const [firstLang, ...otherLangs] = languages;
-    if (!firstLang) throw new Error("No language configured");
-    for (const name of readdirSync(join(content, "articles", firstLang)).sort()) {
+  it("allows independent locale inventories and matches topics only across real equivalents", () => {
+    const names = new Set(languages.flatMap((lang) => readdirSync(join(content, "articles", lang))));
+    expect(names.size).toBeGreaterThan(0);
+    for (const name of names) {
       const topics = (lang: string) => {
         const markdown = readFileSync(join(content, "articles", lang, name), "utf8");
         const raw = /^topics: \[([^\]]+)\]$/m.exec(markdown)?.[1];
@@ -41,6 +41,9 @@ describe("articles", () => {
         expect(values, `${lang}/${name} normalized topics`).toEqual(values.map((value) => value.toLowerCase()).sort());
         return values;
       };
+      const available = languages.filter((lang) => existsSync(join(content, "articles", lang, name)));
+      const [firstLang, ...otherLangs] = available;
+      if (!firstLang) throw new Error(`No article found for ${name}`);
       const expected = topics(firstLang);
       for (const lang of otherLangs) expect(topics(lang), `${lang}/${name} topics match`).toEqual(expected);
     }

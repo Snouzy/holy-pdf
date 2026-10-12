@@ -1,5 +1,6 @@
 ---
 import { ClientRouter } from "astro:transitions";
+import type { LocalePaths } from "../articleInventory";
 import { dictionaries } from "../i18n";
 import { fontFaces, preloadedFonts } from "../styles/fonts";
 import "../styles/tokens.css";
@@ -13,7 +14,7 @@ type Props = {
   lang: Lang;
   title: string;
   description: string;
-  paths: Record<Lang, string>;
+  paths: LocalePaths;
   jsonLd?: object[];
   ogType?: "website" | "article";
   image?: string | undefined;
@@ -28,6 +29,10 @@ const measurementId = process.env.GA4_ID || undefined;
 if (measurementId && !/^G-[A-Z0-9]+$/.test(measurementId)) throw new Error(`GA4_ID is not a GA4 measurement ID: ${measurementId}`);
 const t = dictionaries[lang];
 const url = (path: string) => new URL(path, Astro.site).href;
+const currentPath = paths[lang];
+if (!currentPath) throw new Error(`No ${lang} path was provided for this page`);
+const availableLanguages = languages.flatMap((code) => paths[code] ? [code] : []);
+const xDefault = paths.en;
 ---
 
 <!doctype html>
@@ -106,7 +111,7 @@ const url = (path: string) => new URL(path, Astro.site).href;
     <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={url(paths[lang])} />
+    <meta property="og:url" content={url(currentPath)} />
     {image && <meta property="og:image" content={image} />}
     <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
     <meta name="twitter:title" content={title} />
@@ -114,9 +119,9 @@ const url = (path: string) => new URL(path, Astro.site).href;
     {image && <meta name="twitter:image" content={image} />}
     {!indexable && <meta name="robots" content="noindex" />}
     {clientRouter && <ClientRouter />}
-    <link rel="canonical" href={url(paths[lang])} />
-    {languages.map((code) => <link rel="alternate" hreflang={locales[code]} href={url(paths[code])} />)}
-    <link rel="alternate" hreflang="x-default" href={url(paths.en)} />
+    <link rel="canonical" href={url(currentPath)} />
+    {availableLanguages.map((code) => <link rel="alternate" hreflang={locales[code]} href={url(paths[code]!)} />)}
+    {xDefault && <link rel="alternate" hreflang="x-default" href={url(xDefault)} />}
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
   </head>
   <body>

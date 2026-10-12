@@ -1,5 +1,6 @@
 ---
 import { formatDate, pageTexts } from "../i18n/pages";
+import type { LocalePaths } from "../articleInventory";
 import { siteName } from "../site";
 import type { Lang } from "../tools";
 import Base from "./Base.astro";
@@ -9,11 +10,12 @@ type Props = {
   lang: Lang;
   title: string;
   description: string;
-  paths: Record<Lang, string>;
+  paths: LocalePaths;
   jsonLd: object[];
   h1: string;
   emoji: string;
   lead: string;
+  author?: string | undefined;
   updated?: Date | undefined;
   published?: Date | undefined;
   isArticle?: boolean;
@@ -21,7 +23,7 @@ type Props = {
   image?: string | undefined;
 };
 
-const { lang, title, description, paths, jsonLd, h1, emoji, lead, updated, published, isArticle = false, readingMinutes, image } = Astro.props;
+const { lang, title, description, paths, jsonLd, h1, emoji, lead, author, updated, published, isArticle = false, readingMinutes, image } = Astro.props;
 const texts = pageTexts[lang];
 const Root = isArticle ? "article" : "div";
 const day = (date: Date) => date.toISOString().slice(0, 10);
@@ -36,7 +38,7 @@ const day = (date: Date) => date.toISOString().slice(0, 10);
       <p class="lead">{lead}</p>
       {published && (
         <p class="meta">
-          {texts.published} <time datetime={day(published)}>{formatDate(published, lang)}</time> · {siteName}
+          {texts.published} <time datetime={day(published)}>{formatDate(published, lang)}</time> · {author ?? siteName}
           {readingMinutes && <> · <span class="reading-time">{texts.readingTime(readingMinutes)}</span></>}
         </p>
       )}
