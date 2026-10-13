@@ -118,9 +118,23 @@ export function resizeFromCorner(placement: SignaturePlacement, dx: number, dy: 
 }
 
 /** PDFium renders by width; reject pages whose height cannot fit even at one pixel wide. */
-export function previewWidth(page: PageSize): number | null {
+export function previewWidth(page: PageSize, density = 1): number | null {
   if (![page.width, page.height].every((value) => Number.isFinite(value) && value > 0)) return null;
   const ratio = page.width / page.height;
-  const width = Math.floor(Math.min(1200, 1600 * ratio, Math.sqrt(1_500_000 * ratio)));
+  const width = Math.floor(Math.min(1200, 1600 * ratio, Math.sqrt(1_500_000 * ratio)) * density);
   return width >= 1 ? width : null;
+}
+
+/** Capped at 2 for the budget only: a phone's narrow sheet asks for fewer pixels than the budget anyway. */
+export function screenDensity(): number {
+  return Math.min(2, Math.max(1, globalThis.devicePixelRatio || 1));
+}
+
+/** One picture pixel per screen pixel of `sheet`, within the budget; `zoom` lets a zoomed sheet go past it. */
+export function sharpPreviewWidth(page: PageSize, sheet: HTMLElement | null, zoom = 1): number | null {
+  const budget = previewWidth(page, screenDensity());
+  if (budget === null) return null;
+  // The layout width: the bounding box of a sheet turned sideways is its height.
+  const shown = sheet?.clientWidth ? Math.ceil(sheet.clientWidth * (globalThis.devicePixelRatio || 1)) : Infinity;
+  return Math.min(Math.round(budget * zoom), shown);
 }

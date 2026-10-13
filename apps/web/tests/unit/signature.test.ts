@@ -1,6 +1,6 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PageSize, SignaturePlacement } from "../../src/engine/types";
-import { fitPlacement, inkBounds, jpegSize, pngSize, maxSignatureBytes, movePlacement, previewWidth, resizeFromCorner, signatureSize, sizePlacement, signatureBounds } from "../../src/signature/geometry";
+import { fitPlacement, inkBounds, jpegSize, pngSize, maxSignatureBytes, movePlacement, previewWidth, resizeFromCorner, screenDensity, sharpPreviewWidth, signatureSize, sizePlacement, signatureBounds } from "../../src/signature/geometry";
 
 function header(width: number, height: number, marker = 0xc0) {
   return new Uint8Array([0xff, 0xd8, 0xff, marker, 0, 11, 8, height >> 8, height & 255, width >> 8, width & 255, 1, 1, 0x11, 0]);
@@ -265,5 +265,37 @@ describe("bounded page preview", () => {
   });
   it.each([{ width: 1, height: 1601 }, { width: 0, height: 100 }, { width: Infinity, height: 1 }])("refuses unrenderable pages before allocation", (page) => {
     expect(previewWidth(page)).toBeNull();
+  });
+  it("draws a 2x screen twice as many pixels on each side", () => {
+    const page = { width: 595, height: 842 };
+    const width = previewWidth(page, 2)!;
+    expect(width).toBeGreaterThanOrEqual(previewWidth(page)! * 2);
+    expect(width).toBeLessThanOrEqual(2400);
+    expect(width * Math.round(width * page.height / page.width)).toBeLessThanOrEqual(6_000_000);
+    expect(previewWidth({ width: 1, height: 1600 }, 2)).toBe(2);
+  });
+});
+
+describe("screen density", () => {
+  afterEach(() => vi.unstubAllGlobals());
+  it.each([[undefined, 1], [0.5, 1], [1, 1], [1.5, 1.5], [2, 2], [3, 2]])("devicePixelRatio %s renders at %s", (ratio, density) => {
+    vi.stubGlobal("devicePixelRatio", ratio);
+    expect(screenDensity()).toBe(density);
+  });
+});
+
+describe("sharp page preview", () => {
+  afterEach(() => vi.unstubAllGlobals());
+  const a4 = { width: 595, height: 842 };
+  const sheet = (clientWidth: number) => ({ clientWidth }) as HTMLElement;
+  it.each([[2, 772, 1544], [3, 370, 1110], [1, 772, 772], [2, 1600, previewWidth(a4, 2)!]])("devicePixelRatio %s, sheet %s px: draws %s px", (ratio, shown, width) => {
+    vi.stubGlobal("devicePixelRatio", ratio);
+    expect(sharpPreviewWidth(a4, sheet(shown))).toBe(width);
+  });
+  it("lets a zoomed sheet go past the budget, and falls back to it before layout", () => {
+    vi.stubGlobal("devicePixelRatio", 2);
+    expect(sharpPreviewWidth(a4, sheet(1544), 2)).toBe(3088);
+    expect(sharpPreviewWidth(a4, null)).toBe(previewWidth(a4, 2));
+    expect(sharpPreviewWidth({ width: 0, height: 1 }, sheet(772))).toBeNull();
   });
 });

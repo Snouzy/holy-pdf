@@ -1,4 +1,4 @@
-import type { TargetedPointerEvent } from "preact";
+import type { RefObject, TargetedPointerEvent } from "preact";
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import type { DocumentSkeleton } from "../board/DocumentSkeleton";
 import type { Engine } from "../engine/client";
@@ -6,7 +6,7 @@ import { arrowHead, ascent, keepsFont, lineHeight, oneLine, stampLayout, stampWo
 import { type FieldEdit, type FormField, type Box, type EditFont, type EditImage, type EditItem, type EditText, noteSize, type OriginalEdit, type PageFont, type PageObject, type PageObjects, type PageSize, type Picture, plainPicture, type Point, type Rgb } from "../engine/types";
 import { Icon } from "../illustrations/Icon";
 import { useActionHeight } from "../signature/actionHeight";
-import { previewWidth } from "../signature/geometry";
+import { sharpPreviewWidth } from "../signature/geometry";
 import type { Lang } from "../tools";
 import { boundsOf, composedCrop, created, croppedPicture, type EditDraft, edited, fieldKey, fieldName, fieldsValid, filled, flippedPicture, fractionsIn, framed, type Handle, hit, markupTools, type Measure, moved, narrowest, originalKey, parseFieldKey, parseOriginalKey, picked, pictureOf, quadsOf, redone, rekinded, reordered, resized, resizedBox, restyled, revised, rotatedPicture, spanned, type Style, styleOf, type Tool, toolForKey, toolKeys, turnedBox, undone, validLink } from "./model";
 import "../signature/signature.css";
@@ -258,7 +258,7 @@ function useFieldNames(engine: Pick<Engine, "fieldNames">, docId: string, wanted
 }
 
 /** The page drawn with its retouches. The last picture stays while the next one is drawn, so the page never blinks. */
-function usePreview(engine: Pick<Engine, "thumbnail">, docId: string, pageIndex: number, size: PageSize | undefined, edits: OriginalEdit[], fields: FieldEdit[], zoom: number) {
+function usePreview(engine: Pick<Engine, "thumbnail">, docId: string, pageIndex: number, size: PageSize | undefined, edits: OriginalEdit[], fields: FieldEdit[], zoom: number, sheet: RefObject<HTMLElement>) {
   const [state, setState] = useState<{ page: string; url: string | null; failed: boolean; stale: boolean }>({ page: "", url: null, failed: false, stale: false });
   const [attempt, setAttempt] = useState(0);
   const current = useRef<string | null>(null);
@@ -266,11 +266,11 @@ function usePreview(engine: Pick<Engine, "thumbnail">, docId: string, pageIndex:
   const own = edits.filter((edit) => edit.pageIndex === pageIndex);
   const ownFields = fields.filter((field) => field.pageIndex === pageIndex);
   const editsKey = JSON.stringify([own, ownFields]);
-  // Zoomed in, the picture is drawn larger too, or the small print the zoom is for would blur.
-  const base = size ? previewWidth(size) : null;
-  const width = base === null ? null : Math.min(4000, Math.round(base * zoom / 100));
   useEffect(() => {
     let active = true;
+    // Zoomed in, the picture is drawn larger too, or the small print the zoom is for would blur.
+    const sharp = size ? sharpPreviewWidth(size, sheet.current, zoom / 100) : null;
+    const width = sharp === null ? null : Math.min(4000, sharp);
     setState((previous) => (previous.page === page ? { ...previous, stale: true } : { page, url: null, failed: false, stale: false }));
     if (!width) {
       setState({ page, url: null, failed: true, stale: false });
@@ -284,7 +284,7 @@ function usePreview(engine: Pick<Engine, "thumbnail">, docId: string, pageIndex:
       setState({ page, url, failed: !url, stale: false });
     }, () => active && setState({ page, url: null, failed: true, stale: false }));
     return () => { active = false; };
-  }, [page, width, editsKey, attempt]);
+  }, [page, zoom, editsKey, attempt]);
   useEffect(() => () => { if (current.current) URL.revokeObjectURL(current.current); }, []);
   return { shown: state.page === page ? state : null, retry: () => setAttempt((count) => count + 1) };
 }
@@ -298,7 +298,8 @@ export function EditWorkspace({ sizes: pages, lang, value, onChange, disabled, e
   const hidden = typing?.kind === "original" ? withHidden(value.edits, pageIndex, typing.index) : value.edits;
   // The field being typed is drawn empty: its old value would show under the typing.
   const shownFields = typing?.kind === "field" ? [...value.fields.filter((field) => !(field.pageIndex === pageIndex && field.index === typing.index)), { pageIndex, index: typing.index, value: "" }] : value.fields;
-  const { shown, retry } = usePreview(engine, docId, pageIndex, size, hidden, shownFields, zoom);
+  const sheet = useRef<HTMLDivElement>(null);
+  const { shown, retry } = usePreview(engine, docId, pageIndex, size, hidden, shownFields, zoom, sheet);
   const found = useObjects(engine, docId, pageIndex, value.edits, value.fields);
   const fonts = useFonts(engine, docId, typing?.kind === "original");
   const taken = useFieldNames(engine, docId, value.tool === "field" || value.items.some((item) => item.kind === "field"));
@@ -622,7 +623,7 @@ export function EditWorkspace({ sizes: pages, lang, value, onChange, disabled, e
   const carried = ghost ?? settling;
   return <div class="signature-workspace" ref={workspace}>
     {shown?.failed && <p role="alert">{t.previewError} <button type="button" onClick={retry}>{t.retry}</button></p>}
-    {size && <div class="edit-scroll"><div class="edit-sheet" style={{ aspectRatio: `${size.width} / ${size.height}`, "--page-ratio": size.width / size.height, "--zoom": zoom / 100 }} aria-busy={!shown}>
+    {size && <div class="edit-scroll"><div class="edit-sheet" ref={sheet} style={{ aspectRatio: `${size.width} / ${size.height}`, "--page-ratio": size.width / size.height, "--zoom": zoom / 100 }} aria-busy={!shown}>
       {shown?.url ? <img src={shown.url} alt={`${t.preview} ${pageIndex + 1}`} draggable={false} /> : !shown && <Skeleton label={t.loading} />}
       {shown?.url && <svg ref={layer} class="edit-layer" data-tool={value.tool} data-objects={found ? "ready" : "loading"} viewBox={`0 0 ${size.width} ${size.height}`}
         onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={cancel} onLostPointerCapture={cancel} onDblClick={open}>

@@ -51,14 +51,15 @@ export function BookmarksWorkspace({ sizes, lang, value, onChange, disabled, eng
   const t = texts[lang];
   const { docId, pageIndex } = value;
   const size = sizes[pageIndex];
-  const { shown, retry } = usePagePreview(engine, docId, pageIndex, size);
+  const sheet = useRef<HTMLDivElement>(null);
+  const { shown, retry } = usePagePreview(engine, docId, pageIndex, size, sheet);
   const workspace = useRef<HTMLDivElement>(null);
   useActionHeight(workspace);
   const goTo = (index: number) => onChange((draft) => ({ ...draft, pageIndex: index }));
   const marked = new Set(value.rows.map((row) => row.bookmark.pageIndex));
   return <div class="signature-workspace" ref={workspace}>
     {shown && !shown.url && <p role="alert">{t.previewError} <button type="button" onClick={retry}>{t.retry}</button></p>}
-    {size && <div class="bookmarks-sheet" style={{ aspectRatio: `${size.width} / ${size.height}`, "--page-ratio": size.width / size.height }} aria-busy={!shown}>
+    {size && <div class="bookmarks-sheet" ref={sheet} style={{ aspectRatio: `${size.width} / ${size.height}`, "--page-ratio": size.width / size.height }} aria-busy={!shown}>
       {shown?.url ? <img src={shown.url} alt={`${t.preview} ${pageIndex + 1}`} /> : !shown && <Skeleton label={t.loading} />}
     </div>}
     <div class="signature-pagination">

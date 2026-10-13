@@ -5,7 +5,7 @@ import type { Engine } from "../engine/client";
 import { Icon } from "../illustrations/Icon";
 import type { PageSize, SignatureImage, SignaturePlacement } from "../engine/types";
 import type { Lang } from "../tools";
-import { fitPlacement, movePlacement, resizeFromCorner, signatureBounds, previewWidth, SignatureInputError, type SignatureProblem, sizePlacement } from "./geometry";
+import { fitPlacement, movePlacement, resizeFromCorner, signatureBounds, sharpPreviewWidth, SignatureInputError, type SignatureProblem, sizePlacement } from "./geometry";
 import { importSignatureImage } from "./image";
 import { DrawingSurface } from "./DrawingSurface";
 import { TypedSignature } from "./TypedSignature";
@@ -116,7 +116,6 @@ export function SignatureWorkspace(props: SignatureProps) {
   const size = sizes[pageIndex];
   const pageRotation = value.pageRotations[pageIndex] ?? 0;
   const sideways = pageRotation % 180 !== 0;
-  const renderWidth = size ? previewWidth(size) : null;
   const [attempt, setAttempt] = useState(0);
   const [zoom, setZoom] = useState(100);
   const [insertion, setInsertion] = useState<{ x: number; y: number; screenX: number; screenY: number } | null>(null);
@@ -181,16 +180,17 @@ export function SignatureWorkspace(props: SignatureProps) {
     // Serialize page previews; a fast page change must not queue a document's worth of rasters.
     requests.current = requests.current.catch(() => undefined).then(async () => {
       if (!active) return;
-      if (renderWidth === null) { setPreview({ key, url: null, failed: true }); return; }
+      const width = sharpPreviewWidth(size, pageRef.current, zoom / 100);
+      if (width === null) { setPreview({ key, url: null, failed: true }); return; }
       try {
-        const result = await engine.thumbnail(docId, pageIndex, renderWidth);
+        const result = await engine.thumbnail(docId, pageIndex, width);
         if (!active) return;
         if (result.ok) { url = URL.createObjectURL(result.value); setPreview({ key, url, failed: false }); }
         else setPreview({ key, url: null, failed: true });
       } catch { if (active) setPreview({ key, url: null, failed: true }); }
     });
     return () => { active = false; if (url) URL.revokeObjectURL(url); };
-  }, [key, renderWidth, attempt]);
+  }, [key, zoom, sideways, attempt]);
 
   const shown = preview?.key === key ? preview : null;
   const ready = Boolean(shown?.url && assetsReady);

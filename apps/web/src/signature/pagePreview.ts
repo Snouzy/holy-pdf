@@ -1,16 +1,17 @@
+import type { RefObject } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import type { Engine } from "../engine/client";
 import type { PageSize } from "../engine/types";
-import { previewWidth } from "./geometry";
+import { sharpPreviewWidth } from "./geometry";
 
 /** `shown`: null while the page loads; its `url` null when it could not be drawn. */
-export function usePagePreview(engine: Pick<Engine, "thumbnail">, docId: string, pageIndex: number, size: PageSize | undefined) {
+export function usePagePreview(engine: Pick<Engine, "thumbnail">, docId: string, pageIndex: number, size: PageSize | undefined, sheet: RefObject<HTMLElement>) {
   const [attempt, setAttempt] = useState(0);
   const [preview, setPreview] = useState<{ key: string; url: string | null } | null>(null);
   const key = `${docId}:${pageIndex}:${attempt}`;
 
   useEffect(() => {
-    const width = size && previewWidth(size);
+    const width = size && sharpPreviewWidth(size, sheet.current);
     if (!width) {
       setPreview({ key, url: null });
       return;

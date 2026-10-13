@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import type { PageSize } from "../engine/types";
 import type { Dictionary } from "../i18n/fr";
 import { Icon } from "../illustrations/Icon";
+import { screenDensity } from "../signature/geometry";
 
 /** What the preview shows: a page of the board, or a page or image of the result. `render` gets the width in pixels. */
 export type Sheet = { key: string; label: string; rotation: 0 | 90 | 180 | 270; size?: PageSize; render: (width: number) => Promise<Blob | null> };
 
 type Props = { sheets: Sheet[]; index: number | null; onIndex: (index: number | null) => void; t: Dictionary };
 
-/** The Swift app's sheet rendered the long side at 1 600 px at most: enough for a screen, cheap enough for a 200-page scan. */
+/** The Swift app's sheet rendered the long side at 1 600 px at most, per screen density: enough for a screen, cheap enough for a 200-page scan. */
 const maxSide = 1600;
 /** A held arrow key must not queue one render per page on the worker. */
 const settle = 100;
@@ -84,7 +85,7 @@ export function PagePreview({ sheets, index, onIndex, t }: Props) {
       const sideways = sheet.rotation % 180 !== 0;
       const room = sideways ? { width: box.clientHeight, height: box.clientWidth } : { width: box.clientWidth, height: box.clientHeight };
       const ratio = sheet.size ? sheet.size.width / sheet.size.height : 1;
-      const width = Math.round(Math.min(Math.min(room.width, room.height * ratio) * devicePixelRatio, maxSide * Math.min(1, ratio)));
+      const width = Math.round(Math.min(Math.min(room.width, room.height * ratio) * devicePixelRatio, maxSide * Math.min(1, ratio) * screenDensity()));
       pending.current.add(key);
       void sheet.render(width).then((image) => {
         pending.current.delete(key);
