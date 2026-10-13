@@ -269,14 +269,13 @@ function usePreview(engine: Pick<Engine, "thumbnail">, docId: string, pageIndex:
   useEffect(() => {
     let active = true;
     // Zoomed in, the picture is drawn larger too, or the small print the zoom is for would blur.
-    const sharp = size ? sharpPreviewWidth(size, sheet.current, zoom / 100) : null;
-    const width = sharp === null ? null : Math.min(4000, sharp);
+    const width = size ? sharpPreviewWidth(size, sheet.current, zoom / 100) : null;
     setState((previous) => (previous.page === page ? { ...previous, stale: true } : { page, url: null, failed: false, stale: false }));
     if (!width) {
       setState({ page, url: null, failed: true, stale: false });
       return;
     }
-    engine.thumbnail(docId, pageIndex, width, own, ownFields).then((result) => {
+    engine.thumbnail(docId, pageIndex, Math.min(4000, width), own, ownFields).then((result) => {
       if (!active) return;
       const url = result.ok ? URL.createObjectURL(result.value) : null;
       if (current.current) URL.revokeObjectURL(current.current);
