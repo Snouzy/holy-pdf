@@ -40,11 +40,11 @@ export function RedactWorkspace({ docId, sizes, lang, zones, onZones, disabled, 
   const t = texts[lang];
   const [pageIndex, setPageIndex] = useState(0);
   const size = sizes[pageIndex];
-  const { shown, retry } = usePagePreview(engine, docId, pageIndex, size);
+  const sheet = useRef<HTMLDivElement>(null);
+  const { shown, retry } = usePagePreview(engine, docId, pageIndex, size, sheet);
   const [draft, setDraft] = useState<RedactZone | null>(null);
   const press = useRef<{ id: number; x: number; y: number } | null>(null);
   const grip = useRef<{ id: number; x: number; y: number; index: number; zone: RedactZone } | null>(null);
-  const sheet = useRef<HTMLDivElement>(null);
   const workspace = useRef<HTMLDivElement>(null);
   useActionHeight(workspace);
   const live = useRef(zones);

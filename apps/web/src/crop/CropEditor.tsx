@@ -49,9 +49,9 @@ export function CropWorkspace({ sizes, lang, value, onChange, disabled, engine, 
   const t = texts[lang];
   const { docId, pageIndex, box } = value;
   const size = sizes[pageIndex];
-  const { shown, retry } = usePagePreview(engine, docId, pageIndex, size);
-  const workspace = useRef<HTMLDivElement>(null);
   const sheet = useRef<HTMLDivElement>(null);
+  const { shown, retry } = usePagePreview(engine, docId, pageIndex, size, sheet);
+  const workspace = useRef<HTMLDivElement>(null);
   const drag = useRef<Drag | null>(null);
   useActionHeight(workspace);
 
