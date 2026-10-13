@@ -5,7 +5,7 @@ import { renderPage } from "../../src/engine/render";
 import { transformPdf } from "../../src/engine/transform";
 import type { EditImage, EditItem, Rgb } from "../../src/engine/types";
 import { gradientJpeg, loadTestPdfium, rawPdf, readWithPdfjs, textPdf } from "./support";
-import { stampLayout, textWidth, wrapped } from "../../src/engine/editMetrics";
+import { stampLayout, textWidth, underlines, wrapped } from "../../src/engine/editMetrics";
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 
 /** The text items of the first page in order: one per text object. */
@@ -62,7 +62,7 @@ const near = (actual: Rgb, expected: Rgb) => actual.every((value, index) => Math
 describe("edit", () => {
   it("writes a text as text where the preview shows it, on the four rotations", async () => {
     for (const rotate of [0, 90, 180, 270]) {
-      const bytes = edited(blank(rotate), [item({ kind: "text", at: { x: 100, y: 100 }, text: "Hello\nWorld", font: "Helvetica", bold: true, size: 40, color: black })]);
+      const bytes = edited(blank(rotate), [item({ kind: "text", at: { x: 100, y: 100 }, text: "Hello\nWorld", font: "Helvetica", bold: true, italic: false, underline: false, size: 40, color: black })]);
       expect((await readWithPdfjs(bytes))[0]?.text.replace(/\s/g, "")).toBe("HelloWorld");
       // The left stem of « H », under the top of the first line, and of « W » one line down.
       expect(colour(bytes, 105, 115)).toEqual(black);
@@ -71,11 +71,24 @@ describe("edit", () => {
     }
   });
 
+  it("writes an italic text in the oblique font, and an underline as a bar of the text's colour under each line", async () => {
+    const text = { kind: "text", at: { x: 100, y: 100 }, text: "Hello\nWorld", font: "Helvetica", bold: true, italic: true, underline: true, size: 40, color: red } as const;
+    const bytes = edited(blank(90), [item(text)]);
+    expect(Buffer.from(bytes).toString("latin1")).toContain("/BaseFont/Helvetica-BoldOblique");
+    expect((await readWithPdfjs(bytes))[0]?.text.replace(/\s/g, "")).toBe("HelloWorld");
+    const plain = edited(blank(90), [item({ ...text, underline: false })]);
+    for (const bar of underlines(text)) {
+      const [x, y] = [bar.x + bar.width / 2, Math.ceil(bar.y)];
+      expect(near(colour(bytes, x, y), red)).toBe(true);
+      expect(colour(plain, x, y)).toEqual([255, 255, 255]);
+    }
+  });
+
   it("wraps a text box's lines at its width, as the screen does", async () => {
     const text = "The quick brown fox jumps over the lazy dog, again and again.";
     const lines = wrapped(text, "Helvetica", false, 20, 200);
     expect(lines.length).toBeGreaterThan(2);
-    const bytes = edited(blank(), [item({ kind: "text", at: { x: 50, y: 50 }, text, font: "Helvetica", bold: false, size: 20, color: black, width: 200 })]);
+    const bytes = edited(blank(), [item({ kind: "text", at: { x: 50, y: 50 }, text, font: "Helvetica", bold: false, italic: false, underline: false, size: 20, color: black, width: 200 })]);
     const items = await linesOf(bytes);
     expect(items).toEqual(lines);
     for (const line of lines) expect(textWidth(line, "Helvetica", false, 20)).toBeLessThanOrEqual(200);
@@ -137,12 +150,12 @@ describe("edit", () => {
   });
 
   it("writes every letter of WinAnsi, beyond Latin-1", async () => {
-    const bytes = edited(blank(), [item({ kind: "text", at: { x: 50, y: 50 }, text: "cœur 20 € l’été « oui » — Œuvre…", font: "Times", bold: false, size: 14, color: black })]);
+    const bytes = edited(blank(), [item({ kind: "text", at: { x: 50, y: 50 }, text: "cœur 20 € l’été « oui » — Œuvre…", font: "Times", bold: false, italic: false, underline: false, size: 14, color: black })]);
     expect((await readWithPdfjs(bytes))[0]?.text).toBe("cœur 20 € l’été « oui » — Œuvre…");
   });
 
   it("refuses a letter the standard fonts cannot write, a page or an image it does not have", () => {
-    const text = (fields: Partial<{ text: string; pageIndex: number }>) => item({ kind: "text", at: { x: 10, y: 10 }, text: "a", font: "Times", bold: false, size: 12, color: black, ...fields });
+    const text = (fields: Partial<{ text: string; pageIndex: number }>) => item({ kind: "text", at: { x: 10, y: 10 }, text: "a", font: "Times", bold: false, italic: false, underline: false, size: 12, color: black, ...fields });
     expect(() => edited(blank(), [text({ text: "Iași" })])).toThrow("damaged");
     expect(() => edited(blank(), [text({ pageIndex: 1 })])).toThrow("damaged");
     expect(() => edited(blank(), [item({ kind: "image", box: { x: 0, y: 0, width: 10, height: 10 }, imageId: "missing" })])).toThrow("damaged");
@@ -156,7 +169,7 @@ describe("edit", () => {
       "<</Type/Annot/Subtype/Widget/FT/Sig/T(Signature)/Rect[0 0 1 1]/P 3 0 R/V 5 0 R>>",
       "<</Type/Sig/Filter/Adobe.PPKLite/SubFilter/adbe.pkcs7.detached/ByteRange[0 1 2 3]/Contents<00>>>",
     ]);
-    const note = item({ kind: "text", at: { x: 10, y: 10 }, text: "Note", font: "Courier", bold: false, size: 12, color: black });
+    const note = item({ kind: "text", at: { x: 10, y: 10 }, text: "Note", font: "Courier", bold: false, italic: false, underline: false, size: 12, color: black });
     expect(() => edited(signed, [note])).toThrow("alreadySigned");
     const locked = edited(textPdf(p, ["A"], {}, "1234"), [note], {}, "1234");
     expect(() => openPdf(p, locked)).toThrow("passwordRequired");

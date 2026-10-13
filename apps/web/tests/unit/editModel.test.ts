@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { boundsOf, canSave, composedCrop, created, croppedPicture, edited, emptyEdit, fieldKey, fieldName, fieldsValid, filled, parseFieldKey, rekinded, flippedPicture, fractionsIn, hit, moved, originalKey, parseOriginalKey, picked, quadsOf, redone, reordered, resized, restyled, revised, rotatedPicture, styleOf, turnedBox, type EditDraft, type Style, undone, validLink } from "../../src/edit/model";
 import { type EditItem, type EditText, type OriginalEdit, type PageWord, plainPicture } from "../../src/engine/types";
 
-const style: Style = { color: [0, 0, 0], fill: false, lineWidth: 3, font: "Helvetica", bold: false, size: 20, stamp: "APPROUVÉ", field: "text" };
+const style: Style = { color: [0, 0, 0], fill: false, lineWidth: 3, font: "Helvetica", bold: false, italic: false, underline: false, size: 20, stamp: "APPROUVÉ", field: "text" };
 const measure = (item: EditText) => Math.max(...item.text.split("\n").map((line) => line.length)) * item.size * 0.5;
 const rectangle = (id: string, x = 0): EditItem => ({ id, pageIndex: 0, kind: "rectangle", box: { x, y: 0, width: 100, height: 50 }, stroke: [0, 0, 0], fill: null, lineWidth: 3 });
 
@@ -12,6 +12,7 @@ describe("edit model", () => {
     expect(created("ellipse", "a", 0, { x: 100, y: 100 }, { x: 101, y: 100 }, { ...style, fill: true })).toMatchObject({ box: { x: 100, y: 100, width: 120, height: 80 }, stroke: null, fill: [0, 0, 0] });
     expect(created("arrow", "a", 0, { x: 10, y: 10 }, { x: 10, y: 11 }, style)).toMatchObject({ from: { x: 10, y: 10 }, to: { x: 130, y: 10 } });
     expect(created("text", "a", 2, { x: 30, y: 40 }, { x: 30, y: 40 }, style)).toMatchObject({ pageIndex: 2, kind: "text", at: { x: 30, y: 40 }, text: "", font: "Helvetica", size: 20 });
+    expect(created("text", "a", 0, { x: 30, y: 40 }, { x: 30, y: 40 }, { ...style, italic: true, underline: true })).toMatchObject({ italic: true, underline: true });
   });
 
   it("draws a square or a circle with Shift, from any corner, and keeps a box's proportions when resizing with it", () => {
@@ -31,7 +32,7 @@ describe("edit model", () => {
   });
 
   it("finds the topmost item under a point, a line by its distance, a text by its measured box", () => {
-    const items = [rectangle("under"), rectangle("over", 50), { id: "t", pageIndex: 0, kind: "text", at: { x: 300, y: 300 }, text: "Hello", font: "Helvetica", bold: false, size: 20, color: [0, 0, 0] } satisfies EditItem];
+    const items = [rectangle("under"), rectangle("over", 50), { id: "t", pageIndex: 0, kind: "text", at: { x: 300, y: 300 }, text: "Hello", font: "Helvetica", bold: false, italic: false, underline: false, size: 20, color: [0, 0, 0] } satisfies EditItem];
     expect(hit(items, 0, { x: 60, y: 10 }, measure, 2)?.id).toBe("over");
     expect(hit(items, 0, { x: 20, y: 10 }, measure, 2)?.id).toBe("under");
     expect(hit(items, 1, { x: 20, y: 10 }, measure, 2)).toBeUndefined();
@@ -62,8 +63,9 @@ describe("edit model", () => {
     const outlined = restyled(rectangle("a"), { color: [255, 0, 0], lineWidth: 6, size: 40 });
     expect(outlined).toMatchObject({ stroke: [255, 0, 0], fill: null, lineWidth: 6 });
     expect(restyled(outlined, { fill: true })).toMatchObject({ stroke: null, fill: [255, 0, 0] });
-    const text: EditItem = { id: "t", pageIndex: 0, kind: "text", at: { x: 0, y: 0 }, text: "a", font: "Times", bold: false, size: 12, color: [0, 0, 0] };
-    expect(restyled(text, { font: "Courier", bold: true, size: 30, lineWidth: 6 })).toMatchObject({ font: "Courier", bold: true, size: 30 });
+    const text: EditItem = { id: "t", pageIndex: 0, kind: "text", at: { x: 0, y: 0 }, text: "a", font: "Times", bold: false, italic: false, underline: false, size: 12, color: [0, 0, 0] };
+    expect(restyled(text, { font: "Courier", bold: true, italic: true, underline: true, size: 30, lineWidth: 6 })).toMatchObject({ font: "Courier", bold: true, italic: true, underline: true, size: 30 });
+    expect(styleOf(restyled(text, { italic: true, underline: true }), style)).toMatchObject({ bold: false, italic: true, underline: true });
     expect(styleOf(restyled(outlined, { fill: true }), style)).toMatchObject({ color: [255, 0, 0], fill: true, lineWidth: 6 });
     expect(styleOf(text, style)).toMatchObject({ color: [0, 0, 0], font: "Times", size: 12, lineWidth: 3 });
   });
@@ -141,7 +143,7 @@ describe("edit model", () => {
     expect(resized(filled, "e", { x: 250, y: 0 })).toMatchObject({ width: 240 });
     expect(resized(filled, "w", { x: 70, y: 0 })).toMatchObject({ at: { x: 70, y: 10 }, width: 60 });
     expect(resized(filled, "w", { x: 200, y: 0 })).toMatchObject({ at: { x: 110, y: 10 }, width: 20 });
-    const free: EditItem = { id: "f", pageIndex: 0, kind: "text", at: { x: 0, y: 0 }, text: "Hello", font: "Courier", bold: false, size: 10, color: [0, 0, 0] };
+    const free: EditItem = { id: "f", pageIndex: 0, kind: "text", at: { x: 0, y: 0 }, text: "Hello", font: "Courier", bold: false, italic: false, underline: false, size: 10, color: [0, 0, 0] };
     expect(resized(free, "e", { x: 100, y: 0 }, measure)).toMatchObject({ width: 100 });
   });
 
@@ -156,7 +158,7 @@ describe("edit model", () => {
   });
 
   it("saves once something is added, and never with a letter the fonts cannot write", () => {
-    const text = (value: string): EditItem => ({ id: "t", pageIndex: 0, kind: "text", at: { x: 0, y: 0 }, text: value, font: "Times", bold: false, size: 12, color: [0, 0, 0] });
+    const text = (value: string): EditItem => ({ id: "t", pageIndex: 0, kind: "text", at: { x: 0, y: 0 }, text: value, font: "Times", bold: false, italic: false, underline: false, size: 12, color: [0, 0, 0] });
     expect(canSave(emptyEdit("doc"))).toBe(false);
     expect(canSave(edited(emptyEdit("doc"), [text("Été")]))).toBe(true);
     expect(canSave(edited(emptyEdit("doc"), [text("Iași")]))).toBe(false);

@@ -1,4 +1,4 @@
-import { lineHeight, stampWords, wrapped, writable } from "../engine/editMetrics";
+import { lineHeight, linesOf, stampWords, writable } from "../engine/editMetrics";
 import { nameTaken } from "../engine/formFields";
 import { type Box, type EditField, type EditFont, type EditImage, type EditItem, type EditMarkup, type EditText, type FieldEdit, type FieldKind, noteSize, type OriginalEdit, type PageWord, type Picture, plainPicture, type Point, type Rgb } from "../engine/types";
 
@@ -17,7 +17,7 @@ export function picked(draft: EditDraft, tool: Tool): EditDraft {
   return { ...draft, tool, selectedId: null, cropping: null, style: color ? { ...draft.style, color } : draft.style };
 }
 /** `stamp`: the word the stamp tool puts next; `field`: the kind of field the Field tool draws next. */
-export type Style = { color: Rgb; fill: boolean; lineWidth: number; font: EditFont; bold: boolean; size: number; stamp: string; field: FieldKind };
+export type Style = { color: Rgb; fill: boolean; lineWidth: number; font: EditFont; bold: boolean; italic: boolean; underline: boolean; size: number; stamp: string; field: FieldKind };
 export type Handle = "nw" | "ne" | "sw" | "se" | "from" | "to" | "e" | "w";
 export const narrowest = 20;
 /** The width of a text's widest line, in points. */
@@ -42,7 +42,7 @@ const history = 100;
 
 export const emptyEdit = (docId: string, lang: keyof typeof stampWords = "fr"): EditDraft => ({
   docId, pageIndex: 0, items: [], edits: [], fields: [], taken: [], images: {}, previews: {}, selectedId: null, tool: "select", cropping: null,
-  style: { color: [0, 0, 0], fill: false, lineWidth: 3, font: "Helvetica", bold: false, size: 16, stamp: stampWords[lang][0]!, field: "text" }, past: [], future: [],
+  style: { color: [0, 0, 0], fill: false, lineWidth: 3, font: "Helvetica", bold: false, italic: false, underline: false, size: 16, stamp: stampWords[lang][0]!, field: "text" }, past: [], future: [],
 });
 
 export const canSave = (draft: EditDraft) => (draft.items.length > 0 || draft.edits.length > 0 || draft.fields.length > 0) && fieldsValid(draft.items, draft.taken) && draft.items.every((item) => ((item.kind !== "text" && item.kind !== "stamp") || writable(item.text)) && (item.kind !== "link" || validLink(item)));
@@ -131,7 +131,7 @@ export function created(tool: Exclude<Tool, "select" | "ink" | keyof typeof mark
   switch (tool) {
     case "text": {
       const box = spanned(from, to);
-      return { id, pageIndex, kind: "text", at: dragged ? { x: box.x, y: box.y } : from, text: "", font: style.font, bold: style.bold, size: style.size, color, ...(dragged ? { width: Math.max(narrowest, box.width) } : {}) };
+      return { id, pageIndex, kind: "text", at: dragged ? { x: box.x, y: box.y } : from, text: "", font: style.font, bold: style.bold, italic: style.italic, underline: style.underline, size: style.size, color, ...(dragged ? { width: Math.max(narrowest, box.width) } : {}) };
     }
     case "note":
       return { id, pageIndex, kind: "note", at: { x: from.x - noteSize / 2, y: from.y - noteSize / 2 }, text: "", author: "", color };
@@ -164,7 +164,7 @@ export function restyled(item: EditItem, change: Partial<Style>): EditItem {
   const color = change.color;
   switch (item.kind) {
     case "text":
-      return { ...item, color: color ?? item.color, font: change.font ?? item.font, bold: change.bold ?? item.bold, size: change.size ?? item.size };
+      return { ...item, color: color ?? item.color, font: change.font ?? item.font, bold: change.bold ?? item.bold, italic: change.italic ?? item.italic, underline: change.underline ?? item.underline, size: change.size ?? item.size };
     case "rectangle":
     case "ellipse": {
       const paint = color ?? item.stroke ?? item.fill ?? [0, 0, 0];
@@ -216,7 +216,7 @@ export function rekinded(item: EditItem & EditField, field: FieldKind): EditItem
 export function styleOf(item: EditItem, fallback: Style): Style {
   switch (item.kind) {
     case "text":
-      return { ...fallback, color: item.color, font: item.font, bold: item.bold, size: item.size };
+      return { ...fallback, color: item.color, font: item.font, bold: item.bold, italic: item.italic, underline: item.underline, size: item.size };
     case "rectangle":
     case "ellipse":
       return { ...fallback, color: item.stroke ?? item.fill ?? fallback.color, fill: item.fill !== null, lineWidth: item.lineWidth };
@@ -239,7 +239,7 @@ export function styleOf(item: EditItem, fallback: Style): Style {
 export function boundsOf(item: EditItem, measure: Measure): Box {
   switch (item.kind) {
     case "text":
-      return { ...item.at, width: item.width ?? measure(item), height: item.size * lineHeight * wrapped(item.text, item.font, item.bold, item.size, item.width).length };
+      return { ...item.at, width: item.width ?? measure(item), height: item.size * lineHeight * linesOf(item).length };
     case "line":
     case "arrow":
       return spanned(item.from, item.to);

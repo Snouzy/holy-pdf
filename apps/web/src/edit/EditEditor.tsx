@@ -2,7 +2,7 @@ import type { RefObject, TargetedPointerEvent } from "preact";
 import { useEffect, useLayoutEffect, useRef, useState } from "preact/hooks";
 import type { DocumentSkeleton } from "../board/DocumentSkeleton";
 import type { Engine } from "../engine/client";
-import { arrowHead, ascent, keepsFont, lineHeight, oneLine, stampLayout, stampWords, textWidth, wrapped, writable } from "../engine/editMetrics";
+import { arrowHead, ascent, keepsFont, lineHeight, linesOf, oneLine, stampLayout, stampWords, textWidth, underlines, writable } from "../engine/editMetrics";
 import { type FieldEdit, type FormField, type Box, type EditFont, type EditImage, type EditItem, type EditText, noteSize, type OriginalEdit, type PageFont, type PageObject, type PageObjects, type PageSize, type Picture, plainPicture, type Point, type Rgb } from "../engine/types";
 import { Icon } from "../illustrations/Icon";
 import { useActionHeight } from "../signature/actionHeight";
@@ -28,7 +28,7 @@ const en = {
   picture: "Picture", turnLeft: "Turn left", turnRight: "Turn right", mirrorAcross: "Mirror left-right", mirrorDown: "Mirror top-bottom",
   crop: "Crop", applyCrop: "Apply the crop", cancelCrop: "Cancel the crop", cropHint: "Drag the frame's corners, then apply.",
   image: "Image", color: "Colour", width: "Thickness", widths: ["Thin", "Medium", "Thick"], fill: "Fill", outline: "Outline", filled: "Filled",
-  font: "Font", bold: "Bold", size: "Size", front: "Bring to front", back: "Send to back", remove: "Delete", undo: "Undo", redo: "Redo",
+  font: "Font", bold: "Bold", italic: "Italic", underlined: "Underlined", size: "Size", front: "Bring to front", back: "Send to back", remove: "Delete", undo: "Undo", redo: "Redo",
   colors: ["Black", "Blue", "Red", "Green", "Yellow", "White"], typeHere: "Your text",
   hint: "Pick a tool, then click or drag on the page. Drag with the Text tool for a text box whose lines wrap. Double-click a text to change it, yours or the document's.",
   originalHint: "Drag to move it. Double-click a text to correct it.",
@@ -55,7 +55,7 @@ const fr: typeof en = {
   picture: "Image", turnLeft: "Pivoter à gauche", turnRight: "Pivoter à droite", mirrorAcross: "Retourner gauche-droite", mirrorDown: "Retourner haut-bas",
   crop: "Recadrer", applyCrop: "Appliquer le recadrage", cancelCrop: "Annuler le recadrage", cropHint: "Tirez les coins du cadre, puis appliquez.",
   image: "Image", color: "Couleur", width: "Épaisseur", widths: ["Fine", "Moyenne", "Épaisse"], fill: "Remplissage", outline: "Contour", filled: "Plein",
-  font: "Police", bold: "Gras", size: "Taille", front: "Premier plan", back: "Arrière-plan", remove: "Supprimer", undo: "Annuler", redo: "Rétablir",
+  font: "Police", bold: "Gras", italic: "Italique", underlined: "Souligné", size: "Taille", front: "Premier plan", back: "Arrière-plan", remove: "Supprimer", undo: "Annuler", redo: "Rétablir",
   colors: ["Noir", "Bleu", "Rouge", "Vert", "Jaune", "Blanc"], typeHere: "Votre texte",
   hint: "Choisissez un outil, puis cliquez ou tirez sur la page. Tirez avec l'outil Texte pour une zone dont les lignes reviennent à la ligne. Double-cliquez sur un texte pour le modifier, le vôtre ou celui du document.",
   originalHint: "Tirez pour le déplacer. Double-cliquez sur un texte pour le corriger.",
@@ -82,7 +82,7 @@ const ptBR: typeof en = {
   picture: "Imagem", turnLeft: "Girar à esquerda", turnRight: "Girar à direita", mirrorAcross: "Espelhar esquerda-direita", mirrorDown: "Espelhar cima-baixo",
   crop: "Recortar", applyCrop: "Aplicar o recorte", cancelCrop: "Cancelar o recorte", cropHint: "Arraste os cantos da moldura e depois aplique.",
   image: "Imagem", color: "Cor", width: "Espessura", widths: ["Fina", "Média", "Grossa"], fill: "Preenchimento", outline: "Contorno", filled: "Preenchido",
-  font: "Fonte", bold: "Negrito", size: "Tamanho", front: "Trazer para a frente", back: "Enviar para trás", remove: "Excluir", undo: "Desfazer", redo: "Refazer",
+  font: "Fonte", bold: "Negrito", italic: "Itálico", underlined: "Sublinhado", size: "Tamanho", front: "Trazer para a frente", back: "Enviar para trás", remove: "Excluir", undo: "Desfazer", redo: "Refazer",
   colors: ["Preto", "Azul", "Vermelho", "Verde", "Amarelo", "Branco"], typeHere: "Seu texto",
   hint: "Escolha uma ferramenta e clique ou arraste na página. Arraste com a ferramenta Texto para uma caixa cujas linhas quebram. Dê um clique duplo em um texto para alterá-lo, o seu ou o do documento.",
   originalHint: "Arraste para mover. Dê um clique duplo em um texto para corrigi-lo.",
@@ -126,12 +126,11 @@ const css = (color: Rgb) => `rgb(${color.join(" ")})`;
 let context: CanvasRenderingContext2D | null | undefined;
 function fontContext(item: EditText): CanvasRenderingContext2D | null {
   context ??= document.createElement("canvas").getContext("2d");
-  if (context) context.font = `${item.bold ? "bold " : ""}${item.size}px ${families[item.font]}`;
+  if (context) context.font = `${item.italic ? "italic " : ""}${item.bold ? "bold " : ""}${item.size}px ${families[item.font]}`;
   return context;
 }
 /** Measured with the PDF fonts' advances, not the browser's: the layout then matches the file, whatever font the screen shows. */
-const measure: Measure = (item) => Math.max(item.size * 0.5, ...linesOf(item).map((line) => textWidth(line, item.font, item.bold, item.size)));
-const linesOf = (item: EditText) => wrapped(item.text, item.font, item.bold, item.size, item.width);
+const measure: Measure = (item) => Math.max(item.size * 0.5, ...linesOf(item).map((line) => textWidth(line, item.font, item.bold, item.size, item.italic)));
 /** What the browser's font needs: a letter outside WinAnsi, which the PDF advances count as a half em, may be wider in the field. */
 function fieldWidth(item: EditText): number {
   if (item.width) return item.width;
@@ -161,16 +160,16 @@ const fillable = (field: FormField) => !field.readOnly && field.kind !== "other"
 function asFieldText(field: FormField, text: string): EditText {
   const size = field.size > 0 ? field.size : Math.min(field.multiline ? 12 : field.box.height / lineHeight, 24);
   const top = field.multiline ? field.box.y + 2 : field.box.y + field.box.height / 2 + (0.353 - ascent.Helvetica) * size;
-  return { kind: "text", at: { x: field.box.x + 2, y: top }, text, font: "Helvetica", bold: false, size, color: field.color, ...(field.multiline ? { width: field.box.width - 4 } : {}) };
+  return { kind: "text", at: { x: field.box.x + 2, y: top }, text, font: "Helvetica", bold: false, italic: false, underline: false, size, color: field.color, ...(field.multiline ? { width: field.box.width - 4 } : {}) };
 }
 /** A picture as large as the page is the page: a scan, or a design flattened to pixels. */
 const coversPage = (object: PageObject, page: PageSize) => object.kind === "image" && object.box.width >= 0.9 * page.width && object.box.height >= 0.9 * page.height;
 
 /** The document's text as an addition would be typed: the same textarea serves both. The baseline follows a move. */
-function asTyped(object: PageObject, box: Box, text: string): EditText & { italic: boolean } {
+function asTyped(object: PageObject, box: Box, text: string): EditText {
   const [font, size] = [object.family ?? "Helvetica", object.size ?? 12];
   const baseline = (object.baseline?.y ?? object.box.y + object.box.height) + box.y - object.box.y;
-  return { kind: "text", at: { x: box.x, y: baseline - ascent[font] * size }, text, font, bold: object.bold ?? false, italic: object.italic ?? false, size, color: object.color ?? [0, 0, 0] };
+  return { kind: "text", at: { x: box.x, y: baseline - ascent[font] * size }, text, font, bold: object.bold ?? false, italic: object.italic ?? false, underline: false, size, color: object.color ?? [0, 0, 0] };
 }
 
 export type EditProps = {
@@ -638,7 +637,7 @@ export function EditWorkspace({ sizes: pages, lang, value, onChange, disabled, e
         rows={typed ? linesOf(typed).length : 1} maxlength={typedField?.maxLength ?? undefined} spellcheck={false} tabIndex={typed ? 0 : -1} aria-hidden={!typed} wrap={typed?.width ? "soft" : "off"}
         style={typed && {
           left: `${typed.at.x / size.width * 100}%`, top: `${typingTop(typed) / size.height * 100}%`, color: css(typed.color),
-          font: `${"italic" in typed && typed.italic ? "italic " : ""}${typed.bold ? "bold " : ""}${typed.size / unit}px/${lineHeight} ${families[typed.font]}`,
+          font: `${typed.italic ? "italic " : ""}${typed.bold ? "bold " : ""}${typed.size / unit}px/${lineHeight} ${families[typed.font]}`, textDecoration: typed.underline ? "underline" : "none",
           width: `${fieldWidth(typed) / unit}px`, height: `${Math.max(1, linesOf(typed).length) * lineHeight * typed.size / unit}px`,
         }}
         onInput={(event) => {
@@ -706,9 +705,12 @@ function Carried({ ghost, url, size }: { ghost: Ghost; url: string; size: PageSi
 function Drawn({ item, previews, images }: { item: EditItem; previews: Record<string, string>; images: Record<string, EditImage> }) {
   switch (item.kind) {
     case "text":
-      return <text class="edit-text" font-family={families[item.font]} font-weight={item.bold ? "bold" : "normal"} font-size={item.size} fill={css(item.color)}>
-        {linesOf(item).map((line, index) => <tspan key={index} x={item.at.x} y={item.at.y + item.size * (ascent[item.font] + index * lineHeight)}>{line}</tspan>)}
-      </text>;
+      return <g fill={css(item.color)}>
+        <text class="edit-text" font-family={families[item.font]} font-weight={item.bold ? "bold" : "normal"} font-style={item.italic ? "italic" : "normal"} font-size={item.size}>
+          {linesOf(item).map((line, index) => <tspan key={index} x={item.at.x} y={item.at.y + item.size * (ascent[item.font] + index * lineHeight)}>{line}</tspan>)}
+        </text>
+        {item.underline && underlines(item).map((box, index) => <rect key={index} {...box} />)}
+      </g>;
     case "image": {
       const source = images[item.imageId];
       if (!item.picture || !source) return <image href={previews[item.imageId]} {...item.box} preserveAspectRatio="none" />;
@@ -1033,7 +1035,11 @@ export function EditOptions({ sizes: pages, lang, value, onChange, disabled, eng
         <label>{t.size} <select value={style.size} onChange={(event) => setStyle({ size: Number(event.currentTarget.value) })}>
           {[...new Set([...sizes, style.size])].sort((a, b) => a - b).map((size) => <option key={size} value={size}>{size}</option>)}
         </select></label>
-        <button type="button" aria-pressed={style.bold} onClick={() => setStyle({ bold: !style.bold })}><strong>{t.bold}</strong></button>
+        <div class="edit-toggles">
+          <button type="button" aria-pressed={style.bold} onClick={() => setStyle({ bold: !style.bold })}><strong>{t.bold}</strong></button>
+          <button type="button" aria-pressed={style.italic} onClick={() => setStyle({ italic: !style.italic })}><em>{t.italic}</em></button>
+          <button type="button" aria-pressed={style.underline} onClick={() => setStyle({ underline: !style.underline })}><u>{t.underlined}</u></button>
+        </div>
       </div>}
     </fieldset>}
     <div class="edit-actions">
