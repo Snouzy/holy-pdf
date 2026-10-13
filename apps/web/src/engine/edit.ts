@@ -1,13 +1,13 @@
 import { isAnnotation, writeAnnotations } from "./editAnnotations";
 import { type Assets, closeAssets, imageAsset, placement } from "./editImages";
-import { arrowHead, ascent, lineHeight, pdfFont, stampLayout, wrapped, writable } from "./editMetrics";
+import { arrowHead, ascent, lineHeight, linesOf, stampLayout, standardFont, underlines, writable } from "./editMetrics";
 import { applyEdits } from "./editOriginals";
 import { EngineFailure } from "./failure";
 import { applyFieldEdits, checkFieldNames, createFields, isField } from "./formFields";
 import { type FontChars, fontCharsOf } from "./pageObjects";
 import { at, displayed, textObject } from "./pageText";
 import type { Pdfium } from "./pdfium";
-import { type EditImage, type EditItem, type FieldEdit, type OriginalEdit, plainPicture, type Point, type Rgb } from "./types";
+import { type Box, type EditImage, type EditItem, type FieldEdit, type OriginalEdit, plainPicture, type Point, type Rgb } from "./types";
 
 type Axes = ReturnType<typeof displayed>;
 
@@ -52,15 +52,17 @@ export function editPages(p: Pdfium, handle: number, items: EditItem[], images: 
 function objectsOf(p: Pdfium, handle: number, axes: Axes, item: EditItem, images: Record<string, EditImage>, assets: Assets): number[] {
   const place = (point: Point) => at(axes, point.x, axes.height - point.y);
   switch (item.kind) {
-    case "text":
-      return wrapped(item.text, item.font, item.bold, item.size, item.width).flatMap((line, index) => {
+    case "text": {
+      const lines = linesOf(item).flatMap((line, index) => {
         if (line.trim() === "") return [];
-        const object = textObject(p, handle, pdfFont[item.font][item.bold ? 1 : 0], item.size, line);
+        const object = textObject(p, handle, standardFont(item.font, item.bold, item.italic), item.size, line);
         p.FPDFPageObj_SetFillColor(object, ...item.color, 255);
         const baseline = item.at.y + item.size * (ascent[item.font] + index * lineHeight);
         p.FPDFPageObj_Transform(object, axes.across.x, axes.across.y, axes.up.x, axes.up.y, ...place({ x: item.at.x, y: baseline }));
         return [object];
       });
+      return item.underline ? [...lines, ...underlines(item).map((box) => paint(p, boxPath(p, place, box), null, item.color, 0))] : lines;
+    }
     case "image": {
       const picture = item.picture ?? plainPicture;
       if (picture.crop) throw new EngineFailure({ kind: "damaged" });
@@ -73,8 +75,7 @@ function objectsOf(p: Pdfium, handle: number, axes: Axes, item: EditItem, images
     }
     case "rectangle":
     case "highlight": {
-      const { x, y, width, height } = item.box;
-      const object = path(p, place, [{ x, y }, { x: x + width, y }, { x: x + width, y: y + height }, { x, y: y + height }], true);
+      const object = boxPath(p, place, item.box);
       if (item.kind === "highlight") {
         paint(p, object, null, item.color, 0);
         p.FPDFPageObj_SetBlendMode(object, "Multiply");
@@ -152,13 +153,17 @@ function path(p: Pdfium, place: (point: Point) => [number, number], [first, ...r
   return object;
 }
 
-function paint(p: Pdfium, object: number, stroke: Rgb | null, fill: Rgb | null, lineWidth: number): void {
+const boxPath = (p: Pdfium, place: (point: Point) => [number, number], { x, y, width, height }: Box) =>
+  path(p, place, [{ x, y }, { x: x + width, y }, { x: x + width, y: y + height }, { x, y: y + height }], true);
+
+function paint(p: Pdfium, object: number, stroke: Rgb | null, fill: Rgb | null, lineWidth: number): number {
   if (stroke) {
     p.FPDFPageObj_SetStrokeColor(object, ...stroke, 255);
     p.FPDFPageObj_SetStrokeWidth(object, lineWidth);
   }
   if (fill) p.FPDFPageObj_SetFillColor(object, ...fill, 255);
   p.FPDFPath_SetDrawMode(object, fill ? windingFill : noFill, stroke !== null);
+  return object;
 }
 
 function stroked(p: Pdfium, object: number, color: Rgb, lineWidth: number): number {

@@ -1,11 +1,11 @@
 import { standardWidths } from "./standardWidths";
 import type { Lang } from "../tools";
-import type { Box, EditFont, PageFont, Point } from "./types";
+import type { Box, EditFont, EditText, PageFont, Point } from "./types";
 
 /** From the top of a line to its baseline, per point of size: the Ascender of each standard font's metrics. */
 export const ascent: Record<EditFont, number> = { Helvetica: 0.718, Times: 0.683, Courier: 0.629 };
 export const lineHeight = 1.2;
-export const pdfFont: Record<EditFont, [regular: string, bold: string]> = {
+const pdfFont: Record<EditFont, [regular: string, bold: string]> = {
   Helvetica: ["Helvetica", "Helvetica-Bold"],
   Times: ["Times-Roman", "Times-Bold"],
   Courier: ["Courier", "Courier-Bold"],
@@ -22,9 +22,9 @@ export function winAnsiCode(char: string): number | null {
 }
 
 /** The width of a line in points, with the advances of the standard font: what PDFium will lay out. */
-export function textWidth(text: string, font: EditFont, bold: boolean, size: number): number {
+export function textWidth(text: string, font: EditFont, bold: boolean, size: number, italic = false): number {
   if (font === "Courier") return [...text].length * 0.6 * size;
-  const table = standardWidths[pdfFont[font][bold ? 1 : 0] as keyof typeof standardWidths];
+  const table = standardWidths[standardFont(font, bold, italic) as keyof typeof standardWidths];
   let total = 0;
   for (const char of pdfText(text)) {
     const code = winAnsiCode(char);
@@ -34,9 +34,9 @@ export function textWidth(text: string, font: EditFont, bold: boolean, size: num
 }
 
 /** Greedy on blanks; a word wider than the box is cut by letters; a line break typed by hand stays. No width: the lines as typed. */
-export function wrapped(text: string, font: EditFont, bold: boolean, size: number, width: number | undefined): string[] {
+export function wrapped(text: string, font: EditFont, bold: boolean, size: number, width: number | undefined, italic = false): string[] {
   if (width === undefined) return pdfText(text).split("\n");
-  const fits = (line: string) => textWidth(line, font, bold, size) <= width;
+  const fits = (line: string) => textWidth(line, font, bold, size, italic) <= width;
   const lines: string[] = [];
   for (const paragraph of pdfText(text).split("\n")) {
     let line = "";
@@ -63,6 +63,17 @@ export function wrapped(text: string, font: EditFont, bold: boolean, size: numbe
     lines.push(line);
   }
   return lines;
+}
+
+export const linesOf = (item: EditText) => wrapped(item.text, item.font, item.bold, item.size, item.width, item.italic);
+
+/** A bar under each line, to its last letter: the standard fonts' metrics centre it 0.1 em under the baseline, 0.05 em thick. */
+export function underlines(item: EditText): Box[] {
+  return linesOf(item).flatMap((line, index) => {
+    const width = textWidth(line.trimEnd(), item.font, item.bold, item.size, item.italic);
+    const y = item.at.y + item.size * (ascent[item.font] + index * lineHeight + 0.075);
+    return width > 0 ? [{ x: item.at.x, y, width, height: item.size * 0.05 }] : [];
+  });
 }
 
 export const stampWords: Record<Lang, string[]> = {

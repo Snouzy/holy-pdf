@@ -21,7 +21,7 @@ The spec succeeds when:
 | Scope | Add only. The original text does not change | Author's choice. Editing the original text runs into embedded fonts reduced to the letters already used |
 | Writing | Additions become page content (`engine/edit.ts`): PDFium text, image and path objects | Author's choice. Same rendering in all readers, like Sign and Watermark |
 | Coordinates | Points of the page as the reader sees it, from its top-left corner. The engine goes through the axes of `displayed()` | A rotated page is handled as in the other tools; the SVG preview uses the same numbers |
-| Text | Standard PDF fonts: Helvetica, Times, Courier, regular or bold; size 8 to 96 pt; several lines. All of WinAnsi works (Latin-1, plus "œ", "€", typographic apostrophe and quotes, dashes, ellipsis); any other letter is flagged and blocks saving | No font to embed. macOS and iOS type the typographic apostrophe on their own: refusing it blocked « l'été » |
+| Text | Standard PDF fonts: Helvetica, Times, Courier, regular or bold, italic and underlined since 13 October 2026; size 8 to 96 pt; several lines. All of WinAnsi works (Latin-1, plus "œ", "€", typographic apostrophe and quotes, dashes, ellipsis); any other letter is flagged and blocks saving | No font to embed. macOS and iOS type the typographic apostrophe on their own: refusing it blocked « l'été » |
 | Input | The text is typed in a field placed on the page, positioned so that its baseline falls on the PDF baseline. The field is activated during the gesture itself | Without this calculation, the text jumped by about 0.2 em when it left the field. iOS opens its keyboard only for a field activated during the gesture |
 | Image | JPEG, PNG or WebP. The browser decodes it (EXIF orientation included) and scales it down to 2,400 px at most; JPEG without transparency, RGBA pixels otherwise | A phone photo does not bloat the file and arrives the right way up |
 | Shapes | Rectangle and ellipse (outline, fill or both), line, arrow, pen: thin, medium or thick stroke. Shift while drawing gives a square or a circle, and keeps the proportions during a resize by the corners | The ellipse is made of four Bézier curves. Shift: requested by the author on 4 October |
@@ -51,8 +51,8 @@ The spec succeeds when:
 ## Tests
 
 - Engine (`tests/engine/edit.test.ts`): text read back by pdf.js at its place, on four page rotations; all WinAnsi letters; text box broken at the same words as `wrapped`; image, shapes, arrow, pen and highlighter read back as pixels; front/back order; letter outside WinAnsi, unknown page or image refused; signed PDF refused, protected PDF that stays protected.
-- Model (`tests/unit/editModel.test.ts`): creation by drag, move, handles, selection on click, order, undo and redo, text box and width handles. Metrics (`tests/unit/editMetrics.test.ts`): advance widths, WinAnsi codes, line breaking.
-- Browser (`tests/e2e/edit.spec.ts`): text typed on the page, rectangle dragged, stroke undone, copy read back; letter refused; one typing session undone in one step, a lost click without a step.
+- Model (`tests/unit/editModel.test.ts`): creation by drag, move, handles, selection on click, order, undo and redo, text box and width handles. Metrics (`tests/unit/editMetrics.test.ts`): advance widths, WinAnsi codes, line breaking, underline bars.
+- Browser (`tests/e2e/edit.spec.ts`): text typed on the page in italic and underlined, rectangle dragged, stroke undone, copy read back; letter refused; one typing session undone in one step, a lost click without a step.
 
 ## Second version (4 October 2026): the document itself
 
@@ -140,6 +140,17 @@ _Requested on 4 October: a user must have no reason to prefer Acrobat. Five work
 | Measurement | Lines are broken with the advance widths of the PDF standard fonts, read once in PDFium (`engine/standardWidths.ts`, `FPDFFont_GetGlyphWidth` takes Unicode code points: the 32 signs from 0x80 to 0x9F are read by their character), on screen as in the engine; the bounds and the selection of a text use them too. Greedy breaking at whitespace, whitespace at the start of a line kept, a word that is too wide broken letter by letter, a typed line break kept | The same function on both sides: the line breaks at the same word in the SVG preview and in the file. Read by WinAnsi code, dashes, ellipses and quotes got the width of the missing glyph |
 | Gesture | A drag counts as a box from 20 pt and 8 px on screen; below that, it is a click. The Text tool goes over the images and paths of the document: only a line of document text stops it | On a phone, 4 pt is 2 px: a shaky touch made a 20 pt box. You must be able to write on a scan |
 | Input | The input field takes the width of the box and wraps with the browser font. If it needs one more line, it grows instead of scrolling the first line. When you leave the field, the preview shows the line breaks of the PDF. For a free text, the field takes the wider of the two measurements, PDF and browser | An editor that wraps exactly like the PDF would require us to draw the input ourselves. A letter outside WinAnsi counts as half an em in PDF advance widths: the field of a Cyrillic text would be too narrow |
+
+### Italic and underline (13 October 2026)
+
+| Topic | Decision | Reason |
+|---|---|---|
+| Buttons | Bold, Italic and Underlined are toggles on one row of the Text panel. They set the next text and change the selected one | Requested by the author. The same place as Bold |
+| Italic | The italic standard fonts: Helvetica-Oblique, Times-Italic, Courier-Oblique and their bold forms (`standardFont`). Their advances are read in PDFium like the upright ones (`standardWidths.ts`) | PDFium's italics do not keep the upright advances: « @ » is 1,116 units in Helvetica-Oblique, 1,015 in Helvetica. With the upright table, a box would break its lines at the wrong word |
+| Underline | A filled bar under each line, in the text's colour, written in the page content after the text. It runs from the start of the line to its last letter, centred 0.1 em under the baseline, 0.05 em thick (`underlines`). An empty line gets none. The preview draws the same bars | A PDF font has no underline. The standard fonts' metrics give the position and the thickness. One function on both sides keeps the preview and the file the same |
+| Scope | The additions only. A text of the document keeps its own style | Bold has the same scope |
+
+Preview and PDFium show the italic. Poppler (`pdftoppm`) on macOS showed it upright, with `Helvetica.ttc` as its substitute: check an italic in another reader.
 
 ### Known limits of the second version
 

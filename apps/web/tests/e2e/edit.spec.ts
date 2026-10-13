@@ -16,16 +16,19 @@ async function drag(page: Page, from: [number, number], to: [number, number]) {
   await page.mouse.up();
 }
 
-test("types a text on the page, draws a rectangle, undoes a stroke, and saves both", async ({ page }) => {
+test("types an italic, underlined text on the page, draws a rectangle, undoes a stroke, and saves both", async ({ page }) => {
   await page.goto("/fr/modifier-pdf");
   await chooseFiles(page, [await pdfFile("lettre.pdf", ["Bonjour"])]);
   const verb = page.getByRole("button", { name: "Enregistrer les modifications", exact: true });
   await expect(page.locator(".edit-layer")).toBeVisible();
   await expect(verb).toBeDisabled();
   await page.getByRole("button", { name: "Texte", exact: true }).click();
+  await page.getByRole("button", { name: "Italique", exact: true }).click();
+  await page.getByRole("button", { name: "Souligné", exact: true }).click();
   await drag(page, [0.1, 0.1], [0.1, 0.1]);
   await page.keyboard.type("Merci");
   await page.keyboard.press("Escape");
+  await expect(page.locator(".edit-layer .edit-text + rect")).toHaveCount(1);
   await page.getByRole("button", { name: "Rectangle", exact: true }).click();
   await drag(page, [0.5, 0.5], [0.8, 0.7]);
   await page.getByRole("button", { name: "Crayon", exact: true }).click();
@@ -35,6 +38,7 @@ test("types a text on the page, draws a rectangle, undoes a stroke, and saves bo
   const { name, bytes } = await exportWith(page, "Enregistrer les modifications");
   expect(name).toBe("lettre-modifie.pdf");
   expect((await readWithPdfjs(bytes))[0]?.text).toContain("Merci");
+  expect(Buffer.from(bytes).toString("latin1")).toContain("/BaseFont/Helvetica-Oblique");
   const p = await loadTestPdfium();
   const doc = openPdf(p, bytes);
   const { pixels, width } = renderPage(p, doc, 0, 595);

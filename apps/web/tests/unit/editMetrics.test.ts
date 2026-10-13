@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { stampLayout, textWidth, winAnsiCode, wrapped } from "../../src/engine/editMetrics";
+import { ascent, stampLayout, textWidth, underlines, winAnsiCode, wrapped } from "../../src/engine/editMetrics";
 
 describe("text metrics of the standard fonts", () => {
   it("measures a line with the standard fonts' advances", () => {
     expect(textWidth("a", "Helvetica", false, 1000)).toBe(556);
     expect(textWidth("W", "Times", true, 10)).toBe(10);
     expect(textWidth("abc", "Courier", false, 10)).toBe(18);
+    // PDFium's italics do not keep the upright advances.
+    expect([textWidth("f", "Times", false, 1000, true), textWidth("@", "Helvetica", false, 1000, true), textWidth("@", "Helvetica", false, 1000)]).toEqual([278, 1116, 1015]);
     expect(textWidth("a a", "Helvetica", false, 1000)).toBe(556 * 2 + 278);
     expect(textWidth("a a", "Helvetica", false, 1000)).toBe(556 * 2 + 278);
     expect([winAnsiCode("€"), winAnsiCode("’"), winAnsiCode("é"), winAnsiCode("ș")]).toEqual([0x80, 0x92, 0xe9, null]);
@@ -22,6 +24,16 @@ describe("text metrics of the standard fonts", () => {
     expect(wrapped("", "Helvetica", false, 12, 100)).toEqual([""]);
     expect(wrapped("  item one  two", "Courier", false, 10, 600)).toEqual(["  item one  two"]);
     expect(wrapped("  item", "Courier", false, 10, undefined)).toEqual(["  item"]);
+  });
+});
+
+describe("underlines", () => {
+  it("puts a bar under each line, to its last letter, and none under an empty line", () => {
+    const baseline = (line: number) => 20 + 10 * (ascent.Helvetica + line * 1.2);
+    expect(underlines({ kind: "text", at: { x: 5, y: 20 }, text: "ab\n\ncd  ", font: "Helvetica", bold: false, italic: true, underline: true, size: 10, color: [0, 0, 0] })).toEqual([
+      { x: 5, y: baseline(0) + 0.75, width: textWidth("ab", "Helvetica", false, 10, true), height: 0.5 },
+      { x: 5, y: baseline(2) + 0.75, width: textWidth("cd", "Helvetica", false, 10, true), height: 0.5 },
+    ]);
   });
 });
 

@@ -65,7 +65,7 @@ export type Box = { x: number; y: number; width: number; height: number };
 export type Rgb = [number, number, number];
 export type EditFont = "Helvetica" | "Times" | "Courier";
 /** `at`: the top-left corner of the first line. `width`: a text box, whose lines wrap at it; without it, the lines as typed. */
-export type EditText = { kind: "text"; at: Point; text: string; font: EditFont; bold: boolean; size: number; color: Rgb; width?: number };
+export type EditText = { kind: "text"; at: Point; text: string; font: EditFont; bold: boolean; italic: boolean; underline: boolean; size: number; color: Rgb; width?: number };
 export type EditShape = { kind: "rectangle" | "ellipse"; box: Box; stroke: Rgb | null; fill: Rgb | null; lineWidth: number };
 export type EditLine = { kind: "line" | "arrow"; from: Point; to: Point; color: Rgb; lineWidth: number };
 /** A sticky note: `at` is the top-left corner of its icon, `noteSize` points a side. */

@@ -52,6 +52,7 @@
 .edit-text-style { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.5rem; }
 .edit-text-style label { display: flex; flex-direction: column; gap: 0.25rem; font-weight: 600; }
 .edit-text-style select { min-height: 40px; padding: 0.4rem; border: 1.5px solid var(--line); border-radius: var(--radius-control); background: var(--surface); color: var(--ink); font: inherit; }
+.edit-toggles { display: flex; gap: 0.5rem; }
 .board .edit-text-style button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-tint); color: var(--accent); }
 .edit-actions { display: flex; flex-wrap: wrap; gap: 0.375rem; }
 .board .edit-actions button { font-size: 0.875rem; }
