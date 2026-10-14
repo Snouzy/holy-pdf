@@ -78,7 +78,7 @@ _The "Mac: …" specs, the Scanner Mac v1 spec and the Mac app design system spe
 
 - [Web: Flatten a PDF](specs/2026-10-02-web-flatten-design.md): fields and annotations fixed into the content of the pages.
 
-- [Web: Add a watermark](specs/2026-10-02-web-watermark-design.md): text across the pages, color, opacity, angle, width and range.
+- [Web: Add a watermark](specs/2026-10-02-web-watermark-design.md): text across the pages or tiled over them, color, opacity, angle, size and range, burned into the page on request, with a live preview; photos accepted.
 
 - [Web: Add page numbers to a PDF](specs/2026-10-02-web-page-numbers-design.md): format, six positions, first number, size and range, text in the content.
 

@@ -25,8 +25,9 @@ import { Failure, FileList } from "./FileList";
 import { FilePicker } from "./FilePicker";
 import { baseName, distinct, outputName, partName } from "./fileName";
 import { advance, countOf, docxType, keepsOriginal, type Made, saved, setup, totalSize } from "./flow";
-import { defaultSettings, markColors, Options, optionsReady, type Settings } from "./Options";
+import { defaultSettings, Options, optionsReady, type Settings, watermarkOf } from "./Options";
 import type { PageGrid as PageGridView } from "./PageGrid";
+import type { MarkPreview as MarkPreviewView } from "../watermark/MarkPreview";
 import { Panel } from "./Panel";
 import { canProduce, exportPlans } from "./plans";
 import { Result } from "./Result";
@@ -61,6 +62,7 @@ export default function Board({ toolId, lang: firstLang, monks, texts: firstText
   const files = useRef(new Map<string, File>());
   const locked = useRef(new Set<string>());
   const [PageGrid, setPageGrid] = useState<typeof PageGridView | null>(null);
+  const [MarkPreview, setMarkPreview] = useState<typeof MarkPreviewView | null>(null);
   const [signatureModule, setSignatureModule] = useState<typeof import("../signature/SignatureEditor") | null>(null);
   const [signature, setSignature] = useState<SignatureDraft | null>(null);
   const [redactModule, setRedactModule] = useState<typeof import("../redact/RedactEditor") | null>(null);
@@ -109,6 +111,10 @@ export default function Board({ toolId, lang: firstLang, monks, texts: firstText
   useEffect(() => {
     if (board.docs.length === 0 || tool.workspace !== "pages") return;
     void import("./PageGrid").then((module) => setPageGrid(() => module.PageGrid));
+  }, [board.docs.length === 0]);
+  useEffect(() => {
+    if (board.docs.length === 0 || tool.id !== "watermark") return;
+    void import("../watermark/MarkPreview").then((module) => setMarkPreview(() => module.MarkPreview));
   }, [board.docs.length === 0]);
 
   const pageEditor = tool.workspace === "signature" || tool.workspace === "redact" || tool.workspace === "bookmarks" || tool.workspace === "edit" || tool.workspace === "crop";
@@ -256,7 +262,7 @@ export default function Board({ toolId, lang: firstLang, monks, texts: firstText
     for (const { id, file } of added) void open(id, file, undefined, asImages);
   }
 
-  /** On Merge, images are not refused: the monk offers to make a page of each, as JPG to PDF does. */
+  /** On Merge and Watermark, images are not refused: the monk offers to make a page of each, as JPG to PDF does. */
   async function offerImages(images: File[]) {
     if (await confirm(t.board.imagesArrived(images.length, images[0]?.name ?? ""), { cancel: t.board.leaveImages, confirm: t.board.convertImages })) start(images, true);
   }
@@ -354,11 +360,7 @@ export default function Board({ toolId, lang: firstLang, monks, texts: firstText
     if (read === null) return null;
     const op: TransformOp = read ? read
       : tool.id === "protect" ? { kind: "protect", password: settings.password }
-      : tool.id === "watermark" ? {
-        kind: "watermark", text: settings.markText.trim() || t.watermark.defaultText, color: markColors[settings.markColor],
-        opacity: settings.markOpacity / 100, angle: settings.markAngle, width: settings.markWidth / 100,
-        from: settings.allPages ? 1 : settings.fromPage, to: settings.allPages ? Number.MAX_SAFE_INTEGER : settings.toPage,
-      }
+      : tool.id === "watermark" ? watermarkOf(settings, t.watermark.defaultText)
       : tool.id === "page-numbers" ? {
         kind: "numbers", format: settings.numberFormat, position: settings.numberPosition, first: settings.firstNumber, size: settings.numberSize,
         from: settings.allPages ? 1 : settings.fromPage, to: settings.allPages ? Number.MAX_SAFE_INTEGER : settings.toPage,
@@ -519,6 +521,7 @@ export default function Board({ toolId, lang: firstLang, monks, texts: firstText
     sizes: editingDoc.status.sizes, lang, value: crop, disabled: flow.step === "working", engine, Skeleton: DocumentSkeleton,
     onChange: (update: (draft: CropDraft) => CropDraft) => setCrop((current) => current && update(current)),
   } : null;
+  const marking = board.docs.flatMap((doc) => (doc.status.kind === "ready" ? [{ id: doc.id, name: doc.name, sizes: doc.status.sizes }] : []));
   const editor = signatureModule && signatureProps ? <signatureModule.SignatureWorkspace {...signatureProps} />
     : redactModule && editingDoc?.status.kind === "ready" ? (
       <redactModule.RedactWorkspace docId={editingDoc.id} sizes={editingDoc.status.sizes} lang={lang} zones={zones} onZones={setZones} disabled={flow.step === "working"} engine={engine} Skeleton={DocumentSkeleton} />
@@ -549,7 +552,9 @@ export default function Board({ toolId, lang: firstLang, monks, texts: firstText
             {editorLoadFailed && <p role="alert">{t.errors.engineUnavailable} <button type="button" onClick={() => void loadEditor()}>{t.retry}</button></p>}
           </>
         ) : tool.workspace === "files" ? (
-          <FileCards tool={tool} docs={board.docs} sizes={sizes} lang={lang} t={t} onFiles={addFiles} onPassword={reopen} onRetry={reopen} onRemove={remove} />
+          <FileCards tool={tool} docs={board.docs} sizes={sizes} lang={lang} t={t} onFiles={addFiles} onPassword={reopen} onRetry={reopen} onRemove={remove}>
+            {MarkPreview && marking.length > 0 && <MarkPreview docs={marking} mark={watermarkOf(settings, t.watermark.defaultText)} engine={engine} t={t} Skeleton={DocumentSkeleton} />}
+          </FileCards>
         ) : (
           <>
             <div class="board-top">

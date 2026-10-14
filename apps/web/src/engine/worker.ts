@@ -17,7 +17,7 @@ import { overlaid } from "./overlay";
 import { type FontChars, fontCharsOf, pageFonts, pageObjects } from "./pageObjects";
 import { textCounts } from "./pageText";
 import { loadPdfium, type Pdfium } from "./pdfium";
-import { pixelizePdf } from "./pixelize";
+import { burnMark, pixelizePdf } from "./pixelize";
 import { redactPdf } from "./redact";
 import { openRepaired } from "./repair";
 import { scanPdf } from "./scanPdf";
@@ -142,6 +142,7 @@ async function handle(p: Pdfium, request: EngineRequest, report: (progress: Prog
           : op.kind === "redact" ? await redactPdf(p, doc, op.zones, encodeJpeg)
           : op.kind === "word" ? await wordOf(p, doc, encodeJpeg)
           : op.kind === "overlay" ? overlaid(p, doc, openDoc(op.layerId), op.under)
+          : op.kind === "watermark" && op.burn ? await burnMark(p, transformPdf(p, doc, op), op, doc.password, encodeJpeg)
           : transformPdf(p, doc, op);
         files.push({ name: request.names[index] ?? `${index + 1}.pdf`, bytes });
         report({ done: index + 1, total: request.docIds.length });

@@ -52,7 +52,8 @@ export function openImage(p: Pdfium, image: ImageInput): OpenDoc {
 
 /** A second handle on an open PDF's bytes: what changes through it leaves the open file as it was. */
 export function reopenPdf(p: Pdfium, doc: OpenDoc): OpenDoc {
-  if (doc.buffer === 0) throw new EngineFailure({ kind: "unsupportedFormat" });
+  // A photo made into a page lives in memory only: its copy comes from its saved bytes.
+  if (doc.buffer === 0) return openPdf(p, savePdf(p, doc.handle));
   const handle = p.FPDF_LoadMemDocument64(doc.buffer, doc.size, doc.password);
   if (handle === 0) throw new EngineFailure({ kind: "damaged" });
   return { ...doc, handle, buffer: 0 };
