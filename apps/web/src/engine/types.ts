@@ -43,7 +43,11 @@ export type NumberPosition = "top-left" | "top-center" | "top-right" | "bottom-l
 /** `from` and `to` count from 1 and include both ends. */
 export type PageNumbers = { kind: "numbers"; format: NumberFormat; position: NumberPosition; first: number; size: number; from: number; to: number };
 /** `color` in 0–255 RGB, `opacity` 0–1, `angle` in degrees counterclockwise as the page is read, `width` a share of the page's width. */
-export type Watermark = { kind: "watermark"; text: string; color: [number, number, number]; opacity: number; angle: number; width: number; from: number; to: number };
+export type MarkSpacing = "tight" | "medium" | "loose";
+/** `width`: once, the share of the page's width the text spans. `size`: tiled, the text's size as a share of the page's shorter side. */
+export type MarkLayout = { tiled: false; width: number } | { tiled: true; size: number; spacing: MarkSpacing };
+/** `burn`: the marked pages become pictures, so that the mark cannot be lifted off them. */
+export type Watermark = { kind: "watermark"; text: string; color: [number, number, number]; opacity: number; angle: number; from: number; to: number; burn: boolean } & MarkLayout;
 export type PerSheet = 2 | 4 | 6 | 9 | 16;
 /** `vertical`: a left and a right half, as the page is read; `horizontal`: a top and a bottom half. */
 export type HalfCut = "vertical" | "horizontal";

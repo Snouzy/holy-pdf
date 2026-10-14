@@ -77,7 +77,7 @@ export const tools: Record<ToolId, Tool> = {
   },
   watermark: {
     id: "watermark", slug: { fr: "filigrane-pdf", en: "watermark-pdf", "pt-br": "marca-dagua-pdf" },
-    accepts: "pdf", multipleFiles: true, output: "transformed", workspace: "files", related: ["sign", "page-numbers", "protect"],
+    accepts: "pdf", convertsImages: true, multipleFiles: true, output: "transformed", workspace: "files", related: ["sign", "page-numbers", "protect"],
   },
   "page-numbers": {
     id: "page-numbers", slug: { fr: "numeroter-pdf", en: "page-numbers-pdf", "pt-br": "numerar-paginas-pdf" },

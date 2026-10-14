@@ -1,3 +1,4 @@
+import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
 import type { Dictionary } from "../i18n/fr";
 import { Icon } from "../illustrations/Icon";
@@ -18,14 +19,17 @@ type Props = {
   onPassword: (docId: string, password: string) => void;
   onRetry: (docId: string) => void;
   onRemove: (docId: string) => void;
+  /** A preview of the result: the cards then drop their first page. */
+  children?: ComponentChildren;
 };
 
 /** For the tools that work on whole files: one card per file, with its first page. */
-export function FileCards({ tool, docs, sizes, lang, t, onFiles, ...actions }: Props) {
+export function FileCards({ tool, docs, sizes, lang, t, onFiles, children, ...actions }: Props) {
   const [asking, setAsking] = useState<Doc | null>(null);
   return (
-    <div class="file-cards">
+    <div class={children ? "file-cards previewed" : "file-cards"}>
       <FilePicker tool={tool} label={t.board.addPdf} onFiles={onFiles} />
+      {children}
       <ul>
         {docs.map((doc, position) => (
           <li key={doc.id} class={`file-card ${doc.status.kind}`}>

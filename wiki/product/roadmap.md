@@ -51,7 +51,7 @@ The final goal is an app that covers this whole catalog, on Mac, iPhone and the 
 
 | Tool | Feasibility | Note |
 |---|---|---|
-| Add a watermark | A | Implemented on Mac (2 October 2026): text or image, opacity, angle, page range; see the [spec](../specs/2026-10-02-mac-watermark-design.md). On the site (2 October 2026): text only, centered; see the [spec](../specs/2026-10-02-web-watermark-design.md) |
+| Add a watermark | A | Implemented on Mac (2 October 2026): text or image, opacity, angle, page range; see the [spec](../specs/2026-10-02-mac-watermark-design.md). On the site (2 October 2026): text only, centered; since 14 October 2026 also tiled over the page, burned into it on request, with a live preview and photos accepted; see the [spec](../specs/2026-10-02-web-watermark-design.md) |
 | Add page numbers | A | Implemented on Mac (2 October 2026): format, position, first number, size, range; see the [spec](../specs/2026-10-02-mac-page-numbers-design.md). On the site (2 October 2026): the same settings, text in the content of the page; see the [spec](../specs/2026-10-02-web-page-numbers-design.md) |
 | PDF overlay | A | Implemented on Mac (2 October 2026): the pages of one PDF over or under those of another; see the [spec](../specs/2026-10-02-mac-overlay-design.md). On the site (3 October 2026): the same rule, several receiving PDFs; see the [web spec](../specs/2026-10-03-web-overlay-design.md) |
 | Sign PDF | A | Implemented on Mac (1 October 2026): drawn or imported signature. On the site: drawn, typed or imported. The qualified electronic signature (eIDAS) is out of scope |

@@ -23,7 +23,7 @@ test("offers to turn images into pages on Merge", async ({ page }) => {
   await page.goto("/en/merge-pdf");
   await chooseFiles(page, [await pdfFile("a.pdf", ["A1"]), { name: "red.png", mimeType: "image/png", buffer: solidPng(300, 200, [200, 30, 30]) }]);
   const question = page.getByRole("dialog");
-  await expect(question).toContainText("red.png is an image. Shall I turn it into a PDF page before merging?");
+  await expect(question).toContainText("red.png is an image. Shall I turn it into a PDF page?");
   await question.getByRole("button", { name: "Leave out" }).click();
   await expectThumbnails(page, 1);
   await expect(page.getByRole("alert")).toHaveCount(0);
@@ -31,7 +31,7 @@ test("offers to turn images into pages on Merge", async ({ page }) => {
     { name: "blue.png", mimeType: "image/png", buffer: solidPng(200, 300, [30, 30, 200]) },
     { name: "green.png", mimeType: "image/png", buffer: solidPng(200, 300, [30, 200, 30]) },
   ]);
-  await expect(question).toContainText("These are 2 images. Shall I turn them into PDF pages before merging?");
+  await expect(question).toContainText("These are 2 images. Shall I turn them into PDF pages?");
   // The dialog lives beside the board, not inside it: its buttons must still wear the board's style, not the browser's.
   await expect(question.getByRole("button", { name: "Convert" })).toHaveCSS("font-weight", "700");
   await question.getByRole("button", { name: "Convert" }).click();

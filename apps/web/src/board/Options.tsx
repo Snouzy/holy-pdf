@@ -1,6 +1,6 @@
 import type { ComponentChildren } from "preact";
 import { useState } from "preact/hooks";
-import type { CompressLevel, ImageMode, ImageQuality, NumberFormat, NumberPosition, PerSheet, HalfCut } from "../engine/types";
+import type { CompressLevel, ImageMode, ImageQuality, MarkSpacing, NumberFormat, NumberPosition, PerSheet, HalfCut, Watermark } from "../engine/types";
 import type { Dictionary } from "../i18n/fr";
 import { Icon } from "../illustrations/Icon";
 import type { Tool } from "../tools";
@@ -9,7 +9,7 @@ import type { Action, Board } from "./state";
 export type Settings = {
   mode: ImageMode; quality: ImageQuality; level: CompressLevel; password: string; confirm: string;
   numberFormat: NumberFormat; numberPosition: NumberPosition; firstNumber: number; numberSize: number; allPages: boolean; fromPage: number; toPage: number;
-  markText: string; markColor: MarkColor; markOpacity: number; markAngle: number; markWidth: number;
+  markText: string; markColor: MarkColor; markOpacity: number; markAngle: number; markWidth: number; markTiled: boolean; markSize: number; markSpacing: MarkSpacing; markBurn: boolean;
   perSheet: PerSheet; halfCut: HalfCut; pixelPpi: 150 | 300;
   /** The PDF laid on the pages, open in the engine under its own id; kept from one document to the next. */
   layer: { docId: string; name: string; pages: number } | null; layerUnder: boolean;
@@ -21,13 +21,21 @@ const lastPage = 9999;
 export const defaultSettings: Settings = {
   mode: "pages", quality: "normal", level: "recommended", password: "", confirm: "",
   numberFormat: "number", numberPosition: "bottom-center", firstNumber: 1, numberSize: 12, allPages: true, fromPage: 1, toPage: lastPage,
-  markText: "", markColor: "red", markOpacity: 30, markAngle: 45, markWidth: 60,
+  markText: "", markColor: "red", markOpacity: 30, markAngle: 45, markWidth: 60, markTiled: false, markSize: 4, markSpacing: "medium", markBurn: false,
   perSheet: 4, halfCut: "vertical", pixelPpi: 150,
   layer: null, layerUnder: false,
 };
 
 export type MarkColor = "red" | "gray" | "blue";
 export const markColors: Record<MarkColor, [number, number, number]> = { red: [200, 50, 27], gray: [90, 90, 90], blue: [36, 76, 200] };
+export function watermarkOf(settings: Settings, defaultText: string): Watermark {
+  const base = {
+    kind: "watermark", text: settings.markText.trim() || defaultText, color: markColors[settings.markColor], opacity: settings.markOpacity / 100, angle: settings.markAngle,
+    from: settings.allPages ? 1 : settings.fromPage, to: settings.allPages ? Number.MAX_SAFE_INTEGER : settings.toPage, burn: settings.markBurn,
+  } as const;
+  return settings.markTiled ? { ...base, tiled: true, size: settings.markSize / 100, spacing: settings.markSpacing } : { ...base, tiled: false, width: settings.markWidth / 100 };
+}
+
 /** Helvetica, PDFium's standard font, writes Latin-1 only. */
 export const writable = (text: string) => /^[\x20-\x7E\xA0-\xFF]*$/.test(text);
 
@@ -368,13 +376,13 @@ function PageNumberOptions({ t, board, settings, onSettings }: { t: Dictionary; 
 
 type OptionProps = { t: Dictionary; settings: Settings; onSettings: (change: Partial<Settings>) => void };
 
-function PageRange({ t, pages, known, settings, onSettings }: OptionProps & { pages: number; known: boolean }) {
+function PageRange({ t, pages, known, settings, onSettings, rangeNote = t.pageNumbers.rangeNote }: OptionProps & { pages: number; known: boolean; rangeNote?: string }) {
   const n = t.pageNumbers;
   return (
     <fieldset class="choices">
       <legend>{n.pages}</legend>
       <Choice name="page-range" checked={settings.allPages} onPick={() => onSettings({ allPages: true })} title={n.all} note={known ? n.allNote(pages) : ""} />
-      <Choice name="page-range" checked={!settings.allPages} onPick={() => onSettings({ allPages: false, fromPage: 1, toPage: lastPage })} title={n.range} note={n.rangeNote} />
+      <Choice name="page-range" checked={!settings.allPages} onPick={() => onSettings({ allPages: false, fromPage: 1, toPage: lastPage })} title={n.range} note={rangeNote} />
       {!settings.allPages && (
         <div class="number-fields">
           <label>
@@ -408,6 +416,14 @@ function WatermarkOptions({ t, board, settings, onSettings }: OptionProps & { bo
         <input type="text" maxLength={80} placeholder={w.defaultText} value={settings.markText} onInput={(event) => onSettings({ markText: event.currentTarget.value })} />
       </label>
       {!writable(settings.markText) && <p class="error" role="alert">{w.unwritable}</p>}
+      {settings.markTiled && <p class="hint"><Icon name="help" size={16} />{w.tiledHint}</p>}
+      <fieldset class="choices">
+        <legend>{w.layout}</legend>
+        <div class="tiles">
+          <Choice name="mark-layout" checked={!settings.markTiled} onPick={() => onSettings({ markTiled: false, markBurn: false })} title={w.once.name} note={w.once.note} />
+          <Choice name="mark-layout" checked={settings.markTiled} onPick={() => onSettings({ markTiled: true, markBurn: true })} title={w.tiled.name} note={w.tiled.note} />
+        </div>
+      </fieldset>
       <fieldset class="swatches">
         <legend>{w.color}</legend>
         {(Object.keys(markColors) as MarkColor[]).map((color) => (
@@ -419,8 +435,27 @@ function WatermarkOptions({ t, board, settings, onSettings }: OptionProps & { bo
       </fieldset>
       {slider(w.opacity, settings.markOpacity, 10, 100, " %", (value) => ({ markOpacity: value }))}
       {slider(w.angle, settings.markAngle, -90, 90, "°", (value) => ({ markAngle: value }))}
-      {slider(w.width, settings.markWidth, 20, 100, " %", (value) => ({ markWidth: value }))}
-      <PageRange t={t} pages={pages} known={ready?.kind === "ready"} settings={settings} onSettings={onSettings} />
+      {settings.markTiled ? (
+        <>
+          {slider(w.size, settings.markSize, 2, 10, " %", (value) => ({ markSize: value }))}
+          <fieldset class="mark-spacing">
+            <legend>{w.spacing}</legend>
+            <div class="switch">
+              {(["tight", "medium", "loose"] as const).map((spacing) => (
+                <Choice key={spacing} name="mark-spacing" checked={settings.markSpacing === spacing} onPick={() => onSettings({ markSpacing: spacing })} title={w.spacings[spacing]} note="" />
+              ))}
+            </div>
+          </fieldset>
+        </>
+      ) : slider(w.width, settings.markWidth, 20, 100, " %", (value) => ({ markWidth: value }))}
+      <label class="mark-burn">
+        <input type="checkbox" checked={settings.markBurn} onChange={(event) => onSettings({ markBurn: event.currentTarget.checked })} />
+        <span>
+          <strong>{w.burn}</strong>
+          <span>{w.burnNote}</span>
+        </span>
+      </label>
+      <PageRange t={t} pages={pages} known={ready?.kind === "ready"} settings={settings} onSettings={onSettings} rangeNote={w.rangeNote} />
     </>
   );
 }

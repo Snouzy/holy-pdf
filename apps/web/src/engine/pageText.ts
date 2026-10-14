@@ -1,5 +1,6 @@
 import { outsideWinAnsi, pdfText } from "./editMetrics";
 import { EngineFailure } from "./failure";
+import { markLines } from "./markLayout";
 import { malloc, type Pdfium } from "./pdfium";
 import { pageFrame } from "./sign";
 import type { OcrPage, PageNumbers, Watermark } from "./types";
@@ -21,30 +22,22 @@ export function numberPages(p: Pdfium, handle: number, op: PageNumbers): void {
     const [vertical, horizontal] = op.position.split("-");
     const x = horizontal === "left" ? margin : horizontal === "right" ? axes.width - margin - (right - left) : (axes.width - right + left) / 2;
     const y = vertical === "top" ? axes.height - margin - op.size : margin;
-    return { object, matrix: [axes.across.x, axes.across.y, axes.up.x, axes.up.y, ...at(axes, x, y)] };
+    return [{ object, matrix: [axes.across.x, axes.across.y, axes.up.x, axes.up.y, ...at(axes, x, y)] }];
   });
 }
 
 export function watermarkPages(p: Pdfium, handle: number, op: Watermark): void {
   const [red, green, blue] = op.color;
+  const angle = op.angle * Math.PI / 180;
   eachPage(p, handle, op.from, Math.min(op.to, p.FPDF_GetPageCount(handle)), (page) => {
-    const object = textObject(p, handle, "Helvetica-Bold", 100, op.text);
-    if (!p.FPDFPageObj_SetFillColor(object, red, green, blue, Math.round(op.opacity * 255))) throw new EngineFailure({ kind: "damaged" });
-    const { left, bottom, right, top } = bounds(p, object);
     const axes = displayed(p, page);
-    const scale = op.width * axes.width / (right - left);
-    const angle = op.angle * Math.PI / 180;
     const along = { x: Math.cos(angle) * axes.across.x + Math.sin(angle) * axes.up.x, y: Math.cos(angle) * axes.across.y + Math.sin(angle) * axes.up.y };
     const rise = { x: -Math.sin(angle) * axes.across.x + Math.cos(angle) * axes.up.x, y: -Math.sin(angle) * axes.across.y + Math.cos(angle) * axes.up.y };
-    const [cx, cy] = at(axes, axes.width / 2, axes.height / 2);
-    const middle = { x: (left + right) / 2, y: (bottom + top) / 2 };
-    return {
-      object,
-      matrix: [
-        scale * along.x, scale * along.y, scale * rise.x, scale * rise.y,
-        cx - scale * (middle.x * along.x + middle.y * rise.x), cy - scale * (middle.x * along.y + middle.y * rise.y),
-      ],
-    };
+    return markLines(axes, op).map(({ text, size, origin }) => {
+      const object = textObject(p, handle, "Helvetica-Bold", size, text);
+      if (!p.FPDFPageObj_SetFillColor(object, red, green, blue, Math.round(op.opacity * 255))) throw new EngineFailure({ kind: "damaged" });
+      return { object, matrix: [along.x, along.y, rise.x, rise.y, ...at(axes, origin.x, axes.height - origin.y)] };
+    });
   });
 }
 
@@ -95,14 +88,15 @@ export function textCounts(p: Pdfium, handle: number): number[] {
   });
 }
 
-function eachPage(p: Pdfium, handle: number, from: number, last: number, place: (page: number, index: number) => { object: number; matrix: Matrix }): void {
+function eachPage(p: Pdfium, handle: number, from: number, last: number, place: (page: number, index: number) => { object: number; matrix: Matrix }[]): void {
   for (let index = from - 1; index < last; index++) {
     const page = p.FPDF_LoadPage(handle, index);
     if (page === 0) throw new EngineFailure({ kind: "damaged" });
     try {
-      const { object, matrix } = place(page, index);
-      p.FPDFPageObj_Transform(object, ...matrix);
-      p.FPDFPage_InsertObject(page, object);
+      for (const { object, matrix } of place(page, index)) {
+        p.FPDFPageObj_Transform(object, ...matrix);
+        p.FPDFPage_InsertObject(page, object);
+      }
       if (!p.FPDFPage_GenerateContent(page)) throw new EngineFailure({ kind: "damaged" });
     } finally {
       p.FPDF_ClosePage(page);

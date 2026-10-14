@@ -2,19 +2,21 @@
 tool: watermark
 lang: fr
 title: "Ajouter un filigrane à un PDF, gratuitement"
-description: "Ajoutez un filigrane en travers de vos pages : texte, couleur, opacité, angle et pages. Gratuit, et vos fichiers ne quittent jamais votre appareil."
+description: "Ajoutez un filigrane en travers de vos pages ou en mosaïque, avec un aperçu en direct. Gratuit, et vos fichiers ne quittent jamais votre appareil."
 h1: "Ajouter un filigrane à un PDF"
 steps:
-  - "Déposez un ou plusieurs PDF dans la zone ci-dessus, ou choisissez-les sur votre appareil."
-  - "Écrivez le texte, puis réglez sa couleur, son opacité, son angle, sa taille et les pages."
+  - "Déposez un ou plusieurs PDF ou photos (JPG, PNG) dans la zone ci-dessus, ou choisissez-les sur votre appareil."
+  - "Écrivez le texte, choisissez « Une fois » ou « En mosaïque », puis réglez sa couleur, son opacité, son angle, sa taille et les pages : l'aperçu suit chaque réglage."
   - "Cliquez sur « Ajouter le filigrane », puis téléchargez la copie."
 faq:
   - question: "Mon PDF est-il envoyé sur un serveur ?"
     answer: "Non. Le filigrane s'ajoute dans votre navigateur, sur votre appareil. Aucun fichier n'est envoyé ni stocké."
   - question: "Le filigrane cache-t-il le texte de mes pages ?"
     answer: "Il est transparent : avec une opacité de 30 %, le texte reste lisible dessous. Montez l'opacité pour un filigrane plus marqué."
+  - question: "Comment protéger une carte d'identité avec un filigrane ?"
+    answer: "Choisissez « En mosaïque » et écrivez à qui et pour quoi vous l'envoyez, avec la date. Laissez « Incruster dans la page » coché : la page devient une image, et le filigrane ne peut plus être retiré. Une photo JPG ou PNG de la carte devient une page PDF."
   - question: "Le texte du filigrane est-il un vrai texte ?"
-    answer: "Oui. Il est écrit dans le contenu de la page, pas dans une annotation : un lecteur PDF ne le propose pas comme élément à supprimer d'un clic, et la recherche le trouve."
+    answer: "Oui, sauf si vous l'incrustez. Il est écrit dans le contenu de la page, pas dans une annotation : un lecteur PDF ne le propose pas comme élément à supprimer d'un clic, et la recherche le trouve. Incrusté, il fait partie de l'image de la page."
   - question: "Quels caractères puis-je écrire ?"
     answer: "Les lettres latines, accents compris. Les émojis et les alphabets non latins ne sont pas pris en charge par la police du filigrane : Holy PDF vous le signale avant de l'ajouter."
   - question: "Puis-je ne filigraner que certaines pages ?"
