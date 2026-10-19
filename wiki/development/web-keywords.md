@@ -22,3 +22,17 @@ _5 October 2026: not redone yet, and the site is not online. The table covers on
 | jpg-to-pdf | en | `/en/jpg-to-pdf` | jpg to pdf, convert jpg to pdf, image to pdf | not verified |
 
 To change a URL: `apps/web/src/tools.ts` (`slug`), then the `title` and the `h1` of the tool's text in `apps/web/src/content/tools/`.
+
+## Editorial market checks
+
+### 19 October 2026 — pt-BR redaction guide catch-up
+
+The pt-BR guide `como-ocultar-informacoes-em-pdf` completes the redaction family already available in French and English. It owns the informational workflow; `/pt-br/ocultar-texto-pdf` remains the transactional owner.
+
+Finalized Search Console data for 18 September–16 October returned early Brazilian impressions for the tool page on `censurar pdf` and `ocultar informações pdf`, one impression each, at average positions 79 and 64. These are discovery signals, not established rankings. DataForSEO returned no dependable volume for the long-tail how-to seeds, so no volume claim is made.
+
+Live mobile SERPs in Brazil were checked independently for `como censurar pdf`, `como ocultar informações no pdf`, and `como tarjar texto pdf`. They mix tools, how-to guides, videos, and an AI overview. The selected guide angle answers the informational need, demonstrates the real pt-BR interface, and links to the existing tool instead of competing with its action intent.
+
+The article uses a language-neutral shared hero and new desktop and mobile screenshots captured from the live pt-BR product with a synthetic PDF. The responsive screenshots contain two real redaction zones and no customer data; the mobile variant keeps the runtime labels readable at 390 px. The guide cites the current product specification, the MCTI tarjamento guide, PortosRio's redaction warning, and Adobe's separate sanitization guidance.
+
+Spanish is not yet present in `languages`, the content collections, or `origin/main`; no Spanish article was added to an obsolete branch. Its catch-up remains blocked on the locale integration rather than being filled with a translation artifact.
