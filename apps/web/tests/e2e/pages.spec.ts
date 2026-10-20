@@ -4,7 +4,7 @@ import { languages } from "../../src/tools";
 import { overflowing } from "./support";
 
 const articles = { fr: "/fr/blog/vos-pdf-restent-sur-votre-appareil", en: "/en/blog/your-pdfs-stay-on-your-device", "pt-br": "/pt-br/blog/seus-pdfs-ficam-no-seu-dispositivo" };
-const redactionGuides = { fr: "/fr/guides/comment-caviarder-un-pdf", en: "/en/guides/how-to-redact-a-pdf" };
+const redactionGuides = { fr: "/fr/guides/comment-caviarder-un-pdf", en: "/en/guides/how-to-redact-a-pdf", "pt-br": "/pt-br/guias/como-ocultar-informacoes-em-pdf" };
 const formGuides = { fr: "/fr/guides/remplir-un-formulaire-pdf", en: "/en/guides/how-to-fill-out-a-pdf-form" };
 const marketOnlyArticle = "/pt-br/guias/como-dividir-um-pdf";
 
@@ -49,12 +49,25 @@ test("switches a page and an article to the other language", async ({ page }) =>
   await expect(page).toHaveURL(new RegExp(`${articles.en}$`));
 });
 
-test("switches a sparse article to its sibling, and to the guides list where no sibling exists", async ({ page }) => {
+test("offers only real locale siblings on a complete article", async ({ page }) => {
   await page.goto(redactionGuides.fr);
+  const switches = page.locator(".site-footer a[hreflang]");
+  await expect(switches).toHaveCount(2);
+  await expect(page.locator('.site-footer a[hreflang="en"]')).toHaveAttribute("href", redactionGuides.en);
+  await expect(page.locator('.site-footer a[hreflang="pt-BR"]')).toHaveAttribute("href", redactionGuides["pt-br"]);
+  await page.locator('.site-footer a[hreflang="pt-BR"]').click();
+  await expect(page).toHaveURL(new RegExp(`${redactionGuides["pt-br"]}$`));
+  await expect(page.locator('.site-footer a[hreflang="fr"]')).toHaveAttribute("href", redactionGuides.fr);
+  await expect(page.locator('.site-footer a[hreflang="en"]')).toHaveAttribute("href", redactionGuides.en);
+  await expect(page.locator('.site-footer a[hreflang="pt-BR"]')).toHaveCount(0);
+});
+
+test("switches a sparse article to its sibling, and to the guides list where no sibling exists", async ({ page }) => {
+  await page.goto(formGuides.fr);
   await expect(page.locator(".site-footer a[hreflang]")).toHaveCount(2);
   await expect(page.locator('.site-footer a[hreflang="pt-BR"]')).toHaveAttribute("href", "/pt-br/guias");
   await page.locator('.site-footer a[hreflang="en"]').click();
-  await expect(page).toHaveURL(new RegExp(`${redactionGuides.en}$`));
+  await expect(page).toHaveURL(new RegExp(`${formGuides.en}$`));
   await page.locator('.site-footer a[hreflang="pt-BR"]').click();
   await expect(page).toHaveURL(/\/pt-br\/guias$/);
 });

@@ -159,28 +159,34 @@ describe("built pages", () => {
     expect(posting?.publisher?.name).toBe("Holy PDF");
   });
 
-  it("links the FR and EN redaction guides without inventing a pt-BR alternate, and switches pt-BR to the guides list", () => {
+  it("links the equivalent FR, EN and pt-BR redaction guides", () => {
     const expected = {
       fr: `${site}/fr/guides/comment-caviarder-un-pdf`,
       en: `${site}/en/guides/how-to-redact-a-pdf`,
+      "pt-BR": `${site}/pt-br/guias/como-ocultar-informacoes-em-pdf`,
     };
     for (const path of Object.values(expected).map((href) => new URL(href).pathname)) {
       const html = pages.find((page) => page.path === path)?.html ?? "";
       const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
-      expect(Object.fromEntries(alternates)).toEqual({ fr: expected.fr, en: expected.en, "x-default": expected.en });
-      expect(html).not.toContain('<link rel="alternate" hreflang="pt-BR"');
-      expect(html).toContain('href="/pt-br/guias" hreflang="pt-BR"');
+      expect(Object.fromEntries(alternates)).toEqual({ ...expected, "x-default": expected.en });
     }
   });
 
-  it.each(pages.filter(({ path }) => path.includes("/guides/comment-caviarder") || path.includes("/guides/how-to-redact")))("$path exposes its editorial hero, localized product screenshot and Mathias byline", ({ path, html }) => {
-    const lang = path.startsWith("/fr/") ? "fr" : "en";
+  const redactionPaths = ["/fr/guides/comment-caviarder-un-pdf", "/en/guides/how-to-redact-a-pdf", "/pt-br/guias/como-ocultar-informacoes-em-pdf"];
+  it.each(redactionPaths)("$path exposes its editorial hero, localized product screenshot and Mathias byline", (path) => {
+    const page = pages.find((candidate) => candidate.path === path);
+    expect(page, path).toBeDefined();
+    const html = page?.html ?? "";
+    const lang = path.startsWith("/fr/") ? "fr" : path.startsWith("/en/") ? "en" : "pt-br";
     const screenshot = `/articles/redact-pdf/holy-pdf-redaction-ui-${lang}.webp`;
     const hero = "/articles/redact-pdf/holy-pdf-redaction-guide-hero.webp";
     expect(html).toContain(`src="${hero}"`);
     expect(html).toContain(`src="${screenshot}"`);
     expect(html).toContain('width="1600" height="900"');
-    expect(html).toContain('width="1400" height="900"');
+    expect(html).toContain(lang === "pt-br" ? 'width="1320" height="700"' : 'width="1400" height="900"');
+    if (lang === "pt-br") {
+      expect(html).toMatch(/<figure class="article-visual">\s*<picture>\s*<source media="\(max-width: 40rem\)" srcset="\/articles\/redact-pdf\/holy-pdf-redaction-ui-pt-br-mobile\.webp" width="780" height="1468" \/>\s*<img src="\/articles\/redact-pdf\/holy-pdf-redaction-ui-pt-br\.webp"/);
+    }
     expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
     const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
     expect(posting?.image).toBe(`${site}${hero}`);

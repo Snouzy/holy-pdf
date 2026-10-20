@@ -22,10 +22,10 @@ describe("site pages", () => {
 });
 
 describe("articles", () => {
-  it("can publish the redaction guide in FR and EN without a filler pt-BR article", () => {
+  it("publishes equivalent redaction guides in FR, EN and pt-BR", () => {
     expect(existsSync(join(content, "articles/fr/redact-pdf.md"))).toBe(true);
     expect(existsSync(join(content, "articles/en/redact-pdf.md"))).toBe(true);
-    expect(existsSync(join(content, "articles/pt-br/redact-pdf.md"))).toBe(false);
+    expect(existsSync(join(content, "articles/pt-br/redact-pdf.md"))).toBe(true);
   });
 
   it("can publish the form-filling guide in FR and EN without a filler pt-BR article", () => {
