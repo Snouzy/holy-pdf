@@ -14,6 +14,7 @@ You can open it in Obsidian: **Open folder as vault**, then choose the `wiki/` f
 - [Technical guide](development/technical-guide.md): where things are, code rules for the site and the desktop app, performance, privacy, git.
 - [Scanner algorithm](development/algorithm.md): the pipeline, independent of the language, and its measurements.
 - [Tests](development/tests.md): commands, levels, manual checks.
+- [Editorial production workflow](development/editorial-workflow.md): opportunity selection, market research, evidence, drafting, visuals, SEO integration, QA and pull-request handoff.
 - [Web version](development/web-version.md): Astro site, engine in the browser, known pitfalls.
 - [Compression benchmark](development/compression-benchmark-2026-10-01.md): comparison of PDFium, qpdf, Cantoo and MuPDF, browser measurements and limits.
 - [Site keywords](development/web-keywords.md): the addresses of the first seven tools in French and in English, the search candidates, volumes to check.
