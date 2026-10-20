@@ -31,8 +31,9 @@ _SE Ranking volumes through treg, live Google results through treg (crawl4ai), o
 |---|---|---|---|---|---|
 | `fill-pdf-form` | US | how to fill out a pdf form | 920/month, KD 7 (20 October 2026) | how to fill out a pdf form on mac 480, KD 8; xfa form 480, KD 14; how to fill out a pdf form and save it 10, KD 19 | `/en/edit-pdf` |
 | `fill-pdf-form` | FR | remplir un formulaire pdf | 480/month, KD 10 (20 October 2026) | comment remplir un formulaire pdf 170, KD 19; comment remplir un cerfa en ligne 70, KD 0; comment remplir un pdf sur mac 50, KD 9 | `/fr/modifier-pdf` (« remplir un pdf », 1,900, KD 98, is a tool query) |
+| `fill-pdf-form` | BR | como preencher um formulário em pdf | 590/month, KD 8 (20 October 2026) | preencher formulario pdf 390, KD 7; como preencher pdf no celular 170, KD 10; como preencher um pdf no celular 140, KD 19 | `/pt-br/editar-pdf` ("preencher pdf", 5,700, KD 86, and "escrever em pdf", 4,400, KD 85, are tool queries) |
 
-Not made on 20 October 2026: a pt-BR sibling, because "como preencher formulario pdf" returned no volume in the Brazilian index.
+The first Brazilian check of 20 October 2026 tried one wording only ("como preencher formulario pdf", no volume); the thirty-wording check later that day found the demand above, with the phone as the main variant. The live Brazilian results for the primary query are tool pages, Google Drive's help, Adobe's how-to, an Android app and videos.
 
 ## Editorial market checks
 

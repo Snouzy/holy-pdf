@@ -29,4 +29,6 @@ faq:
 
 Editar PDF permite corrigir um nome ou uma data, preencher um formulário, anotar um documento, destacar um trecho ou adicionar um logotipo sem instalar nada.
 
+Tem um formulário para preencher? O guia mostra como [preencher um formulário em PDF e salvar as respostas](/pt-br/guias/como-preencher-um-formulario-em-pdf), e o que fazer quando o PDF não tem campos.
+
 Frei Escriba faz tudo no seu dispositivo: seus documentos nunca saem do computador ou do celular.

@@ -193,29 +193,29 @@ describe("built pages", () => {
     expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
   });
 
-  it("links the FR and EN form-filling guides without inventing a pt-BR alternate, and switches pt-BR to the guides list", () => {
+  it("links the equivalent FR, EN and pt-BR form-filling guides", () => {
     const expected = {
       fr: `${site}/fr/guides/remplir-un-formulaire-pdf`,
       en: `${site}/en/guides/how-to-fill-out-a-pdf-form`,
+      "pt-BR": `${site}/pt-br/guias/como-preencher-um-formulario-em-pdf`,
     };
     for (const path of Object.values(expected).map((href) => new URL(href).pathname)) {
       const html = pages.find((page) => page.path === path)?.html ?? "";
       const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
-      expect(Object.fromEntries(alternates)).toEqual({ fr: expected.fr, en: expected.en, "x-default": expected.en });
-      expect(html).not.toContain('<link rel="alternate" hreflang="pt-BR"');
-      expect(html).toContain('href="/pt-br/guias" hreflang="pt-BR"');
+      expect(Object.fromEntries(alternates)).toEqual({ ...expected, "x-default": expected.en });
     }
   });
 
-  it.each(pages.filter(({ path }) => path.includes("/guides/remplir-un-formulaire") || path.includes("/guides/how-to-fill-out")))("$path exposes its editorial hero, localized product screenshot, Edit tool link and Mathias byline", ({ path, html }) => {
-    const lang = path.startsWith("/fr/") ? "fr" : "en";
+  it.each(pages.filter(({ path }) => path.includes("/guides/remplir-un-formulaire") || path.includes("/guides/how-to-fill-out") || path.includes("/guias/como-preencher")))("$path exposes its editorial hero, localized product screenshot, Edit tool link and Mathias byline", ({ path, html }) => {
+    const lang = path.startsWith("/fr/") ? "fr" : path.startsWith("/en/") ? "en" : "pt-br";
     const screenshot = `/articles/fill-pdf-form/holy-pdf-fill-form-ui-${lang}.webp`;
     const hero = "/articles/fill-pdf-form/holy-pdf-fill-form-hero.webp";
     expect(html).toContain(`src="${hero}"`);
     expect(html).toContain(`src="${screenshot}"`);
     expect(html).toContain('width="1600" height="900"');
     expect(html).toContain('width="1400" height="900"');
-    expect(html).toContain(`href="/${lang}/${lang === "fr" ? "modifier-pdf" : "edit-pdf"}"`);
+    expect(html).toContain(`href="/${lang}/${{ fr: "modifier-pdf", en: "edit-pdf", "pt-br": "editar-pdf" }[lang]}"`);
+    if (lang === "pt-br") expect(html).toContain('srcset="/articles/fill-pdf-form/holy-pdf-fill-form-ui-pt-br-mobile.webp" width="780" height="1328"');
     expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
     const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
     expect(posting?.image).toBe(`${site}${hero}`);
