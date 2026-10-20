@@ -22,3 +22,14 @@ _5 October 2026: not redone yet, and the site is not online. The table covers on
 | jpg-to-pdf | en | `/en/jpg-to-pdf` | jpg to pdf, convert jpg to pdf, image to pdf | not verified |
 
 To change a URL: `apps/web/src/tools.ts` (`slug`), then the `title` and the `h1` of the tool's text in `apps/web/src/content/tools/`.
+
+## Guides: researched queries
+
+_SE Ranking volumes through treg, live Google results through treg (crawl4ai), on the date given. A guide owns an informational query; the tool page keeps the transactional one._
+
+| Guide | Market | Primary query | Volume, difficulty (date) | Variants kept in the text | Owner of the transactional query |
+|---|---|---|---|---|---|
+| `fill-pdf-form` | US | how to fill out a pdf form | 920/month, KD 7 (20 October 2026) | how to fill out a pdf form on mac 480, KD 8; xfa form 480, KD 14; how to fill out a pdf form and save it 10, KD 19 | `/en/edit-pdf` |
+| `fill-pdf-form` | FR | remplir un formulaire pdf | 480/month, KD 10 (20 October 2026) | comment remplir un formulaire pdf 170, KD 19; comment remplir un cerfa en ligne 70, KD 0; comment remplir un pdf sur mac 50, KD 9 | `/fr/modifier-pdf` (« remplir un pdf », 1,900, KD 98, is a tool query) |
+
+Not made on 20 October 2026: a pt-BR sibling, because "como preencher formulario pdf" returned no volume in the Brazilian index.

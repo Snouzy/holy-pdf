@@ -29,4 +29,6 @@ faq:
 
 Modifier un PDF sert à corriger une date ou un nom, compléter un formulaire imprimé, annoter un document, entourer un détail ou ajouter un logo, sans logiciel à installer.
 
+Un formulaire à remplir ? Le guide explique comment [remplir un formulaire PDF et garder ses réponses](/fr/guides/remplir-un-formulaire-pdf), et quoi faire quand le PDF n'a pas de champs.
+
 Frère Scribe fait tout sur votre appareil : vos documents ne quittent jamais votre ordinateur ou votre téléphone.

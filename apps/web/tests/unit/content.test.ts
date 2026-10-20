@@ -28,6 +28,12 @@ describe("articles", () => {
     expect(existsSync(join(content, "articles/pt-br/redact-pdf.md"))).toBe(false);
   });
 
+  it("can publish the form-filling guide in FR and EN without a filler pt-BR article", () => {
+    expect(existsSync(join(content, "articles/fr/fill-pdf-form.md"))).toBe(true);
+    expect(existsSync(join(content, "articles/en/fill-pdf-form.md"))).toBe(true);
+    expect(existsSync(join(content, "articles/pt-br/fill-pdf-form.md"))).toBe(false);
+  });
+
   it("publishes the PDF splitting guide only in its intended pt-BR market", () => {
     expect(existsSync(join(content, "articles/pt-br/como-dividir-um-pdf.md"))).toBe(true);
     expect(existsSync(join(content, "articles/fr/como-dividir-um-pdf.md"))).toBe(false);

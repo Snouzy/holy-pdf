@@ -186,6 +186,34 @@ describe("built pages", () => {
     expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
   });
 
+  it("links the FR and EN form-filling guides without inventing a pt-BR alternate", () => {
+    const expected = {
+      fr: `${site}/fr/guides/remplir-un-formulaire-pdf`,
+      en: `${site}/en/guides/how-to-fill-out-a-pdf-form`,
+    };
+    for (const path of Object.values(expected).map((href) => new URL(href).pathname)) {
+      const html = pages.find((page) => page.path === path)?.html ?? "";
+      const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
+      expect(Object.fromEntries(alternates)).toEqual({ fr: expected.fr, en: expected.en, "x-default": expected.en });
+      expect(html).not.toContain('hreflang="pt-BR"');
+    }
+  });
+
+  it.each(pages.filter(({ path }) => path.includes("/guides/remplir-un-formulaire") || path.includes("/guides/how-to-fill-out")))("$path exposes its editorial hero, localized product screenshot, Edit tool link and Mathias byline", ({ path, html }) => {
+    const lang = path.startsWith("/fr/") ? "fr" : "en";
+    const screenshot = `/articles/fill-pdf-form/holy-pdf-fill-form-ui-${lang}.webp`;
+    const hero = "/articles/fill-pdf-form/holy-pdf-fill-form-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain(`src="${screenshot}"`);
+    expect(html).toContain('width="1600" height="900"');
+    expect(html).toContain('width="1400" height="900"');
+    expect(html).toContain(`href="/${lang}/${lang === "fr" ? "modifier-pdf" : "edit-pdf"}"`);
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+  });
+
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {
     const hero = "/articles/scan-multiple-pages/scan-multiple-pages-hero.webp";
     expect(html).toContain(`src="${hero}"`);

@@ -5,6 +5,7 @@ import { overflowing } from "./support";
 
 const articles = { fr: "/fr/blog/vos-pdf-restent-sur-votre-appareil", en: "/en/blog/your-pdfs-stay-on-your-device", "pt-br": "/pt-br/blog/seus-pdfs-ficam-no-seu-dispositivo" };
 const redactionGuides = { fr: "/fr/guides/comment-caviarder-un-pdf", en: "/en/guides/how-to-redact-a-pdf" };
+const formGuides = { fr: "/fr/guides/remplir-un-formulaire-pdf", en: "/en/guides/how-to-fill-out-a-pdf-form" };
 const marketOnlyArticle = "/pt-br/guias/como-dividir-um-pdf";
 
 async function hrefs(page: Page, scope: string): Promise<string[]> {
@@ -98,7 +99,7 @@ for (const width of [320, 390]) {
   test(`fits every content page in a ${width} px wide screen, even with fallback fonts`, async ({ page }) => {
     await page.route(/\.woff2$/, (route) => route.abort());
     await page.setViewportSize({ width, height: 700 });
-    for (const path of [...languages.flatMap((lang) => pageIds.map((id) => pagePath(id, lang))), ...Object.values(articles), ...Object.values(redactionGuides), marketOnlyArticle]) {
+    for (const path of [...languages.flatMap((lang) => pageIds.map((id) => pagePath(id, lang))), ...Object.values(articles), ...Object.values(redactionGuides), ...Object.values(formGuides), marketOnlyArticle]) {
       await page.goto(path);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), `${path}: ${await overflowing(page)}`).toBe(width);
     }
