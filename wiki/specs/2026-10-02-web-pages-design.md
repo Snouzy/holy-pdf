@@ -100,7 +100,7 @@ No page slug may be equal to a tool slug or to `search.json`: a test checks it.
 - `src/pages/[lang]/[page].astro` builds the 24 pages. Astro 7 keeps the two routes `[lang]/[tool]` and `[lang]/[page]`: each one builds the paths of its `getStaticPaths`, and the development server goes to the next one when the first one does not know the path (`matchAllRoutes`). For `blog` and `guides`, the page adds under its text the list of the articles of its section and its language, from the newest to the oldest.
 - `src/pages/[lang]/[section]/[article].astro` builds the articles.
 
-The language switch (`paths` of `Base.astro`) leads to the same page in the other language; for an article, to its counterpart.
+The language switch (`paths` of `Base.astro`) leads to the same page in the other language; for an article, to its counterpart, or, since 20 October 2026, to the section's list in that language when no counterpart exists (`switches` of `Base.astro`).
 
 ## Template
 

@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { getCollection, render } from "astro:content";
-import { articleAlternates } from "../../../articleInventory";
+import { articleAlternates, articleSwitches } from "../../../articleInventory";
 import ArticleNavigation from "../../../components/ArticleNavigation.astro";
 import { dictionaries } from "../../../i18n";
 import { pageTexts } from "../../../i18n/pages";
@@ -15,6 +15,7 @@ export const getStaticPaths = (async () => {
   return entries.map((entry) => {
     const { section, lang, slug } = entry.data;
     const paths = articleAlternates(entries, entry);
+    const switches = articleSwitches(entries, entry);
     const related = entries
       .filter((other) => other.id !== entry.id && other.data.lang === lang)
       .map((other) => ({
@@ -24,11 +25,11 @@ export const getStaticPaths = (async () => {
       .sort((a, b) => b.score - a.score || b.entry.data.published.getTime() - a.entry.data.published.getTime() || a.entry.data.slug.localeCompare(b.entry.data.slug))
       .slice(0, 2)
       .map(({ entry: relatedEntry }) => relatedEntry);
-    return { params: { lang, section: sitePages[section].slug[lang], article: slug }, props: { entry, paths, related } };
+    return { params: { lang, section: sitePages[section].slug[lang], article: slug }, props: { entry, paths, switches, related } };
   });
 }) satisfies GetStaticPaths;
 
-const { entry, paths, related } = Astro.props;
+const { entry, paths, switches, related } = Astro.props;
 const { section, lang, title, description, h1, lead, author, image, published, updated } = entry.data;
 const { Content, headings } = await render(entry);
 const url = (path: string) => new URL(path, Astro.site).href;
@@ -66,7 +67,7 @@ const jsonLd = [
 ];
 ---
 
-<ContentPage lang={lang} title={title} description={description} paths={paths} jsonLd={jsonLd} h1={h1} emoji={sitePages[section].emoji} lead={lead} author={author} published={published} updated={updated} isArticle readingMinutes={readingMinutes} image={image ? url(image) : undefined}>
+<ContentPage lang={lang} title={title} description={description} paths={paths} switches={switches} jsonLd={jsonLd} h1={h1} emoji={sitePages[section].emoji} lead={lead} author={author} published={published} updated={updated} isArticle readingMinutes={readingMinutes} image={image ? url(image) : undefined}>
   <nav slot="breadcrumbs" class="breadcrumbs" aria-label={texts.breadcrumbs}>
     <ol>
       <li><a href={homePath(lang)}>{siteName}</a></li>

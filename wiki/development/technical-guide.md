@@ -39,7 +39,7 @@ _Written on 29 September 2026 for the Swift engine and the Mac app. Rewritten on
 - Articles have independent editorial inventories per market. An article may exist in one language or a selected subset; never add a filler translation only to satisfy route generation.
 - Equivalent article siblings use the same Markdown filename under their locale directories. Their frontmatter slugs and copy remain independently authored for each market, while their normalized topics stay aligned.
 - `author` is optional article frontmatter. When present, it is the visible byline and a `Person` in `BlogPosting`; otherwise Holy PDF remains the organization author. The `image` field is the editorial/social hero, while localized product screenshots can remain separate figures in the body.
-- An article is always self-canonical. Its `hreflang` links and language switches include only equivalent siblings that actually exist. `x-default` points to the English sibling only when that sibling exists; otherwise it is omitted.
+- An article is always self-canonical. Its `hreflang` links include only equivalent siblings that actually exist. `x-default` points to the English sibling only when that sibling exists; otherwise it is omitted. The language switch (header menu, drawer, footer) still lists every language: it leads to the sibling when it exists, otherwise to that language's list of the section (`/pt-br/guias`, `/en/blog`), never to a page that does not exist (`articleSwitches`, decision of 20 October 2026).
 - Sparse article support does not relax the locale-coverage tests for `content/tools` or `content/pages`.
 
 ## Comments

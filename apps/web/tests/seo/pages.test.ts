@@ -159,7 +159,7 @@ describe("built pages", () => {
     expect(posting?.publisher?.name).toBe("Holy PDF");
   });
 
-  it("links the FR and EN redaction guides without inventing a pt-BR alternate or switch", () => {
+  it("links the FR and EN redaction guides without inventing a pt-BR alternate, and switches pt-BR to the guides list", () => {
     const expected = {
       fr: `${site}/fr/guides/comment-caviarder-un-pdf`,
       en: `${site}/en/guides/how-to-redact-a-pdf`,
@@ -168,7 +168,8 @@ describe("built pages", () => {
       const html = pages.find((page) => page.path === path)?.html ?? "";
       const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
       expect(Object.fromEntries(alternates)).toEqual({ fr: expected.fr, en: expected.en, "x-default": expected.en });
-      expect(html).not.toContain('hreflang="pt-BR"');
+      expect(html).not.toContain('<link rel="alternate" hreflang="pt-BR"');
+      expect(html).toContain('href="/pt-br/guias" hreflang="pt-BR"');
     }
   });
 
@@ -186,7 +187,7 @@ describe("built pages", () => {
     expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
   });
 
-  it("links the FR and EN form-filling guides without inventing a pt-BR alternate", () => {
+  it("links the FR and EN form-filling guides without inventing a pt-BR alternate, and switches pt-BR to the guides list", () => {
     const expected = {
       fr: `${site}/fr/guides/remplir-un-formulaire-pdf`,
       en: `${site}/en/guides/how-to-fill-out-a-pdf-form`,
@@ -195,7 +196,8 @@ describe("built pages", () => {
       const html = pages.find((page) => page.path === path)?.html ?? "";
       const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
       expect(Object.fromEntries(alternates)).toEqual({ fr: expected.fr, en: expected.en, "x-default": expected.en });
-      expect(html).not.toContain('hreflang="pt-BR"');
+      expect(html).not.toContain('<link rel="alternate" hreflang="pt-BR"');
+      expect(html).toContain('href="/pt-br/guias" hreflang="pt-BR"');
     }
   });
 
