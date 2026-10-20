@@ -14,7 +14,10 @@ type Props = {
   lang: Lang;
   title: string;
   description: string;
+  /** The page in each language it exists in: the `hreflang` links. */
   paths: LocalePaths;
+  /** Where the language switch leads when it differs from `paths` (an article without a sibling leads to its section's list). */
+  switches?: LocalePaths | undefined;
   jsonLd?: object[];
   ogType?: "website" | "article";
   image?: string | undefined;
@@ -22,7 +25,7 @@ type Props = {
   clientRouter?: boolean;
 };
 
-const { lang, title, description, paths, jsonLd = [], ogType = "website", image, clientRouter = false } = Astro.props;
+const { lang, title, description, paths, switches = paths, jsonLd = [], ogType = "website", image, clientRouter = false } = Astro.props;
 // Pages stay out of search engines until the site has its own domain: set INDEXABLE=true at build time.
 const indexable = process.env.INDEXABLE === "true";
 const measurementId = process.env.GA4_ID || undefined;
@@ -125,11 +128,11 @@ const xDefault = paths.en;
     {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
   </head>
   <body>
-    <SiteNav lang={lang} paths={paths} />
+    <SiteNav lang={lang} paths={switches} />
     <main>
       <slot />
     </main>
-    <SiteFooter lang={lang} paths={paths} consent={measurementId !== undefined} />
+    <SiteFooter lang={lang} paths={switches} consent={measurementId !== undefined} />
     {measurementId && <Consent lang={lang} measurementId={measurementId} />}
     <div class="drop-overlay" aria-hidden="true"><p>{t.drop.release}</p></div>
   </body>

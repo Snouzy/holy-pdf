@@ -5,6 +5,7 @@ import { overflowing } from "./support";
 
 const articles = { fr: "/fr/blog/vos-pdf-restent-sur-votre-appareil", en: "/en/blog/your-pdfs-stay-on-your-device", "pt-br": "/pt-br/blog/seus-pdfs-ficam-no-seu-dispositivo" };
 const redactionGuides = { fr: "/fr/guides/comment-caviarder-un-pdf", en: "/en/guides/how-to-redact-a-pdf", "pt-br": "/pt-br/guias/como-ocultar-informacoes-em-pdf" };
+const formGuides = { fr: "/fr/guides/remplir-un-formulaire-pdf", en: "/en/guides/how-to-fill-out-a-pdf-form" };
 const marketOnlyArticle = "/pt-br/guias/como-dividir-um-pdf";
 
 async function hrefs(page: Page, scope: string): Promise<string[]> {
@@ -48,7 +49,7 @@ test("switches a page and an article to the other language", async ({ page }) =>
   await expect(page).toHaveURL(new RegExp(`${articles.en}$`));
 });
 
-test("offers only real locale siblings on a sparse article", async ({ page }) => {
+test("offers only real locale siblings on a complete article", async ({ page }) => {
   await page.goto(redactionGuides.fr);
   const switches = page.locator(".site-footer a[hreflang]");
   await expect(switches).toHaveCount(2);
@@ -61,11 +62,21 @@ test("offers only real locale siblings on a sparse article", async ({ page }) =>
   await expect(page.locator('.site-footer a[hreflang="pt-BR"]')).toHaveCount(0);
 });
 
-test("hides language switchers when an article has no equivalent locale", async ({ page }) => {
+test("switches a sparse article to its sibling, and to the guides list where no sibling exists", async ({ page }) => {
+  await page.goto(formGuides.fr);
+  await expect(page.locator(".site-footer a[hreflang]")).toHaveCount(2);
+  await expect(page.locator('.site-footer a[hreflang="pt-BR"]')).toHaveAttribute("href", "/pt-br/guias");
+  await page.locator('.site-footer a[hreflang="en"]').click();
+  await expect(page).toHaveURL(new RegExp(`${formGuides.en}$`));
+  await page.locator('.site-footer a[hreflang="pt-BR"]').click();
+  await expect(page).toHaveURL(/\/pt-br\/guias$/);
+});
+
+test("switches a market-only article to the other languages' guides lists", async ({ page }) => {
   await page.goto(marketOnlyArticle);
-  await expect(page.locator(".language-menu")).toHaveCount(0);
-  await expect(page.locator(".drawer-languages")).toHaveCount(0);
-  await expect(page.locator('.site-footer a[hreflang]')).toHaveCount(0);
+  await expect(page.locator(".language-menu a")).toHaveCount(2);
+  await expect(page.locator('.site-footer a[hreflang="fr"]')).toHaveAttribute("href", "/fr/guides");
+  await expect(page.locator('.site-footer a[hreflang="en"]')).toHaveAttribute("href", "/en/guides");
 });
 
 test("shows the apps asleep, one anchor per app", async ({ page }) => {
@@ -101,7 +112,7 @@ for (const width of [320, 390]) {
   test(`fits every content page in a ${width} px wide screen, even with fallback fonts`, async ({ page }) => {
     await page.route(/\.woff2$/, (route) => route.abort());
     await page.setViewportSize({ width, height: 700 });
-    for (const path of [...languages.flatMap((lang) => pageIds.map((id) => pagePath(id, lang))), ...Object.values(articles), ...Object.values(redactionGuides), marketOnlyArticle]) {
+    for (const path of [...languages.flatMap((lang) => pageIds.map((id) => pagePath(id, lang))), ...Object.values(articles), ...Object.values(redactionGuides), ...Object.values(formGuides), marketOnlyArticle]) {
       await page.goto(path);
       expect(await page.evaluate(() => document.documentElement.scrollWidth), `${path}: ${await overflowing(page)}`).toBe(width);
     }

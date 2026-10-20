@@ -29,4 +29,6 @@ faq:
 
 Editing a PDF lets you correct a date or a name, fill in a printed form, annotate a document, circle a detail or add a logo, without installing anything.
 
+Got a form to fill? The guide shows how to [fill out a PDF form and keep your answers](/en/guides/how-to-fill-out-a-pdf-form), and what to do when the PDF has no fields.
+
 Brother Scribe does everything on your device: your documents never leave your computer or your phone.

@@ -31,7 +31,7 @@ Three languages since 7 October 2026: French, English and Brazilian Portuguese. 
 | URL | `/<code>/…` with `fr`, `en`, `pt-br`. The slugs of the tools (`tools.ts`) and of the pages (`sitePages.ts`) are written per language; an article carries its slug in its frontmatter, under the same file name in every language (`content.test.ts`). |
 | `lang`, `hreflang`, `inLanguage`, `Intl` | The BCP 47 tag from `locales`: `pt-BR` where the URL says `pt-br`. `x-default` stays English. |
 | Dictionaries | `fr.ts` and `frSite.ts` define the types; `en.ts`, `enSite.ts`, `ptBR.ts` and `ptBRSite.ts` are typed against them. The component texts (the editors, the Scanner, the signature, `i18n/pages.ts`, the stamp words in `engine/editMetrics.ts`) hold one block per language. |
-| Language switch | In the header, a menu under the globe and the current language's name lists the other languages, each named in its own language (`languageNames`): two pills no longer fit at 1280 px. The drawer and the footer show one link per other language. |
+| Language switch | In the header, a menu under the globe and the current language's name lists the other languages, each named in its own language (`languageNames`): two pills no longer fit at 1280 px. The drawer and the footer show one link per other language. On an article without a sibling in a language, that language's link leads to the section's list (`switches` of `Base.astro`); the `hreflang` links stay limited to the real siblings. |
 | Fonts | The `unicode-range` in `styles/fonts.ts` covers the Portuguese letters (á ã í ó ú õ and their capitals, º ª); `scripts/subset-fonts.py` regenerates the two WOFF2 files (13.8 KB and 12.7 KB). |
 | Films and OCR | The home film and the tool films of Redact and the Scanner exist in Portuguese (`scripts/home-film.mjs`, `scripts/tool-film.mjs`). OCR reads French and English (`fra`, `eng`); the Portuguese data (`por`) is not served yet. |
 | Desktop | The app speaks French and English (`AppLang` in `apps/desktop/app/shell.ts`): its menus in `lib.rs` have no Portuguese yet. |
@@ -58,7 +58,7 @@ The structure that works:
 
 The subject and the editorial structure can be shared, but each version is rewritten as native content, never translated mechanically. Some French pages will have no reason to exist in pt-BR, and the other way round.
 
-Since 12 October 2026, an article may exist in one market only. `[section]/[article].astro` links only the sibling files that actually exist, and emits no invented `hreflang` or language-switch destination. When a real English sibling exists, it remains the `x-default`; a market-only article has no `x-default`.
+Since 12 October 2026, an article may exist in one market only. `[section]/[article].astro` links only the sibling files that actually exist, and emits no invented `hreflang`. When a real English sibling exists, it remains the `x-default`; a market-only article has no `x-default`. Until 20 October 2026 the language switch hid the languages without a sibling, which left the reader of a guide with no way to reach the other languages (the author's remark on the form guide); since then `Base.astro` takes a separate `switches` map, and an article's switch leads to the section's list in that language (`/pt-br/guias`) where no sibling exists.
 
 ## Editorial pages
 

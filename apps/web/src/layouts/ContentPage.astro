@@ -11,6 +11,7 @@ type Props = {
   title: string;
   description: string;
   paths: LocalePaths;
+  switches?: LocalePaths | undefined;
   jsonLd: object[];
   h1: string;
   emoji: string;
@@ -23,13 +24,13 @@ type Props = {
   image?: string | undefined;
 };
 
-const { lang, title, description, paths, jsonLd, h1, emoji, lead, author, updated, published, isArticle = false, readingMinutes, image } = Astro.props;
+const { lang, title, description, paths, switches, jsonLd, h1, emoji, lead, author, updated, published, isArticle = false, readingMinutes, image } = Astro.props;
 const texts = pageTexts[lang];
 const Root = isArticle ? "article" : "div";
 const day = (date: Date) => date.toISOString().slice(0, 10);
 ---
 
-<Base lang={lang} title={title} description={description} paths={paths} jsonLd={jsonLd} ogType={isArticle ? "article" : "website"} image={image}>
+<Base lang={lang} title={title} description={description} paths={paths} switches={switches} jsonLd={jsonLd} ogType={isArticle ? "article" : "website"} image={image}>
   <Root class:list={{ "article-page": isArticle }}>
     <slot name="breadcrumbs" />
     <header class="page-head">

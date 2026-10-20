@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { articleAlternates } from "../../src/articleInventory";
+import { articleAlternates, articleSwitches } from "../../src/articleInventory";
 
 const articles = [
   { id: "fr/redaction", data: { lang: "fr" as const, section: "guides" as const, slug: "comment-caviarder-un-pdf" } },
@@ -17,5 +17,14 @@ describe("article locale inventory", () => {
 
   it("keeps a single-market article self-referential without invented siblings", () => {
     expect(articleAlternates(articles, articles[2]!)).toEqual({ "pt-br": "/pt-br/blog/somente-aqui" });
+  });
+
+  it("switches to the sibling when it exists, otherwise to the section's list in that language", () => {
+    expect(articleSwitches(articles, articles[0]!)).toEqual({
+      fr: "/fr/guides/comment-caviarder-un-pdf",
+      en: "/en/guides/how-to-redact-a-pdf",
+      "pt-br": "/pt-br/guias",
+    });
+    expect(articleSwitches(articles, articles[2]!)).toEqual({ fr: "/fr/blog", en: "/en/blog", "pt-br": "/pt-br/blog/somente-aqui" });
   });
 });
