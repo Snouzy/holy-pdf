@@ -922,6 +922,11 @@ export function EditOptions({ sizes: pages, lang, value, onChange, disabled, eng
     });
   }
   return <div class="edit-options">
+    {/* First in the panel: under sixteen tools and the undo row, it fell below a 900 px high window. */}
+    {value.items.some((item) => (item.kind === "text" || item.kind === "stamp") && !writable(item.text)) ? <p class="error" role="alert">{t.unwritable}</p>
+      : badField ? <p class="error" role="alert">{t.fieldNames(badField.pageIndex + 1)}</p>
+      : missingLink && !(selected?.kind === "link") ? <p class="error" role="alert">{t.linkMissing(missingLink.pageIndex + 1)}</p>
+      : <p class="signature-hint">{original ? t.originalHint : isMarkupTool(value.tool) ? t.markupHint : value.tool === "note" ? t.noteHint : value.tool === "stamp" ? t.stampHint : value.tool === "field" ? ((found?.rotation ?? 0) !== 0 ? t.fieldTurned : t.fieldHint) : hasFields ? t.fieldsHint : t.hint}</p>}
     <fieldset class="edit-group" disabled={disabled}>
       <legend>{t.tools}</legend>
       <div class="edit-tools">
@@ -1051,10 +1056,6 @@ export function EditOptions({ sizes: pages, lang, value, onChange, disabled, eng
       </>}
       {(selected || original) && <button type="button" disabled={disabled} onClick={() => onChange(removeSelected)}><Icon name="delete" size={16} />{t.remove}</button>}
     </div>
-    {value.items.some((item) => (item.kind === "text" || item.kind === "stamp") && !writable(item.text)) ? <p class="error" role="alert">{t.unwritable}</p>
-      : badField ? <p class="error" role="alert">{t.fieldNames(badField.pageIndex + 1)}</p>
-      : missingLink && !(selected?.kind === "link") ? <p class="error" role="alert">{t.linkMissing(missingLink.pageIndex + 1)}</p>
-      : <p class="signature-hint">{original ? t.originalHint : isMarkupTool(value.tool) ? t.markupHint : value.tool === "note" ? t.noteHint : value.tool === "stamp" ? t.stampHint : value.tool === "field" ? ((found?.rotation ?? 0) !== 0 ? t.fieldTurned : t.fieldHint) : hasFields ? t.fieldsHint : t.hint}</p>}
   </div>;
 }
 

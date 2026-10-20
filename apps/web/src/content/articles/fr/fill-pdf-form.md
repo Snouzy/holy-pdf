@@ -23,7 +23,7 @@ Pour remplir un formulaire PDF, ouvrez [Modifier un PDF](/fr/modifier-pdf), choi
 
 Un PDF remplissable contient des champs interactifs : des zones de texte, des cases à cocher, des listes. Beaucoup de « formulaires » n'en sont pas. Ce sont des scans ou des exports d'un formulaire papier, avec des cadres imprimés et rien derrière.
 
-Holy PDF vous l'indique. Ouvrez le fichier dans [Modifier un PDF](/fr/modifier-pdf) : quand la page contient des champs à remplir, l'indication sous les outils affiche **Cliquez dans un champ du formulaire pour le remplir.** Si cette phrase n'apparaît pas, avec l'outil Sélection actif et rien de sélectionné, la page n'a pas de champ, et c'est la section [si le PDF n'est pas remplissable](#si-le-pdf-nest-pas-remplissable) qui s'applique.
+Holy PDF vous l'indique. Ouvrez le fichier dans [Modifier un PDF](/fr/modifier-pdf) : quand la page contient des champs à remplir, l'indication au-dessus des outils affiche **Cliquez dans un champ du formulaire pour le remplir.** Si cette phrase n'apparaît pas, avec l'outil Sélection actif et rien de sélectionné, la page n'a pas de champ, et c'est la section [si le PDF n'est pas remplissable](#si-le-pdf-nest-pas-remplissable) qui s'applique.
 
 ## Remplir le formulaire dans Holy PDF
 
@@ -77,7 +77,7 @@ Si vous voulez que les réponses ne soient plus modifiables, passez la copie dan
 
 ## Les limites à connaître
 
-- **Les formulaires XFA.** Holy PDF ne propose aucun champ sur un formulaire XFA, et l'outil Champ refuse d'y en ajouter. Ouvrez ces formulaires dans Adobe Acrobat Reader.
+- **Les formulaires XFA.** Sur un formulaire XFA, en général aucun champ n'apparaît, et l'outil Champ ne peut pas en ajouter. Ouvrez ces formulaires dans Adobe Acrobat Reader.
 - **Les scripts.** Un formulaire peut contenir des scripts qui mettent une date en forme, calculent un total ou vérifient une valeur. Holy PDF ne les exécute pas. Tapez la valeur finale vous-même, et vérifiez les totaux.
 - **La longueur.** Un champ de texte garde au plus le nombre de caractères que son auteur a autorisé ; taper au-delà ne change rien.
 - **Les champs en lecture seule, les boutons et les champs de signature** ne réagissent pas au clic : Holy PDF ne les remplit pas.
@@ -103,7 +103,7 @@ Enregistrez la copie avec **Enregistrer les modifications**, puis rouvrez cette 
 
 ### Comment savoir si un PDF est un formulaire XFA ?
 
-Aucun champ n'est proposé sur ses pages, et l'indication « Cliquez dans un champ du formulaire pour le remplir. » n'apparaît pas. Si vous tentez d'y ajouter un champ avec l'outil Champ, l'enregistrement est refusé par un message qui le dit. Ces formulaires sont faits pour Adobe Acrobat Reader.
+En général, aucun champ n'apparaît sur ses pages, et l'indication « Cliquez dans un champ du formulaire pour le remplir. » n'apparaît pas. Si vous tentez d'y ajouter un champ avec l'outil Champ, l'enregistrement est refusé par un message qui nomme le formulaire XFA. Ces formulaires sont faits pour Adobe Acrobat Reader.
 
 ### Mes données sont-elles envoyées quelque part ?
 

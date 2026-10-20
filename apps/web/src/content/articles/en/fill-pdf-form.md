@@ -23,7 +23,7 @@ To fill out a PDF form, open [Edit a PDF](/en/edit-pdf), choose the file, and cl
 
 A fillable PDF carries interactive fields: boxes a reader can type into, checkboxes, lists. Many "forms" are not like that. They are a scan or an export of a paper form, with printed boxes and no field behind them.
 
-Holy PDF shows you which one you have. Open the file in [Edit a PDF](/en/edit-pdf): when the page holds fields you can fill, the hint under the tools reads **Click a form field to fill it.** If no such hint appears, with the Select tool active and nothing selected, the page has no fields, and the section [when the PDF is not fillable](#when-the-pdf-is-not-fillable) applies instead.
+Holy PDF shows you which one you have. Open the file in [Edit a PDF](/en/edit-pdf): when the page holds fields you can fill, the hint above the tools reads **Click a form field to fill it.** If no such hint appears, with the Select tool active and nothing selected, the page has no fields, and the section [when the PDF is not fillable](#when-the-pdf-is-not-fillable) applies instead.
 
 ## Fill out the PDF form in Holy PDF
 
@@ -71,7 +71,7 @@ If you want to lock the answers, run the copy through [Flatten a PDF](/en/flatte
 
 ## Limits to know before you start
 
-- **XFA forms.** Holy PDF offers no field on an XFA form, and the Field tool refuses to add one. Open those forms in Adobe Acrobat Reader.
+- **XFA forms.** On an XFA form, usually no field shows up, and the Field tool cannot add one. Open those forms in Adobe Acrobat Reader.
 - **Scripts.** Forms can carry scripts that format a date, compute a total or validate a value. Holy PDF does not run them. Type the final value yourself, and check the totals.
 - **Length.** A text field accepts only as many characters as the form allows; extra characters are dropped.
 - **Read-only fields, buttons and signature fields** do not react to a click. They are not meant to be filled this way.
@@ -97,7 +97,7 @@ Save the copy with **Save the changes**, then open that copy again in the tool: 
 
 ### How do I know a PDF is an XFA form?
 
-No field is offered on its pages, and the hint **Click a form field to fill it.** does not appear. If you try to add a field to it with the Field tool, saving is refused with a message that says so. Those forms are made for Adobe Acrobat Reader.
+Usually no field shows up on its pages, and the hint **Click a form field to fill it.** does not appear. If you try to add a field to it with the Field tool, saving is refused with a message that names the XFA form. Those forms are made for Adobe Acrobat Reader.
 
 ### Does filling the form send my data anywhere?
 

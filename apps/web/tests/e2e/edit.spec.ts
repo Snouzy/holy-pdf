@@ -299,6 +299,21 @@ test("stamps a word, changes it, dates it, and writes it into the file", async (
   expect([read.includes("PAYÉ"), read.includes(String(new Date().getFullYear()))]).toEqual([true, true]);
 });
 
+test("shows the form hint above the tools, in sight without scrolling the panel of a 1400 × 900 window", async ({ page }) => {
+  await page.setViewportSize({ width: 1400, height: 900 });
+  await page.goto("/fr/modifier-pdf");
+  await chooseFiles(page, [formFile()]);
+  await expect(page.locator(".edit-layer[data-objects=ready]")).toBeVisible();
+  const hint = page.locator(".edit-options .signature-hint");
+  await expect(hint).toHaveText("Cliquez dans un champ du formulaire pour le remplir.");
+  const [hintBox, toolsBox] = [await hint.boundingBox(), await page.locator(".edit-tools").boundingBox()];
+  expect(hintBox!.y + hintBox!.height).toBeLessThan(toolsBox!.y);
+  expect(await hint.evaluate((element) => {
+    const box = element.getBoundingClientRect();
+    return document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2) === element;
+  })).toBe(true);
+});
+
 test("fills a form's fields in place: a text, a box, a list, and writes the values into the file", async ({ page }) => {
   await page.goto("/fr/modifier-pdf");
   await chooseFiles(page, [formFile()]);

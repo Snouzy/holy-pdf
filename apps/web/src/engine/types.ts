@@ -20,6 +20,7 @@ export type EngineError =
   | { kind: "alreadySigned" }
   | { kind: "fieldNameTaken" }
   | { kind: "xfaForm" }
+  | { kind: "xfaFields" }
   | { kind: "textAlready" }
   | { kind: "noTextRead" }
   | { kind: "invalidSignature" };

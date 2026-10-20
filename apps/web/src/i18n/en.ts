@@ -95,6 +95,7 @@ export const en: BoardTexts = {
     alreadySigned: "This PDF already contains a digital signature and cannot be changed here.",
     fieldNameTaken: "A field of this document already has the name of one of the new fields.",
     xfaForm: "This PDF is an XFA form: its data cannot be erased for good here.",
+    xfaFields: "This PDF is an XFA form: fields cannot be added to it here. Open it in Adobe Acrobat Reader.",
     textAlready: "Every page already has its text: there is nothing to read.",
     noTextRead: "No text could be read in the pages.",
     invalidSignature: "The signature or its placement is invalid. Create it again or reposition it on the page.",

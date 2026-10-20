@@ -23,7 +23,7 @@ Para preencher um formulário em PDF, abra [Editar PDF](/pt-br/editar-pdf), esco
 
 Um PDF preenchível, ou editável, tem campos interativos: caixas em que dá para digitar, caixas de seleção, listas. Muitos "formulários" não são assim. São um formulário de papel escaneado, ou um arquivo exportado só com o desenho: os quadrinhos estão impressos, mas não há nenhum campo por trás.
 
-O Holy PDF mostra qual é o seu caso. Abra o arquivo em [Editar PDF](/pt-br/editar-pdf): quando a página tem campos para preencher, a dica abaixo das ferramentas diz **Clique em um campo do formulário para preenchê-lo.** Se essa frase não aparecer, com a ferramenta Selecionar ativa e nada selecionado, a página não tem campos: veja a seção [se o PDF não for preenchível](#se-o-pdf-não-for-preenchível).
+O Holy PDF mostra qual é o seu caso. Abra o arquivo em [Editar PDF](/pt-br/editar-pdf): quando a página tem campos para preencher, a dica acima das ferramentas diz **Clique em um campo do formulário para preenchê-lo.** Se essa frase não aparecer, com a ferramenta Selecionar ativa e nada selecionado, a página não tem campos: veja a seção [se o PDF não for preenchível](#se-o-pdf-não-for-preenchível).
 
 ## Como preencher o formulário no Holy PDF
 
