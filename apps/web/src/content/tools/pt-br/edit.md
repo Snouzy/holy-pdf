@@ -12,7 +12,7 @@ faq:
 - question: Posso alterar o texto que já está no PDF?
   answer: 'Sim. Clique duas vezes em uma linha para editá-la. A fonte original é mantida quando aceita os caracteres digitados; caso contrário, a ferramenta usa uma fonte padrão semelhante e avisa você. Também é possível mover ou excluir a linha.'
 - question: Posso fazer anotações e adicionar links?
-  answer: 'Sim. Você pode incluir notas, destaques, sublinhados, tachados e links para sites ou páginas do documento. São anotações de PDF reconhecidas pelo Acrobat e pelo Preview.'
+  answer: 'Sim. Você pode incluir notas, destaques, sublinhados, tachados e links para sites ou páginas do documento. São anotações de PDF reconhecidas pelo Acrobat e pelo app Pré-Visualização do Mac.'
 - question: Posso mover, cortar ou excluir uma imagem do PDF?
   answer: 'Sim. Clique na imagem para mover, redimensionar, girar, espelhar, cortar ou excluir. Desenhos também podem ser movidos ou apagados. O objeto excluído deixa de fazer parte do arquivo.'
 - question: O texto cabe automaticamente na caixa?

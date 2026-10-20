@@ -126,6 +126,14 @@ describe("forms", () => {
     expect(() => filled(blank(), [], [field("a", { name: " " })])).toThrow("damaged");
     expect(() => filled(blank(90), [], [field("a", {})])).toThrow("damaged");
     expect(() => filled(formPdf(), [], [field("name", {})])).toThrow("fieldNameTaken");
+    // An XFA form draws itself from its XML: the refusal names the added field, not the Redact reason.
+    const xfa = rawPdf([
+      "<</Type/Catalog/Pages 2 0 R/AcroForm<</Fields[]/XFA 4 0 R>>>>",
+      "<</Type/Pages/Count 1/Kids[3 0 R]>>",
+      "<</Type/Page/Parent 2 0 R/MediaBox[0 0 300 400]>>",
+      "<</Length 14>>stream\n<xdp:xdp/>    \nendstream",
+    ]);
+    expect(() => filled(xfa, [], [field("a", {})])).toThrow("xfaFields");
     // Filled and added in one pass: the values land on the old widgets, the new one comes after them.
     const both = filled(formPdf(), [{ pageIndex: 0, index: 0, value: "Marie" }], [field("extra", {})]);
     expect(await readFields(both)).toMatchObject({ name: "Marie", extra: "" });

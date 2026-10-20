@@ -161,7 +161,7 @@ export const nameTaken = (name: string, taken: string[]) => taken.some((each) =>
 export function checkFieldNames(p: Pdfium, handle: number, items: EditField[]): void {
   const names = items.map((item) => item.name.trim());
   if (names.some((name) => name === "" || name.includes(".")) || new Set(names).size !== names.length) throw new EngineFailure({ kind: "damaged" });
-  if (p.FPDF_GetFormType(handle) >= 2) throw new EngineFailure({ kind: "xfaForm" });
+  if (p.FPDF_GetFormType(handle) >= 2) throw new EngineFailure({ kind: "xfaFields" });
   const taken = fieldNamesOf(p, handle);
   if (names.some((name) => nameTaken(name, taken))) throw new EngineFailure({ kind: "fieldNameTaken" });
 }

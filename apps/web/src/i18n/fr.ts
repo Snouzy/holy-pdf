@@ -117,6 +117,7 @@ export const fr = {
     alreadySigned: "Ce PDF contient déjà une signature numérique et ne peut pas être modifié ici.",
     fieldNameTaken: "Un champ du document porte déjà le nom d'un des champs ajoutés.",
     xfaForm: "Ce PDF est un formulaire XFA : ses données ne peuvent pas être effacées pour de bon ici.",
+    xfaFields: "Ce PDF est un formulaire XFA : on ne peut pas y ajouter de champ ici. Ouvrez-le dans Adobe Acrobat Reader.",
     textAlready: "Toutes les pages ont déjà leur texte : il n'y a rien à lire.",
     noTextRead: "Aucun texte n'a pu être lu dans les pages.",
     invalidSignature: "La signature ou son placement n'est pas valide. Recréez-la ou replacez-la sur la page.",

@@ -95,6 +95,7 @@ export const ptBR: BoardTexts = {
     alreadySigned: "Este PDF já contém uma assinatura digital e não pode ser alterado aqui.",
     fieldNameTaken: "Um campo deste documento já possui o nome de um dos novos campos.",
     xfaForm: "Este PDF é um formulário XFA: seus dados não podem ser apagados definitivamente aqui.",
+    xfaFields: "Este PDF é um formulário XFA: não é possível adicionar campos a ele aqui. Abra-o no Adobe Acrobat Reader.",
     textAlready: "Cada página já tem o seu texto: não há nada para ler.",
     noTextRead: "Nenhum texto pôde ser lido nas páginas.",
     invalidSignature: "A assinatura ou sua posição é inválida. Crie-a novamente ou reposicione-a na página.",
