@@ -1,19 +1,27 @@
-import { tesseractWorker } from "./tesseract";
+import { type Language, tesseractWorker } from "./tesseract";
 import type { Engine } from "../engine/client";
 import type { Progress } from "../engine/protocol";
 import type { OcrLine, OcrPage, PageSize, Result } from "../engine/types";
+import type { Lang } from "../tools";
 
 /** About 200 ppi on an A4 page: a sharper picture reads hardly better and takes longer. */
 const longestSide = 2400;
 
-/** Reads each page's picture with Tesseract, in French and English. */
+/**
+ * The languages read on each version of the page: its own and English. A third language would slow every page down
+ * for the people who do not need it.
+ */
+export const readLanguages: Record<Lang, Language[]> = { fr: ["fra", "eng"], en: ["eng", "fra"], "pt-br": ["por", "eng"] };
+
+/** Reads each page's picture with Tesseract, in the languages of the page's version. */
 export async function readPages(
   engine: Pick<Engine, "thumbnail">,
   docId: string,
   pages: { index: number; size: PageSize }[],
+  lang: Lang,
   onProgress: (progress: Progress) => void,
 ): Promise<Result<OcrPage[]>> {
-  const worker = await tesseractWorker(["fra", "eng"]);
+  const worker = await tesseractWorker(readLanguages[lang]);
   try {
     const read: OcrPage[] = [];
     for (const [done, { index, size }] of pages.entries()) {

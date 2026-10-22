@@ -329,7 +329,7 @@ export const ptBRSite: SiteDictionary = {
     },
     ocr: {
       name: "Frei Leitor", intro: "Frei Leitor reconhece o texto das páginas digitalizadas e o adiciona de forma invisível: o PDF passa a ser pesquisável e copiável.", line: "O que os olhos veem, a busca encontra.",
-      hint: "Eu leio as páginas que ainda não têm texto, em inglês e francês.", working: "Lendo as páginas…", verb: "Reconhecer o texto",
+      hint: "Eu leio as páginas que ainda não têm texto, em português e inglês.", working: "Lendo as páginas…", verb: "Reconhecer o texto",
       result: [{ count: 1, title: { before: "Texto adicionado a ", highlight: "uma página", after: "" } }, { title: { before: "Texto adicionado a ", highlight: "{count} páginas", after: "" } }], again: "Ler outro PDF",
     },
     "pdf-to-word": {

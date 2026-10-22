@@ -232,6 +232,9 @@ importers:
       '@techstark/opencv-js':
         specifier: 5.0.0-release.1
         version: 5.0.0-release.1
+      '@tesseract.js-data/por':
+        specifier: 1.0.0
+        version: 1.0.0
       '@wasm-zoo/qpdf':
         specifier: 0.1.1
         version: 0.1.1(patch_hash=a3bc026feaea867be6e297ebf899356b18e3224b0283322c77a9491145748398)
@@ -1920,6 +1923,9 @@ packages:
 
   '@tesseract.js-data/fra@1.0.0':
     resolution: {integrity: sha512-pp58gMaoyidoBBLd5y5rnf0WW0Y1994QrGqZrYatITqIU/AReUJMykD+YY3JDgvnmgz7uAx1UmhjjuyEmV8JEA==}
+
+  '@tesseract.js-data/por@1.0.0':
+    resolution: {integrity: sha512-sQ7GqYUgKaMmV0vNujYoXLlXUp2e5RGGkJxQ3L59kUOaupIugLJeb1dqhrfgyb71XQw7ltdSuXdQIoaoS/rpsQ==}
 
   '@tesseract.js-data/ron@1.0.0':
     resolution: {integrity: sha512-UdjCzTs3prY8J5CrCV3tPteGx8aE3TNMypYCtAy5vv4Yc4NlwYQaoDHY87Mo8ORcbAFec6ipRjN63usyuQIH6g==}
@@ -5708,6 +5714,8 @@ snapshots:
   '@tesseract.js-data/eng@1.0.0': {}
 
   '@tesseract.js-data/fra@1.0.0': {}
+
+  '@tesseract.js-data/por@1.0.0': {}
 
   '@tesseract.js-data/ron@1.0.0': {}
 

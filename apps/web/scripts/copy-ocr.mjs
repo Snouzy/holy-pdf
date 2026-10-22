@@ -16,6 +16,6 @@ copyFileSync(join(tesseract, "dist/worker.min.js"), join(out, "worker.min.js"));
 for (const variant of ["lstm", "simd-lstm", "relaxedsimd-lstm"]) {
   copyFileSync(join(core, `tesseract-core-${variant}.wasm.js`), join(out, "core", `tesseract-core-${variant}.wasm.js`));
 }
-for (const language of ["fra", "eng", "ron"]) {
+for (const language of ["fra", "eng", "por", "ron"]) {
   copyFileSync(join(root(`@tesseract.js-data/${language}`), "4.0.0_best_int", `${language}.traineddata.gz`), join(out, "lang", `${language}.traineddata.gz`));
 }

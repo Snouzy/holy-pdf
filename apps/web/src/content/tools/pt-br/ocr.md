@@ -14,7 +14,7 @@ faq:
 - question: Meu PDF é enviado para um servidor?
   answer: Não. O reconhecimento acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
 - question: Quais idiomas são reconhecidos?
-  answer: Atualmente, inglês e francês. Caracteres que a fonte do PDF não aceita podem perder acentos.
+  answer: Português e inglês, com os acentos (ã, ç, õ, é…). Caracteres que a fonte do PDF não aceita podem perder acentos.
 - question: As páginas que já têm texto são processadas?
   answer: Não. Somente páginas com menos de 50 caracteres de texto passam pelo OCR; as outras permanecem como estão.
 - question: Quanto tempo leva?
