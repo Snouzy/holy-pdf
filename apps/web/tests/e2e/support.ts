@@ -37,11 +37,11 @@ export async function truncatedPdfFile(name: string, labels: string[]) {
   return { name, mimeType: "application/pdf", buffer: whole.subarray(0, Math.floor(whole.length * 0.8)) };
 }
 
-/** Pages that show their label in a picture, with no text: what a scanner makes. */
-export async function scannedPdfFile(name: string, labels: string[]) {
+/** Pages that show their label in a picture, with no text: what a scanner makes. A sentence needs a smaller `size`. */
+export async function scannedPdfFile(name: string, labels: string[], size?: number) {
   pdfium ??= loadTestPdfium();
   const p = await pdfium;
-  const doc = openPdf(p, textPdf(p, labels));
+  const doc = openPdf(p, textPdf(p, labels, {}, undefined, size));
   const bytes = await pixelizePdf(p, doc, 150, encodeTestJpeg);
   closeDoc(p, doc);
   return { name, mimeType: "application/pdf", buffer: Buffer.from(bytes) };
@@ -140,7 +140,7 @@ export async function expectNoHoverFeedback(locator: Locator) {
 export async function exportWith(page: Page, verb: string) {
   await page.getByRole("button", { name: verb, exact: true }).click();
   const downloading = page.waitForEvent("download");
-  await page.getByRole("button", { name: /^(Download|Télécharger)/ }).click();
+  await page.getByRole("button", { name: /^(Download|Télécharger|Baixar)/ }).click();
   const download = await downloading;
   return { name: download.suggestedFilename(), bytes: new Uint8Array(await readFile(await download.path())) };
 }

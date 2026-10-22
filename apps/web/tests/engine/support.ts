@@ -13,11 +13,11 @@ export async function loadTestPdfium(): Promise<Pdfium> {
 }
 
 /** A PDF whose pages show their label in large letters. `rotations` sets a page's own /Rotate, in degrees. */
-export function textPdf(p: Pdfium, labels: string[], rotations: Record<number, number> = {}, password?: string): Uint8Array {
+export function textPdf(p: Pdfium, labels: string[], rotations: Record<number, number> = {}, password?: string, size = 120): Uint8Array {
   const doc = p.FPDF_CreateNewDocument();
   labels.forEach((label, index) => {
     const page = p.FPDFPage_New(doc, index, 595.28, 841.89);
-    p.FPDFPage_InsertObject(page, textObject(p, doc, label, 120, 400));
+    p.FPDFPage_InsertObject(page, textObject(p, doc, label, size, 400));
     p.FPDFPage_SetRotation(page, (rotations[index] ?? 0) / 90);
     p.FPDFPage_GenerateContent(page);
     p.FPDF_ClosePage(page);

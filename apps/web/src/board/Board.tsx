@@ -408,7 +408,7 @@ export default function Board({ toolId, lang: firstLang, monks, texts: firstText
     const pages = counts.value.flatMap((count, index) => (count < 50 && sizes[index] ? [{ index, size: sizes[index] }] : []));
     if (pages.length === 0) return fail({ kind: "textAlready" });
     const reader = await import("../ocr/reader").catch(() => null);
-    const read = reader ? await reader.readPages(engine, doc.id, pages, onProgress).catch(() => null) : null;
+    const read = reader ? await reader.readPages(engine, doc.id, pages, lang, onProgress).catch(() => null) : null;
     if (!read) return fail({ kind: "engineUnavailable" });
     if (!read.ok) return fail(read.error);
     if (read.value.every((page) => page.lines.length === 0)) return fail({ kind: "noTextRead" });
