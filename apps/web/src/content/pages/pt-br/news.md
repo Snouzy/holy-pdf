@@ -16,7 +16,7 @@ O código do site foi publicado como software livre sob a licença AGPL-3.0-or-l
 Dois freis chegaram ao mosteiro:
 
 - [Editar PDF](/pt-br/editar-pdf): Frei Escriba adiciona textos, imagens, formas, anotações, links e carimbos, além de preencher formulários e criar campos.
-- [Cortar PDF](/pt-br/cortar-pdf): Frei Moldurador oculta as margens de uma página ou de todas elas.
+- [Recortar PDF](/pt-br/cortar-pdf): Frei Moldurador oculta as margens de uma página ou de todas elas.
 
 ## 3 de outubro de 2026
 

@@ -23,6 +23,19 @@ _5 October 2026: not redone yet, and the site is not online. The table covers on
 
 To change a URL: `apps/web/src/tools.ts` (`slug`), then the `title` and the `h1` of the tool's text in `apps/web/src/content/tools/`.
 
+## Tool pages: wording decisions
+
+### 24 October 2026 — pt-BR "cortar" and "recortar"
+
+In Brazil, "cortar" names two different actions. Live Google results in Brazil (DataForSEO through treg, 24 October 2026) show split tools for `cortar pdf` (33,100/month, KD 99) and `cortar página de pdf`: Sejda, Lumin and Smallpdf split pages lead, and crop pages appear only at positions 7 and 9. Crop pages fill the results for `recortar pdf` (8,100/month, KD 92, ten crop pages out of ten), `cortar pdf grátis` (70/month) and `cortador de pdf gratuito` (`cortador de pdf` 260/month). Volumes: SE Ranking, Brazilian database, same day.
+
+Decision:
+
+- Crop leads with "Recortar": short name, tool name, title and H1 of `/pt-br/cortar-pdf`. "cortar" stays in its title for the crop long tail. The slug does not change: the page is the site's most-shown URL in Search Console, and "cortar" is a correct crop word that Adobe, pdf24 and Xodo use for their Brazilian crop pages.
+- Split carries "cortar" in its description and in an FAQ entry that tells the two actions apart. Each page links to the other in its body text.
+
+Review with Search Console 60 days after deployment: impressions of `/pt-br/cortar-pdf` on the `recortar` queries, and of `/pt-br/dividir-pdf` on the `cortar` queries.
+
 ## Guides: researched queries
 
 _SE Ranking volumes through treg, live Google results through treg (crawl4ai), on the date given. A guide owns an informational query; the tool page keeps the transactional one._
