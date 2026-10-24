@@ -2,7 +2,7 @@
 tool: split
 lang: pt-br
 title: Dividir PDF online grátis
-description: Separe um PDF nos pontos que escolher ou em blocos com o mesmo número de páginas. Baixe as partes sem enviar o arquivo.
+description: Separe ou corte um PDF em vários arquivos, nos pontos que escolher ou em blocos com o mesmo número de páginas. Baixe as partes sem enviar o arquivo.
 h1: Dividir PDF
 steps:
 - Solte o PDF na área acima ou escolha-o no dispositivo.
@@ -19,6 +19,8 @@ faq:
   answer: 'Eles mantêm o nome do PDF seguido do número da parte: contrato-1.pdf, contrato-2.pdf e assim por diante.'
 - question: A qualidade muda?
   answer: Não. As páginas são copiadas sem nova compressão.
+- question: Cortar um PDF é o mesmo que dividir?
+  answer: 'Se você quer transformar um PDF em vários arquivos, sim: é esta ferramenta. Para cortar as margens ou manter só uma área da página, use a ferramenta Recortar PDF.'
 - question: É grátis?
   answer: Sim, sem cadastro e sem marca d'água.
 ---
@@ -27,4 +29,4 @@ A ferramenta Dividir PDF permite separar documentos digitalizados de uma só vez
 
 Se quiser conferir a diferença entre dividir, extrair e remover páginas, siga o guia [Como dividir um PDF em vários arquivos](/pt-br/guias/como-dividir-um-pdf).
 
-Você também pode girar ou remover páginas antes de dividir.
+Você também pode girar ou remover páginas antes de dividir. Para cortar as margens das páginas, sem separar o documento, use [Recortar PDF](/pt-br/cortar-pdf).
