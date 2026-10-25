@@ -1,6 +1,6 @@
 import { createWorker, OEM, type Worker } from "tesseract.js";
 
-/** French, English and Brazilian Portuguese for OCR, and Romanian for the Scanner: the reference batch is Romanian. */
+/** French, English and Brazilian Portuguese for OCR and the Scanner, and Romanian for the Scanner: the reference batch is Romanian. */
 export type Language = "fra" | "eng" | "por" | "ron";
 
 /**

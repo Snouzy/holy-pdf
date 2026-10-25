@@ -4,6 +4,7 @@ import { expect, type Locator, type Page } from "@playwright/test";
 import { closeDoc, openPdf } from "../../src/engine/documents";
 import type { Pdfium } from "../../src/engine/pdfium";
 import { pixelizePdf } from "../../src/engine/pixelize";
+import { renderPage } from "../../src/engine/render";
 import { transformPdf } from "../../src/engine/transform";
 import type { Bookmark } from "../../src/engine/types";
 import { encodeTestJpeg, formPdf, loadTestPdfium, photoPdf, textPdf } from "../engine/support";
@@ -66,6 +67,22 @@ export async function sidewaysPageFile(name: string, lines: string[]) {
   const jpeg = encodeJpeg({ data: photo.data, width: photo.cols, height: photo.rows }, 92).data;
   photo.delete();
   return { name, mimeType: "image/jpeg", buffer: Buffer.from(jpeg) };
+}
+
+/** A JPEG photo of a printed page with one line of text, on a dark desk: unlike `sidewaysPageFile`, it draws accents. */
+export async function printedPagePhotoFile(name: string, sentence: string) {
+  pdfium ??= loadTestPdfium();
+  const p = await pdfium;
+  const doc = openPdf(p, textPdf(p, [sentence], {}, undefined, 20));
+  const sheet = renderPage(p, doc, 0, 1240);
+  closeDoc(p, doc);
+  const [width, height, margin] = [sheet.width + 160, sheet.height + 160, 80];
+  const photo = new Uint8Array(width * height * 4);
+  for (let i = 0; i < photo.length; i += 4) photo.set([45, 40, 38, 255], i);
+  for (let y = 0; y < sheet.height; y++) {
+    photo.set(sheet.pixels.subarray(y * sheet.width * 4, (y + 1) * sheet.width * 4), ((y + margin) * width + margin) * 4);
+  }
+  return { name, mimeType: "image/jpeg", buffer: Buffer.from(encodeJpeg({ data: photo, width, height }, 92).data) };
 }
 
 export async function photoPdfFile(name: string, labels: string[]) {

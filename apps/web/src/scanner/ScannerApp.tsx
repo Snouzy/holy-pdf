@@ -8,6 +8,7 @@ import type { NamedBytes } from "../engine/types";
 import { createScanner } from "../scan/client";
 import { photoKind } from "../scan/protocol";
 import { suggest } from "../scan/suggest";
+import type { Language } from "../ocr/tesseract";
 import type { Lang } from "../tools";
 import { Correction } from "./Correction";
 import { needsCheck } from "./pages";
@@ -23,6 +24,12 @@ type Props = {
   saver: Saver; confirm: Confirm; onSavedChange?: (saved: boolean) => void; onDownloaded?: () => void;
 };
 type State = { session: Session; history: History };
+
+/**
+ * The languages read on each version of the page. Romanian stays on the French and English pages: the reference batch is
+ * Romanian. The Brazilian page reads Portuguese and English, as OCR does: Romanian and French there would lose the "ã".
+ */
+export const scannerLanguages: Record<Lang, Language[]> = { fr: ["ron", "fra", "eng"], en: ["ron", "fra", "eng"], "pt-br": ["por", "eng"] };
 
 export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton, saver, confirm, onSavedChange, onDownloaded }: Props) {
   const t = scannerTexts[lang];
@@ -150,7 +157,7 @@ export function ScannerApp({ photos, lang, onPhotos, engine, Skeleton, saver, co
     try {
       const page = live.current.state.session.pages[pageId];
       if (page?.status.kind !== "ready") return;
-      reader.current ??= import("../ocr/tesseract").then((module) => module.tesseractWorker(["ron", "fra", "eng"])).catch(() => null);
+      reader.current ??= import("../ocr/tesseract").then((module) => module.tesseractWorker(scannerLanguages[lang])).catch(() => null);
       const worker = await reader.current;
       const { result } = page.status;
       if (!worker) {

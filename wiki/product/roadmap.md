@@ -22,7 +22,7 @@ The final goal is an app that covers this whole catalog, on Mac, iPhone and the 
 
 | Tool | Feasibility | Note |
 |---|---|---|
-| Create a PDF with a camera (**Scanner**) | A | Phase 0, shipped on Mac on 1 October 2026. On the site (3 October 2026): the same engine ported to OpenCV.js, board, correction and export; reading and suggestions (milestone B) the same day; see the [web spec](../specs/2026-10-02-web-scanner-design.md) |
+| Create a PDF with a camera (**Scanner**) | A | Phase 0, shipped on Mac on 1 October 2026. On the site (3 October 2026): the same engine ported to OpenCV.js, board, correction and export; reading and suggestions (milestone B) the same day; the Brazilian page reads Portuguese and English (25 October 2026); see the [web spec](../specs/2026-10-02-web-scanner-design.md) |
 | Images to PDF | A | Implemented on Mac (2 October 2026): one A4 page per image, in the order set; see the [spec](../specs/2026-10-02-mac-images-design.md). On the site: JPG to PDF |
 | Web page to PDF | A | On Mac: `WKWebView.createPDF`. On the site: it would need a server; not for now (decision of 4 October 2026) |
 | Generate a QR code | A | Removed on 4 October 2026: a traffic bait with no link to PDFs |
