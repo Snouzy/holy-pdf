@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { readWithPdfjs } from "../engine/support";
-import { chooseFiles, deskPhotoFile, sidewaysPageFile } from "./support";
+import { chooseFiles, deskPhotoFile, printedPagePhotoFile, sidewaysPageFile } from "./support";
 
 test("turns a photo of a page into a straight A4 PDF", async ({ page }) => {
   test.slow();
@@ -47,6 +47,23 @@ test("reads a sideways page: turns it upright, names its document after it, and 
   const [read] = await readWithPdfjs(bytes);
   expect([read?.width, read?.height]).toEqual([595, 842]);
   expect(read?.text).toMatch(/CERTIFICAT/);
+});
+
+test("reads Portuguese with its accents on the Brazilian page", async ({ page }) => {
+  test.setTimeout(180_000);
+  await page.goto("/pt-br/digitalizar-para-pdf");
+  // Read in Romanian, French and English, this came out as "Nao hâ informaçäo sobre a açäo". No final full stop: the
+  // Document mode's clean-up can take a dot that small for a speck, whatever the language.
+  const sentence = "Não há informação sobre a ação, nem sobre a conclusão";
+  await chooseFiles(page, [await printedPagePhotoFile("contrato.jpg", sentence)]);
+  await expect(page.locator(".planche-open img")).toBeVisible({ timeout: 60_000 });
+  await expect(page.locator(".planche-reading")).toBeVisible({ timeout: 60_000 });
+  await expect(page.locator(".planche-reading")).toBeHidden({ timeout: 150_000 });
+  const downloading = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Baixar tudo" }).click();
+  const bytes = new Uint8Array(await (await import("node:fs/promises")).readFile(await (await downloading).path()));
+  const [read] = await readWithPdfjs(bytes);
+  expect(read?.text.trim()).toBe(sentence);
 });
 
 test("asks before removing a document, and keeps it on « Annuler »", async ({ page }) => {

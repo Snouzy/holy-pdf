@@ -9,6 +9,7 @@ h1: Como digitalizar várias páginas em um PDF
 lead: Fotografe cada página, confira a ordem e baixe um único PDF. As imagens ficam no seu dispositivo.
 image: /articles/scan-multiple-pages/scan-multiple-pages-hero.webp
 published: 2026-10-06
+updated: 2026-10-25
 ---
 
 <figure class="article-visual article-visual--hero">
@@ -49,7 +50,7 @@ Se precisar corrigir a ordem depois, use [Organizar páginas de PDF](/pt-br/orga
 
 A opção **Texto pesquisável** adiciona uma camada de texto invisível sobre as páginas. Assim, você pode buscar uma palavra ou copiar um trecho sem mudar a aparência da digitalização.
 
-O reconhecimento de texto aceita atualmente inglês e francês. Para processar um PDF já digitalizado, use o [OCR PDF](/pt-br/ocr-pdf).
+O reconhecimento lê português e inglês, com os acentos: “informação” continua “informação”. Para processar um PDF já digitalizado, use o [OCR PDF](/pt-br/ocr-pdf), que também lê português.
 
 ## 5. Baixe um único PDF
 
