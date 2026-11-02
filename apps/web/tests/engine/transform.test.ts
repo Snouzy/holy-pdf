@@ -20,13 +20,16 @@ function transformed(bytes: Uint8Array, op: Parameters<typeof transformPdf>[2], 
 
 describe("transformPdf", () => {
   it("protects a PDF: it then opens with its password only, in PDFium and in pdf.js", async () => {
-    const bytes = transformed(textPdf(p, ["One", "Two"]), { kind: "protect", password: "s3cret é" });
+    // A space, an accent and a symbol: the password keeps every character typed.
+    const bytes = transformed(textPdf(p, ["One", "Two"]), { kind: "protect", password: "s3cret é#" });
     expect(() => openPdf(p, bytes)).toThrow("passwordRequired");
     expect(() => openPdf(p, bytes, "wrong")).toThrow("wrongPassword");
-    const doc = openPdf(p, bytes, "s3cret é");
+    const doc = openPdf(p, bytes, "s3cret é#");
     expect(doc.sizes).toHaveLength(2);
     closeDoc(p, doc);
-    expect((await readWithPdfjs(bytes, "s3cret é")).map((page) => page.text)).toEqual(["One", "Two"]);
+    await expect(readWithPdfjs(bytes)).rejects.toThrow();
+    await expect(readWithPdfjs(bytes, "wrong")).rejects.toThrow();
+    expect((await readWithPdfjs(bytes, "s3cret é#")).map((page) => page.text)).toEqual(["One", "Two"]);
   });
 
   it("unlocks a PDF opened with its password: the copy opens without one", async () => {

@@ -25,4 +25,6 @@ faq:
 
 Proteger PDF com senha ajuda a controlar a abertura de documentos sensíveis. Compartilhe a senha por um canal diferente do arquivo e mantenha uma cópia original.
 
+Primeira vez? O guia explica [como colocar senha em um PDF](/pt-br/guias/como-colocar-senha-em-pdf), no computador e no celular, o que a senha protege e o que fazer se você a esquecer.
+
 Frei Cadeado faz tudo no seu dispositivo: seus documentos e sua senha nunca saem do computador ou do celular.
