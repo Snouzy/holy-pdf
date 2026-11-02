@@ -32,6 +32,10 @@ describe("articles", () => {
     for (const lang of ["fr", "en", "pt-br"]) expect(existsSync(join(content, `articles/${lang}/fill-pdf-form.md`)), lang).toBe(true);
   });
 
+  it("publishes the searchable-PDF OCR guide in FR, EN and pt-BR as equivalent siblings", () => {
+    for (const lang of ["fr", "en", "pt-br"]) expect(existsSync(join(content, `articles/${lang}/searchable-pdf.md`)), lang).toBe(true);
+  });
+
   it("publishes the PDF splitting guide only in its intended pt-BR market", () => {
     expect(existsSync(join(content, "articles/pt-br/como-dividir-um-pdf.md"))).toBe(true);
     expect(existsSync(join(content, "articles/fr/como-dividir-um-pdf.md"))).toBe(false);

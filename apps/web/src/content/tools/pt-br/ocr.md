@@ -6,7 +6,7 @@ description: Use OCR no PDF digitalizado para tornar o texto pesquisável e copi
 h1: 'OCR PDF: tornar o texto pesquisável'
 steps:
 - Solte um PDF digitalizado na área acima ou escolha-o no dispositivo.
-- 'Clique em “Reconhecer o texto”: cada página sem texto será processada.'
+- 'Clique em “Reconhecer o texto”: páginas com menos de 50 caracteres de texto serão processadas.'
 - 'Baixe a cópia: você poderá pesquisar palavras e selecionar trechos.'
 faq:
 - question: O que é OCR?
@@ -14,7 +14,7 @@ faq:
 - question: Meu PDF é enviado para um servidor?
   answer: Não. O reconhecimento acontece no seu navegador, no seu dispositivo. Nenhum arquivo é enviado ou armazenado.
 - question: Quais idiomas são reconhecidos?
-  answer: Português e inglês, com os acentos (ã, ç, õ, é…). Caracteres que a fonte do PDF não aceita podem perder acentos.
+  answer: Português e inglês, com os acentos (ã, ç, õ, é…). Caracteres que a fonte padrão do PDF não aceita podem perder acentos ou ser omitidos.
 - question: As páginas que já têm texto são processadas?
   answer: Não. Somente páginas com menos de 50 caracteres de texto passam pelo OCR; as outras permanecem como estão.
 - question: Quanto tempo leva?

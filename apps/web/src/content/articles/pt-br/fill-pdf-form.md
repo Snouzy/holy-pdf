@@ -68,7 +68,7 @@ Guarde a cópia baixada e o original intacto: assim dá para recomeçar se uma r
 
 Se o formulário não tem campos, ainda dá para escrever nele. Na mesma ferramenta, escolha **Texto**, clique onde vai a resposta e digite. Arraste em vez de clicar para desenhar uma caixa: o texto quebra a linha na largura dela. O texto adicionado continua sendo texto de verdade: dá para selecionar, copiar e encontrar na busca em qualquer leitor.
 
-Em um formulário que saiu de um scanner ou da câmera do celular, a página é uma imagem. A ferramenta Texto funciona sobre ela do mesmo jeito. O [OCR PDF](/pt-br/ocr-pdf) serve para tornar pesquisáveis as palavras impressas da digitalização, e, por enquanto, reconhece só inglês e francês, não português; para digitar as suas respostas, ele não é necessário.
+Em um formulário que saiu de um scanner ou da câmera do celular, a página é uma imagem. A ferramenta Texto funciona sobre ela do mesmo jeito. O [OCR PDF](/pt-br/ocr-pdf) serve para tornar pesquisáveis as palavras impressas da digitalização e reconhece português e inglês; para digitar as suas respostas, ele não é necessário.
 
 A ferramenta **Campo** vai um passo além e adiciona campos de verdade a uma página: um campo de texto, uma caixa de seleção ou uma lista suspensa. Um campo adicionado só pode ser preenchido depois de salvar, em uma segunda passagem. Por isso, a ferramenta Campo serve para preparar um formulário que outras pessoas vão preencher.
 
