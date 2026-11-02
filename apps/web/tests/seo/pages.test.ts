@@ -222,6 +222,32 @@ describe("built pages", () => {
     expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
   });
 
+  const searchablePdfGuides = {
+    fr: `${site}/fr/guides/rendre-un-pdf-scanne-recherchable`,
+    en: `${site}/en/guides/how-to-make-a-pdf-searchable`,
+    "pt-BR": `${site}/pt-br/guias/como-tornar-pdf-pesquisavel`,
+  };
+  it.each(Object.values(searchablePdfGuides).map((href) => new URL(href).pathname))("%s links the real OCR siblings and exposes reviewed visuals", (path) => {
+    const page = pages.find((candidate) => candidate.path === path);
+    expect(page, path).toBeDefined();
+    const html = page?.html ?? "";
+    const alternates = new Map([...html.matchAll(/<link rel="alternate" hreflang="([^"]+)" href="([^"]+)"/g)].map((match) => [match[1], match[2]]));
+    expect(Object.fromEntries(alternates)).toEqual({ ...searchablePdfGuides, "x-default": searchablePdfGuides.en });
+    const lang = path.startsWith("/fr/") ? "fr" : path.startsWith("/en/") ? "en" : "pt-br";
+    const hero = "/articles/searchable-pdf/searchable-pdf-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain(`src="/articles/searchable-pdf/holy-pdf-ocr-ui-${lang}.webp"`);
+    expect(html).toContain(`srcset="/articles/searchable-pdf/holy-pdf-ocr-ui-${lang}-mobile.webp"`);
+    expect(html).toContain('width="1600" height="900"');
+    expect(html).toContain('width="1400" height="900"');
+    expect(html).toContain('width="390" height="900"');
+    expect(html).toContain(`href="/${lang}/ocr-pdf"`);
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+  });
+
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {
     const hero = "/articles/scan-multiple-pages/scan-multiple-pages-hero.webp";
     expect(html).toContain(`src="${hero}"`);

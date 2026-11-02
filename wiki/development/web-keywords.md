@@ -23,6 +23,20 @@ _5 October 2026: not redone yet, and the site is not online. The table covers on
 
 To change a URL: `apps/web/src/tools.ts` (`slug`), then the `title` and the `h1` of the tool's text in `apps/web/src/content/tools/`.
 
+## Searchable scanned PDFs (2 November 2026)
+
+The OCR tool remains the owner of the transactional `OCR PDF` intent. Its French and English title and H1 lead with that transactional phrase. The paired guide file `searchable-pdf.md` owns the diagnostic workflow: confirm that a scan has no text, run OCR, then verify search and copied text in the downloaded file.
+
+| Market | Tool owner | Guide | Evidence used for the guide |
+|---|---|---|---|
+| France | `/fr/ocr-pdf` | `/fr/guides/rendre-un-pdf-scanne-recherchable` | 26 October DataForSEO: `ocr pdf`, 3,600 monthly searches, KD 0; the 2 November mobile long-tail SERP mixed explainers and OCR tools |
+| United States | `/en/ocr-pdf` | `/en/guides/how-to-make-a-pdf-searchable` | 26 October DataForSEO: `make pdf searchable`, 1,900 monthly searches, KD 9; `searchable pdf`, 2,400, KD 8; the 2 November US and UK mobile SERPs mixed how-to pages and OCR tools |
+| Brazil | `/pt-br/ocr-pdf` | `/pt-br/guias/como-tornar-pdf-pesquisavel` | 26 October DataForSEO: `tornar pdf pesquisável`, 1,900 monthly searches, KD 0; the 2 November mobile SERP mixed tools and explanatory results |
+
+Finalized GSC for 3–30 October records 43 impressions, no clicks and average position 65.9 for `/pt-br/ocr-pdf`; this is an early demand signal, not established traffic. No FR or EN OCR owner row was returned. GA4 returned no Organic Search landing-page rows for 5 October–1 November.
+
+Do not add a Spanish sibling until the product has a complete `/es` locale and verified Spanish OCR behavior. The 2 November repository check still found no Spanish route owner. The Mexico SERP was mixed, while the Spain refresh failed at the provider and therefore remains unconfirmed for this run.
+
 ## Tool pages: wording decisions
 
 ### 24 October 2026 — pt-BR "cortar" and "recortar"
