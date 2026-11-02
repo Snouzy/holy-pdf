@@ -62,8 +62,8 @@ describe("built pages", () => {
     }
   });
 
-  it("does not invent hreflang siblings for a market-only article", () => {
-    const page = pages.find(({ path }) => path === "/pt-br/guias/como-dividir-um-pdf");
+  it.each(["/pt-br/guias/como-dividir-um-pdf", "/pt-br/guias/como-colocar-senha-em-pdf"])("does not invent hreflang siblings for the market-only article %s", (path) => {
+    const page = pages.find((candidate) => candidate.path === path);
     expect(page).toBeDefined();
     const alternates = [...(page?.html ?? "").matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((match) => match[1]);
     expect(alternates).toEqual(["pt-BR"]);
@@ -220,6 +220,26 @@ describe("built pages", () => {
     const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
     expect(posting?.image).toBe(`${site}${hero}`);
     expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+  });
+
+  it("exposes the password guide's hero, real captures, Protect and Unlock links and Mathias byline", () => {
+    const path = "/pt-br/guias/como-colocar-senha-em-pdf";
+    const html = pages.find((page) => page.path === path)?.html ?? "";
+    expect(html).not.toBe("");
+    const hero = "/articles/password-protect-pdf/holy-pdf-senha-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain('width="1600" height="900"');
+    expect(html).toMatch(/<figure class="article-visual">\s*<picture>\s*<source media="\(max-width: 40rem\)" srcset="\/articles\/password-protect-pdf\/holy-pdf-senha-ui-pt-br-mobile\.webp" width="780" height="\d+" \/>\s*<img src="\/articles\/password-protect-pdf\/holy-pdf-senha-ui-pt-br\.webp"/);
+    expect(html).toContain('src="/articles/password-protect-pdf/holy-pdf-senha-resultado-pt-br.webp"');
+    expect(html).toContain('width="1320" height="700"');
+    expect(html).toContain('href="/pt-br/proteger-pdf"');
+    expect(html).toContain('href="/pt-br/desbloquear-pdf"');
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+    const tool = pages.find((page) => page.path === "/pt-br/proteger-pdf")?.html ?? "";
+    expect(tool).toContain(`href="${path}"`);
   });
 
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {
