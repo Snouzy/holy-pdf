@@ -323,7 +323,11 @@
   .file-card { grid-template-columns: 3rem minmax(0, 1fr) auto; align-items: center; column-gap: 0.75rem; width: auto; padding: 0.75rem; }
   .file-card .thumb { grid-row: span 2; width: 3rem; height: 4rem; }
   .file-card .page-sheet img { max-width: 3rem; max-height: 4rem; }
-  .board .file-card .file-close { position: static; grid-row: span 2; width: 44px; min-height: 44px; border-radius: var(--radius-control); }
+  .board .file-card .file-close { position: static; grid-column: 3; grid-row: 1 / span 2; width: 44px; min-height: 44px; border-radius: var(--radius-control); }
+  /* A file that failed to open: its message and its password form take the full width under the name. */
+  .file-card .error, .file-card .password { grid-column: 1 / -1; }
+  .file-card.failed .thumb { display: none; }
+  .file-card.failed .file-name { grid-column: 1 / 3; }
   .board .help-button { position: relative; }
   .board .help-button::before { content: ""; position: absolute; inset: -8px; }
 }
