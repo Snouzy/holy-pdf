@@ -62,7 +62,7 @@ describe("built pages", () => {
     }
   });
 
-  it.each(["/pt-br/guias/como-dividir-um-pdf", "/pt-br/guias/como-colocar-senha-em-pdf"])("does not invent hreflang siblings for the market-only article %s", (path) => {
+  it.each(["/pt-br/guias/como-dividir-um-pdf", "/pt-br/guias/como-colocar-senha-em-pdf", "/pt-br/guias/como-tirar-senha-de-pdf"])("does not invent hreflang siblings for the market-only article %s", (path) => {
     const page = pages.find((candidate) => candidate.path === path);
     expect(page).toBeDefined();
     const alternates = [...(page?.html ?? "").matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((match) => match[1]);
@@ -240,6 +240,28 @@ describe("built pages", () => {
     expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
     const tool = pages.find((page) => page.path === "/pt-br/proteger-pdf")?.html ?? "";
     expect(tool).toContain(`href="${path}"`);
+  });
+
+  it("exposes the unlock guide's hero, real captures, Unlock and Protect links, Mathias byline and its incoming links", () => {
+    const path = "/pt-br/guias/como-tirar-senha-de-pdf";
+    const html = pages.find((page) => page.path === path)?.html ?? "";
+    expect(html).not.toBe("");
+    const hero = "/articles/unlock-pdf/holy-pdf-tirar-senha-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain('width="1600" height="900"');
+    expect(html).toMatch(/<figure class="article-visual">\s*<picture>\s*<source media="\(max-width: 40rem\)" srcset="\/articles\/unlock-pdf\/holy-pdf-tirar-senha-ui-pt-br-mobile\.webp" width="780" height="\d+" \/>\s*<img src="\/articles\/unlock-pdf\/holy-pdf-tirar-senha-ui-pt-br\.webp"/);
+    expect(html).toContain('src="/articles/unlock-pdf/holy-pdf-tirar-senha-resultado-pt-br.webp"');
+    expect(html).toContain('src="/articles/unlock-pdf/holy-pdf-tirar-senha-resultado-pt-br-mobile.webp"');
+    expect(html).toContain('width="1320" height="700"');
+    expect(html).toContain('href="/pt-br/desbloquear-pdf"');
+    expect(html).toContain('href="/pt-br/proteger-pdf"');
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+    for (const from of ["/pt-br/desbloquear-pdf", "/pt-br/guias/como-colocar-senha-em-pdf"]) {
+      expect(pages.find((page) => page.path === from)?.html ?? "", from).toContain(`href="${path}"`);
+    }
   });
 
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {

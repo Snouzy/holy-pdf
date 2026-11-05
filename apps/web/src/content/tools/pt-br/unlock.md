@@ -23,4 +23,6 @@ faq:
 
 Desbloquear PDF permite arquivar uma fatura sem digitar a senha a cada abertura ou usar o documento em um aplicativo que não aceita arquivos protegidos.
 
+Primeira vez? O guia mostra [como tirar a senha de um PDF](/pt-br/guias/como-tirar-senha-de-pdf) no computador e no celular, explica a diferença entre senha de abertura e restrição de impressão e diz o que fazer se você não souber a senha.
+
 Frei Chave faz tudo no seu dispositivo: seus documentos e suas senhas nunca saem do computador ou do celular.
