@@ -26,7 +26,7 @@ Sign: `pnpm exec playwright test tests/e2e/sign.spec.ts --project chromium --pro
 
 This suite also checks that the instruction and the document position stay stable during character-by-character typing, its clearing, and selection/deselection. Mutations are observed in FR/EN at 1280 and 390 px to detect transient flips, not only the final state of the text.
 
-Protect and Unlock: `tests/engine/transform.test.ts` (encryption read back by PDFium and pdf.js, signed PDF refused) and `tests/e2e/protect-unlock.spec.ts` (matching passwords before the run, the preview of the protected copy, copies that open with or without a password).
+Protect and Unlock: `tests/engine/transform.test.ts` (encryption read back by PDFium and pdf.js, print and copy restrictions lifted without a password, signed PDF refused) and `tests/e2e/protect-unlock.spec.ts` (matching passwords before the run, the preview of the protected copy, copies that open with or without a password).
 
 Page numbers: `tests/engine/numbers.test.ts` (formats, range, position read back by pdf.js under the four rotations) and `tests/e2e/page-numbers.spec.ts` (settings entered before the PDF has finished opening).
 

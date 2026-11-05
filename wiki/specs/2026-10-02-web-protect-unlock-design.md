@@ -17,5 +17,5 @@ A PDF that carries a digital signature is refused ("This PDF already contains a 
 
 ## Tests
 
-- Engine (`tests/engine/transform.test.ts`): the protected file requires its password in PDFium and in pdf.js, a wrong password is refused, the unlocked copy opens without a password, a signed PDF is refused for both operations.
+- Engine (`tests/engine/transform.test.ts`): the protected file requires its password in PDFium and in pdf.js, a wrong password is refused, the unlocked copy opens without a password, a PDF that opens without a password but forbids printing and copying comes out with every permission in PDFium and no encryption for pdf.js, whose `getPermissions()` answers `null` (added on 5 November 2026; the saved bytes may still carry the old security-handler dictionary as an unreferenced object, which neither reader uses), a signed PDF is refused for both operations.
 - Browser (`tests/e2e/protect-unlock.spec.ts`): the button stays grayed out while the two passwords differ, the downloaded copy is named `<name>-protected.pdf`, "View" shows its page, and it opens only with the password; the unlocked copy is named `<name>-unlocked.pdf` and opens without it.

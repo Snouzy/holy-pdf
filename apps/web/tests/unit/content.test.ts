@@ -44,6 +44,12 @@ describe("articles", () => {
     expect(existsSync(join(content, "articles/en/password-protect-pdf.md"))).toBe(false);
   });
 
+  it("publishes the unlock guide only in its intended pt-BR market", () => {
+    expect(existsSync(join(content, "articles/pt-br/unlock-pdf.md"))).toBe(true);
+    expect(existsSync(join(content, "articles/fr/unlock-pdf.md"))).toBe(false);
+    expect(existsSync(join(content, "articles/en/unlock-pdf.md"))).toBe(false);
+  });
+
   it("allows independent locale inventories and matches topics only across real equivalents", () => {
     const names = new Set(languages.flatMap((lang) => readdirSync(join(content, "articles", lang))));
     expect(names.size).toBeGreaterThan(0);

@@ -10,6 +10,7 @@ author: Mathias
 lead: "Abra Proteger PDF, escolha o arquivo, digite a senha duas vezes e baixe a cópia protegida. A senha controla a abertura do arquivo: depois de aberto, ele ainda pode ser impresso ou copiado, conforme o leitor usado."
 image: /articles/password-protect-pdf/holy-pdf-senha-hero.webp
 published: 2026-11-02
+updated: 2026-11-05
 ---
 
 <figure class="article-visual article-visual--hero">
@@ -104,7 +105,7 @@ A senha de abertura não faz isso: quem abre o arquivo pode editá-lo e copiá-l
 
 ### Como desbloquear um PDF protegido se eu sei a senha?
 
-Abra [Desbloquear PDF](/pt-br/desbloquear-pdf), escolha o arquivo e digite a senha quando ela for pedida. Você baixa uma cópia que abre sem senha; o arquivo original continua protegido. A ferramenta não tenta descobrir uma senha que você não conhece.
+Abra [Desbloquear PDF](/pt-br/desbloquear-pdf), escolha o arquivo e digite a senha quando ela for pedida. Você baixa uma cópia que abre sem senha; o arquivo original continua protegido. A ferramenta não tenta descobrir uma senha que você não conhece. O guia sobre [como tirar a senha de um PDF](/pt-br/guias/como-tirar-senha-de-pdf) mostra cada passo, no computador e no celular.
 
 ### Meu arquivo ou minha senha são enviados para um servidor?
 
