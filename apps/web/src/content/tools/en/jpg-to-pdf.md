@@ -25,4 +25,6 @@ faq:
 
 Putting photos into one PDF lets you send receipts, proofs or photographed pages as a single file that is easy to read.
 
+Step by step: [how to combine photos into one PDF](/en/guides/how-to-combine-photos-into-one-pdf), including how to order the pages, convert iPhone HEIC photos to JPEG, what page size you get, and what to do if the file is too large to send.
+
 For photos of documents, frame the whole page and avoid reflections.

@@ -264,6 +264,31 @@ describe("built pages", () => {
     }
   });
 
+  it("exposes the combine-photos guide's hero, real captures, tool links, Mathias byline, English-only alternates and incoming links", () => {
+    const path = "/en/guides/how-to-combine-photos-into-one-pdf";
+    const html = pages.find((page) => page.path === path)?.html ?? "";
+    expect(html).not.toBe("");
+    const hero = "/articles/combine-photos/holy-pdf-combine-photos-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain('width="1600" height="900"');
+    for (const capture of ["ui", "result", "heic"]) {
+      expect(html).toContain(`srcset="/articles/combine-photos/holy-pdf-combine-photos-${capture}-mobile.webp" width="780" height="1328"`);
+      expect(html).toContain(`src="/articles/combine-photos/holy-pdf-combine-photos-${capture}.webp"`);
+    }
+    expect(html).toContain('src="/articles/combine-photos/holy-pdf-combine-photos-order.webp"');
+    for (const href of ["/en/jpg-to-pdf", "/en/compress-pdf", "/en/scanner"]) expect(html).toContain(`href="${href}"`);
+    expect(html).toContain('id="photos-from-an-iphone-convert-heic-to-jpeg-first"');
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const alternates = [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((match) => match[1]);
+    expect(alternates).toEqual(["en", "x-default"]);
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+    for (const from of ["/en/jpg-to-pdf", "/en/guides/scan-multiple-pages-into-one-pdf", "/en/guides"]) {
+      expect(pages.find((page) => page.path === from)?.html ?? "", from).toContain(`href="${path}"`);
+    }
+  });
+
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {
     const hero = "/articles/scan-multiple-pages/scan-multiple-pages-hero.webp";
     expect(html).toContain(`src="${hero}"`);
