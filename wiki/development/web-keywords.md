@@ -36,6 +36,18 @@ Decision:
 
 Review with Search Console 60 days after deployment: impressions of `/pt-br/cortar-pdf` on the `recortar` queries, and of `/pt-br/dividir-pdf` on the `cortar` queries.
 
+### 7 November 2026 — pt-BR OCR says "em português"
+
+Since 22 October 2026 the Brazilian OCR page reads Brazilian Portuguese and English (`readLanguages` in `src/ocr/reader.ts`), but its title, description and H1 did not say so, and the Brazilian form-filling guide still said the opposite. Demand in Brazil: `ocr pdf` 10,800/month, KD 100 (SE Ranking) and 12,100/month, KD 46 (Serpstat), stable since March 2026; `converter pdf em ocr` 30 (SE Ranking) and 1,900 (Serpstat); `ocr pdf online` 720 (Serpstat); volumes through treg, 7 November 2026, not summed. Search Console, 9 October to 5 November 2026 (`dataState: all`): `/pt-br/ocr-pdf` had 43 impressions, no click and an average position of 65.9; by query, 21 rows and 37 impressions, led by `pdf ocr` and `pdf ocr gratuito` (4 each), `ocr online pdf`, `ocr pdf`, `ocr pdf online` and `pdf para ocr` (3 each); six queries say "grátis", "gratuito" or "free" (10 impressions), five say "converter", "para", "transformar" or "passar" (7 impressions). The Brazilian results for `ocr pdf` (google.com.br, desktop, 7 November 2026) are eight online OCR tools, a Microsoft Store app and a Google Cloud page: the query stays on the tool page, no guide.
+
+Decision:
+
+- The title becomes "OCR PDF em português online grátis" and the H1 "OCR PDF em português: tornar o texto pesquisável"; the description names the two languages and says the file is not uploaded. None of the three competitor pages read that day puts the language forward.
+- The body answers in its first sentence (Portuguese and English, invisible text layer, appearance unchanged), keeps the 50-character rule and links to the Scanner and to the Brazilian scanning guide. Two FAQ entries answer "converter um PDF em OCR" and "grátis".
+- The Brazilian form-filling guide now says the OCR reads Portuguese and English.
+
+Review with Search Console 60 days after deployment: impressions and position of `/pt-br/ocr-pdf` on the "português", "grátis" and "converter" variants.
+
 ## Guides: researched queries
 
 _SE Ranking volumes through treg, live Google results through treg (crawl4ai), on the date given. A guide owns an informational query; the tool page keeps the transactional one._
