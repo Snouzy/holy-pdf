@@ -62,8 +62,8 @@ describe("built pages", () => {
     }
   });
 
-  it("does not invent hreflang siblings for a market-only article", () => {
-    const page = pages.find(({ path }) => path === "/pt-br/guias/como-dividir-um-pdf");
+  it.each(["/pt-br/guias/como-dividir-um-pdf", "/pt-br/guias/como-colocar-senha-em-pdf", "/pt-br/guias/como-tirar-senha-de-pdf"])("does not invent hreflang siblings for the market-only article %s", (path) => {
+    const page = pages.find((candidate) => candidate.path === path);
     expect(page).toBeDefined();
     const alternates = [...(page?.html ?? "").matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((match) => match[1]);
     expect(alternates).toEqual(["pt-BR"]);
@@ -246,6 +246,73 @@ describe("built pages", () => {
     const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
     expect(posting?.image).toBe(`${site}${hero}`);
     expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+  });
+
+  it("exposes the password guide's hero, real captures, Protect and Unlock links and Mathias byline", () => {
+    const path = "/pt-br/guias/como-colocar-senha-em-pdf";
+    const html = pages.find((page) => page.path === path)?.html ?? "";
+    expect(html).not.toBe("");
+    const hero = "/articles/password-protect-pdf/holy-pdf-senha-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain('width="1600" height="900"');
+    expect(html).toMatch(/<figure class="article-visual">\s*<picture>\s*<source media="\(max-width: 40rem\)" srcset="\/articles\/password-protect-pdf\/holy-pdf-senha-ui-pt-br-mobile\.webp" width="780" height="\d+" \/>\s*<img src="\/articles\/password-protect-pdf\/holy-pdf-senha-ui-pt-br\.webp"/);
+    expect(html).toContain('src="/articles/password-protect-pdf/holy-pdf-senha-resultado-pt-br.webp"');
+    expect(html).toContain('width="1320" height="700"');
+    expect(html).toContain('href="/pt-br/proteger-pdf"');
+    expect(html).toContain('href="/pt-br/desbloquear-pdf"');
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+    const tool = pages.find((page) => page.path === "/pt-br/proteger-pdf")?.html ?? "";
+    expect(tool).toContain(`href="${path}"`);
+  });
+
+  it("exposes the unlock guide's hero, real captures, Unlock and Protect links, Mathias byline and its incoming links", () => {
+    const path = "/pt-br/guias/como-tirar-senha-de-pdf";
+    const html = pages.find((page) => page.path === path)?.html ?? "";
+    expect(html).not.toBe("");
+    const hero = "/articles/unlock-pdf/holy-pdf-tirar-senha-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain('width="1600" height="900"');
+    expect(html).toMatch(/<figure class="article-visual">\s*<picture>\s*<source media="\(max-width: 40rem\)" srcset="\/articles\/unlock-pdf\/holy-pdf-tirar-senha-ui-pt-br-mobile\.webp" width="780" height="\d+" \/>\s*<img src="\/articles\/unlock-pdf\/holy-pdf-tirar-senha-ui-pt-br\.webp"/);
+    expect(html).toContain('src="/articles/unlock-pdf/holy-pdf-tirar-senha-resultado-pt-br.webp"');
+    expect(html).toContain('src="/articles/unlock-pdf/holy-pdf-tirar-senha-resultado-pt-br-mobile.webp"');
+    expect(html).toContain('width="1320" height="700"');
+    expect(html).toContain('href="/pt-br/desbloquear-pdf"');
+    expect(html).toContain('href="/pt-br/proteger-pdf"');
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+    for (const from of ["/pt-br/desbloquear-pdf", "/pt-br/guias/como-colocar-senha-em-pdf"]) {
+      expect(pages.find((page) => page.path === from)?.html ?? "", from).toContain(`href="${path}"`);
+    }
+  });
+
+  it("exposes the combine-photos guide's hero, real captures, tool links, Mathias byline, English-only alternates and incoming links", () => {
+    const path = "/en/guides/how-to-combine-photos-into-one-pdf";
+    const html = pages.find((page) => page.path === path)?.html ?? "";
+    expect(html).not.toBe("");
+    const hero = "/articles/combine-photos/holy-pdf-combine-photos-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain('width="1600" height="900"');
+    for (const capture of ["ui", "result", "heic"]) {
+      expect(html).toContain(`srcset="/articles/combine-photos/holy-pdf-combine-photos-${capture}-mobile.webp" width="780" height="1328"`);
+      expect(html).toContain(`src="/articles/combine-photos/holy-pdf-combine-photos-${capture}.webp"`);
+    }
+    expect(html).toContain('src="/articles/combine-photos/holy-pdf-combine-photos-order.webp"');
+    for (const href of ["/en/jpg-to-pdf", "/en/compress-pdf", "/en/scanner"]) expect(html).toContain(`href="${href}"`);
+    expect(html).toContain('id="photos-from-an-iphone-convert-heic-to-jpeg-first"');
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const alternates = [...html.matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((match) => match[1]);
+    expect(alternates).toEqual(["en", "x-default"]);
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+    for (const from of ["/en/jpg-to-pdf", "/en/guides/scan-multiple-pages-into-one-pdf", "/en/guides"]) {
+      expect(pages.find((page) => page.path === from)?.html ?? "", from).toContain(`href="${path}"`);
+    }
   });
 
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {

@@ -24,6 +24,8 @@ Place the sheets flat under even light. Keep the whole page inside the frame and
 
 Take all the photos before you start. You can then select them together in [Scan a document](/en/scanner). The tool accepts JPEG and PNG files, as well as HEIC photos from an iPhone.
 
+For photos that are not of paper documents (a room, an object, a vacation), the Scanner is not the right tool. See [how to combine photos into one PDF](/en/guides/how-to-combine-photos-into-one-pdf) instead.
+
 ## 2. Import the photos together
 
 Open the Scanner and choose every page of the document in the same import. They are placed in one multi-page document.

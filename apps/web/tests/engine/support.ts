@@ -224,6 +224,18 @@ export function imagePixelSizes(p: Pdfium, bytes: Uint8Array): [number, number][
 export type ReadPage = { text: string; rotation: number; width: number; height: number };
 
 /** Reads a PDF with pdf.js, so the engine is never checked with itself. */
+/** pdf.js answers `null` when the file has no encryption dictionary; otherwise the flags of what the file allows. */
+export async function permissionsWithPdfjs(bytes: Uint8Array): Promise<number[] | null> {
+  const task = getDocument({ data: bytes.slice(), verbosity: 0 });
+  const doc = await task.promise;
+  try {
+    const flags = await doc.getPermissions();
+    return flags ? [...flags] : null;
+  } finally {
+    await task.destroy();
+  }
+}
+
 export async function readWithPdfjs(bytes: Uint8Array, password?: string): Promise<ReadPage[]> {
   const task = getDocument({ data: bytes.slice(), verbosity: 0, ...(password ? { password } : {}) });
   const doc = await task.promise;

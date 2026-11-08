@@ -50,6 +50,18 @@ Decision:
 
 Review with Search Console 60 days after deployment: impressions of `/pt-br/cortar-pdf` on the `recortar` queries, and of `/pt-br/dividir-pdf` on the `cortar` queries.
 
+### 7 November 2026 — pt-BR OCR says "em português"
+
+Since 22 October 2026 the Brazilian OCR page reads Brazilian Portuguese and English (`readLanguages` in `src/ocr/reader.ts`), but its title, description and H1 did not say so, and the Brazilian form-filling guide still said the opposite. Demand in Brazil: `ocr pdf` 10,800/month, KD 100 (SE Ranking) and 12,100/month, KD 46 (Serpstat), stable since March 2026; `converter pdf em ocr` 30 (SE Ranking) and 1,900 (Serpstat); `ocr pdf online` 720 (Serpstat); volumes through treg, 7 November 2026, not summed. Search Console, 9 October to 5 November 2026 (`dataState: all`): `/pt-br/ocr-pdf` had 43 impressions, no click and an average position of 65.9; by query, 21 rows and 37 impressions, led by `pdf ocr` and `pdf ocr gratuito` (4 each), `ocr online pdf`, `ocr pdf`, `ocr pdf online` and `pdf para ocr` (3 each); six queries say "grátis", "gratuito" or "free" (10 impressions), five say "converter", "para", "transformar" or "passar" (7 impressions). The Brazilian results for `ocr pdf` (google.com.br, desktop, 7 November 2026) are eight online OCR tools, a Microsoft Store app and a Google Cloud page: the query stays on the tool page, no guide.
+
+Decision:
+
+- The title becomes "OCR PDF em português online grátis" and the H1 "OCR PDF em português: tornar o texto pesquisável"; the description names the two languages and says the file is not uploaded. None of the three competitor pages read that day puts the language forward.
+- The body answers in its first sentence (Portuguese and English, invisible text layer, appearance unchanged), keeps the 50-character rule and links to the Scanner and to the Brazilian scanning guide. Two FAQ entries answer "converter um PDF em OCR" and "grátis".
+- The Brazilian form-filling guide now says the OCR reads Portuguese and English.
+
+Review with Search Console 60 days after deployment: impressions and position of `/pt-br/ocr-pdf` on the "português", "grátis" and "converter" variants.
+
 ## Guides: researched queries
 
 _SE Ranking volumes through treg, live Google results through treg (crawl4ai), on the date given. A guide owns an informational query; the tool page keeps the transactional one._
@@ -59,6 +71,15 @@ _SE Ranking volumes through treg, live Google results through treg (crawl4ai), o
 | `fill-pdf-form` | US | how to fill out a pdf form | 920/month, KD 7 (20 October 2026) | how to fill out a pdf form on mac 480, KD 8; xfa form 480, KD 14; how to fill out a pdf form and save it 10, KD 19 | `/en/edit-pdf` |
 | `fill-pdf-form` | FR | remplir un formulaire pdf | 480/month, KD 10 (20 October 2026) | comment remplir un formulaire pdf 170, KD 19; comment remplir un cerfa en ligne 70, KD 0; comment remplir un pdf sur mac 50, KD 9 | `/fr/modifier-pdf` (« remplir un pdf », 1,900, KD 98, is a tool query) |
 | `fill-pdf-form` | BR | como preencher um formulário em pdf | 590/month, KD 8 (20 October 2026) | preencher formulario pdf 390, KD 7; como preencher pdf no celular 170, KD 10; como preencher um pdf no celular 140, KD 19 | `/pt-br/editar-pdf` ("preencher pdf", 5,700, KD 86, and "escrever em pdf", 4,400, KD 85, are tool queries) |
+| `password-protect-pdf` | BR | como colocar senha em pdf | 480/month, KD 10 SE Ranking and 480/month, KD 16 Serpstat (2 November 2026) | none kept: "colocar senha em pdf" diverges between the two tools (10 and 720) and is not used | `/pt-br/proteger-pdf` ("proteger pdf com senha", 210/month in both tools, stays on the tool page) |
+| `unlock-pdf` | BR | como tirar senha de pdf | 810/month, KD 11 SE Ranking (4 November 2026); no row in Serpstat (3 November 2026) | none kept: "como remover senha de pdf" 880 and "como desbloquear pdf" 260 (Serpstat) are close variants, not summed | `/pt-br/desbloquear-pdf` ("tirar senha de pdf", 6,600 SE Ranking and 8,100 Serpstat, 3 November 2026, stays on the tool page) |
+| `combine-photos` | US | how to combine photos into one pdf | 590/month, KD 17 SE Ranking and 590/month, KD 37 Serpstat (6 November 2026), stable since March 2026 | none summed: "how to combine pictures into one pdf" 390 (both tools) is a close variant | `/en/jpg-to-pdf` (the tool page keeps the transactional "jpg to pdf" intent) |
+
+The Brazilian results for "como colocar senha em pdf" (DataForSEO through treg, desktop, 2 November 2026) are three articles, one Microsoft answer, five videos and one Android app, with no tool page at the top and no AI overview: a guide owns it, market-only, with the Protect tool as its head. Search Console (3–31 October 2026) shows no impression on `/pt-br/proteger-pdf` yet, so the guide's first link comes from the tool page itself.
+
+The Brazilian results for "como tirar senha de pdf" (DataForSEO through treg, desktop, 3 November 2026) are two tool pages, three videos, an Apple community thread, wikiHow, a blog, a Reddit thread and a video block, with no AI overview: a guide owns it, market-only, with the Unlock tool as its head. The first result promises to unlock without the password; the guide says in its first sentences that Holy PDF needs the known password, and tells a password-to-open apart from print and copy restrictions, which the tool lifts without any password. Search Console (5 October to 1 November 2026) shows no impression on `/pt-br/desbloquear-pdf` and no query containing "senha".
+
+The US results for "how to combine photos into one pdf" (google.com, English, desktop, 6 November 2026) are an Adobe guide, two Reddit threads, a university PDF, an Apple Discussions thread, two YouTube videos and three tool pages, with an AI overview and "people also ask" questions about the iPhone: a guide owns it, English only for now, with Convert JPG to PDF as its head and Compress PDF and the Scanner as neighbours. The guide says before the tool that HEIC photos are refused and gives the conversion. Search Console (7 October to 3 November 2026) shows no impression on `/en/jpg-to-pdf` or on the query.
 
 The first Brazilian check of 20 October 2026 tried one wording only ("como preencher formulario pdf", no volume); the thirty-wording check later that day found the demand above, with the phone as the main variant. The live Brazilian results for the primary query are tool pages, Google Drive's help, Adobe's how-to, an Android app and videos.
 
