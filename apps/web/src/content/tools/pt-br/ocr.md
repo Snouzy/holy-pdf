@@ -6,7 +6,7 @@ description: Reconheça o texto de um PDF digitalizado em português e inglês e
 h1: 'OCR PDF em português: tornar o texto pesquisável'
 steps:
 - Solte um PDF digitalizado na área acima ou escolha-o no dispositivo.
-- 'Clique em “Reconhecer o texto”: cada página sem texto será processada.'
+- 'Clique em “Reconhecer o texto”: páginas com menos de 50 caracteres de texto serão processadas.'
 - 'Baixe a cópia: você poderá pesquisar palavras e selecionar trechos.'
 faq:
 - question: O que é OCR?
