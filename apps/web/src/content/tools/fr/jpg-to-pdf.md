@@ -16,7 +16,7 @@ faq:
   - question: "Mes photos prises au téléphone seront-elles dans le bon sens ?"
     answer: "Oui. Le sens enregistré par le téléphone est respecté, et vous pouvez encore pivoter chaque page."
   - question: "Quel format de page ?"
-    answer: "A4, en portrait ou en paysage selon l'image. L'image est ajustée à la page sans être déformée, sans marge."
+    answer: "A4, en portrait ou en paysage selon l'image. L'image est ajustée sans être rognée ni déformée ; des marges blanches apparaissent si ses proportions diffèrent de celles de la page."
   - question: "Et les photos HEIC d'iPhone ?"
     answer: "Elles ne sont pas encore prises en charge. Exportez-les d'abord en JPEG, depuis l'app Photos par exemple."
   - question: "Est-ce gratuit ?"

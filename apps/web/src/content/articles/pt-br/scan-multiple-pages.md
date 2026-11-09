@@ -25,6 +25,8 @@ Coloque as folhas sobre uma superfície plana e com iluminação uniforme. Mante
 
 Tire todas as fotos antes de começar. Depois, selecione-as juntas em [Digitalizar para PDF](/pt-br/digitalizar-para-pdf). A ferramenta aceita arquivos JPEG e PNG, além de fotos HEIC do iPhone.
 
+Para fotos que não são páginas de um documento — um cômodo, um objeto ou uma viagem — use [JPG para PDF](/pt-br/jpg-para-pdf) em vez do Scanner. A ferramenta coloca uma foto por página, na ordem que você escolher.
+
 ## 2. Importe as fotos juntas
 
 Abra a ferramenta Digitalizar para PDF e escolha todas as páginas do documento na mesma importação. Elas serão colocadas em um único documento de várias páginas.

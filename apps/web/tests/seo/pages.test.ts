@@ -315,6 +315,20 @@ describe("built pages", () => {
     }
   });
 
+  it("gives the Brazilian JPG to PDF owner the multi-photo workflow and truthful A4 fitting limits", () => {
+    const html = pages.find((page) => page.path === "/pt-br/jpg-para-pdf")?.html ?? "";
+    expect(html).not.toBe("");
+    expect(html).toContain("Como transformar várias fotos em um único arquivo PDF");
+    for (const href of ["/pt-br/comprimir-pdf", "/pt-br/digitalizar-para-pdf", "/pt-br/paginas-por-folha", "/pt-br/juntar-pdf"]) {
+      expect(html).toContain(`href="${href}"`);
+    }
+    expect(html).toContain("sem corte nem deformação");
+    expect(html).toContain("margens brancas");
+    expect(html).not.toContain("ampliada até caber");
+    expect(html).not.toContain("sem distorção nem margem");
+    expect(pages.find((page) => page.path === "/pt-br/guias/digitalizar-varias-paginas-em-um-pdf")?.html ?? "").toContain('href="/pt-br/jpg-para-pdf"');
+  });
+
   it.each(pages.filter(({ path }) => path.includes("/guides/scan") || path.includes("/guides/scanner")))("$path exposes its reviewed hero in the page and BlogPosting data", ({ html }) => {
     const hero = "/articles/scan-multiple-pages/scan-multiple-pages-hero.webp";
     expect(html).toContain(`src="${hero}"`);

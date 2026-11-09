@@ -81,6 +81,12 @@ The Brazilian results for "como tirar senha de pdf" (DataForSEO through treg, de
 
 The US results for "how to combine photos into one pdf" (google.com, English, desktop, 6 November 2026) are an Adobe guide, two Reddit threads, a university PDF, an Apple Discussions thread, two YouTube videos and three tool pages, with an AI overview and "people also ask" questions about the iPhone: a guide owns it, English only for now, with Convert JPG to PDF as its head and Compress PDF and the Scanner as neighbours. The guide says before the tool that HEIC photos are refused and gives the conversion. Search Console (7 October to 3 November 2026) shows no impression on `/en/jpg-to-pdf` or on the query.
 
+### 9 November 2026 — pt-BR photos to one PDF stay on the tool page
+
+In Brazil, `como transformar várias fotos em um único arquivo pdf` has 20 monthly searches and informational intent in DataForSEO; `como juntar várias fotos em um único pdf` returned no metrics row. The mobile results for both queries are dominated by image-to-PDF tools (iLovePDF, Smallpdf, PDF24, Adobe and other converters), with some videos and how-to results, an AI overview and People also ask. A separate guide would repeat the same three-step workflow and compete with `/pt-br/jpg-para-pdf`.
+
+Decision: the tool page remains the sole owner. Its body now answers the full multi-photo workflow, A4 fitting and white-margin behavior, JPEG/PNG quality, HEIC conversion, file-size follow-up and the alternatives for scanned documents or several photos per sheet. The scanning guide links back to this owner for photos that are not paper documents. No pt-BR article sibling is created. The French phrases checked the same day returned no keyword-metrics rows and tool-heavy results, so no French sibling is added either. Spanish remains blocked because `origin/main` still has no `/es` product journey.
+
 The first Brazilian check of 20 October 2026 tried one wording only ("como preencher formulario pdf", no volume); the thirty-wording check later that day found the demand above, with the phone as the main variant. The live Brazilian results for the primary query are tool pages, Google Drive's help, Adobe's how-to, an Android app and videos.
 
 ## Editorial market checks
