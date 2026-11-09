@@ -16,7 +16,7 @@ faq:
   - question: "Will photos from my phone be the right way up?"
     answer: "Yes. The orientation saved by the phone is kept, and you can still rotate each page."
   - question: "What page size?"
-    answer: "A4, in portrait or landscape to match the image. The image is scaled to fit the page without stretching, with no margin."
+    answer: "A4, in portrait or landscape to match the image. The image is scaled to fit without cropping or stretching; white margins appear when its proportions differ from the page."
   - question: "What about HEIC photos from an iPhone?"
     answer: "They are not supported yet. Export them as JPEG first, from the Photos app for example."
   - question: "Is it free?"
