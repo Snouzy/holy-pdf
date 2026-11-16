@@ -374,7 +374,7 @@ export const enSite: SiteDictionary = {
     },
     "pages-per-sheet": {
       name: "Brother Mosaic",
-      intro: "Brother Mosaic lays several pages of your PDF on each sheet, to print less.",
+      intro: "Brother Mosaic places multiple PDF pages on each sheet to help you use less paper.",
       line: "Four pages, one sheet.",
       hint: "Choose how many pages go on each sheet.",
       working: "Laying out the sheets…",

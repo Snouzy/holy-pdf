@@ -41,7 +41,7 @@ const jsonLd = [
     operatingSystem: "Any",
     browserRequirements: "Requires JavaScript and WebAssembly",
     inLanguage: locales[lang],
-    offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+    offers: { "@type": "Offer", price: "0", priceCurrency: { fr: "EUR", en: "USD", "pt-br": "BRL" }[lang] },
   },
   {
     "@context": "https://schema.org",
