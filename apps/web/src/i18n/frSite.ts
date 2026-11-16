@@ -381,7 +381,7 @@ export const frSite = {
     },
     "pages-per-sheet": {
       name: "Frère Mosaïque",
-      intro: "Frère Mosaïque range plusieurs pages de votre PDF sur chaque feuille, pour imprimer moins.",
+      intro: "Frère Mosaïque range plusieurs pages de votre PDF sur chaque feuille pour utiliser moins de papier.",
       line: "Quatre pages, une seule feuille.",
       hint: "Choisissez combien de pages par feuille.",
       working: "Je compose les feuilles…",

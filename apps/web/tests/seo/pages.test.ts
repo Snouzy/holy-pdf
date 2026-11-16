@@ -25,8 +25,14 @@ const first = (html: string, pattern: RegExp) => pattern.exec(html)?.[1];
 const sitemapUrls = () => [...readFileSync(join(dist, "sitemap-0.xml"), "utf8").matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 const homes = pages.filter(({ path }) => path.split("/").length === 2);
 const emoji = /\p{Extended_Pictographic}/u;
+const decodeHtml = (text: string) => text.replaceAll("&#39;", "'").replaceAll("&quot;", '"').replaceAll("&amp;", "&").replaceAll("&nbsp;", " ");
+const visibleText = (html: string) => decodeHtml(html.replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>/g, " ").replace(/\s+/g, " "));
 
 describe("built pages", () => {
+  it.each(pages)("$path follows the requested indexability", ({ html }) => {
+    expect(html.includes('<meta name="robots" content="noindex">')).toBe(process.env.INDEXABLE !== "true");
+  });
+
   it("has a home per language and a page per content file", () => {
     const markdown = (folder: string) =>
       readdirSync(join(import.meta.dirname, "../../src/content", folder), { recursive: true }).filter((file) => String(file).endsWith(".md")).length;
@@ -92,10 +98,15 @@ describe("built pages", () => {
 
   const toolPages = pages.filter(({ html }) => html.includes('"@type":"WebApplication"'));
   const contentPages = pages.filter(({ path, html }) => path.split("/").length > 2 && !html.includes('"@type":"WebApplication"'));
-  const structured = (html: string): { "@id"?: string; "@type": string; image?: string; author?: { "@type": string; name: string }; mainEntity?: { name: string }[]; mainEntityOfPage?: { "@id": string }; publisher?: { name: string } }[] =>
+  const structured = (html: string): { "@id"?: string; "@type": string; image?: string; author?: { "@type": string; name: string }; mainEntity?: { name: string }[]; mainEntityOfPage?: { "@id": string }; publisher?: { name: string }; offers?: { "@type": string; price: string; priceCurrency: string } }[] =>
     [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((match) => JSON.parse(match[1] ?? "{}"));
   const faqPages = pages.filter(({ path }) => /^\/[a-z-]+\/faq$/.test(path));
   const articlePages = pages.filter(({ html }) => structured(html).some((data) => data["@type"] === "BlogPosting"));
+
+  it.each(toolPages)("$path expresses its free offer in the market currency", ({ path, html }) => {
+    const currency = { fr: "EUR", en: "USD", "pt-br": "BRL" }[path.split("/")[1] as "fr" | "en" | "pt-br"];
+    expect(structured(html).find((data) => data["@type"] === "WebApplication")?.offers).toEqual({ "@type": "Offer", price: "0", priceCurrency: currency });
+  });
 
   it.each(toolPages)("$path gives each question an anchor and marks them up as an FAQ", ({ html }) => {
     const ids = [...html.matchAll(/<details[^>]* id="([^"]+)"/g)].map((match) => match[1]);
@@ -320,6 +331,47 @@ describe("built pages", () => {
     expect(html).toContain(`src="${hero}"`);
     expect(html).toContain('width="1600" height="893"');
     expect(structured(html).find((data) => data["@type"] === "BlogPosting")?.image).toBe(`${site}${hero}`);
+  });
+
+  it.each([
+    {
+      path: "/fr/pages-par-feuille",
+      title: "Mettre plusieurs pages d'un PDF sur une feuille A4",
+      description: "Regroupez 2, 4, 6, 9 ou 16 pages de vos PDF sur chaque feuille A4, puis téléchargez les fichiers prêts à imprimer. Traitement local dans votre navigateur.",
+      h1: "Mettre plusieurs pages d'un PDF sur une feuille",
+      source: "helpx.adobe.com/fr/",
+      claims: ["Pour chaque fichier", "le ou les fichiers générés", "2, 4, 6, 9 ou 16", "de gauche à droite, puis de haut en bas", "orientation paysage", "orientation portrait", "Le texte reste-t-il sélectionnable ?", "annotations et les champs de formulaire", "signature numérique", "localement dans votre navigateur"],
+      currency: "EUR",
+    },
+    {
+      path: "/en/pages-per-sheet",
+      title: "Print multiple PDF pages on one sheet",
+      description: "Put 2, 4, 6, 9, or 16 PDF pages on each A4 sheet. Create printable PDF files locally in your browser.",
+      h1: "Print multiple PDF pages on one sheet",
+      source: "helpx.adobe.com/acrobat/",
+      claims: ["For each PDF you add", "generated file or files", "2, 4, 6, 9 or 16", "from left to right, then from top to bottom", "landscape", "portrait", "Does the text remain selectable?", "annotations, form fields and digital signatures", "processed locally in your browser", "exact label depends on your app and printer"],
+      currency: "USD",
+    },
+    {
+      path: "/pt-br/paginas-por-folha",
+      title: "Imprimir várias páginas do PDF em uma folha",
+      description: "Crie arquivos PDF A4 com 2, 4, 6, 9 ou 16 páginas por folha. O processamento acontece localmente no seu navegador.",
+      h1: "Imprimir várias páginas do PDF em uma folha",
+      source: "helpx.adobe.com/br/",
+      claims: ["Para cada arquivo", "arquivo ou os arquivos gerados", "2, 4, 6, 9 ou 16", "da esquerda para a direita e, depois, de cima para baixo", "formato paisagem", "formato retrato", "O texto continua selecionável?", "Anotações e campos de formulário", "assinatura digital", "processamento é feito localmente no seu navegador"],
+      currency: "BRL",
+    },
+  ])("$path owns the localized pages-per-sheet workflow and exposes its limits", ({ path, title, description, h1, source, claims, currency }) => {
+    const html = pages.find((page) => page.path === path)?.html ?? "";
+    expect(html).not.toBe("");
+    expect(decodeHtml(first(html, /<title>([^<]+)<\/title>/) ?? "")).toBe(title);
+    expect(decodeHtml(first(html, /<meta name="description" content="([^"]+)"/) ?? "")).toBe(description);
+    expect(decodeHtml(first(html, /<h1[^>]*>([\s\S]*?)&nbsp;<span class="emoji"/) ?? "")).toBe(h1);
+    expect(html).toContain(source);
+    const text = visibleText(html);
+    for (const claim of claims) expect(text).toContain(claim);
+    expect(text).not.toMatch(/\[(?:\d+|unverified)\]/);
+    expect(structured(html).find((data) => data["@type"] === "WebApplication")?.offers).toEqual({ "@type": "Offer", price: "0", priceCurrency: currency });
   });
 
   it("points robots.txt at the sitemap of the site's own address", () => {

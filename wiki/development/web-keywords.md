@@ -62,6 +62,20 @@ Decision:
 
 Review with Search Console 60 days after deployment: impressions and position of `/pt-br/ocr-pdf` on the "português", "grátis" and "converter" variants.
 
+### 16 November 2026 — pages per sheet
+
+The existing tool pages remain the owners of the print-layout intent. No guide was added: the US demand is led by transactional phrases, the mixed SERP still serves tools for the informational variant, and the Brazilian owner is already in Search Console's strike zone.
+
+| Market | Owner | Evidence | Decision |
+|---|---|---|---|
+| France | `/fr/pages-par-feuille` | Finalized GSC, 17 October–13 November: 2 impressions, average position 72; the three long-tail phrases returned no DataForSEO row; the mobile SERP mixed tutorials, forums and an AI overview | Lead with "mettre plusieurs pages PDF sur une feuille", explain that Holy PDF prepares an A4 PDF and does not print |
+| United States | `/en/pages-per-sheet` | DataForSEO: `print multiple pages on one sheet pdf`, 50/month, KD 0, transactional; `print multiple pdf pages on one sheet`, 50/month, KD 8, transactional; `how to print multiple pages on one sheet`, 30/month, KD 0, informational. The US mobile SERP mixed Adobe's guide, a dedicated tool and tutorials; the UK control was also mixed | Keep the tool owner, target the exact printing workflow, and state that output is A4 rather than US Letter |
+| Brazil | `/pt-br/paginas-por-folha` | Finalized GSC, 17 October–13 November: 4 impressions, no click, average position 7.8. DataForSEO returned no measurable volume for the tested phrases. The mobile SERP was tutorial/video-heavy and poorly localized | Improve the strike-zone owner instead of adding a competing guide |
+
+The three pages now state the verified product contract: 2, 4, 6, 9 or 16 source pages per A4 sheet; reading order from left to right then top to bottom; landscape for 2 and 6, portrait for 4, 9 and 16; selectable text retained; annotations, form fields and digital signatures not copied. The interactive tool is the visual proof, so no duplicate screenshot was added below it.
+
+Mexico and Spain were checked separately. Their mobile SERPs also mixed how-to results and tools, but `origin/main` still has no Spanish product journey. Do not add an `/es` sibling on a stale locale branch; integrate the locale first, then author its owner page from fresh market evidence.
+
 ## Guides: researched queries
 
 _SE Ranking volumes through treg, live Google results through treg (crawl4ai), on the date given. A guide owns an informational query; the tool page keeps the transactional one._

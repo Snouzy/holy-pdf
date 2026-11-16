@@ -4,7 +4,7 @@ export const en: BoardTexts = {
   toolPage: {
     privacy: "No file leaves your device, from import to download.",
     otherMonks: "The other monks",
-    below: "How to, frequent questions",
+    below: "How it works and frequently asked questions",
   },
   sizes: { kilo: "KB", mega: "MB" },
   drop: {
