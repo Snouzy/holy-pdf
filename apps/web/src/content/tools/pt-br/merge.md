@@ -26,3 +26,5 @@ faq:
 Juntar PDF permite enviar um arquivo em vez de vários: uma candidatura, as faturas do mês ou os documentos de um processo administrativo.
 
 O novo PDF preserva as páginas originais sem comprimi-las novamente. O tamanho final costuma ficar próximo da soma dos arquivos de origem.
+
+Quer ver o passo a passo com capturas de tela? O guia [como juntar PDF](/pt-br/guias/como-juntar-pdf) mostra o caminho no computador e no celular, o que acontece quando um arquivo tem senha e o que o PDF final não guarda.

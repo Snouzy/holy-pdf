@@ -68,7 +68,7 @@ Se o arquivo estiver grande demais, passe-o pela ferramenta [Comprimir PDF](/pt-
 
 ## Se as páginas já forem PDFs separados
 
-Você não precisa fotografá-las novamente. Abra [Juntar PDF](/pt-br/juntar-pdf), adicione os arquivos, organize-os e baixe o documento final.
+Você não precisa fotografá-las novamente. Abra [Juntar PDF](/pt-br/juntar-pdf), adicione os arquivos, organize-os e baixe o documento final. O guia [como juntar PDF](/pt-br/guias/como-juntar-pdf) mostra o passo a passo, inclusive no celular e com arquivos protegidos por senha.
 
 ## Perguntas frequentes
 
