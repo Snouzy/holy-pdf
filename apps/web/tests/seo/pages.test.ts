@@ -62,7 +62,7 @@ describe("built pages", () => {
     }
   });
 
-  it.each(["/pt-br/guias/como-dividir-um-pdf", "/pt-br/guias/como-colocar-senha-em-pdf", "/pt-br/guias/como-tirar-senha-de-pdf"])("does not invent hreflang siblings for the market-only article %s", (path) => {
+  it.each(["/pt-br/guias/como-dividir-um-pdf", "/pt-br/guias/como-colocar-senha-em-pdf", "/pt-br/guias/como-tirar-senha-de-pdf", "/pt-br/guias/como-juntar-pdf"])("does not invent hreflang siblings for the market-only article %s", (path) => {
     const page = pages.find((candidate) => candidate.path === path);
     expect(page).toBeDefined();
     const alternates = [...(page?.html ?? "").matchAll(/<link rel="alternate" hreflang="([^"]+)"/g)].map((match) => match[1]);
@@ -266,6 +266,30 @@ describe("built pages", () => {
     expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
     const tool = pages.find((page) => page.path === "/pt-br/proteger-pdf")?.html ?? "";
     expect(tool).toContain(`href="${path}"`);
+  });
+
+  it("exposes the merge guide's hero, real captures, Merge, Compress and Organize links, Mathias byline and its incoming links", () => {
+    const path = "/pt-br/guias/como-juntar-pdf";
+    const html = pages.find((page) => page.path === path)?.html ?? "";
+    expect(html).not.toBe("");
+    const hero = "/articles/merge-pdf/holy-pdf-juntar-pdf-hero.webp";
+    expect(html).toContain(`src="${hero}"`);
+    expect(html).toContain('width="1600" height="900"');
+    for (const capture of ["ui", "resultado", "senha"]) {
+      expect(html).toContain(`srcset="/articles/merge-pdf/holy-pdf-juntar-pdf-${capture}-pt-br-mobile.webp" width="780" height="1328"`);
+      expect(html).toContain(`src="/articles/merge-pdf/holy-pdf-juntar-pdf-${capture}-pt-br.webp"`);
+    }
+    expect(html).toContain('src="/articles/merge-pdf/holy-pdf-juntar-pdf-ordem-pt-br.webp"');
+    expect(html).toContain('<figure class="article-visual article-visual--phone">');
+    expect(html).toContain('src="/articles/merge-pdf/holy-pdf-juntar-pdf-celular-pt-br.webp"');
+    for (const href of ["/pt-br/juntar-pdf", "/pt-br/comprimir-pdf", "/pt-br/organizar-pdf"]) expect(html).toContain(`href="${href}"`);
+    expect(first(html, /<p class="meta"[^>]*>([\s\S]*?)<\/p>/)).toContain("Mathias");
+    const posting = structured(html).find((data) => data["@type"] === "BlogPosting");
+    expect(posting?.image).toBe(`${site}${hero}`);
+    expect(posting?.author).toEqual({ "@type": "Person", name: "Mathias" });
+    for (const from of ["/pt-br/juntar-pdf", "/pt-br/guias/digitalizar-varias-paginas-em-um-pdf", "/pt-br/guias"]) {
+      expect(pages.find((page) => page.path === from)?.html ?? "", from).toContain(`href="${path}"`);
+    }
   });
 
   it("exposes the unlock guide's hero, real captures, Unlock and Protect links, Mathias byline and its incoming links", () => {
